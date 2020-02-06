@@ -6,3 +6,5 @@
 *.wasm
 
 .DS_Store
+
+evm/main.out
