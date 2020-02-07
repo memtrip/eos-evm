@@ -13,4 +13,6 @@ void printInstruction(unsigned int value);
 
 void printInstructionList();
 
+void hex2bin(const std::string& hex, char* bytes);
+
 #endif

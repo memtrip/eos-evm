@@ -1,5 +1,7 @@
 #include <stdio.h>
-#include "utils.h"
+#include <stdexcept>
+#include <vector>
+#include <string>
 #include "opcode.h"
 #include "instruction.h"
 
@@ -477,5 +479,14 @@ void printInstructionList() {
   for (int i = 0; i < 255; i++) {
     unsigned int instruction = Instructions::values[i];
     printInstruction(instruction);
+  }
+}
+
+void hex2bin(const std::string& hex, char* bytes) {
+  int position = 0;
+  for (unsigned int i = 0; i < hex.length(); i+=2) {
+    std::string byteString = hex.substr(i, 2);
+    bytes[position] = (char) strtol(byteString.c_str(), NULL, 16);
+    position++;
   }
 }
