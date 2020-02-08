@@ -1,17 +1,34 @@
 #include "vm.h"
 #include "opcode.h"
 #include "instruction.h"
+#include "jumps.h"
+#include "big_int.h"
+#include "utils.h" // TODO: remove this
 
-void VM::step(ByteReader* reader, jump_set_t jumps) {
-  stack = StackMachine();
+ExecResult VM::execute(char* bytes, unsigned int size) {
+  ExecResult result;
+
+  jump_set_t jumps = Jumps::find_destinations(bytes, size);
+  ByteReader reader(0, bytes, size);
+
+  do {
+    result = VM::step(jumps, reader);
+  } while(result == ExecResult::CONTINUE);
+
+  return result;
 }
 
-unsigned int VM::stepInner(ByteReader* reader) {
-  unsigned char opcode = reader->bytes[reader->position];
-  unsigned int instruction = Instruction::values[opcode];
-  reader->position += 1;
+ExecResult VM::step(jump_set_t jumps, ByteReader& reader) {
+  return VM::stepInner(reader);
+}
 
-  if (instruction == 0x000000FF) return -1;
+ExecResult VM::stepInner(ByteReader& reader) {
+  unsigned char opcode = reader.bytes[reader.position];
+  unsigned int instruction = Instruction::values[opcode];
+  reader.position += 1;
+
+  // TODO: handle this properly
+  if (instruction == 0x000000FF) return ExecResult::DONE;
 
   last_stack_ret_len = Instruction::ret(instruction);
 
@@ -19,23 +36,55 @@ unsigned int VM::stepInner(ByteReader* reader) {
 
   // TODO: calculate gas cost
 
-  return 1;
+  InstructionResult result = VM::executeInstruction(instruction, reader);
+
+  switch (result) {
+    case InstructionResult::OK:
+      break;
+    case InstructionResult::UNUSED_GAS:
+      break;
+    case InstructionResult::JUMP_POSITION:
+      break;
+    case InstructionResult::STOP_EXEC_RETURN:
+      break;
+    case InstructionResult::STOP_EXEC:
+      break;
+    case InstructionResult::INSTRUCTION_TRAP:
+      break;
+  }
+  
+  if (reader.position >= reader.len) {
+    return ExecResult::DONE;
+  }
+
+  return ExecResult::CONTINUE;
 }
 
-unsigned char VM::execute(instruct_t instruction) {
+InstructionResult VM::executeInstruction(instruct_t instruction, ByteReader& reader) {
+  Utils::printInstruction(instruction);
   switch (Instruction::opcode(instruction)) {
     case Opcode::STOP:
       printf("(STOP ");
       break;
     case Opcode::ADD:
-      printf("(ADD ");
-      break;
+      {
+        // TODO: handle arthemetic overflows
+        uint256_t result = stack.peek(1) + stack.peek(0);
+        stack.pop(2);
+        stack.push(result);
+        break;
+      }
     case Opcode::MUL:
       printf("(MUL ");
       break;
     case Opcode::SUB:
-      printf("(SUB ");
-      break;
+      {
+        // TODO: handle arthemetic overflows
+        uint256_t result = stack.peek(1) - stack.peek(0);
+        stack.pop(2);
+        stack.push(result);
+        break;
+      }
     case Opcode::DIV:
       printf("(DIV ");
       break;
@@ -189,104 +238,40 @@ unsigned char VM::execute(instruct_t instruction) {
     case Opcode::JUMPDEST:
       printf("(JUMPDEST ");
       break;
-    
     case Opcode::PUSH1:
-      printf("(PUSH1 ");
-      break;
     case Opcode::PUSH2:
-      printf("(PUSH2 ");
-      break;
     case Opcode::PUSH3:
-      printf("(PUSH3 ");
-      break;
     case Opcode::PUSH4:
-      printf("(PUSH4 ");
-      break;
     case Opcode::PUSH5:
-      printf("(PUSH5 ");
-      break;
     case Opcode::PUSH6:
-      printf("(PUSH6 ");
-      break;
     case Opcode::PUSH7:
-      printf("(PUSH7 ");
-      break;
     case Opcode::PUSH8:
-      printf("(PUSH8 ");
-      break;
     case Opcode::PUSH9:
-      printf("(PUSH9 ");
-      break;
     case Opcode::PUSH10:
-      printf("(PUSH10 ");
-      break;
     case Opcode::PUSH11:
-      printf("(PUSH11 ");
-      break;
     case Opcode::PUSH12:
-      printf("(PUSH12 ");
-      break;
     case Opcode::PUSH13:
-      printf("(PUSH13 ");
-      break;
     case Opcode::PUSH14:
-      printf("(PUSH14 ");
-      break;
     case Opcode::PUSH15:
-      printf("(PUSH15 ");
-      break;
     case Opcode::PUSH16:
-      printf("(PUSH16 ");
-      break;
     case Opcode::PUSH17:
-      printf("(PUSH17 ");
-      break;
     case Opcode::PUSH18:
-      printf("(PUSH18 ");
-      break;
     case Opcode::PUSH19:
-      printf("(PUSH19 ");
-      break;
     case Opcode::PUSH20:
-      printf("(PUSH20 ");
-      break;
     case Opcode::PUSH21:
-      printf("(PUSH21 ");
-      break;
     case Opcode::PUSH22:
-      printf("(PUSH22 ");
-      break;
     case Opcode::PUSH23:
-      printf("(PUSH23 ");
-      break;
     case Opcode::PUSH24:
-      printf("(PUSH24 ");
-      break;
     case Opcode::PUSH25:
-      printf("(PUSH25 ");
-      break;
     case Opcode::PUSH26:
-      printf("(PUSH26 ");
-      break;
     case Opcode::PUSH27:
-      printf("(PUSH27 ");
-      break;
     case Opcode::PUSH28:
-      printf("(PUSH28 ");
-      break;
     case Opcode::PUSH29:
-      printf("(PUSH29 ");
-      break;
     case Opcode::PUSH30:
-      printf("(PUSH30 ");
-      break;
     case Opcode::PUSH31:
-      printf("(PUSH31 ");
-      break;
     case Opcode::PUSH32:
-      printf("(PUSH32 ");
+      stack.push(reader.read(Instruction::pushBytes(instruction)));
       break;
-
     case Opcode::DUP1:
       printf("(DUP1 ");
       break;
@@ -438,5 +423,9 @@ unsigned char VM::execute(instruct_t instruction) {
       printf("(SELFDESTRUCT ");
       break;
   }
-  return 0x1;
+  return InstructionResult::OK;
+}
+
+uint256_t VM::stackTop() {
+  return stack.peek(0);
 }

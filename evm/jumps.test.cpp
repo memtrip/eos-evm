@@ -11,9 +11,13 @@ jump_set_t jump_destinations(std::string bytecode_str) {
 }
 
 TEST_CASE("Find jump distinations", "[find_destinations]") {
+  // given
   std::string bytecode_str = "7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff5b01600055";
+  
+  // when
   jump_set_t jumps = jump_destinations(bytecode_str);
 
+  // then
   for (jump_set_t::iterator it=jumps.begin(); it!=jumps.end(); ++it)
     REQUIRE(66 == *it); 
 }

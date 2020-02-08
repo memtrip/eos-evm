@@ -485,3 +485,15 @@ void Utils::hex2bin(const std::string& hex, char* bytes) {
     position++;
   }
 }
+
+std::string Utils::uint256_2str(uint256_t value) {
+  std::ostringstream ost;
+  ost << std::hex << value;
+  return ost.str();
+}
+
+void Utils::print_uint256(uint256_t value) {
+  printf("{");
+  std::cout << Utils::uint256_2str(value);
+  printf("}\n");
+}

@@ -4,6 +4,7 @@
 #include "instruction.h"
 #include "utils.h"
 #include "types.h"
+#include "opcode.h"
 
 std::vector<instruct_t> parse(std::string bytecode_str) {
   std::vector<instruct_t> values = std::vector<instruct_t>();
@@ -24,7 +25,7 @@ std::vector<instruct_t> parse(std::string bytecode_str) {
 }
 
 TEST_CASE("Instruction lookup 00-0B", "[instruction]" ) {
-
+  // given
   std::vector<instruct_t> instructions = parse("000102030405060708090A0B");
 
   // ((STOP (0x00)), 0, 0, ZERO)
@@ -101,7 +102,7 @@ TEST_CASE("Instruction lookup 00-0B", "[instruction]" ) {
 }
 
 TEST_CASE("Instruction lookup 10-20", "[instruction]" ) {
-
+  // given
   std::vector<instruct_t> instructions = parse("101112131415161718191A1B1C1D20");
 
   REQUIRE(0x10 == Instruction::opcode(instructions.at(0)));
@@ -119,4 +120,12 @@ TEST_CASE("Instruction lookup 10-20", "[instruction]" ) {
   REQUIRE(0x1C == Instruction::opcode(instructions.at(12)));
   REQUIRE(0x1D == Instruction::opcode(instructions.at(13)));
   REQUIRE(0x20 == Instruction::opcode(instructions.at(14)));
+}
+
+TEST_CASE("Instruction pushBytes(PUSH32)", "[pushBytes(PUSH32)]" ) {
+  REQUIRE(32 == Instruction::pushBytes(Instruction::values[Opcode::PUSH32]));
+}
+
+TEST_CASE("Instruction pushBytes(PUSH1)", "[pushBytes(PUSH1)]" ) {
+  REQUIRE(1 == Instruction::pushBytes(Instruction::values[Opcode::PUSH1]));
 }
