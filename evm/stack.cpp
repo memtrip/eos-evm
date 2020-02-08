@@ -16,9 +16,18 @@ void StackMachine::popOne() {
 }
 
 uint256_t StackMachine::peek(unsigned int n) {
-  return stack.at(stack.size() - n - 1);
+  return stack[stack.size() - n - 1];
 }
 
 void StackMachine::push(uint256_t item) {
   stack.push_back(item);
+}
+
+void StackMachine::pushBool(bool value) {
+  stack.push_back(value ? uint256_t(1) : uint256_t(0));
+}
+
+void StackMachine::swapWithTop(unsigned int n) {
+  unsigned size = stack.size();
+  std::swap(stack[size - n - 1], stack[size - 1]);
 }

@@ -385,15 +385,6 @@ void Utils::printOpcode(unsigned char value) {
       printf("(LOG4 ");
       break;
 
-    case Opcode::PUSH:
-      printf("(PUSH ");
-      break;
-    case Opcode::DUP:
-      printf("(DUP ");
-      break;
-    case Opcode::SWAP:
-      printf("(SWAP ");
-      break;
     case Opcode::CREATE:
       printf("(CREATE ");
       break;

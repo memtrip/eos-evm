@@ -129,3 +129,39 @@ TEST_CASE("Instruction pushBytes(PUSH32)", "[pushBytes(PUSH32)]" ) {
 TEST_CASE("Instruction pushBytes(PUSH1)", "[pushBytes(PUSH1)]" ) {
   REQUIRE(1 == Instruction::pushBytes(Instruction::values[Opcode::PUSH1]));
 }
+
+TEST_CASE("Instruction dupPosition(DUP16)", "[dupPosition(DUP16)]" ) {
+  REQUIRE(15 == Instruction::dupPosition(Instruction::values[Opcode::DUP16]));
+}
+
+TEST_CASE("Instruction dupPosition(DUP10)", "[dupPosition(DUP10)]" ) {
+  REQUIRE(9 == Instruction::dupPosition(Instruction::values[Opcode::DUP10]));
+}
+
+TEST_CASE("Instruction dupPosition(DUP5)", "[dupPosition(DUP5)]" ) {
+  REQUIRE(4 == Instruction::dupPosition(Instruction::values[Opcode::DUP5]));
+}
+
+TEST_CASE("Instruction dupPosition(DUP1)", "[dupPosition(DUP1)]" ) {
+  REQUIRE(0 == Instruction::dupPosition(Instruction::values[Opcode::DUP1]));
+}
+
+TEST_CASE("Instruction swapPosition(SWAP16)", "[swapPosition(SWAP16)]" ) {
+  REQUIRE(16 == Instruction::swapPosition(Instruction::values[Opcode::SWAP16]));
+}
+
+TEST_CASE("Instruction swapPosition(SWAP5)", "[swapPosition(SWAP5)]" ) {
+  REQUIRE(5 == Instruction::swapPosition(Instruction::values[Opcode::SWAP5]));
+}
+
+TEST_CASE("Instruction swapPosition(SWAP1)", "[swapPosition(SWAP1)]" ) {
+  REQUIRE(1 == Instruction::swapPosition(Instruction::values[Opcode::SWAP1]));
+}
+
+TEST_CASE("Instruction logBytes(LOG4)", "[dupPosition(LOG4)]" ) {
+  REQUIRE(4 == Instruction::logBytes(Instruction::values[Opcode::LOG4]));
+}
+
+TEST_CASE("Instruction logBytes(LOG0)", "[dupPosition(LOG0)]" ) {
+  REQUIRE(0 == Instruction::logBytes(Instruction::values[Opcode::LOG0]));
+}

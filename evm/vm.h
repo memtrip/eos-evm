@@ -30,4 +30,5 @@ class VM {
     ExecResult execute(char* bytesArg, unsigned int lenArg);
     // NOTE: exposed for testing
     uint256_t stackTop();
+    uint256_t peekAt(int pos);
 };

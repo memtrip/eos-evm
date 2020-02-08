@@ -48,7 +48,8 @@ ExecResult VM::stepInner(ByteReader& reader) {
     case InstructionResult::STOP_EXEC_RETURN:
       break;
     case InstructionResult::STOP_EXEC:
-      break;
+      // TODO: return the amount of gas left, before execution was stopped
+      return ExecResult::STOPPED;
     case InstructionResult::INSTRUCTION_TRAP:
       break;
   }
@@ -64,36 +65,62 @@ InstructionResult VM::executeInstruction(instruct_t instruction, ByteReader& rea
   Utils::printInstruction(instruction);
   switch (Instruction::opcode(instruction)) {
     case Opcode::STOP:
-      printf("(STOP ");
-      break;
+      return InstructionResult::STOP_EXEC;
     case Opcode::ADD:
       {
         // TODO: handle arthemetic overflows
-        uint256_t result = stack.peek(1) + stack.peek(0);
+        uint256_t result = stack.peek(0) + stack.peek(1);
         stack.pop(2);
         stack.push(result);
         break;
       }
     case Opcode::MUL:
-      printf("(MUL ");
-      break;
+      {
+        // TODO: handle arthemetic overflows
+        uint256_t result = stack.peek(0) * stack.peek(1);
+        stack.pop(2);
+        stack.push(result);
+        break;
+      }
     case Opcode::SUB:
       {
         // TODO: handle arthemetic overflows
-        uint256_t result = stack.peek(1) - stack.peek(0);
+        uint256_t result = stack.peek(0) - stack.peek(1);
         stack.pop(2);
         stack.push(result);
         break;
       }
     case Opcode::DIV:
-      printf("(DIV ");
-      break;
+      {
+        // TODO: handle arthemetic overflows
+        uint256_t a = stack.peek(0);
+        uint256_t b = stack.peek(1);
+        if (b == 0) {
+          stack.pop(2);
+          stack.push(uint256_t(0));
+        } else {
+          stack.pop(2);
+          stack.push(a / b);
+        }
+        break;
+      }
     case Opcode::SDIV:
       printf("(SDIV ");
       break;
     case Opcode::MOD:
-      printf("(MOD ");
-      break;
+      {
+        // TODO: handle arthemetic overflows
+        uint256_t a = stack.peek(0);
+        uint256_t b = stack.peek(1);
+        if (b == 0) {
+          stack.pop(2);
+          stack.push(uint256_t(0));
+        } else {
+          stack.pop(2);
+          stack.push(a % b);
+        }
+        break;
+      }
     case Opcode::SMOD:
       printf("(SMOD ");
       break;
@@ -111,11 +138,19 @@ InstructionResult VM::executeInstruction(instruct_t instruction, ByteReader& rea
       break;
 
     case Opcode::LT:
-      printf("(LT ");
-      break;
+      {
+        bool result = stack.peek(0) < stack.peek(1);
+        stack.pop(2);
+        stack.pushBool(result);
+        break;
+      }
     case Opcode::GT:
-      printf("(GT ");
-      break;
+      {
+        bool result = stack.peek(0) > stack.peek(1);
+        stack.pop(2);
+        stack.pushBool(result);
+        break;
+      }
     case Opcode::SLT:
       printf("(SLT ");
       break;
@@ -123,11 +158,19 @@ InstructionResult VM::executeInstruction(instruct_t instruction, ByteReader& rea
       printf("(SGT ");
       break;
     case Opcode::EQ:
-      printf("(EQ ");
-      break;
+      {
+        bool result = stack.peek(0) == stack.peek(1);
+        stack.pop(2);
+        stack.pushBool(result);
+        break;
+      }
     case Opcode::ISZERO:
-      printf("(ISZERO ");
-      break;
+      {
+        bool result = stack.peek(0) == 0;
+        stack.pop(1);
+        stack.pushBool(result);
+        break;
+      }
     case Opcode::AND:
       printf("(AND ");
       break;
@@ -273,101 +316,40 @@ InstructionResult VM::executeInstruction(instruct_t instruction, ByteReader& rea
       stack.push(reader.read(Instruction::pushBytes(instruction)));
       break;
     case Opcode::DUP1:
-      printf("(DUP1 ");
-      break;
     case Opcode::DUP2:
-      printf("(DUP2 ");
-      break;
     case Opcode::DUP3:
-      printf("(DUP3 ");
-      break;
     case Opcode::DUP4:
-      printf("(DUP4 ");
-      break;
     case Opcode::DUP5:
-      printf("(DUP5 ");
-      break;
     case Opcode::DUP6:
-      printf("(DUP6 ");
-      break;
     case Opcode::DUP7:
-      printf("(DUP7 ");
-      break;
     case Opcode::DUP8:
-      printf("(DUP8 ");
-      break;
     case Opcode::DUP9:
-      printf("(DUP9 ");
-      break;
     case Opcode::DUP10:
-      printf("(DUP10 ");
-      break;
     case Opcode::DUP11:
-      printf("(DUP11 ");
-      break;
     case Opcode::DUP12:
-      printf("(DUP12 ");
-      break;
     case Opcode::DUP13:
-      printf("(DUP13 ");
-      break;
     case Opcode::DUP14:
-      printf("(DUP14 ");
-      break;
     case Opcode::DUP15:
-      printf("(DUP15 ");
-      break;
     case Opcode::DUP16:
-      printf("(DUP16 ");
+      stack.push(stack.peek(Instruction::dupPosition(instruction)));
       break;
-
     case Opcode::SWAP1:
-      printf("(SWAP1 ");
-      break;
     case Opcode::SWAP2:
-      printf("(SWAP2 ");
-      break;
     case Opcode::SWAP3:
-      printf("(SWAP3 ");
-      break;
     case Opcode::SWAP4:
-      printf("(SWAP4 ");
-      break;
     case Opcode::SWAP5:
-      printf("(SWAP5 ");
-      break;
     case Opcode::SWAP6:
-      printf("(SWAP6 ");
-      break;
     case Opcode::SWAP7:
-      printf("(SWAP7 ");
-      break;
     case Opcode::SWAP8:
-      printf("(SWAP8 ");
-      break;
     case Opcode::SWAP9:
-      printf("(SWAP9 ");
-      break;
     case Opcode::SWAP10:
-      printf("(SWAP10 ");
-      break;
     case Opcode::SWAP11:
-      printf("(SWAP11 ");
-      break;
     case Opcode::SWAP12:
-      printf("(SWAP12 ");
-      break;
     case Opcode::SWAP13:
-      printf("(SWAP13 ");
-      break;
     case Opcode::SWAP14:
-      printf("(SWAP14 ");
-      break;
     case Opcode::SWAP15:
-      printf("(SWAP15 ");
-      break;
     case Opcode::SWAP16:
-      printf("(SWAP16 ");
+      stack.swapWithTop(Instruction::swapPosition(instruction));
       break;
 
     case Opcode::LOG0:
@@ -386,15 +368,6 @@ InstructionResult VM::executeInstruction(instruct_t instruction, ByteReader& rea
       printf("(LOG4 ");
       break;
 
-    case Opcode::PUSH:
-      printf("(PUSH ");
-      break;
-    case Opcode::DUP:
-      printf("(DUP ");
-      break;
-    case Opcode::SWAP:
-      printf("(SWAP ");
-      break;
     case Opcode::CREATE:
       printf("(CREATE ");
       break;
@@ -428,4 +401,8 @@ InstructionResult VM::executeInstruction(instruct_t instruction, ByteReader& rea
 
 uint256_t VM::stackTop() {
   return stack.peek(0);
+}
+
+uint256_t VM::peekAt(int pos) {
+  return stack.peek(pos);
 }

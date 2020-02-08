@@ -11,4 +11,7 @@ class Instruction
     static unsigned char tier(instruct_t instruction);
     static bool isPush(instruct_t instruction);
     static unsigned char pushBytes(instruct_t instruction);
+    static unsigned char dupPosition(instruct_t instruction);
+    static unsigned char swapPosition(instruct_t instruction);
+    static unsigned char logBytes(instruct_t instruction);
 };

@@ -25,3 +25,14 @@ TEST_CASE("Byte Reader read(1)", "[read(1)]" ) {
     Utils::uint256_2str(item)
   );
 }
+
+TEST_CASE("Byte Reader read(17)", "[read(17)]" ) {
+  std::string bytecode_str = "6017";
+  char bytecode_array[bytecode_str.length() / 2];
+  Utils::hex2bin(bytecode_str, bytecode_array);
+  ByteReader byteReader(1, bytecode_array, sizeof(bytecode_array));
+  uint256_t item = byteReader.read(1);
+  CHECK("17" == 
+    Utils::uint256_2str(item)
+  );
+}

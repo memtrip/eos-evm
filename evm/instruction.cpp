@@ -293,3 +293,27 @@ unsigned char Instruction::pushBytes(instruct_t instruction) {
   } 
   return 0;
 }
+
+unsigned char Instruction::dupPosition(instruct_t instruction) {
+  unsigned char op = Instruction::opcode(instruction);
+  if (op >= Opcode::DUP1 && op <= Opcode::DUP16) {
+    return op - Opcode::DUP1;
+  }
+  return 0;
+}
+
+unsigned char Instruction::swapPosition(instruct_t instruction) {
+  unsigned char op = Instruction::opcode(instruction);
+  if (op >= Opcode::SWAP1 && op <= Opcode::SWAP16) {
+    return op - Opcode::SWAP1 + 1;
+  }
+  return 0;
+}
+
+unsigned char Instruction::logBytes(instruct_t instruction) {
+  unsigned char op = Instruction::opcode(instruction);
+  if (op >= Opcode::LOG0 && op <= Opcode::LOG4) {
+    return op - Opcode::LOG0;
+  }
+  return 0;
+}

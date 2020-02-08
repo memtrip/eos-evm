@@ -129,10 +129,6 @@ enum Opcode: unsigned char {
   LOG3 = 0xA3,
   LOG4 = 0xA4,
 
-  PUSH = 0xB0,
-  DUP = 0xB1,
-  SWAP = 0xB2,
-
   CREATE = 0xF0,
   CALL = 0xF1,
   CALLCODE = 0xF2,
