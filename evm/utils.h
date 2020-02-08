@@ -1,18 +1,9 @@
-#ifndef FUNCTIONS_H_INCLUDED
-#define FUNCTIONS_H_INCLUDED
-
-unsigned char byteAt(unsigned int value, int pos);
-
-void printOpcode(unsigned char value);
-
-void printTier(unsigned char value);
-
-void printOpcodeHex(unsigned char value);
-
-void printInstruction(unsigned int value);
-
-void printInstructionList();
-
-void hex2bin(const std::string& hex, char* bytes);
-
-#endif
+class Utils {
+  public:
+    static void printOpcode(unsigned char value);
+    static void printTier(unsigned char value);
+    static void printOpcodeHex(unsigned char value);
+    static void printInstruction(unsigned int value);
+    static void printInstructionList();
+    static void hex2bin(const std::string& hex, char* bytes);
+};

@@ -1,17 +1,12 @@
 #include <stdio.h>
 #include <stdexcept>
-#include <vector>
 #include <string>
 #include "opcode.h"
 #include "instruction.h"
+#include "gas_tier_price.h"
+#include "utils.h"
 
-using namespace evm;
-
-unsigned char byteAt(unsigned int value, int pos) {
-  return (value >> (8*pos)) & 0xff;
-}
-
-void printOpcode(unsigned char value) {
+void Utils::printOpcode(unsigned char value) {
   switch (value) {
     case Opcode::STOP:
       printf("(STOP ");
@@ -429,7 +424,7 @@ void printOpcode(unsigned char value) {
   }
 }
 
-void printTier(unsigned char value) {
+void Utils::printTier(unsigned char value) {
   switch (value) {
     case GasTierPrice::ZERO:
       printf("ZERO");
@@ -458,31 +453,31 @@ void printTier(unsigned char value) {
   }
 }
 
-void printOpcodeHex(unsigned char value) {
+void Utils::printOpcodeHex(unsigned char value) {
   printf("(0x%02X)", (unsigned int)(value & 0xFF));
 }
 
-void printInstruction(unsigned int value) {
+void Utils::printInstruction(unsigned int value) {
   if (value == 255) return;
   printf("(");
-  printOpcode(byteAt(value, 3));
-  printOpcodeHex(byteAt(value, 3));
+  printOpcode(Instruction::byteAt(value, 3));
+  printOpcodeHex(Instruction::byteAt(value, 3));
   printf(")");
-  printf(", %d, %d, ", byteAt(value, 2), byteAt(value, 1));
-  printTier(byteAt(value, 0));
+  printf(", %d, %d, ", Instruction::byteAt(value, 2), Instruction::byteAt(value, 1));
+  printTier(Instruction::byteAt(value, 0));
   printf(")");
   printf(" ");
   printf("\n");
 }
 
-void printInstructionList() {
+void Utils::printInstructionList() {
   for (int i = 0; i < 255; i++) {
-    unsigned int instruction = Instructions::values[i];
+    unsigned int instruction = Instruction::values[i];
     printInstruction(instruction);
   }
 }
 
-void hex2bin(const std::string& hex, char* bytes) {
+void Utils::hex2bin(const std::string& hex, char* bytes) {
   int position = 0;
   for (unsigned int i = 0; i < hex.length(); i+=2) {
     std::string byteString = hex.substr(i, 2);

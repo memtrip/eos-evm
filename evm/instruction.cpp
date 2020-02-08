@@ -1,9 +1,10 @@
 #include "instruction.h"
+#include "opcode.h"
 
 /*
   A 4 byte representation of an EVM instruction; [opcode][args][return][tier]
 */
-const unsigned int evm::Instructions::values[] = {
+const instruct_t Instruction::values[] = {
   0x00000000, // ((STOP (0x00)), 0, 0, ZERO)
   0x01020102, // ((ADD (0x01)), 2, 1, VERY_LOW)
   0x02020103, // ((MUL (0x02)), 2, 1, LOW)
@@ -260,3 +261,35 @@ const unsigned int evm::Instructions::values[] = {
   0x000000FF, // Unassigned
   0xFF010007, // ((SELFDESTRUCT (0xFF)), 1, 0, SPECIAL)
 };
+
+unsigned char Instruction::byteAt(instruct_t instruction, int pos) {
+  return (instruction >> (8*pos)) & 0xff;
+}
+
+unsigned char Instruction::opcode(instruct_t instruction) {
+  return Instruction::byteAt(instruction, 3);
+}
+
+unsigned char Instruction::args(instruct_t instruction) {
+  return Instruction::byteAt(instruction, 2);
+} 
+
+unsigned char Instruction::ret(instruct_t instruction) {
+  return Instruction::byteAt(instruction, 1);
+} 
+
+unsigned char Instruction::tier(instruct_t instruction) {
+  return Instruction::byteAt(instruction, 0);
+}
+
+bool Instruction::isPush(instruct_t instruction) {
+  unsigned char op = Instruction::opcode(instruction);
+  return op >= Opcode::PUSH1 && op <= Opcode::PUSH32;
+}
+
+unsigned char Instruction::pushBytes(instruct_t instruction) {
+  if (Instruction::isPush(instruction)) {
+    return Instruction::opcode(instruction) - Opcode::PUSH1 + 1;
+  } 
+  return 0;
+}

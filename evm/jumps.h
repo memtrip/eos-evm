@@ -1,6 +1,6 @@
-#include <set>
+#include "types.h"
 
 class Jumps {
   public:
-    static std::set<unsigned int> find_destinations(char* byte_code, unsigned int size);
+    static jump_set_t find_destinations(char* byte_code, unsigned int size);
 };
