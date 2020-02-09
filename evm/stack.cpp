@@ -24,10 +24,18 @@ void StackMachine::push(uint256_t item) {
 }
 
 void StackMachine::pushBool(bool value) {
-  stack.push_back(value ? uint256_t(1) : uint256_t(0));
+  stack.push_back(value ? StackMachine::TRUE : StackMachine::FALSE);
 }
 
 void StackMachine::swapWithTop(unsigned int n) {
   unsigned size = stack.size();
   std::swap(stack[size - n - 1], stack[size - 1]);
 }
+
+uint256_t StackMachine::top() {
+  return StackMachine::peek(0);
+}
+
+uint256_t StackMachine::TRUE = uint256_t(1);
+
+uint256_t StackMachine::FALSE = uint256_t(0);

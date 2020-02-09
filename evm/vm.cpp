@@ -5,29 +5,39 @@
 #include "big_int.h"
 #include "utils.h" // TODO: remove this
 
-ExecResult VM::execute(char* bytes, unsigned int size) {
+ExecResult VM::execute(char* bytes, unsigned int size, StackMachine& stack, AccountState& accountState) {
   ExecResult result;
 
-  jump_set_t jumps = Jumps::find_destinations(bytes, size);
+  jump_set_t jumps = Jumps::findDestinations(bytes, size);
   ByteReader reader(0, bytes, size);
 
   do {
-    result = VM::step(jumps, reader);
+    result = VM::step(jumps, stack, reader, accountState);
   } while(result == ExecResult::CONTINUE);
 
   return result;
 }
 
-ExecResult VM::step(jump_set_t jumps, ByteReader& reader) {
-  return VM::stepInner(reader);
+ExecResult VM::step(
+  jump_set_t& jumps, 
+  StackMachine& stack,
+  ByteReader& reader, 
+  AccountState& accountState
+) {
+  return VM::stepInner(jumps, stack, reader, accountState);
 }
 
-ExecResult VM::stepInner(ByteReader& reader) {
+ExecResult VM::stepInner(
+  jump_set_t& jumps,
+  StackMachine& stack,
+  ByteReader& reader, 
+  AccountState& accountState
+) {
   unsigned char opcode = reader.bytes[reader.position];
   unsigned int instruction = Instruction::values[opcode];
   reader.position += 1;
 
-  // TODO: handle this properly
+  // TODO: handle this properly with an invalid instruction error 
   if (instruction == 0x000000FF) return ExecResult::DONE;
 
   last_stack_ret_len = Instruction::ret(instruction);
@@ -36,7 +46,14 @@ ExecResult VM::stepInner(ByteReader& reader) {
 
   // TODO: calculate gas cost
 
-  InstructionResult result = VM::executeInstruction(instruction, reader);
+  InstructionResult result = VM::executeInstruction(
+    instruction, 
+    stack,
+    reader, 
+    accountState
+  );
+
+  printf("%d", result);
 
   switch (result) {
     case InstructionResult::OK:
@@ -44,7 +61,36 @@ ExecResult VM::stepInner(ByteReader& reader) {
     case InstructionResult::UNUSED_GAS:
       break;
     case InstructionResult::JUMP_POSITION:
-      break;
+      {
+        uint256_t position = stack.peek(0);
+        stack.pop(1);
+
+        if (jumps.size() == 0) {
+          // TODO: check jump position for child contracts?
+          // i.e; resolve the jumps from the code attached to the VM
+        }
+
+        unsigned long pos = Jumps::verifyJump(position, jumps);
+        if (pos == INVALID_ARGUMENT) return ExecResult::STOPPED; // TODO: handle error
+        reader.position = pos;
+        break;
+      }
+      case InstructionResult::JUMP_CONDITIONAL_POSITION:
+      {
+        printf("weird!");
+        uint256_t position = stack.peek(0);
+        //stack.pop(2);
+
+        // if (jumps.size() == 0) {
+        //   // TODO: check jump position for child contracts?
+        //   // i.e; resolve the jumps from the code attached to the VM
+        // }
+
+        // unsigned long pos = Jumps::verifyJump(position, jumps);
+        // if (pos == INVALID_ARGUMENT) return ExecResult::STOPPED; // TODO: handle error
+        // reader.position = pos;
+        break;
+      }
     case InstructionResult::STOP_EXEC_RETURN:
       break;
     case InstructionResult::STOP_EXEC:
@@ -61,11 +107,17 @@ ExecResult VM::stepInner(ByteReader& reader) {
   return ExecResult::CONTINUE;
 }
 
-InstructionResult VM::executeInstruction(instruct_t instruction, ByteReader& reader) {
+InstructionResult VM::executeInstruction(
+  instruct_t instruction,
+  StackMachine& stack,
+  ByteReader& reader, 
+  AccountState& accountState
+) {
   Utils::printInstruction(instruction);
   switch (Instruction::opcode(instruction)) {
-    case Opcode::STOP:
+    case Opcode::STOP: {
       return InstructionResult::STOP_EXEC;
+    }
     case Opcode::ADD:
       {
         // TODO: handle arthemetic overflows
@@ -172,17 +224,33 @@ InstructionResult VM::executeInstruction(instruct_t instruction, ByteReader& rea
         break;
       }
     case Opcode::AND:
-      printf("(AND ");
-      break;
+      {
+        uint256_t result = stack.peek(0) & stack.peek(1);
+        stack.pop(2);
+        stack.push(result);
+        break;
+      }
     case Opcode::OR:
-      printf("(OR ");
-      break;
+      {
+        uint256_t result = stack.peek(0) | stack.peek(1);
+        stack.pop(2);
+        stack.push(result);
+        break;
+      }
     case Opcode::XOR:
-      printf("(XOR ");
-      break;
+      {
+        uint256_t result = stack.peek(0) ^ stack.peek(1);
+        stack.pop(2);
+        stack.push(result);
+        break;
+      }
     case Opcode::NOT:
-      printf("(NOT ");
-      break;
+      {
+        uint256_t item = stack.peek(0);
+        stack.pop(1);
+        stack.push(!item);
+        break;
+      }
     case Opcode::BYTE:
       printf("(BYTE ");
       break;
@@ -264,14 +332,23 @@ InstructionResult VM::executeInstruction(instruct_t instruction, ByteReader& rea
       printf("(SLOAD ");
       break;
     case Opcode::SSTORE:
-      printf("(SSTORE ");
-      break;
+      {
+        // TODO: support clear
+        // TODO: gas calculations
+        uint256_t address = stack.peek(0);
+        uint256_t val = stack.peek(1);
+        accountState.set(address, val);
+        stack.pop(2);
+        break;
+      }
     case Opcode::JUMP:
-      printf("(JUMP ");
-      break;
+      return InstructionResult::JUMP_POSITION;
     case Opcode::JUMPI:
-      printf("(JUMPI ");
-      break;
+      {
+        if (stack.peek(1) == StackMachine::TRUE) return InstructionResult::JUMP_CONDITIONAL_POSITION;
+        stack.pop(2);
+        break;
+      }
     case Opcode::PC:
       printf("(PC ");
       break;
@@ -279,7 +356,7 @@ InstructionResult VM::executeInstruction(instruct_t instruction, ByteReader& rea
       printf("(GAS ");
       break;
     case Opcode::JUMPDEST:
-      printf("(JUMPDEST ");
+      // resolved in Jumps::findDestinations
       break;
     case Opcode::PUSH1:
     case Opcode::PUSH2:
@@ -396,13 +473,6 @@ InstructionResult VM::executeInstruction(instruct_t instruction, ByteReader& rea
       printf("(SELFDESTRUCT ");
       break;
   }
+
   return InstructionResult::OK;
-}
-
-uint256_t VM::stackTop() {
-  return stack.peek(0);
-}
-
-uint256_t VM::peekAt(int pos) {
-  return stack.peek(pos);
 }

@@ -12,4 +12,7 @@ class StackMachine {
     void push(uint256_t item);
     void pushBool(bool value);
     void swapWithTop(unsigned int n);
+    uint256_t top();
+    static uint256_t TRUE;
+    static uint256_t FALSE;
 };

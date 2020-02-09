@@ -5,6 +5,7 @@
 #include "instruction.h"
 #include "gas_tier_price.h"
 #include "utils.h"
+#include "big_int.h"
 
 void Utils::printOpcode(unsigned char value) {
   switch (value) {
@@ -487,4 +488,10 @@ void Utils::print_uint256(uint256_t value) {
   printf("{");
   std::cout << Utils::uint256_2str(value);
   printf("}\n");
+}
+
+uint256_t Utils::bigIntFromBytes(std::string bytecode_str) {
+  char bytecode_array[bytecode_str.length() / 2];
+  Utils::hex2bin(bytecode_str, bytecode_array);
+  return BigInt::fromBytes(bytecode_array, sizeof(bytecode_array));
 }

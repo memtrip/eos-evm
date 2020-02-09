@@ -12,13 +12,15 @@ TEST_CASE("Less than comparison truthy", "[LT]") {
   char bytecode_array[bytecode_str.length() / 2];
   Utils::hex2bin(bytecode_str, bytecode_array);
   VM vm {};
+  AccountState accountState {};
+  StackMachine sm {};
 
   // when
-  vm.execute(bytecode_array, sizeof(bytecode_array));
+  vm.execute(bytecode_array, sizeof(bytecode_array), sm, accountState);
 
   // then
   CHECK("1" == 
-    Utils::uint256_2str(vm.stackTop())
+    Utils::uint256_2str(sm.top())
   );
 }
 
@@ -31,13 +33,15 @@ TEST_CASE("Less than comparison not true", "[LT]") {
   char bytecode_array[bytecode_str.length() / 2];
   Utils::hex2bin(bytecode_str, bytecode_array);
   VM vm {};
+  AccountState accountState {};
+  StackMachine sm {};
 
   // when
-  vm.execute(bytecode_array, sizeof(bytecode_array));
+  vm.execute(bytecode_array, sizeof(bytecode_array), sm, accountState);
 
   // then
   CHECK("0" == 
-    Utils::uint256_2str(vm.stackTop())
+    Utils::uint256_2str(sm.top())
   );
 }
 
@@ -50,13 +54,15 @@ TEST_CASE("Greater than comparison truthy", "[GT]") {
   char bytecode_array[bytecode_str.length() / 2];
   Utils::hex2bin(bytecode_str, bytecode_array);
   VM vm {};
+  AccountState accountState {};
+  StackMachine sm {};
 
   // when
-  vm.execute(bytecode_array, sizeof(bytecode_array));
+  vm.execute(bytecode_array, sizeof(bytecode_array), sm, accountState);
 
   // then
   CHECK("1" == 
-    Utils::uint256_2str(vm.stackTop())
+    Utils::uint256_2str(sm.top())
   );
 }
 
@@ -69,13 +75,15 @@ TEST_CASE("Greater than comparison not true", "[GT]") {
   char bytecode_array[bytecode_str.length() / 2];
   Utils::hex2bin(bytecode_str, bytecode_array);
   VM vm {};
+  AccountState accountState {};
+  StackMachine sm {};
 
   // when
-  vm.execute(bytecode_array, sizeof(bytecode_array));
+  vm.execute(bytecode_array, sizeof(bytecode_array), sm, accountState);
 
   // then
   CHECK("0" == 
-    Utils::uint256_2str(vm.stackTop())
+    Utils::uint256_2str(sm.top())
   );
 }
 
@@ -88,13 +96,15 @@ TEST_CASE("Equal comparison truthy", "[EQ]") {
   char bytecode_array[bytecode_str.length() / 2];
   Utils::hex2bin(bytecode_str, bytecode_array);
   VM vm {};
+  AccountState accountState {};
+  StackMachine sm {};
 
   // when
-  vm.execute(bytecode_array, sizeof(bytecode_array));
+  vm.execute(bytecode_array, sizeof(bytecode_array), sm, accountState);
 
   // then
   CHECK("1" == 
-    Utils::uint256_2str(vm.stackTop())
+    Utils::uint256_2str(sm.top())
   );
 }
 
@@ -107,13 +117,15 @@ TEST_CASE("Equal comparison not true", "[EQ]") {
   char bytecode_array[bytecode_str.length() / 2];
   Utils::hex2bin(bytecode_str, bytecode_array);
   VM vm {};
+  AccountState accountState {};
+  StackMachine sm {};
 
   // when
-  vm.execute(bytecode_array, sizeof(bytecode_array));
+  vm.execute(bytecode_array, sizeof(bytecode_array), sm, accountState);
 
   // then
   CHECK("0" == 
-    Utils::uint256_2str(vm.stackTop())
+    Utils::uint256_2str(sm.top())
   );
 }
 
@@ -125,13 +137,15 @@ TEST_CASE("Is zero comparison truthy", "[ISZERO]") {
   char bytecode_array[bytecode_str.length() / 2];
   Utils::hex2bin(bytecode_str, bytecode_array);
   VM vm {};
+  AccountState accountState {};
+  StackMachine sm {};
 
   // when
-  vm.execute(bytecode_array, sizeof(bytecode_array));
+  vm.execute(bytecode_array, sizeof(bytecode_array), sm, accountState);
 
   // then
   CHECK("1" == 
-    Utils::uint256_2str(vm.stackTop())
+    Utils::uint256_2str(sm.top())
   );
 }
 
@@ -143,12 +157,14 @@ TEST_CASE("Is zero comparison not true", "[ISZERO]") {
   char bytecode_array[bytecode_str.length() / 2];
   Utils::hex2bin(bytecode_str, bytecode_array);
   VM vm {};
+  AccountState accountState {};
+  StackMachine sm {};
 
   // when
-  vm.execute(bytecode_array, sizeof(bytecode_array));
+  vm.execute(bytecode_array, sizeof(bytecode_array), sm, accountState);
 
   // then
   CHECK("0" == 
-    Utils::uint256_2str(vm.stackTop())
+    Utils::uint256_2str(sm.top())
   );
 }

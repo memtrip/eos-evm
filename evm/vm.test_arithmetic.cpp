@@ -12,13 +12,15 @@ TEST_CASE("Add two large numbers", "[ADD]") {
   char bytecode_array[bytecode_str.length() / 2];
   Utils::hex2bin(bytecode_str, bytecode_array);
   VM vm {};
+  AccountState accountState {};
+  StackMachine sm {};
 
   // when
-  vm.execute(bytecode_array, sizeof(bytecode_array));
+  vm.execute(bytecode_array, sizeof(bytecode_array), sm, accountState);
 
   // then
   CHECK("fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe" == 
-    Utils::uint256_2str(vm.stackTop())
+    Utils::uint256_2str(sm.top())
   );
 }
 
@@ -31,13 +33,15 @@ TEST_CASE("Multiply two numbers", "[MUL]") {
   char bytecode_array[bytecode_str.length() / 2];
   Utils::hex2bin(bytecode_str, bytecode_array);
   VM vm {};
+  AccountState accountState {};
+  StackMachine sm {};
 
   // when
-  vm.execute(bytecode_array, sizeof(bytecode_array));
+  vm.execute(bytecode_array, sizeof(bytecode_array), sm, accountState);
 
   // then
   CHECK("9" == 
-    Utils::uint256_2str(vm.stackTop())
+    Utils::uint256_2str(sm.top())
   );
 }
 
@@ -50,13 +54,15 @@ TEST_CASE("Multiply two larger numbers", "[MUL]") {
   char bytecode_array[bytecode_str.length() / 2];
   Utils::hex2bin(bytecode_str, bytecode_array);
   VM vm {};
+  AccountState accountState {};
+  StackMachine sm {};
 
   // when
-  vm.execute(bytecode_array, sizeof(bytecode_array));
+  vm.execute(bytecode_array, sizeof(bytecode_array), sm, accountState);
 
   // then
   CHECK("1e4" == 
-    Utils::uint256_2str(vm.stackTop())
+    Utils::uint256_2str(sm.top())
   );
 }
 
@@ -69,13 +75,15 @@ TEST_CASE("Subtract two numbers", "[SUB]") {
   char bytecode_array[bytecode_str.length() / 2];
   Utils::hex2bin(bytecode_str, bytecode_array);
   VM vm {};
+  AccountState accountState {};
+  StackMachine sm {};
 
   // when
-  vm.execute(bytecode_array, sizeof(bytecode_array));
+  vm.execute(bytecode_array, sizeof(bytecode_array), sm, accountState);
 
   // then
   CHECK("2" == 
-    Utils::uint256_2str(vm.stackTop())
+    Utils::uint256_2str(sm.top())
   );
 }
 
@@ -88,13 +96,15 @@ TEST_CASE("Divide two numbers", "[DIV]") {
   char bytecode_array[bytecode_str.length() / 2];
   Utils::hex2bin(bytecode_str, bytecode_array);
   VM vm {};
+  AccountState accountState {};
+  StackMachine sm {};
 
   // when
-  vm.execute(bytecode_array, sizeof(bytecode_array));
+  vm.execute(bytecode_array, sizeof(bytecode_array), sm, accountState);
 
   // then
   CHECK("2" == 
-    Utils::uint256_2str(vm.stackTop())
+    Utils::uint256_2str(sm.top())
   );
 }
 
@@ -107,13 +117,15 @@ TEST_CASE("Divide 2 / 0", "[DIV]") {
   char bytecode_array[bytecode_str.length() / 2];
   Utils::hex2bin(bytecode_str, bytecode_array);
   VM vm {};
+  AccountState accountState {};
+  StackMachine sm {};
 
   // when
-  vm.execute(bytecode_array, sizeof(bytecode_array));
+  vm.execute(bytecode_array, sizeof(bytecode_array), sm, accountState);
 
   // then
   CHECK("0" == 
-    Utils::uint256_2str(vm.stackTop())
+    Utils::uint256_2str(sm.top())
   );
 }
 
@@ -126,13 +138,15 @@ TEST_CASE("Modulus 8 % 2", "[MOD]") {
   char bytecode_array[bytecode_str.length() / 2];
   Utils::hex2bin(bytecode_str, bytecode_array);
   VM vm {};
+  AccountState accountState {};
+  StackMachine sm {};
 
   // when
-  vm.execute(bytecode_array, sizeof(bytecode_array));
+  vm.execute(bytecode_array, sizeof(bytecode_array), sm, accountState);
 
   // then
   CHECK("0" == 
-    Utils::uint256_2str(vm.stackTop())
+    Utils::uint256_2str(sm.top())
   );
 }
 
@@ -145,13 +159,15 @@ TEST_CASE("Modulus 5 % 2", "[MOD]") {
   char bytecode_array[bytecode_str.length() / 2];
   Utils::hex2bin(bytecode_str, bytecode_array);
   VM vm {};
+  AccountState accountState {};
+  StackMachine sm {};
 
   // when
-  vm.execute(bytecode_array, sizeof(bytecode_array));
+  vm.execute(bytecode_array, sizeof(bytecode_array), sm, accountState);
 
   // then
   CHECK("1" == 
-    Utils::uint256_2str(vm.stackTop())
+    Utils::uint256_2str(sm.top())
   );
 }
 
@@ -164,12 +180,14 @@ TEST_CASE("Modulus 2 % 0", "[MOD]") {
   char bytecode_array[bytecode_str.length() / 2];
   Utils::hex2bin(bytecode_str, bytecode_array);
   VM vm {};
+  AccountState accountState {};
+  StackMachine sm {};
 
   // when
-  vm.execute(bytecode_array, sizeof(bytecode_array));
+  vm.execute(bytecode_array, sizeof(bytecode_array), sm, accountState);
 
   // then
   CHECK("0" == 
-    Utils::uint256_2str(vm.stackTop())
+    Utils::uint256_2str(sm.top())
   );
 }

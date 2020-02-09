@@ -10,4 +10,5 @@ class Utils {
     static void hex2bin(const std::string& hex, char* bytes);
     static std::string uint256_2str(uint256_t value);
     static void print_uint256(uint256_t value);
+    static uint256_t bigIntFromBytes(std::string bytecode_str);
 };

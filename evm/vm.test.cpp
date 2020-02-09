@@ -12,19 +12,21 @@ TEST_CASE("Duplicate stack item", "[DUP1]") {
   char bytecode_array[bytecode_str.length() / 2];
   Utils::hex2bin(bytecode_str, bytecode_array);
   VM vm {};
+  AccountState accountState {};
+  StackMachine sm {};
 
   // when
-  vm.execute(bytecode_array, sizeof(bytecode_array));
+  vm.execute(bytecode_array, sizeof(bytecode_array), sm, accountState);
 
   // then
   CHECK("3" == 
-    Utils::uint256_2str(vm.stackTop())
+    Utils::uint256_2str(sm.top())
   );
   CHECK("3" == 
-    Utils::uint256_2str(vm.peekAt(1))
+    Utils::uint256_2str(sm.peek(1))
   );
   CHECK("2" == 
-    Utils::uint256_2str(vm.peekAt(2))
+    Utils::uint256_2str(sm.peek(2))
   );
 }
 
@@ -51,13 +53,15 @@ TEST_CASE("Duplicate stack item at 16", "[DUP1]") {
   char bytecode_array[bytecode_str.length() / 2];
   Utils::hex2bin(bytecode_str, bytecode_array);
   VM vm {};
+  AccountState accountState {};
+  StackMachine sm {};
 
   // when
-  vm.execute(bytecode_array, sizeof(bytecode_array));
+  vm.execute(bytecode_array, sizeof(bytecode_array), sm, accountState);
 
   // then
   CHECK("1" == 
-    Utils::uint256_2str(vm.stackTop())
+    Utils::uint256_2str(sm.top())
   );
 }
 
@@ -70,16 +74,18 @@ TEST_CASE("Swap stack item", "[SWAP1]") {
   char bytecode_array[bytecode_str.length() / 2];
   Utils::hex2bin(bytecode_str, bytecode_array);
   VM vm {};
+  AccountState accountState {};
+  StackMachine sm {};
 
   // when
-  vm.execute(bytecode_array, sizeof(bytecode_array));
+  vm.execute(bytecode_array, sizeof(bytecode_array), sm, accountState);
 
   // then
   CHECK("2" == 
-    Utils::uint256_2str(vm.stackTop())
+    Utils::uint256_2str(sm.top())
   );
   CHECK("3" == 
-    Utils::uint256_2str(vm.peekAt(1))
+    Utils::uint256_2str(sm.peek(1))
   );
 }
 
@@ -107,34 +113,38 @@ TEST_CASE("Swap stack item at 16", "[SWAP16]") {
   char bytecode_array[bytecode_str.length() / 2];
   Utils::hex2bin(bytecode_str, bytecode_array);
   VM vm {};
+  AccountState accountState {};
+  StackMachine sm {};
 
   // when
-  vm.execute(bytecode_array, sizeof(bytecode_array));
+  vm.execute(bytecode_array, sizeof(bytecode_array), sm, accountState);
 
   // then
   CHECK("1" == 
-    Utils::uint256_2str(vm.stackTop())
+    Utils::uint256_2str(sm.top())
   );
   CHECK("17" == 
-    Utils::uint256_2str(vm.peekAt(16))
+    Utils::uint256_2str(sm.peek(16))
   );
 }
 
-TEST_CASE("Comparison", "[c]") {
-  // given
-  // (PUSH1 ((60)02))
-	// (PUSH1 ((60)00))
-	// (MOD (06))
-  std::string bytecode_str = "601665012365124623818181811060005511600155146002556415235412358014600355";
-  char bytecode_array[bytecode_str.length() / 2];
-  Utils::hex2bin(bytecode_str, bytecode_array);
-  VM vm {};
+// TEST_CASE("Comparison", "[c]") {
+//   // given
+//   // (PUSH1 ((60)02))
+// 	// (PUSH1 ((60)00))
+// 	// (MOD (06))
+//   std::string bytecode_str = "601665012365124623818181811060005511600155146002556415235412358014600355";
+//   char bytecode_array[bytecode_str.length() / 2];
+//   Utils::hex2bin(bytecode_str, bytecode_array);
+//   VM vm {};
+//   AccountState accountState {};
+//   StackMachine sm {};
 
-  // when
-  vm.execute(bytecode_array, sizeof(bytecode_array));
+//   // when
+//   vm.execute(bytecode_array, sizeof(bytecode_array), sm, accountState);
 
-  // then
-  CHECK("?" == 
-    Utils::uint256_2str(vm.stackTop())
-  );
-}
+//   // then
+//   CHECK("?" == 
+//     Utils::uint256_2str(sm.top())
+//   );
+// }
