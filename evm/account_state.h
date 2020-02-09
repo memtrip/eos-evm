@@ -1,8 +1,10 @@
 #include <map>
+#include <vector>
 #include "types.h"
 
 class AccountState {
   public:
-    void set(uint256_t key, uint256_t value);
-    std::map<uint256_t, uint256_t> items;
+    AccountState(std::map<uint256_t, uint256_t>* itemsArg);
+    std::map<uint256_t, uint256_t>* items;
+    void putTopPair(std::vector<uint256_t>* stackItems);
 };

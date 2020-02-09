@@ -3,58 +3,71 @@
 #include "utils.h"
 #include "vm.h"
 
-// TODO: this test should asser that the account store has set values
-// TEST_CASE("Jumps", "[jumps]") {
-//   // given
-//   // (PUSH1 ((60)06))
-// 	 // (PUSH1 ((60)03))
-//   // (JUMP (56))
-// 	 // (MUL (02))
-// 	 // (DIV (04))
-//   std::string bytecode_str = "600160015560066000555b60016000540380806000551560245760015402600155600a565b";
-//   char bytecode_array[bytecode_str.length() / 2];
-//   Utils::hex2bin(bytecode_str, bytecode_array);
-//   VM vm {};
-//   AccountState accountState {};
-//   StackMachine sm {};
+TEST_CASE("Conditional jump to destination truthy", "[jumps]") {
+  // given
+  // (PUSH1 ((60)06))
+	// (PUSH1 ((60)03))
+  // (LT (10))
+  // (PUSH1 ((60)0F))
+  // (JUMPI (57))
+  // (PUSH1 ((60)06))
+	// (PUSH1 ((60)03))
+	// (MUL (02))
+  // (STOP (00))
+  // (JUMPDEST (5B))
+  // (PUSH1 ((60)02))
+  // (PUSH1 ((60)10))
+	// (DIV (04))
+  std::string bytecode_str = "6006600310600F57600660030200025B6002601604";
+  char bytecode_array[bytecode_str.length() / 2];
+  Utils::hex2bin(bytecode_str, bytecode_array);
+  VM vm {};
+  std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
+  AccountState as(accountItems);
+  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
+  StackMachine sm(stackItems);
 
-//   // when
-//   vm.execute(bytecode_array, sizeof(bytecode_array), sm, accountState);
+  // when
+  vm.execute(bytecode_array, sizeof(bytecode_array), sm, as);
 
-//   // then
-//   CHECK("2" == 
-//     Utils::uint256_2str(sm.top())
-//   );
-// }
+  // then
+  CHECK("b" == 
+    Utils::uint256_2str(sm.top())
+  );
+}
 
-// TEST_CASE("Conditional jump to destination truthy", "[jumps]") {
-//   // given
-//   // (PUSH1 ((60)06))
-// 	// (PUSH1 ((60)03))
-//   // (LT (10))
-//   // (PUSH1 ((60)03))
-//   // (JUMPI (57))
-// 	// (MUL (02))
-//   // (JUMPDEST (5B))
-//   // (PUSH1 ((60)03))
-//   // (PUSH1 ((60)02))
-//   // (PUSH1 ((60)10))
-// 	// (DIV (04))
-//   std::string bytecode_str = "6006600310600357025B60036002601004";
-//   char bytecode_array[bytecode_str.length() / 2];
-//   Utils::hex2bin(bytecode_str, bytecode_array);
-//   VM vm {};
-//   AccountState accountState {};
-//   StackMachine sm {};
+TEST_CASE("Conditional jump to destination not true", "[jumps]") {
+  // given
+  // (PUSH1 ((60)03))
+	// (PUSH1 ((60)06))
+  // (LT (10))
+  // (PUSH1 ((60)0F))
+  // (JUMPI (57))
+  // (PUSH1 ((60)06))
+	// (PUSH1 ((60)03))
+	// (MUL (02))
+  // (STOP (00))
+  // (JUMPDEST (5B))
+  // (PUSH1 ((60)02))
+  // (PUSH1 ((60)10))
+	// (DIV (04))
+  std::string bytecode_str = "6003600610600F57600660030200025B6002601604";
+  char bytecode_array[bytecode_str.length() / 2];
+  Utils::hex2bin(bytecode_str, bytecode_array);
+  VM vm {};
+  std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
+  AccountState as(accountItems);
+  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
+  StackMachine sm(stackItems);
 
-//   // when
-//   vm.execute(bytecode_array, sizeof(bytecode_array), sm, accountState);
+  // when
+  vm.execute(bytecode_array, sizeof(bytecode_array), sm, as);
 
-//   // then
-//   CHECK("5" == 
-//     Utils::uint256_2str(sm.top())
-//   );
-// }
+  // then
+  CHECK("12" == 
+    Utils::uint256_2str(sm.top())
+  );
+}
 
 TEST_CASE("Unconditional jump to destination", "[jumps]") {
   // given
@@ -69,14 +82,42 @@ TEST_CASE("Unconditional jump to destination", "[jumps]") {
   char bytecode_array[bytecode_str.length() / 2];
   Utils::hex2bin(bytecode_str, bytecode_array);
   VM vm {};
-  AccountState accountState {};
-  StackMachine sm {};
+  std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
+  AccountState as(accountItems);
+  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
+  StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytecode_array, sizeof(bytecode_array), sm, accountState);
+  vm.execute(bytecode_array, sizeof(bytecode_array), sm, as);
 
   // then
   CHECK("2" == 
     Utils::uint256_2str(sm.top())
   );
 }
+
+//TODO: this test should asser that the account store has set values
+// TEST_CASE("Jumps", "[jumps]") {
+//   // given
+//   // (PUSH1 ((60)06))
+// 	 // (PUSH1 ((60)03))
+//   // (JUMP (56))
+// 	 // (MUL (02))
+// 	 // (DIV (04))
+//   std::string bytecode_str = "600160015560066000555b60016000540380806000551560245760015402600155600a565b";
+//   char bytecode_array[bytecode_str.length() / 2];
+//   Utils::hex2bin(bytecode_str, bytecode_array);
+//   VM vm {};
+//   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
+//   AccountState as(accountItems);
+//   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
+//   StackMachine sm(stackItems);
+
+//   // when
+//   vm.execute(bytecode_array, sizeof(bytecode_array), sm, as);
+
+//   // then
+//   CHECK("2" == 
+//     Utils::uint256_2str(sm.top())
+//   );
+// }

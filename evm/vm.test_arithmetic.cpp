@@ -12,11 +12,13 @@ TEST_CASE("Add two large numbers", "[ADD]") {
   char bytecode_array[bytecode_str.length() / 2];
   Utils::hex2bin(bytecode_str, bytecode_array);
   VM vm {};
-  AccountState accountState {};
-  StackMachine sm {};
+  std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
+  AccountState as(accountItems);
+  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
+  StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytecode_array, sizeof(bytecode_array), sm, accountState);
+  vm.execute(bytecode_array, sizeof(bytecode_array), sm, as);
 
   // then
   CHECK("fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe" == 
@@ -33,11 +35,13 @@ TEST_CASE("Multiply two numbers", "[MUL]") {
   char bytecode_array[bytecode_str.length() / 2];
   Utils::hex2bin(bytecode_str, bytecode_array);
   VM vm {};
-  AccountState accountState {};
-  StackMachine sm {};
+  std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
+  AccountState as(accountItems);
+  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
+  StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytecode_array, sizeof(bytecode_array), sm, accountState);
+  vm.execute(bytecode_array, sizeof(bytecode_array), sm, as);
 
   // then
   CHECK("9" == 
@@ -54,11 +58,13 @@ TEST_CASE("Multiply two larger numbers", "[MUL]") {
   char bytecode_array[bytecode_str.length() / 2];
   Utils::hex2bin(bytecode_str, bytecode_array);
   VM vm {};
-  AccountState accountState {};
-  StackMachine sm {};
+  std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
+  AccountState as(accountItems);
+  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
+  StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytecode_array, sizeof(bytecode_array), sm, accountState);
+  vm.execute(bytecode_array, sizeof(bytecode_array), sm, as);
 
   // then
   CHECK("1e4" == 
@@ -75,11 +81,13 @@ TEST_CASE("Subtract two numbers", "[SUB]") {
   char bytecode_array[bytecode_str.length() / 2];
   Utils::hex2bin(bytecode_str, bytecode_array);
   VM vm {};
-  AccountState accountState {};
-  StackMachine sm {};
+  std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
+  AccountState as(accountItems);
+  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
+  StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytecode_array, sizeof(bytecode_array), sm, accountState);
+  vm.execute(bytecode_array, sizeof(bytecode_array), sm, as);
 
   // then
   CHECK("2" == 
@@ -96,11 +104,13 @@ TEST_CASE("Divide two numbers", "[DIV]") {
   char bytecode_array[bytecode_str.length() / 2];
   Utils::hex2bin(bytecode_str, bytecode_array);
   VM vm {};
-  AccountState accountState {};
-  StackMachine sm {};
+  std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
+  AccountState as(accountItems);
+  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
+  StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytecode_array, sizeof(bytecode_array), sm, accountState);
+  vm.execute(bytecode_array, sizeof(bytecode_array), sm, as);
 
   // then
   CHECK("2" == 
@@ -117,11 +127,13 @@ TEST_CASE("Divide 2 / 0", "[DIV]") {
   char bytecode_array[bytecode_str.length() / 2];
   Utils::hex2bin(bytecode_str, bytecode_array);
   VM vm {};
-  AccountState accountState {};
-  StackMachine sm {};
+  std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
+  AccountState as(accountItems);
+  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
+  StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytecode_array, sizeof(bytecode_array), sm, accountState);
+  vm.execute(bytecode_array, sizeof(bytecode_array), sm, as);
 
   // then
   CHECK("0" == 
@@ -138,11 +150,13 @@ TEST_CASE("Modulus 8 % 2", "[MOD]") {
   char bytecode_array[bytecode_str.length() / 2];
   Utils::hex2bin(bytecode_str, bytecode_array);
   VM vm {};
-  AccountState accountState {};
-  StackMachine sm {};
+  std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
+  AccountState as(accountItems);
+  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
+  StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytecode_array, sizeof(bytecode_array), sm, accountState);
+  vm.execute(bytecode_array, sizeof(bytecode_array), sm, as);
 
   // then
   CHECK("0" == 
@@ -159,11 +173,13 @@ TEST_CASE("Modulus 5 % 2", "[MOD]") {
   char bytecode_array[bytecode_str.length() / 2];
   Utils::hex2bin(bytecode_str, bytecode_array);
   VM vm {};
-  AccountState accountState {};
-  StackMachine sm {};
+  std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
+  AccountState as(accountItems);
+  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
+  StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytecode_array, sizeof(bytecode_array), sm, accountState);
+  vm.execute(bytecode_array, sizeof(bytecode_array), sm, as);
 
   // then
   CHECK("1" == 
@@ -180,11 +196,13 @@ TEST_CASE("Modulus 2 % 0", "[MOD]") {
   char bytecode_array[bytecode_str.length() / 2];
   Utils::hex2bin(bytecode_str, bytecode_array);
   VM vm {};
-  AccountState accountState {};
-  StackMachine sm {};
+  std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
+  AccountState as(accountItems);
+  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
+  StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytecode_array, sizeof(bytecode_array), sm, accountState);
+  vm.execute(bytecode_array, sizeof(bytecode_array), sm, as);
 
   // then
   CHECK("0" == 

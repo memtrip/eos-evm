@@ -53,8 +53,6 @@ ExecResult VM::stepInner(
     accountState
   );
 
-  printf("%d", result);
-
   switch (result) {
     case InstructionResult::OK:
       break;
@@ -77,18 +75,17 @@ ExecResult VM::stepInner(
       }
       case InstructionResult::JUMP_CONDITIONAL_POSITION:
       {
-        printf("weird!");
         uint256_t position = stack.peek(0);
-        //stack.pop(2);
+        stack.pop(2);
 
-        // if (jumps.size() == 0) {
-        //   // TODO: check jump position for child contracts?
-        //   // i.e; resolve the jumps from the code attached to the VM
-        // }
+        if (jumps.size() == 0) {
+          // TODO: check jump position for child contracts?
+          // i.e; resolve the jumps from the code attached to the VM
+        }
 
-        // unsigned long pos = Jumps::verifyJump(position, jumps);
-        // if (pos == INVALID_ARGUMENT) return ExecResult::STOPPED; // TODO: handle error
-        // reader.position = pos;
+        unsigned long pos = Jumps::verifyJump(position, jumps);
+        if (pos == INVALID_ARGUMENT) return ExecResult::STOPPED; // TODO: handle error
+        reader.position = pos;
         break;
       }
     case InstructionResult::STOP_EXEC_RETURN:
@@ -113,7 +110,7 @@ InstructionResult VM::executeInstruction(
   ByteReader& reader, 
   AccountState& accountState
 ) {
-  Utils::printInstruction(instruction);
+  //Utils::printInstruction(instruction);
   switch (Instruction::opcode(instruction)) {
     case Opcode::STOP: {
       return InstructionResult::STOP_EXEC;
@@ -147,6 +144,7 @@ InstructionResult VM::executeInstruction(
         // TODO: handle arthemetic overflows
         uint256_t a = stack.peek(0);
         uint256_t b = stack.peek(1);
+
         if (b == 0) {
           stack.pop(2);
           stack.push(uint256_t(0));
@@ -244,11 +242,12 @@ InstructionResult VM::executeInstruction(
         stack.push(result);
         break;
       }
+    // TODO: write a test for this
     case Opcode::NOT:
       {
         uint256_t item = stack.peek(0);
         stack.pop(1);
-        stack.push(!item);
+        stack.push(~item);
         break;
       }
     case Opcode::BYTE:
@@ -333,11 +332,9 @@ InstructionResult VM::executeInstruction(
       break;
     case Opcode::SSTORE:
       {
-        // TODO: support clear
+        // TODO: support clear by index
         // TODO: gas calculations
-        uint256_t address = stack.peek(0);
-        uint256_t val = stack.peek(1);
-        accountState.set(address, val);
+        accountState.putTopPair(stack.stack);
         stack.pop(2);
         break;
       }
@@ -345,7 +342,8 @@ InstructionResult VM::executeInstruction(
       return InstructionResult::JUMP_POSITION;
     case Opcode::JUMPI:
       {
-        if (stack.peek(1) == StackMachine::TRUE) return InstructionResult::JUMP_CONDITIONAL_POSITION;
+        uint256_t condition = stack.peek(1);
+        if (condition == StackMachine::TRUE) return InstructionResult::JUMP_CONDITIONAL_POSITION;
         stack.pop(2);
         break;
       }

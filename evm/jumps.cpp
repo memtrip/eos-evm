@@ -14,7 +14,6 @@ jump_set_t Jumps::findDestinations(char* byte_code, unsigned int size) {
     int instruction = Instruction::values[index];
 
     if (Instruction::opcode(instruction) == Opcode::JUMPDEST) {
-      printf("{{%d}}", position);
       jumps.insert(position);
     } else {
       position += Instruction::pushBytes(instruction);
@@ -26,11 +25,10 @@ jump_set_t Jumps::findDestinations(char* byte_code, unsigned int size) {
   return jumps;
 }
 
-unsigned long Jumps::verifyJump(uint256_t position, jump_set_t validDestinations) {
+unsigned long Jumps::verifyJump(uint256_t position, jump_set_t& validDestinations) {
   using boost::numeric_cast;
   try {
       unsigned long jump = numeric_cast<unsigned long>(position);
-      printf("<%lu>", jump);
       bool exists = validDestinations.find(jump) != validDestinations.end();
       if (validDestinations.find(jump) != validDestinations.end()) {
         return jump;

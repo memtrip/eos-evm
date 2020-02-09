@@ -495,3 +495,11 @@ uint256_t Utils::bigIntFromBytes(std::string bytecode_str) {
   Utils::hex2bin(bytecode_str, bytecode_array);
   return BigInt::fromBytes(bytecode_array, sizeof(bytecode_array));
 }
+
+bool Utils::accountStoreContains(uint256_t key, std::map<uint256_t, uint256_t>* store) {
+  return store->find(key) != store->end();
+}
+
+uint256_t Utils::accountStoreValue(uint256_t key, std::map<uint256_t, uint256_t>* store) {
+  return store->find(key)->second;
+}
