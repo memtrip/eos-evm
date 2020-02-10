@@ -22,7 +22,6 @@ TEST_CASE("Find jump distinations", "[findDestinations]") {
     REQUIRE(66 == *it); 
 }
 
-
 TEST_CASE("Verify jumps", "[verifyJump]") {
   // given
   jump_set_t jumps = jump_set_t();

@@ -1,3 +1,4 @@
+#include <vector>
 #include "big_int.h"
 #include "types.h"
 
@@ -11,6 +12,15 @@ uint256_t BigInt::fromBytes(char* bytes, int len) {
     size = len;
   }
   i.backend().resize(size, size);
-  memcpy(i.backend().limbs(), bytes, len);
+  std::memcpy(i.backend().limbs(), bytes, len);
   return i;
+}
+
+void BigInt::toBytes(uint256_t& value, char* output) {
+  auto count = value.backend().size();
+  auto tsize = sizeof(limb_type_t);
+  auto copy_count = count * tsize;
+  if (len < count * tsize) return;
+  std::memcpy(output, value.backend().limbs(), copy_count);
+  if (len > copy_count) std::memset(output + copy_count, 0, len - copy_count);
 }
