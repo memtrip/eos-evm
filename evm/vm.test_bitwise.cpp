@@ -10,7 +10,7 @@ TEST_CASE("Bitwise AND", "[bitwise]") {
   std::string bytecode_str = "6003600916";
   std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
-  std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
+  account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
   Memory mem(memoryBytes);
@@ -33,7 +33,7 @@ TEST_CASE("Bitwise OR", "[bitwise]") {
   std::string bytecode_str = "6002600417";
   std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
-  std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
+  account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
   Memory mem(memoryBytes);
@@ -56,7 +56,7 @@ TEST_CASE("Bitwise XOR", "[bitwise]") {
   std::string bytecode_str = "6002600718";
   std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
-  std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
+  account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
   Memory mem(memoryBytes);

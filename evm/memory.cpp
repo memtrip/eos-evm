@@ -47,25 +47,29 @@ uint256_t Memory::read(uint256_t offset) {
   return BigInt::fromBigEndianBytes(std::vector<uint8_t>(memory->begin() + index, memory->begin() + index + WORD_SIZE));
 }
 
-void Memory::writeSlice(uint256_t offset, Memory& memoryToWrite) {
-  if (memoryToWrite.size() != 0) {
-    unsigned long off = numeric_cast<unsigned long>(offset);
-    // TODO: ?
+void Memory::writeSlice(uint256_t offsetArg, std::vector<uint8_t> bytes) {
+  if (bytes.size() != 0) {
+    size_t offset = numeric_cast<size_t>(offsetArg);
+    std::copy(bytes.begin(), bytes.end(), memory->begin() + offset);
   }
 }
 
-void Memory::readSlice(uint256_t initOffset, uint256_t initSize) {
-  size_t off = numeric_cast<size_t>(initOffset);
-  unsigned long size = numeric_cast<unsigned long>(initSize);
-  // TODO: -_-
+std::vector<uint8_t> Memory::readSlice(uint256_t offsetArg, uint256_t sizeArg) {
+  size_t offset = numeric_cast<size_t>(offsetArg);
+  size_t size = numeric_cast<size_t>(sizeArg);
+  if (!isValidRange(offset, size)) {
+    return std::vector<uint8_t>();
+  } else {
+    return std::vector<uint8_t>(memory->begin() + offset, memory->begin() + offset + size);
+  }
 }
 
-void Memory::writeableSlice(uint256_t initOffset, uint256_t initSize) {
-  size_t off = numeric_cast<size_t>(initOffset);
-  unsigned long size = numeric_cast<unsigned long>(initSize);
+void Memory::writeableSlice(uint256_t offsetArg, uint256_t sizeArg) {
+  size_t offset = numeric_cast<size_t>(offsetArg);
+  size_t size = numeric_cast<size_t>(sizeArg);
 }
 
-bool Memory::isValidRange(unsigned long offset, unsigned long size) {
+bool Memory::isValidRange(size_t offset, size_t size) {
   std::pair<unsigned int, bool> overflow = Overflow::add(offset, size);
   return size > 0 && !overflow.second;
 }

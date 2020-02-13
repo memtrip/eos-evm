@@ -3,12 +3,12 @@
 #include "utils.h"
 #include "vm.h"
 
-TEST_CASE("Store two values", "[store]") {
+TEST_CASE("Hash zero", "[sha3]") {
   // given
-  // (PUSH1 ((60) 01))
-	// (PUSH1 ((60) 02))
-	// (SSTORE (55))
-  std::string bytecode_str = "6001600255";
+  // (PUSH1 ((60) 00))
+	// (PUSH1 ((60) 00))
+	// (SHA3 (20))
+  std::string bytecode_str = "6000600020";
   std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
   account_store_t* accountItems = new account_store_t();
@@ -19,10 +19,10 @@ TEST_CASE("Store two values", "[store]") {
   StackMachine sm(stackItems);
 
   // when
-  // vm.execute(bytes, mem, sm, as);
+  vm.execute(bytes, mem, sm, as);
 
   // then
-  // CHECK(uint256_t(2) == 
-  //   Utils::accountStoreValue(uint256_t(1), accountItems)
-  // );
+  REQUIRE("c5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470" == 
+    Utils::uint256_2str(sm.top())
+  );
 }

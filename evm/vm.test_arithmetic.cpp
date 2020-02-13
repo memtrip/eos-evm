@@ -11,7 +11,7 @@ TEST_CASE("Add two large numbers", "[ADD]") {
   std::string bytecode_str = "7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff01";
   std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
-  std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
+  account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
   Memory mem(memoryBytes);
@@ -35,7 +35,7 @@ TEST_CASE("Multiply two numbers", "[MUL]") {
   std::string bytecode_str = "6003600302";
   std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
-  std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
+  account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
   Memory mem(memoryBytes);
@@ -59,7 +59,7 @@ TEST_CASE("Multiply two larger numbers", "[MUL]") {
   std::string bytecode_str = "6016601602";
   std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
-  std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
+  account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
   Memory mem(memoryBytes);
@@ -83,7 +83,7 @@ TEST_CASE("Subtract two numbers", "[SUB]") {
   std::string bytecode_str = "6003600503";
   std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
-  std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
+  account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
   Memory mem(memoryBytes);
@@ -107,7 +107,7 @@ TEST_CASE("Divide two numbers", "[DIV]") {
   std::string bytecode_str = "6002600404";
   std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
-  std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
+  account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
   Memory mem(memoryBytes);
@@ -131,7 +131,7 @@ TEST_CASE("Divide 2 / 0", "[DIV]") {
   std::string bytecode_str = "6000600204";
   std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
-  std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
+  account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
   Memory mem(memoryBytes);
@@ -155,7 +155,7 @@ TEST_CASE("Modulus 8 % 2", "[MOD]") {
   std::string bytecode_str = "6002600806";
   std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
-  std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
+  account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
   Memory mem(memoryBytes);
@@ -179,7 +179,7 @@ TEST_CASE("Modulus 5 % 2", "[MOD]") {
   std::string bytecode_str = "6002600506";
   std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
-  std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
+  account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
   Memory mem(memoryBytes);
@@ -203,7 +203,7 @@ TEST_CASE("Modulus 2 % 0", "[MOD]") {
   std::string bytecode_str = "6000600206";
   std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
-  std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
+  account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
   Memory mem(memoryBytes);

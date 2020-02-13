@@ -11,7 +11,7 @@ TEST_CASE("Less than comparison truthy", "[LT]") {
   std::string bytecode_str = "6003600110";
   std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
-  std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
+  account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
   Memory mem(memoryBytes);
@@ -35,7 +35,7 @@ TEST_CASE("Less than comparison not true", "[LT]") {
   std::string bytecode_str = "6001600310";
   std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
-  std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
+  account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
   Memory mem(memoryBytes);
@@ -59,7 +59,7 @@ TEST_CASE("Greater than comparison truthy", "[GT]") {
   std::string bytecode_str = "6001600311";
   std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
-  std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
+  account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
   Memory mem(memoryBytes);
@@ -83,7 +83,7 @@ TEST_CASE("Greater than comparison not true", "[GT]") {
   std::string bytecode_str = "6003600111";
   std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
-  std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
+  account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
   Memory mem(memoryBytes);
@@ -107,7 +107,7 @@ TEST_CASE("Equal comparison truthy", "[EQ]") {
   std::string bytecode_str = "6003600314";
   std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
-  std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
+  account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
   Memory mem(memoryBytes);
@@ -131,7 +131,7 @@ TEST_CASE("Equal comparison not true", "[EQ]") {
   std::string bytecode_str = "6003600114";
   std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
-  std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
+  account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
   Memory mem(memoryBytes);
@@ -154,7 +154,7 @@ TEST_CASE("Is zero comparison truthy", "[ISZERO]") {
   std::string bytecode_str = "600015";
   std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
-  std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
+  account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
   Memory mem(memoryBytes);
@@ -177,7 +177,7 @@ TEST_CASE("Is zero comparison not true", "[ISZERO]") {
   std::string bytecode_str = "600115";
   std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
-  std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
+  account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
   Memory mem(memoryBytes);

@@ -10,14 +10,14 @@ TEST_CASE("Put pair", "[account_state]") {
   stackItems->push_back(uint256_t(1));
   stackItems->push_back(uint256_t(2));
 
-  std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
+  account_store_t* accountItems = new account_store_t();
   AccountState accountState(accountItems);
 
   // when
   accountState.putTopPair(stackItems);
 
   // then
-  // CHECK(uint256_t(2) == 
-  //   Utils::accountStoreValue(uint256_t(1), accountItems)
-  // );
+  store_item_t item = Utils::accountStoreValue(0, accountItems);
+  CHECK(uint256_t(1) == item.first);
+  CHECK(uint256_t(1) == item.second);
 }

@@ -11,7 +11,7 @@ TEST_CASE("Push1", "[push]") {
   std::string bytecode_str = "6006600301";
   std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
-  std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
+  account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
   Memory mem(memoryBytes);
@@ -35,7 +35,7 @@ TEST_CASE("Push2", "[push]") {
   std::string bytecode_str = "61AB0061AC0001";
   std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
-  std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
+  account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
   Memory mem(memoryBytes);
@@ -59,7 +59,7 @@ TEST_CASE("Push3", "[push]") {
   std::string bytecode_str = "62AB00EF62AC00EF01";
   std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
-  std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
+  account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
   Memory mem(memoryBytes);
@@ -83,7 +83,7 @@ TEST_CASE("Push4", "[push]") {
   std::string bytecode_str = "6312345678631234530001";
   std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
-  std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
+  account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
   Memory mem(memoryBytes);
@@ -107,7 +107,7 @@ TEST_CASE("Push5", "[push]") {
   std::string bytecode_str = "64123456781264123453001201";
   std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
-  std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
+  account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
   Memory mem(memoryBytes);
@@ -131,7 +131,7 @@ TEST_CASE("Push6", "[push]") {
   std::string bytecode_str = "651234567812346512345300123401";
   std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
-  std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
+  account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
   Memory mem(memoryBytes);
@@ -155,7 +155,7 @@ TEST_CASE("Push7", "[push]") {
   std::string bytecode_str = "6610000000000012661000000000001201";
   std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
-  std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
+  account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
   Memory mem(memoryBytes);
@@ -179,7 +179,7 @@ TEST_CASE("Push8", "[push]") {
   std::string bytecode_str = "67100000000000001267100000000000001201";
   std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
-  std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
+  account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
   Memory mem(memoryBytes);

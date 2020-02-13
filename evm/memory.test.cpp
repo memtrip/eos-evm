@@ -69,3 +69,26 @@ TEST_CASE("Memory write single byte and read", "[memory]") {
   // then
   REQUIRE("6" == Utils::uint256_2str(memory.read(uint256_t(0x00)))); 
 }
+
+TEST_CASE("Memory read slice and write slice", "[memory]") {
+  // given
+  std::vector<uint8_t>* bytes = new std::vector<uint8_t>();
+  Memory memory(bytes);
+  
+  // when
+  memory.resize(32);
+
+  std::vector<uint8_t> slice1 = Utils::hex2bin("aabbccee112233445566778899");
+  memory.writeSlice(uint256_t(0x00), slice1);
+  std::vector<uint8_t> readSlice1 = memory.readSlice(uint256_t(0x00), uint256_t(0x0D));
+  REQUIRE("aabbccee112233445566778899" == Utils::bytesTohex(&readSlice1)); 
+  
+  std::vector<uint8_t> slice2 = Utils::hex2bin("FFFF");
+  memory.writeSlice(uint256_t(0x01), slice2);
+  std::vector<uint8_t> readSlice2 = memory.readSlice(uint256_t(0x00), uint256_t(0x06));
+  REQUIRE("aaffffee1122" == Utils::bytesTohex(&readSlice2)); 
+
+  std::vector<uint8_t> emptySlice = std::vector<uint8_t>();
+  memory.writeSlice(uint256_t(0x1000), emptySlice);
+  REQUIRE(32 == memory.size()); 
+}

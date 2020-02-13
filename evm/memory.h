@@ -11,8 +11,8 @@ class Memory {
     void writeByte(uint256_t offset, uint256_t value);
     void write(uint256_t offset, uint256_t value);
     uint256_t read(uint256_t offset);
-    void writeSlice(uint256_t offset, Memory& memoryToWrite);
-    void readSlice(uint256_t initOffset, uint256_t initSize);
-    void writeableSlice(uint256_t offset, uint256_t size);
-    bool isValidRange(unsigned long offset, unsigned long size);
+    void writeSlice(uint256_t offsetArg, std::vector<uint8_t> bytes);
+    std::vector<uint8_t> readSlice(uint256_t offsetArg, uint256_t sizeArg);
+    void writeableSlice(uint256_t offsetArg, uint256_t sizeArg);
+    bool isValidRange(size_t offset, size_t size);
 };

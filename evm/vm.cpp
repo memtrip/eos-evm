@@ -3,6 +3,7 @@
 #include "instruction.h"
 #include "jumps.h"
 #include "big_int.h"
+#include "hash.h"
 #include "utils.h" // TODO: remove this
 
 ExecResult VM::execute(
@@ -273,9 +274,14 @@ InstructionResult VM::executeInstruction(
       printf("(SAR ");
       break;
     case Opcode::SHA3:
-      printf("(SHA3 ");
-      break;
-
+      {
+        uint256_t offset = stack.peek(0);
+        uint256_t size = stack.peek(1);
+        stack.pop(2);
+        std::vector<uint8_t> bytes = memory.readSlice(offset, size);
+        stack.push(Hash::keccak256(bytes));
+        break;
+      }
     case Opcode::ADDRESS:
       printf("(ADDRESS ");
       break;
@@ -373,7 +379,10 @@ InstructionResult VM::executeInstruction(
         break;
       }
     case Opcode::PC:
-      printf("(PC ");
+      stack.push(uint256_t(reader.position - 1));
+      break;
+    case Opcode::MSIZE:
+      stack.push(uint256_t(memory.size()));
       break;
     case Opcode::GAS:
       printf("(GAS ");

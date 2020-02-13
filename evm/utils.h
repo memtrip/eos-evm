@@ -12,7 +12,6 @@ class Utils {
     static std::string uint256_2str(uint256_t value);
     static void print_uint256(uint256_t value);
     static uint256_t bigIntFromBigEndianBytes(std::string bytecode_str);
-    static bool accountStoreContains(uint256_t key, std::map<uint256_t, uint256_t>* store);
-    static uint256_t accountStoreValue(uint256_t key, std::map<uint256_t, uint256_t>* store);
+    static store_item_t accountStoreValue(size_t index, account_store_t* store);
     static std::string bytesTohex(std::vector<uint8_t>* bytes);
 };

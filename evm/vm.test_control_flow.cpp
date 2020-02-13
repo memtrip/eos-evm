@@ -21,7 +21,7 @@ TEST_CASE("Conditional jump to destination truthy", "[jumps]") {
   std::string bytecode_str = "6006600310600F57600660030200025B6002601604";
   std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
-  std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
+  account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
   Memory mem(memoryBytes);
@@ -55,7 +55,7 @@ TEST_CASE("Conditional jump to destination not true", "[jumps]") {
   std::string bytecode_str = "6003600610600F57600660030200025B6002601604";
   std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
-  std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
+  account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
   Memory mem(memoryBytes);
@@ -83,7 +83,7 @@ TEST_CASE("Unconditional jump to destination", "[jumps]") {
   std::string bytecode_str = "60036006600856025B04";
   std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
-  std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
+  account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
   Memory mem(memoryBytes);
@@ -111,7 +111,7 @@ TEST_CASE("Unconditional jump to destination", "[jumps]") {
 //   char bytecode_array[bytecode_str.length() / 2];
 //   Utils::hex2bin(bytecode_str, bytecode_array);
 //   VM vm {};
-//   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
+//   account_store_t* accountItems = new account_store_t();
 //   AccountState as(accountItems);
 //   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
 //   StackMachine sm(stackItems);

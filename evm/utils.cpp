@@ -168,6 +168,9 @@ void Utils::printOpcode(unsigned char value) {
     case Opcode::PC:
       printf("(PC ");
       break;
+    case Opcode::MSIZE:
+      printf("(MSIZE ");
+      break;
     case Opcode::GAS:
       printf("(GAS ");
       break;
@@ -496,12 +499,8 @@ uint256_t Utils::bigIntFromBigEndianBytes(std::string bytecode_str) {
   return BigInt::fromBigEndianBytes(Utils::hex2bin(bytecode_str));
 }
 
-bool Utils::accountStoreContains(uint256_t key, std::map<uint256_t, uint256_t>* store) {
-  return store->find(key) != store->end();
-}
-
-uint256_t Utils::accountStoreValue(uint256_t key, std::map<uint256_t, uint256_t>* store) {
-  return store->find(key)->second;
+store_item_t Utils::accountStoreValue(size_t index, account_store_t* store) {
+  return store->at(index);
 }
 
 std::string Utils::bytesTohex(std::vector<uint8_t>* bytes) {
