@@ -12,11 +12,13 @@ TEST_CASE("Bitwise AND", "[bitwise]") {
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
   AccountState as(accountItems);
+  std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
+  Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, sm, as);
+  vm.execute(bytes, mem, sm, as);
 
   // then
   CHECK("1" == 
@@ -33,11 +35,13 @@ TEST_CASE("Bitwise OR", "[bitwise]") {
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
   AccountState as(accountItems);
+  std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
+  Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, sm, as);
+  vm.execute(bytes, mem, sm, as);
 
   // then
   CHECK("6" == 
@@ -54,11 +58,13 @@ TEST_CASE("Bitwise XOR", "[bitwise]") {
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
   AccountState as(accountItems);
+  std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
+  Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, sm, as);
+  vm.execute(bytes, mem, sm, as);
 
   // then
   CHECK("5" == 

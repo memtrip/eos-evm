@@ -23,11 +23,13 @@ TEST_CASE("Conditional jump to destination truthy", "[jumps]") {
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
   AccountState as(accountItems);
+  std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
+  Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, sm, as);
+  vm.execute(bytes, mem, sm, as);
 
   // then
   CHECK("b" == 
@@ -55,11 +57,13 @@ TEST_CASE("Conditional jump to destination not true", "[jumps]") {
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
   AccountState as(accountItems);
+  std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
+  Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, sm, as);
+  vm.execute(bytes, mem, sm, as);
 
   // then
   CHECK("12" == 
@@ -81,11 +85,13 @@ TEST_CASE("Unconditional jump to destination", "[jumps]") {
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
   AccountState as(accountItems);
+  std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
+  Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, sm, as);
+  vm.execute(bytes, mem, sm, as);
 
   // then
   CHECK("2" == 
@@ -111,7 +117,7 @@ TEST_CASE("Unconditional jump to destination", "[jumps]") {
 //   StackMachine sm(stackItems);
 
 //   // when
-//   vm.execute(bytes, sm, as);
+//   vm.execute(bytes, mem, sm, as);
 
 //   // then
 //   CHECK("2" == 

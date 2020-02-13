@@ -13,11 +13,13 @@ TEST_CASE("Add two large numbers", "[ADD]") {
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
   AccountState as(accountItems);
+  std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
+  Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, sm, as);
+  vm.execute(bytes, mem, sm, as);
 
   // then
   CHECK("fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe" == 
@@ -35,11 +37,13 @@ TEST_CASE("Multiply two numbers", "[MUL]") {
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
   AccountState as(accountItems);
+  std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
+  Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, sm, as);
+  vm.execute(bytes, mem, sm, as);
 
   // then
   CHECK("9" == 
@@ -57,11 +61,13 @@ TEST_CASE("Multiply two larger numbers", "[MUL]") {
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
   AccountState as(accountItems);
+  std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
+  Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, sm, as);
+  vm.execute(bytes, mem, sm, as);
 
   // then
   CHECK("1e4" == 
@@ -79,11 +85,13 @@ TEST_CASE("Subtract two numbers", "[SUB]") {
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
   AccountState as(accountItems);
+  std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
+  Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, sm, as);
+  vm.execute(bytes, mem, sm, as);
 
   // then
   CHECK("2" == 
@@ -101,11 +109,13 @@ TEST_CASE("Divide two numbers", "[DIV]") {
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
   AccountState as(accountItems);
+  std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
+  Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, sm, as);
+  vm.execute(bytes, mem, sm, as);
 
   // then
   CHECK("2" == 
@@ -123,11 +133,13 @@ TEST_CASE("Divide 2 / 0", "[DIV]") {
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
   AccountState as(accountItems);
+  std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
+  Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, sm, as);
+  vm.execute(bytes, mem, sm, as);
 
   // then
   CHECK("0" == 
@@ -145,11 +157,13 @@ TEST_CASE("Modulus 8 % 2", "[MOD]") {
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
   AccountState as(accountItems);
+  std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
+  Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, sm, as);
+  vm.execute(bytes, mem, sm, as);
 
   // then
   CHECK("0" == 
@@ -167,11 +181,13 @@ TEST_CASE("Modulus 5 % 2", "[MOD]") {
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
   AccountState as(accountItems);
+  std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
+  Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, sm, as);
+  vm.execute(bytes, mem, sm, as);
 
   // then
   CHECK("1" == 
@@ -189,11 +205,13 @@ TEST_CASE("Modulus 2 % 0", "[MOD]") {
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
   AccountState as(accountItems);
+  std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
+  Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, sm, as);
+  vm.execute(bytes, mem, sm, as);
 
   // then
   CHECK("0" == 

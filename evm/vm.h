@@ -4,6 +4,7 @@
 #include "params.h"
 #include "account_state.h"
 #include "vm_result.h"
+#include "memory.h"
 
 class VM {
   private:
@@ -11,6 +12,7 @@ class VM {
 
     ExecResult step(
       jump_set_t& jumps, 
+      Memory& memory,
       StackMachine& stack,
       ByteReader& reader, 
       AccountState& accountState
@@ -18,6 +20,7 @@ class VM {
 
     ExecResult stepInner(
       jump_set_t& jumps, 
+      Memory& memory,
       StackMachine& stack,
       ByteReader& reader, 
       AccountState& accountState
@@ -25,11 +28,17 @@ class VM {
 
     InstructionResult executeInstruction(
       instruct_t instruction, 
+      Memory& memory,
       StackMachine& stack,
       ByteReader& reader, 
       AccountState& accountState
     );
 
   public:
-    ExecResult execute(std::vector<uint8_t> bytes, StackMachine& stack, AccountState& accountState);
+    ExecResult execute(
+      std::vector<uint8_t> bytes, 
+      Memory& memory,
+      StackMachine& stack, 
+      AccountState& accountState
+    );
 };

@@ -5,14 +5,20 @@
 #include "big_int.h"
 #include "utils.h" // TODO: remove this
 
-ExecResult VM::execute(std::vector<uint8_t> bytes, StackMachine& stack, AccountState& accountState) {
+ExecResult VM::execute(
+  std::vector<uint8_t> bytes, 
+  Memory& memory,
+  StackMachine& stack, 
+  AccountState& accountState
+) {
+
   ExecResult result;
 
   jump_set_t jumps = Jumps::findDestinations(bytes);
   ByteReader reader(0, bytes);
 
   do {
-    result = VM::step(jumps, stack, reader, accountState);
+    result = VM::step(jumps, memory, stack, reader, accountState);
   } while(result == ExecResult::CONTINUE);
 
   return result;
@@ -20,15 +26,17 @@ ExecResult VM::execute(std::vector<uint8_t> bytes, StackMachine& stack, AccountS
 
 ExecResult VM::step(
   jump_set_t& jumps, 
+  Memory& memory,
   StackMachine& stack,
   ByteReader& reader, 
   AccountState& accountState
 ) {
-  return VM::stepInner(jumps, stack, reader, accountState);
+  return VM::stepInner(jumps, memory, stack, reader, accountState);
 }
 
 ExecResult VM::stepInner(
   jump_set_t& jumps,
+  Memory& memory,
   StackMachine& stack,
   ByteReader& reader, 
   AccountState& accountState
@@ -48,6 +56,7 @@ ExecResult VM::stepInner(
 
   InstructionResult result = VM::executeInstruction(
     instruction, 
+    memory,
     stack,
     reader, 
     accountState
@@ -106,6 +115,7 @@ ExecResult VM::stepInner(
 
 InstructionResult VM::executeInstruction(
   instruct_t instruction,
+  Memory& memory,
   StackMachine& stack,
   ByteReader& reader, 
   AccountState& accountState
@@ -319,14 +329,29 @@ InstructionResult VM::executeInstruction(
       printf("(POP ");
       break;
     case Opcode::MLOAD:
-      printf("(MLOAD ");
-      break;
+      {
+        uint256_t offset = stack.peek(0);
+        stack.pop(1);
+        uint256_t word = memory.read(offset);
+        stack.push(word);
+        break;
+      }
     case Opcode::MSTORE:
-      printf("(MSTORE ");
-      break;
+      {
+        uint256_t offset = stack.peek(0);
+        uint256_t word = stack.peek(1);
+        stack.pop(2);
+        memory.write(offset, word);
+        break;
+      }
     case Opcode::MSTORE8:
-      printf("(MSTORE8 ");
-      break;
+      {
+        uint256_t offset = stack.peek(0);
+        uint256_t byte = stack.peek(1);
+        stack.pop(2);
+        memory.writeByte(offset, byte);
+        break;
+      }
     case Opcode::SLOAD:
       printf("(SLOAD ");
       break;

@@ -13,11 +13,13 @@ TEST_CASE("Less than comparison truthy", "[LT]") {
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
   AccountState as(accountItems);
+  std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
+  Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, sm, as);
+  vm.execute(bytes, mem, sm, as);
 
   // then
   CHECK("1" == 
@@ -35,11 +37,13 @@ TEST_CASE("Less than comparison not true", "[LT]") {
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
   AccountState as(accountItems);
+  std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
+  Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, sm, as);
+  vm.execute(bytes, mem, sm, as);
 
   // then
   CHECK("0" == 
@@ -57,11 +61,13 @@ TEST_CASE("Greater than comparison truthy", "[GT]") {
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
   AccountState as(accountItems);
+  std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
+  Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, sm, as);
+  vm.execute(bytes, mem, sm, as);
 
   // then
   CHECK("1" == 
@@ -79,11 +85,13 @@ TEST_CASE("Greater than comparison not true", "[GT]") {
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
   AccountState as(accountItems);
+  std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
+  Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, sm, as);
+  vm.execute(bytes, mem, sm, as);
 
   // then
   CHECK("0" == 
@@ -101,11 +109,13 @@ TEST_CASE("Equal comparison truthy", "[EQ]") {
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
   AccountState as(accountItems);
+  std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
+  Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, sm, as);
+  vm.execute(bytes, mem, sm, as);
 
   // then
   CHECK("1" == 
@@ -123,11 +133,13 @@ TEST_CASE("Equal comparison not true", "[EQ]") {
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
   AccountState as(accountItems);
+  std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
+  Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, sm, as);
+  vm.execute(bytes, mem, sm, as);
 
   // then
   CHECK("0" == 
@@ -144,11 +156,13 @@ TEST_CASE("Is zero comparison truthy", "[ISZERO]") {
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
   AccountState as(accountItems);
+  std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
+  Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, sm, as);
+  vm.execute(bytes, mem, sm, as);
 
   // then
   CHECK("1" == 
@@ -165,11 +179,13 @@ TEST_CASE("Is zero comparison not true", "[ISZERO]") {
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
   AccountState as(accountItems);
+  std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
+  Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, sm, as);
+  vm.execute(bytes, mem, sm, as);
 
   // then
   CHECK("0" == 

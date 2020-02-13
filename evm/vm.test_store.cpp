@@ -13,11 +13,13 @@ TEST_CASE("Store two values", "[store]") {
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
   AccountState as(accountItems);
+  std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
+  Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
 
   // when
-  // vm.execute(bytes, sm, as);
+  // vm.execute(bytes, mem, sm, as);
 
   // then
   // CHECK(uint256_t(2) == 

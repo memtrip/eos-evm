@@ -13,11 +13,13 @@ TEST_CASE("Push1", "[push]") {
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
   AccountState as(accountItems);
+  std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
+  Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, sm, as);
+  vm.execute(bytes, mem, sm, as);
 
   // then
   CHECK("9" == 
@@ -35,11 +37,13 @@ TEST_CASE("Push2", "[push]") {
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
   AccountState as(accountItems);
+  std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
+  Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, sm, as);
+  vm.execute(bytes, mem, sm, as);
 
   // then
   CHECK("15700" == 
@@ -57,11 +61,13 @@ TEST_CASE("Push3", "[push]") {
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
   AccountState as(accountItems);
+  std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
+  Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, sm, as);
+  vm.execute(bytes, mem, sm, as);
 
   // then
   CHECK("15701de" == 
@@ -79,11 +85,13 @@ TEST_CASE("Push4", "[push]") {
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
   AccountState as(accountItems);
+  std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
+  Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, sm, as);
+  vm.execute(bytes, mem, sm, as);
 
   // then
   CHECK("2468a978" == 
@@ -101,11 +109,13 @@ TEST_CASE("Push5", "[push]") {
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
   AccountState as(accountItems);
+  std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
+  Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, sm, as);
+  vm.execute(bytes, mem, sm, as);
 
   // then
   CHECK("2468a97824" == 
@@ -123,11 +133,13 @@ TEST_CASE("Push6", "[push]") {
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
   AccountState as(accountItems);
+  std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
+  Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, sm, as);
+  vm.execute(bytes, mem, sm, as);
 
   // then
   CHECK("2468a9782468" == 
@@ -145,11 +157,13 @@ TEST_CASE("Push7", "[push]") {
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
   AccountState as(accountItems);
+  std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
+  Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, sm, as);
+  vm.execute(bytes, mem, sm, as);
 
   // then
   CHECK("20000000000024" == 
@@ -167,11 +181,13 @@ TEST_CASE("Push8", "[push]") {
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
   AccountState as(accountItems);
+  std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
+  Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, sm, as);
+  vm.execute(bytes, mem, sm, as);
 
   // then
   CHECK("2000000000000024" == 
