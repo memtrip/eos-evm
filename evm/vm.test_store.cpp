@@ -5,10 +5,10 @@
 
 TEST_CASE("Store two values", "[store]") {
   // given
-  // (PUSH1 ((60) 01))
-	// (PUSH1 ((60) 02))
+  // (PUSH1 ((60) 02))
+	// (PUSH1 ((60) 01))
 	// (SSTORE (55))
-  std::string bytecode_str = "6001600255";
+  std::string bytecode_str = "6002600155";
   std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
   account_store_t* accountItems = new account_store_t();
@@ -19,10 +19,12 @@ TEST_CASE("Store two values", "[store]") {
   StackMachine sm(stackItems);
 
   // when
-  // vm.execute(bytes, mem, sm, as);
+  vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
-  // CHECK(uint256_t(2) == 
-  //   Utils::accountStoreValue(uint256_t(1), accountItems)
-  // );
+  store_item_t item = Utils::accountStoreValue(0, accountItems);
+
+  CHECK("2" == 
+    Utils::uint256_2str(item.second)
+  );
 }

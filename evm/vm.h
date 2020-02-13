@@ -6,6 +6,7 @@
 #include "vm_result.h"
 #include "memory.h"
 
+
 class VM {
   private:
     unsigned char last_stack_ret_len;
@@ -15,7 +16,8 @@ class VM {
       Memory& memory,
       StackMachine& stack,
       ByteReader& reader, 
-      AccountState& accountState
+      AccountState& accountState,
+      env_t envInfo
     );
 
     ExecResult stepInner(
@@ -23,7 +25,8 @@ class VM {
       Memory& memory,
       StackMachine& stack,
       ByteReader& reader, 
-      AccountState& accountState
+      AccountState& accountState,
+      env_t envInfo
     );
 
     InstructionResult executeInstruction(
@@ -31,7 +34,8 @@ class VM {
       Memory& memory,
       StackMachine& stack,
       ByteReader& reader, 
-      AccountState& accountState
+      AccountState& accountState,
+      env_t envInfo
     );
 
   public:
@@ -39,6 +43,7 @@ class VM {
       std::vector<uint8_t> bytes, 
       Memory& memory,
       StackMachine& stack, 
-      AccountState& accountState
+      AccountState& accountState,
+      env_t envInfo
     );
 };

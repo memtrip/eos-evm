@@ -46,6 +46,15 @@ enum Opcode: unsigned char {
   RETURNDATACOPY = 0x3E,
   EXTCODEHASH = 0x3F,
 
+  BLOCKHASH = 0x40,
+  COINBASE = 0x41,
+  TIMESTAMP = 0x42,
+  NUMBER = 0x43,
+  DIFFICULTY = 0x44,
+  GASLIMIT = 0x45,
+  CHAINID = 0x46,
+  SELFBALANCE = 0x47,
+
   POP = 0x50,
   MLOAD = 0x51,
   MSTORE = 0x52,

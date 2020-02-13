@@ -14,4 +14,5 @@ class Utils {
     static uint256_t bigIntFromBigEndianBytes(std::string bytecode_str);
     static store_item_t accountStoreValue(size_t index, account_store_t* store);
     static std::string bytesTohex(std::vector<uint8_t>* bytes);
+    static env_t env();
 };

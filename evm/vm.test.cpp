@@ -19,7 +19,7 @@ TEST_CASE("Duplicate stack item", "[DUP1]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as);
+  vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
   CHECK("3" == 
@@ -63,7 +63,7 @@ TEST_CASE("Duplicate stack item at 16", "[DUP1]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as);
+  vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
   CHECK("1" == 
@@ -87,7 +87,7 @@ TEST_CASE("Swap stack item", "[SWAP1]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as);
+  vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
   CHECK("2" == 
@@ -129,7 +129,7 @@ TEST_CASE("Swap stack item at 16", "[SWAP16]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as);
+  vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
   CHECK("1" == 
@@ -161,7 +161,7 @@ TEST_CASE("Program counter", "[PC]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as);
+  vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
   CHECK("e" == 
@@ -169,48 +169,33 @@ TEST_CASE("Program counter", "[PC]") {
   );
 }
 
-// // TEST_CASE("Comparison", "[c]") {
-// //   // given
-// //   // (PUSH1 ((60)02))
-// // 	// (PUSH1 ((60)00))
-// // 	// (MOD (06))
-// //   std::string bytecode_str = "65012365124623626543219002600055";
-// //   char bytecode_array[bytecode_str.length() / 2];
-// //   Utils::hex2bin(bytecode_str, bytecode_array);
-// //   VM vm {};
-// //   account_store_t* accountItems = new account_store_t();
-// //   AccountState as(accountItems);
-// //   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-// //   StackMachine sm(stackItems);
+TEST_CASE("Pop", "[POP]") {
+  // given
+  // (PUSH1 ((60)01))
+	// (PUSH1 ((60)02))
+  // (PUSH1 ((60)03))
+	// (PUSH1 ((60)04))
+  // (PUSH1 ((60)05))
+	// (PUSH1 ((60)06))
+  // (PUSH1 ((60)07))
+  // (PC (58))
+  std::string bytecode_str = "60f060aa50600055";
+  std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
+  VM vm {};
+  account_store_t* accountItems = new account_store_t();
+  AccountState as(accountItems);
+  std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
+  Memory mem(memoryBytes);
+  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
+  StackMachine sm(stackItems);
 
-// //   // when
-// //   vm.execute(bytes, mem, sm, as);
+  // when
+  vm.execute(bytes, mem, sm, as, Utils::env());
 
-// //   // then
-// //   CHECK("?" == 
-// //     Utils::uint256_2str(sm.top())
-// //   );
-// // }
+  // then
+  store_item_t item1 = Utils::accountStoreValue(0, accountItems);
 
-// // TEST_CASE("Comparison", "[c]") {
-// //   // given
-// //   // (PUSH1 ((60)02))
-// // 	// (PUSH1 ((60)00))
-// // 	// (MOD (06))
-// //   std::string bytecode_str = "601665012365124623818181811060005511600155146002556415235412358014600355";
-// //   char bytecode_array[bytecode_str.length() / 2];
-// //   Utils::hex2bin(bytecode_str, bytecode_array);
-// //   VM vm {};
-// //   account_store_t* accountItems = new account_store_t();
-// //   AccountState as(accountItems);
-// //   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-// //    StackMachine sm(stackItems);
-
-// //   // when
-// //   vm.execute(bytes, mem, sm, as);
-
-// //   // then
-// //   CHECK("?" == 
-// //     Utils::uint256_2str(sm.top())
-// //   );
-// // }
+  CHECK("f0" == 
+    Utils::uint256_2str(item1.second)
+  );
+}

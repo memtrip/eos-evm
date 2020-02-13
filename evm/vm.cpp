@@ -10,7 +10,8 @@ ExecResult VM::execute(
   std::vector<uint8_t> bytes, 
   Memory& memory,
   StackMachine& stack, 
-  AccountState& accountState
+  AccountState& accountState,
+  env_t envInfo
 ) {
 
   ExecResult result;
@@ -19,7 +20,7 @@ ExecResult VM::execute(
   ByteReader reader(0, bytes);
 
   do {
-    result = VM::step(jumps, memory, stack, reader, accountState);
+    result = VM::step(jumps, memory, stack, reader, accountState, envInfo);
   } while(result == ExecResult::CONTINUE);
 
   return result;
@@ -30,9 +31,10 @@ ExecResult VM::step(
   Memory& memory,
   StackMachine& stack,
   ByteReader& reader, 
-  AccountState& accountState
+  AccountState& accountState,
+  env_t envInfo
 ) {
-  return VM::stepInner(jumps, memory, stack, reader, accountState);
+  return VM::stepInner(jumps, memory, stack, reader, accountState, envInfo);
 }
 
 ExecResult VM::stepInner(
@@ -40,7 +42,8 @@ ExecResult VM::stepInner(
   Memory& memory,
   StackMachine& stack,
   ByteReader& reader, 
-  AccountState& accountState
+  AccountState& accountState,
+  env_t envInfo
 ) {
   unsigned char opcode = reader.bytes[reader.position];
   unsigned int instruction = Instruction::values[opcode];
@@ -60,7 +63,8 @@ ExecResult VM::stepInner(
     memory,
     stack,
     reader, 
-    accountState
+    accountState,
+    envInfo
   );
 
   switch (result) {
@@ -119,7 +123,8 @@ InstructionResult VM::executeInstruction(
   Memory& memory,
   StackMachine& stack,
   ByteReader& reader, 
-  AccountState& accountState
+  AccountState& accountState,
+  env_t envInfo
 ) {
   //Utils::printInstruction(instruction);
   switch (Instruction::opcode(instruction)) {
@@ -331,8 +336,39 @@ InstructionResult VM::executeInstruction(
       printf("(EXTCODEHASH ");
       break;
 
+    case Opcode::BLOCKHASH:
+      {
+        stack.pop(1);
+        stack.push(StackMachine::STUB);
+      }
+      break;
+    case Opcode::COINBASE:
+      stack.push(StackMachine::STUB);
+      break;
+    case Opcode::TIMESTAMP:
+      // TODO: this comes from eos
+      printf("(TIMESTAMP ");
+      break;
+    case Opcode::NUMBER:
+      // TODO: this comes from eos
+      printf("(NUMBER ");
+      break;
+    case Opcode::DIFFICULTY:
+      stack.push(StackMachine::STUB);
+      break;
+    case Opcode::GASLIMIT:
+      // TODO: this comes from the smart contract
+      break;
+    case Opcode::CHAINID:
+      // TODO: this comes from the smart contract
+      printf("(CHAINID ");
+      break;
+    case Opcode::SELFBALANCE:
+      printf("(SELFBALANCE ");
+      break;
+
     case Opcode::POP:
-      printf("(POP ");
+      stack.pop(1);
       break;
     case Opcode::MLOAD:
       {

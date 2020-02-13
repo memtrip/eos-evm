@@ -69,14 +69,14 @@ const instruct_t Instruction::values[] = {
   0x3D000101, // ((RETURNDATASIZE (0x3D)), 0, 1, BASE)
   0x3E030002, // ((RETURNDATACOPY (0x3E)), 3, 0, VERY_LOW)
   0x3F010107, // ((EXTCODEHASH (0x3F)), 1, 1, SPECIAL)
-  0x000000FF, // Unassigned
-  0x000000FF, // Unassigned
-  0x000000FF, // Unassigned
-  0x000000FF, // Unassigned
-  0x000000FF, // Unassigned
-  0x000000FF, // Unassigned
-  0x000000FF, // Unassigned
-  0x000000FF, // Unassigned
+  0x40010106, // ((BLOCKHASH (0x40)), 1, 1, EXT)
+  0x41000101, // ((COINBASE (0x41)), 0, 1, BASE)
+  0x42000101, // ((TIMESTAMP (0x42)), 0, 1, BASE)
+  0x43000101, // ((NUMBER (0x43)), 0, 1, BASE)
+  0x44000101, // ((DIFFICULTY (0x44)), 0, 1, BASE)
+  0x45000101, // ((GASLIMIT (0x45)), 0, 1, BASE)
+  0x46000101, // ((CHAINID (0x46)), 0, 1, BASE)
+  0x47000103, // ((SELFBALANCE (0x47)), 0, 1, LOW)
   0x000000FF, // Unassigned
   0x000000FF, // Unassigned
   0x000000FF, // Unassigned

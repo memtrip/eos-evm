@@ -19,7 +19,7 @@ TEST_CASE("Push1", "[push]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as);
+  vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
   CHECK("9" == 
@@ -43,7 +43,7 @@ TEST_CASE("Push2", "[push]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as);
+  vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
   CHECK("15700" == 
@@ -67,7 +67,7 @@ TEST_CASE("Push3", "[push]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as);
+  vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
   CHECK("15701de" == 
@@ -91,7 +91,7 @@ TEST_CASE("Push4", "[push]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as);
+  vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
   CHECK("2468a978" == 
@@ -115,7 +115,7 @@ TEST_CASE("Push5", "[push]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as);
+  vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
   CHECK("2468a97824" == 
@@ -139,7 +139,7 @@ TEST_CASE("Push6", "[push]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as);
+  vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
   CHECK("2468a9782468" == 
@@ -163,7 +163,7 @@ TEST_CASE("Push7", "[push]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as);
+  vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
   CHECK("20000000000024" == 
@@ -187,7 +187,7 @@ TEST_CASE("Push8", "[push]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as);
+  vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
   CHECK("2000000000000024" == 

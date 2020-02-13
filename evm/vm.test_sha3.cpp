@@ -19,7 +19,7 @@ TEST_CASE("Hash zero", "[sha3]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as);
+  vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
   REQUIRE("c5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470" == 

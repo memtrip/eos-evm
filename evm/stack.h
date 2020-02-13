@@ -15,4 +15,5 @@ class StackMachine {
     void putMap(std::map<uint256_t,uint256_t>* items);
     static uint256_t TRUE;
     static uint256_t FALSE;
+    static uint256_t STUB;
 };

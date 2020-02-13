@@ -19,7 +19,7 @@ TEST_CASE("Less than comparison truthy", "[LT]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as);
+  vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
   CHECK("1" == 
@@ -43,7 +43,7 @@ TEST_CASE("Less than comparison not true", "[LT]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as);
+  vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
   CHECK("0" == 
@@ -67,7 +67,7 @@ TEST_CASE("Greater than comparison truthy", "[GT]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as);
+  vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
   CHECK("1" == 
@@ -91,7 +91,7 @@ TEST_CASE("Greater than comparison not true", "[GT]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as);
+  vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
   CHECK("0" == 
@@ -115,7 +115,7 @@ TEST_CASE("Equal comparison truthy", "[EQ]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as);
+  vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
   CHECK("1" == 
@@ -139,7 +139,7 @@ TEST_CASE("Equal comparison not true", "[EQ]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as);
+  vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
   CHECK("0" == 
@@ -162,7 +162,7 @@ TEST_CASE("Is zero comparison truthy", "[ISZERO]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as);
+  vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
   CHECK("1" == 
@@ -185,10 +185,47 @@ TEST_CASE("Is zero comparison not true", "[ISZERO]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as);
+  vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
   CHECK("0" == 
     Utils::uint256_2str(sm.top())
+  );
+}
+
+TEST_CASE("Comparison with many instructions", "[comparison]") {
+  std::string bytecode_str = "601665012365124623818181811060005511600155146002556415235412358014600355";
+  std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
+  VM vm {};
+  account_store_t* accountItems = new account_store_t();
+  AccountState as(accountItems);
+  std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
+  Memory mem(memoryBytes);
+  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
+  StackMachine sm(stackItems);
+
+  // when
+  vm.execute(bytes, mem, sm, as, Utils::env());
+
+  // then
+  store_item_t item1 = Utils::accountStoreValue(0, accountItems);
+  store_item_t item2 = Utils::accountStoreValue(1, accountItems);
+  store_item_t item3 = Utils::accountStoreValue(2, accountItems);
+  store_item_t item4 = Utils::accountStoreValue(3, accountItems);
+
+  CHECK("0" == 
+    Utils::uint256_2str(item1.second)
+  );
+
+  CHECK("1" == 
+    Utils::uint256_2str(item2.second)
+  );
+
+  CHECK("0" == 
+    Utils::uint256_2str(item3.second)
+  );
+
+  CHECK("1" == 
+    Utils::uint256_2str(item4.second)
   );
 }

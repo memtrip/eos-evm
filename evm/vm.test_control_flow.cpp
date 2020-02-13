@@ -29,7 +29,7 @@ TEST_CASE("Conditional jump to destination truthy", "[jumps]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as);
+  vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
   CHECK("b" == 
@@ -63,7 +63,7 @@ TEST_CASE("Conditional jump to destination not true", "[jumps]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as);
+  vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
   CHECK("12" == 
@@ -91,7 +91,7 @@ TEST_CASE("Unconditional jump to destination", "[jumps]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as);
+  vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
   CHECK("2" == 
@@ -117,7 +117,7 @@ TEST_CASE("Unconditional jump to destination", "[jumps]") {
 //   StackMachine sm(stackItems);
 
 //   // when
-//   vm.execute(bytes, mem, sm, as);
+//   vm.execute(bytes, mem, sm, as, Utils::env());
 
 //   // then
 //   CHECK("2" == 

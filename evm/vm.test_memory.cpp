@@ -20,7 +20,7 @@ TEST_CASE("Save to memory", "[memory]") {
 
   // when
   mem.resize(32); // TODO: this should happen via requirements (memoryRequiredSize)
-  vm.execute(bytes, mem, sm, as);
+  vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
   CHECK("6" == 
@@ -47,7 +47,7 @@ TEST_CASE("Save to memory, and retreive", "[memory]") {
 
   // when
   mem.resize(32); // TODO: this should happen via requirements (memoryRequiredSize)
-  vm.execute(bytes, mem, sm, as);
+  vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
   CHECK("6" == 
@@ -75,7 +75,7 @@ TEST_CASE("Save to memory, retreive, and apply addition", "[memory]") {
 
   // when
   mem.resize(32); // TODO: this should happen via requirements (memoryRequiredSize)
-  vm.execute(bytes, mem, sm, as);
+  vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
   CHECK("18" == 
@@ -103,7 +103,7 @@ TEST_CASE("Save byte to memory, retreive, and apply addition", "[memory]") {
 
   // when
   mem.resize(32); // TODO: this should happen via requirements (memoryRequiredSize)
-  vm.execute(bytes, mem, sm, as);
+  vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
   CHECK("18" == 
@@ -126,7 +126,7 @@ TEST_CASE("Memory size", "[memory]") {
 
   // when
   mem.resize(32); // TODO: this should happen via requirements (memoryRequiredSize)
-  vm.execute(bytes, mem, sm, as);
+  vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
   CHECK("20" /* 32 in hex */ == 

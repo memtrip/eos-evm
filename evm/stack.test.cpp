@@ -6,7 +6,7 @@ TEST_CASE("Stack pop", "[pop(1)]") {
   // given 
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
-  sm.push(uint256_t(1));
+  sm.push(1);
 
   // when
   sm.pop(1);

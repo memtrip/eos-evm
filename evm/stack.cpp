@@ -42,3 +42,5 @@ void StackMachine::printSize() {
 uint256_t StackMachine::TRUE = uint256_t(1);
 
 uint256_t StackMachine::FALSE = uint256_t(0);
+
+uint256_t StackMachine::STUB = uint256_t(0xFFFFFFFFFFFFFFFF);

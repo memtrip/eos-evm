@@ -141,6 +141,31 @@ void Utils::printOpcode(unsigned char value) {
       printf("(EXTCODEHASH ");
       break;
 
+    case Opcode::BLOCKHASH:
+      printf("(BLOCKHASH ");
+      break;
+    case Opcode::COINBASE:
+      printf("(COINBASE ");
+      break;
+    case Opcode::TIMESTAMP:
+      printf("(TIMESTAMP ");
+      break;
+    case Opcode::NUMBER:
+      printf("(NUMBER ");
+      break;
+    case Opcode::DIFFICULTY:
+      printf("(DIFFICULTY ");
+      break;
+    case Opcode::GASLIMIT:
+      printf("(GASLIMIT ");
+      break;
+    case Opcode::CHAINID:
+      printf("(CHAINID ");
+      break;
+    case Opcode::SELFBALANCE:
+      printf("(SELFBALANCE ");
+      break;
+
     case Opcode::POP:
       printf("(POP ");
       break;
@@ -509,3 +534,12 @@ std::string Utils::bytesTohex(std::vector<uint8_t>* bytes) {
     ss << std::hex << (int)bytes->at(i);
   return ss.str();
 }
+
+env_t Utils::env() {
+  return {
+    16339169,
+    1581632422128,
+    100000,
+    1
+  };
+};
