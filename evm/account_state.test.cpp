@@ -4,7 +4,7 @@
 #include "utils.h"
 #include "stack.h"
 
-TEST_CASE("Put pair", "[pop(1)]") {
+TEST_CASE("Put pair", "[account_state]") {
   // given 
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   stackItems->push_back(uint256_t(1));

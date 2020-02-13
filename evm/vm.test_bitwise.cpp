@@ -8,8 +8,7 @@ TEST_CASE("Bitwise AND", "[bitwise]") {
   // (PUSH1 ((60)09))
   // (AND (16))
   std::string bytecode_str = "6003600916";
-  char bytecode_array[bytecode_str.length() / 2];
-  Utils::hex2bin(bytecode_str, bytecode_array);
+  std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
   AccountState as(accountItems);
@@ -17,7 +16,7 @@ TEST_CASE("Bitwise AND", "[bitwise]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytecode_array, sizeof(bytecode_array), sm, as);
+  vm.execute(bytes, sm, as);
 
   // then
   CHECK("1" == 
@@ -30,8 +29,7 @@ TEST_CASE("Bitwise OR", "[bitwise]") {
   // (PUSH1 ((60)04))
   // (AND (17))
   std::string bytecode_str = "6002600417";
-  char bytecode_array[bytecode_str.length() / 2];
-  Utils::hex2bin(bytecode_str, bytecode_array);
+  std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
   AccountState as(accountItems);
@@ -39,7 +37,7 @@ TEST_CASE("Bitwise OR", "[bitwise]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytecode_array, sizeof(bytecode_array), sm, as);
+  vm.execute(bytes, sm, as);
 
   // then
   CHECK("6" == 
@@ -52,8 +50,7 @@ TEST_CASE("Bitwise XOR", "[bitwise]") {
   // (PUSH1 ((60)07))
   // (XOR (18))
   std::string bytecode_str = "6002600718";
-  char bytecode_array[bytecode_str.length() / 2];
-  Utils::hex2bin(bytecode_str, bytecode_array);
+  std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
   AccountState as(accountItems);
@@ -61,7 +58,7 @@ TEST_CASE("Bitwise XOR", "[bitwise]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytecode_array, sizeof(bytecode_array), sm, as);
+  vm.execute(bytes, sm, as);
 
   // then
   CHECK("5" == 

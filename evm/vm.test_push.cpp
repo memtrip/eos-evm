@@ -3,34 +3,12 @@
 #include "utils.h"
 #include "vm.h"
 
-TEST_CASE("Add two large numbers", "[ADD]") {
+TEST_CASE("Push1", "[push]") {
   // given
-  // (PUSH32 ((7f)fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff))
-	// (PUSH32 ((7f)fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff))
-	// (ADD (01))
-  std::string bytecode_str = "7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff01";
-  std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
-  VM vm {};
-  std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
-  AccountState as(accountItems);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
-
-  // when
-  vm.execute(bytes, sm, as);
-
-  // then
-  CHECK("fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe" == 
-    Utils::uint256_2str(sm.top())
-  );
-}
-
-TEST_CASE("Multiply two numbers", "[MUL]") {
-  // given
-  // (PUSH1 ((60)03))
+  // (PUSH1 ((60)06))
 	// (PUSH1 ((60)03))
-	// (MUL (02))
-  std::string bytecode_str = "6003600302";
+  // (ADD (01))
+  std::string bytecode_str = "6006600301";
   std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
@@ -47,12 +25,12 @@ TEST_CASE("Multiply two numbers", "[MUL]") {
   );
 }
 
-TEST_CASE("Multiply two larger numbers", "[MUL]") {
+TEST_CASE("Push2", "[push]") {
   // given
-  // (PUSH2 ((61)0A10))
-	// (PUSH2 ((61)0B12))
-	// (MUL (02))
-  std::string bytecode_str = "6016601602";
+  // (PUSH2 ((61)AB00))
+	// (PUSH2 ((61)AC00))
+  // (ADD (01))
+  std::string bytecode_str = "61AB0061AC0001";
   std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
@@ -64,17 +42,17 @@ TEST_CASE("Multiply two larger numbers", "[MUL]") {
   vm.execute(bytes, sm, as);
 
   // then
-  CHECK("1e4" == 
+  CHECK("15700" == 
     Utils::uint256_2str(sm.top())
   );
 }
 
-TEST_CASE("Subtract two numbers", "[SUB]") {
+TEST_CASE("Push3", "[push]") {
   // given
-  // (PUSH1 ((60)03))
-	// (PUSH1 ((60)05))
-	// (SUB (03))
-  std::string bytecode_str = "6003600503";
+  // (PUSH3 ((62)AB00EF))
+	// (PUSH3 ((62)AC00EF))
+  // (ADD (01))
+  std::string bytecode_str = "62AB00EF62AC00EF01";
   std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
@@ -86,17 +64,17 @@ TEST_CASE("Subtract two numbers", "[SUB]") {
   vm.execute(bytes, sm, as);
 
   // then
-  CHECK("2" == 
+  CHECK("15701de" == 
     Utils::uint256_2str(sm.top())
   );
 }
 
-TEST_CASE("Divide two numbers", "[DIV]") {
+TEST_CASE("Push4", "[push]") {
   // given
-  // (PUSH1 ((60)02))
-	// (PUSH1 ((60)04))
-	// (DIV (04))
-  std::string bytecode_str = "6002600404";
+  // (PUSH4 ((63)12345678))
+	// (PUSH4 ((63)12345300))
+  // (ADD (01))
+  std::string bytecode_str = "6312345678631234530001";
   std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
@@ -108,17 +86,17 @@ TEST_CASE("Divide two numbers", "[DIV]") {
   vm.execute(bytes, sm, as);
 
   // then
-  CHECK("2" == 
+  CHECK("2468a978" == 
     Utils::uint256_2str(sm.top())
   );
 }
 
-TEST_CASE("Divide 2 / 0", "[DIV]") {
+TEST_CASE("Push5", "[push]") {
   // given
-  // (PUSH1 ((60)00))
-	// (PUSH1 ((60)02))
-	// (DIV (04))
-  std::string bytecode_str = "6000600204";
+  // (PUSH5 ((64)1234567812))
+	// (PUSH5 ((64)1234530012))
+  // (ADD (01))
+  std::string bytecode_str = "64123456781264123453001201";
   std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
@@ -130,17 +108,17 @@ TEST_CASE("Divide 2 / 0", "[DIV]") {
   vm.execute(bytes, sm, as);
 
   // then
-  CHECK("0" == 
+  CHECK("2468a97824" == 
     Utils::uint256_2str(sm.top())
   );
 }
 
-TEST_CASE("Modulus 8 % 2", "[MOD]") {
+TEST_CASE("Push6", "[push]") {
   // given
-  // (PUSH1 ((60)02))
-	// (PUSH1 ((60)08))
-	// (MOD (06))
-  std::string bytecode_str = "6002600806";
+  // (PUSH6 ((65)123456781234))
+	// (PUSH6 ((65)123453001234))
+  // (ADD (01))
+  std::string bytecode_str = "651234567812346512345300123401";
   std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
@@ -152,17 +130,17 @@ TEST_CASE("Modulus 8 % 2", "[MOD]") {
   vm.execute(bytes, sm, as);
 
   // then
-  CHECK("0" == 
+  CHECK("2468a9782468" == 
     Utils::uint256_2str(sm.top())
   );
 }
 
-TEST_CASE("Modulus 5 % 2", "[MOD]") {
+TEST_CASE("Push7", "[push]") {
   // given
-  // (PUSH1 ((60)05))
-	// (PUSH1 ((60)02))
-	// (MOD (06))
-  std::string bytecode_str = "6002600506";
+  // (PUSH7 ((66)10000000000012))
+	// (PUSH7 ((66)10000000000012))
+  // (ADD (01))
+  std::string bytecode_str = "6610000000000012661000000000001201";
   std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
@@ -174,17 +152,17 @@ TEST_CASE("Modulus 5 % 2", "[MOD]") {
   vm.execute(bytes, sm, as);
 
   // then
-  CHECK("1" == 
+  CHECK("20000000000024" == 
     Utils::uint256_2str(sm.top())
   );
 }
 
-TEST_CASE("Modulus 2 % 0", "[MOD]") {
+TEST_CASE("Push8", "[push]") {
   // given
-  // (PUSH1 ((60)02))
-	// (PUSH1 ((60)00))
-	// (MOD (06))
-  std::string bytecode_str = "6000600206";
+  // (PUSH8 ((67)1000000000000012))
+	// (PUSH8 ((67)1000000000000012))
+  // (ADD (01))
+  std::string bytecode_str = "67100000000000001267100000000000001201";
   std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
@@ -196,7 +174,7 @@ TEST_CASE("Modulus 2 % 0", "[MOD]") {
   vm.execute(bytes, sm, as);
 
   // then
-  CHECK("0" == 
+  CHECK("2000000000000024" == 
     Utils::uint256_2str(sm.top())
   );
 }

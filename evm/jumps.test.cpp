@@ -5,12 +5,11 @@
 #include "utils.h"
 
 jump_set_t jump_destinations(std::string bytecode_str) {
-  char bytecode_array[bytecode_str.length() / 2];
-  Utils::hex2bin(bytecode_str, bytecode_array);
-  return Jumps::findDestinations(bytecode_array, sizeof(bytecode_array));
+  std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
+  return Jumps::findDestinations(bytes);
 }
 
-TEST_CASE("Find jump distinations", "[findDestinations]") {
+TEST_CASE("Find jump distinations", "[jumps]") {
   // given
   std::string bytecode_str = "7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff5b01600055";
   
@@ -22,7 +21,7 @@ TEST_CASE("Find jump distinations", "[findDestinations]") {
     REQUIRE(66 == *it); 
 }
 
-TEST_CASE("Verify jumps", "[verifyJump]") {
+TEST_CASE("Verify jumps", "[jumps]") {
   // given
   jump_set_t jumps = jump_set_t();
   jumps.insert(2);
@@ -34,5 +33,5 @@ TEST_CASE("Verify jumps", "[verifyJump]") {
   REQUIRE(2 == Jumps::verifyJump(uint256_t(2), jumps)); 
   REQUIRE(10 == Jumps::verifyJump(uint256_t(10), jumps)); 
   REQUIRE(INVALID_ARGUMENT == Jumps::verifyJump(3, jumps)); 
-  REQUIRE(INVALID_ARGUMENT == Jumps::verifyJump(Utils::bigIntFromBytes("FFFFFFFFFFFFFFFFFFFFF"), jumps)); 
+  REQUIRE(INVALID_ARGUMENT == Jumps::verifyJump(Utils::bigIntFromBigEndianBytes("FFFFFFFFFFFFFFFFFFFFF"), jumps)); 
 }

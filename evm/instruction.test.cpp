@@ -9,13 +9,12 @@
 std::vector<instruct_t> parse(std::string bytecode_str) {
   std::vector<instruct_t> values = std::vector<instruct_t>();
 
-  char bytecode_array[bytecode_str.length() / 2];
-  Utils::hex2bin(bytecode_str, bytecode_array);
-
+  std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
+  
   int position = 0;
 
-  while (position < sizeof(bytecode_array)) {
-    char index = bytecode_array[position];
+  while (position < bytes.size()) {
+    uint8_t index = bytes[position];
     int instruction = Instruction::values[index];
     values.push_back(instruction);
     position++;
@@ -122,46 +121,46 @@ TEST_CASE("Instruction lookup 10-20", "[instruction]" ) {
   REQUIRE(0x20 == Instruction::opcode(instructions.at(14)));
 }
 
-TEST_CASE("Instruction pushBytes(PUSH32)", "[pushBytes(PUSH32)]" ) {
+TEST_CASE("Instruction pushBytes(PUSH32)", "[instruction]" ) {
   REQUIRE(32 == Instruction::pushBytes(Instruction::values[Opcode::PUSH32]));
 }
 
-TEST_CASE("Instruction pushBytes(PUSH1)", "[pushBytes(PUSH1)]" ) {
+TEST_CASE("Instruction pushBytes(PUSH1)", "[instruction]" ) {
   REQUIRE(1 == Instruction::pushBytes(Instruction::values[Opcode::PUSH1]));
 }
 
-TEST_CASE("Instruction dupPosition(DUP16)", "[dupPosition(DUP16)]" ) {
+TEST_CASE("Instruction dupPosition(DUP16)", "[instruction]" ) {
   REQUIRE(15 == Instruction::dupPosition(Instruction::values[Opcode::DUP16]));
 }
 
-TEST_CASE("Instruction dupPosition(DUP10)", "[dupPosition(DUP10)]" ) {
+TEST_CASE("Instruction dupPosition(DUP10)", "[instruction]" ) {
   REQUIRE(9 == Instruction::dupPosition(Instruction::values[Opcode::DUP10]));
 }
 
-TEST_CASE("Instruction dupPosition(DUP5)", "[dupPosition(DUP5)]" ) {
+TEST_CASE("Instruction dupPosition(DUP5)", "[instruction]" ) {
   REQUIRE(4 == Instruction::dupPosition(Instruction::values[Opcode::DUP5]));
 }
 
-TEST_CASE("Instruction dupPosition(DUP1)", "[dupPosition(DUP1)]" ) {
+TEST_CASE("Instruction dupPosition(DUP1)", "[instruction]" ) {
   REQUIRE(0 == Instruction::dupPosition(Instruction::values[Opcode::DUP1]));
 }
 
-TEST_CASE("Instruction swapPosition(SWAP16)", "[swapPosition(SWAP16)]" ) {
+TEST_CASE("Instruction swapPosition(SWAP16)", "[instruction]" ) {
   REQUIRE(16 == Instruction::swapPosition(Instruction::values[Opcode::SWAP16]));
 }
 
-TEST_CASE("Instruction swapPosition(SWAP5)", "[swapPosition(SWAP5)]" ) {
+TEST_CASE("Instruction swapPosition(SWAP5)", "[instruction]" ) {
   REQUIRE(5 == Instruction::swapPosition(Instruction::values[Opcode::SWAP5]));
 }
 
-TEST_CASE("Instruction swapPosition(SWAP1)", "[swapPosition(SWAP1)]" ) {
+TEST_CASE("Instruction swapPosition(SWAP1)", "[instruction]" ) {
   REQUIRE(1 == Instruction::swapPosition(Instruction::values[Opcode::SWAP1]));
 }
 
-TEST_CASE("Instruction logBytes(LOG4)", "[dupPosition(LOG4)]" ) {
+TEST_CASE("Instruction logBytes(LOG4)", "[instruction]" ) {
   REQUIRE(4 == Instruction::logBytes(Instruction::values[Opcode::LOG4]));
 }
 
-TEST_CASE("Instruction logBytes(LOG0)", "[dupPosition(LOG0)]" ) {
+TEST_CASE("Instruction logBytes(LOG0)", "[instruction]" ) {
   REQUIRE(0 == Instruction::logBytes(Instruction::values[Opcode::LOG0]));
 }

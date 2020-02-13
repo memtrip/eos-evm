@@ -9,8 +9,7 @@ TEST_CASE("Store two values", "[store]") {
 	// (PUSH1 ((60) 02))
 	// (SSTORE (55))
   std::string bytecode_str = "6001600255";
-  char bytecode_array[bytecode_str.length() / 2];
-  Utils::hex2bin(bytecode_str, bytecode_array);
+  std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
   AccountState as(accountItems);
@@ -18,7 +17,7 @@ TEST_CASE("Store two values", "[store]") {
   StackMachine sm(stackItems);
 
   // when
-  // vm.execute(bytecode_array, sizeof(bytecode_array), sm, as);
+  // vm.execute(bytes, sm, as);
 
   // then
   // CHECK(uint256_t(2) == 

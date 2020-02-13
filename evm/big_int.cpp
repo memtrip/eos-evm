@@ -1,6 +1,19 @@
-#include <vector>
 #include "big_int.h"
 #include "types.h"
+#include "utils.h" 
+
+uint256_t BigInt::fromBigEndianBytes(std::vector<uint8_t> bytes) {
+  std::reverse(bytes.begin(),bytes.end()); 
+  char buffer[bytes.size()];
+  std::copy(bytes.begin(), bytes.end(), buffer);
+  return BigInt::fromBytes(buffer, bytes.size());
+}
+
+uint256_t BigInt::fromBytes(std::vector<uint8_t> bytes) {
+  char buffer[bytes.size()];
+  std::copy(bytes.begin(), bytes.end(), buffer);
+  return BigInt::fromBytes(buffer, bytes.size());
+}
 
 uint256_t BigInt::fromBytes(char* bytes, int len) {
   uint256_t i;
@@ -9,18 +22,16 @@ uint256_t BigInt::fromBytes(char* bytes, int len) {
   if (len >= limbSize) {
     size = (uint32_t) len / sizeof(limb_type_t);
   } else {
-    size = len;
+    size = 1;
   }
   i.backend().resize(size, size);
   std::memcpy(i.backend().limbs(), bytes, len);
   return i;
 }
 
-void BigInt::toBytes(uint256_t& value, char* output) {
-  auto count = value.backend().size();
-  auto tsize = sizeof(limb_type_t);
-  auto copy_count = count * tsize;
-  if (len < count * tsize) return;
-  std::memcpy(output, value.backend().limbs(), copy_count);
-  if (len > copy_count) std::memset(output + copy_count, 0, len - copy_count);
+std::vector<uint8_t> BigInt::toBytes(uint256_t const& input) {
+  using boost::multiprecision::cpp_int;
+  std::vector<uint8_t> data;
+  export_bits(input, std::back_inserter(data), 8);
+  return data;
 }

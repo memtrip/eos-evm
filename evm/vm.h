@@ -31,5 +31,5 @@ class VM {
     );
 
   public:
-    ExecResult execute(char* bytesArg, unsigned int lenArg, StackMachine& stack, AccountState& accountState);
+    ExecResult execute(std::vector<uint8_t> bytes, StackMachine& stack, AccountState& accountState);
 };

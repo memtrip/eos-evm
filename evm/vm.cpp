@@ -5,11 +5,11 @@
 #include "big_int.h"
 #include "utils.h" // TODO: remove this
 
-ExecResult VM::execute(char* bytes, unsigned int size, StackMachine& stack, AccountState& accountState) {
+ExecResult VM::execute(std::vector<uint8_t> bytes, StackMachine& stack, AccountState& accountState) {
   ExecResult result;
 
-  jump_set_t jumps = Jumps::findDestinations(bytes, size);
-  ByteReader reader(0, bytes, size);
+  jump_set_t jumps = Jumps::findDestinations(bytes);
+  ByteReader reader(0, bytes);
 
   do {
     result = VM::step(jumps, stack, reader, accountState);
@@ -97,7 +97,7 @@ ExecResult VM::stepInner(
       break;
   }
   
-  if (reader.position >= reader.len) {
+  if (reader.position >= reader.len()) {
     return ExecResult::DONE;
   }
 

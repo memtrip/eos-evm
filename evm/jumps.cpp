@@ -4,13 +4,13 @@
 #include "utils.h"
 #include "opcode.h"
 
-jump_set_t Jumps::findDestinations(char* byte_code, unsigned int size) {
+jump_set_t Jumps::findDestinations(std::vector<uint8_t> bytes) {
   jump_set_t jumps = jump_set_t();
 
   int position = 0;
 
-  while (position < size) {
-    char index = byte_code[position];
+  while (position < bytes.size()) {
+    char index = bytes[position];
     int instruction = Instruction::values[index];
 
     if (Instruction::opcode(instruction) == Opcode::JUMPDEST) {

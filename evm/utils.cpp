@@ -469,13 +469,15 @@ void Utils::printInstructionList() {
   }
 }
 
-void Utils::hex2bin(const std::string& hex, char* bytes) {
-  int position = 0;
+std::vector<uint8_t> Utils::hex2bin(const std::string& hex) {
+
+  std::vector<uint8_t> bytes;
   for (unsigned int i = 0; i < hex.length(); i+=2) {
     std::string byteString = hex.substr(i, 2);
-    bytes[position] = (char) strtol(byteString.c_str(), NULL, 16);
-    position++;
+    bytes.push_back((uint8_t) strtol(byteString.c_str(), NULL, 16));
   }
+
+  return bytes;
 }
 
 std::string Utils::uint256_2str(uint256_t value) {
@@ -490,10 +492,8 @@ void Utils::print_uint256(uint256_t value) {
   printf("}\n");
 }
 
-uint256_t Utils::bigIntFromBytes(std::string bytecode_str) {
-  char bytecode_array[bytecode_str.length() / 2];
-  Utils::hex2bin(bytecode_str, bytecode_array);
-  return BigInt::fromBytes(bytecode_array, sizeof(bytecode_array));
+uint256_t Utils::bigIntFromBigEndianBytes(std::string bytecode_str) {
+  return BigInt::fromBigEndianBytes(Utils::hex2bin(bytecode_str));
 }
 
 bool Utils::accountStoreContains(uint256_t key, std::map<uint256_t, uint256_t>* store) {
@@ -502,4 +502,11 @@ bool Utils::accountStoreContains(uint256_t key, std::map<uint256_t, uint256_t>* 
 
 uint256_t Utils::accountStoreValue(uint256_t key, std::map<uint256_t, uint256_t>* store) {
   return store->find(key)->second;
+}
+
+std::string Utils::bytesTohex(std::vector<uint8_t>* bytes) {
+  std::stringstream ss;
+  for(int i = 0; i < bytes->size(); ++i)
+    ss << std::hex << (int)bytes->at(i);
+  return ss.str();
 }

@@ -17,4 +17,6 @@ typedef ethash::hash512 keccak512_t;
 
 const unsigned long INVALID_ARGUMENT = 0xFFFFFFFFFFFFFFFF;
 
+const size_t WORD_SIZE = 32;
+
 #endif

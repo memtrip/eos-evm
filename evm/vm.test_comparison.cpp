@@ -9,8 +9,7 @@ TEST_CASE("Less than comparison truthy", "[LT]") {
 	// (PUSH1 ((60) 01))
 	// (LT (10))
   std::string bytecode_str = "6003600110";
-  char bytecode_array[bytecode_str.length() / 2];
-  Utils::hex2bin(bytecode_str, bytecode_array);
+  std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
   AccountState as(accountItems);
@@ -18,7 +17,7 @@ TEST_CASE("Less than comparison truthy", "[LT]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytecode_array, sizeof(bytecode_array), sm, as);
+  vm.execute(bytes, sm, as);
 
   // then
   CHECK("1" == 
@@ -32,8 +31,7 @@ TEST_CASE("Less than comparison not true", "[LT]") {
 	// (PUSH1 ((60) 03))
 	// (LT (10))
   std::string bytecode_str = "6001600310";
-  char bytecode_array[bytecode_str.length() / 2];
-  Utils::hex2bin(bytecode_str, bytecode_array);
+  std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
   AccountState as(accountItems);
@@ -41,7 +39,7 @@ TEST_CASE("Less than comparison not true", "[LT]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytecode_array, sizeof(bytecode_array), sm, as);
+  vm.execute(bytes, sm, as);
 
   // then
   CHECK("0" == 
@@ -55,8 +53,7 @@ TEST_CASE("Greater than comparison truthy", "[GT]") {
 	// (PUSH1 ((60) 03))
 	// (GT (11))
   std::string bytecode_str = "6001600311";
-  char bytecode_array[bytecode_str.length() / 2];
-  Utils::hex2bin(bytecode_str, bytecode_array);
+  std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
   AccountState as(accountItems);
@@ -64,7 +61,7 @@ TEST_CASE("Greater than comparison truthy", "[GT]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytecode_array, sizeof(bytecode_array), sm, as);
+  vm.execute(bytes, sm, as);
 
   // then
   CHECK("1" == 
@@ -78,8 +75,7 @@ TEST_CASE("Greater than comparison not true", "[GT]") {
 	// (PUSH1 ((60) 01))
 	// (GT (11))
   std::string bytecode_str = "6003600111";
-  char bytecode_array[bytecode_str.length() / 2];
-  Utils::hex2bin(bytecode_str, bytecode_array);
+  std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
   AccountState as(accountItems);
@@ -87,7 +83,7 @@ TEST_CASE("Greater than comparison not true", "[GT]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytecode_array, sizeof(bytecode_array), sm, as);
+  vm.execute(bytes, sm, as);
 
   // then
   CHECK("0" == 
@@ -101,8 +97,7 @@ TEST_CASE("Equal comparison truthy", "[EQ]") {
 	// (PUSH1 ((60) 03))
 	// (EQ (14))
   std::string bytecode_str = "6003600314";
-  char bytecode_array[bytecode_str.length() / 2];
-  Utils::hex2bin(bytecode_str, bytecode_array);
+  std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
   AccountState as(accountItems);
@@ -110,7 +105,7 @@ TEST_CASE("Equal comparison truthy", "[EQ]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytecode_array, sizeof(bytecode_array), sm, as);
+  vm.execute(bytes, sm, as);
 
   // then
   CHECK("1" == 
@@ -124,8 +119,7 @@ TEST_CASE("Equal comparison not true", "[EQ]") {
 	// (PUSH1 ((60) 01))
 	// (EQ (14))
   std::string bytecode_str = "6003600114";
-  char bytecode_array[bytecode_str.length() / 2];
-  Utils::hex2bin(bytecode_str, bytecode_array);
+  std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
   AccountState as(accountItems);
@@ -133,7 +127,7 @@ TEST_CASE("Equal comparison not true", "[EQ]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytecode_array, sizeof(bytecode_array), sm, as);
+  vm.execute(bytes, sm, as);
 
   // then
   CHECK("0" == 
@@ -146,8 +140,7 @@ TEST_CASE("Is zero comparison truthy", "[ISZERO]") {
   // (PUSH1 ((60) 00))
 	// (ISZERO (15))
   std::string bytecode_str = "600015";
-  char bytecode_array[bytecode_str.length() / 2];
-  Utils::hex2bin(bytecode_str, bytecode_array);
+  std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
   AccountState as(accountItems);
@@ -155,7 +148,7 @@ TEST_CASE("Is zero comparison truthy", "[ISZERO]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytecode_array, sizeof(bytecode_array), sm, as);
+  vm.execute(bytes, sm, as);
 
   // then
   CHECK("1" == 
@@ -168,8 +161,7 @@ TEST_CASE("Is zero comparison not true", "[ISZERO]") {
   // (PUSH1 ((60) 01))
 	// (ISZERO (15))
   std::string bytecode_str = "600115";
-  char bytecode_array[bytecode_str.length() / 2];
-  Utils::hex2bin(bytecode_str, bytecode_array);
+  std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
   AccountState as(accountItems);
@@ -177,7 +169,7 @@ TEST_CASE("Is zero comparison not true", "[ISZERO]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytecode_array, sizeof(bytecode_array), sm, as);
+  vm.execute(bytes, sm, as);
 
   // then
   CHECK("0" == 

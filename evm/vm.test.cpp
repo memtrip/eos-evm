@@ -9,8 +9,7 @@ TEST_CASE("Duplicate stack item", "[DUP1]") {
 	// (PUSH1 ((60)03))
 	// (DUP1 (80))
   std::string bytecode_str = "6002600380";
-  char bytecode_array[bytecode_str.length() / 2];
-  Utils::hex2bin(bytecode_str, bytecode_array);
+  std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
   AccountState as(accountItems);
@@ -18,7 +17,7 @@ TEST_CASE("Duplicate stack item", "[DUP1]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytecode_array, sizeof(bytecode_array), sm, as);
+  vm.execute(bytes, sm, as);
 
   // then
   CHECK("3" == 
@@ -52,8 +51,7 @@ TEST_CASE("Duplicate stack item at 16", "[DUP1]") {
   // (PUSH1 ((60)16))
 	// (DUP16 (8F))
   std::string bytecode_str = "60016002600360046005600660076008600960106011601260136014601560168F";
-  char bytecode_array[bytecode_str.length() / 2];
-  Utils::hex2bin(bytecode_str, bytecode_array);
+  std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
   AccountState as(accountItems);
@@ -61,7 +59,7 @@ TEST_CASE("Duplicate stack item at 16", "[DUP1]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytecode_array, sizeof(bytecode_array), sm, as);
+  vm.execute(bytes, sm, as);
 
   // then
   CHECK("1" == 
@@ -75,8 +73,7 @@ TEST_CASE("Swap stack item", "[SWAP1]") {
 	// (PUSH1 ((60)03))
 	// (SWAP1 (90))
   std::string bytecode_str = "6002600390";
-  char bytecode_array[bytecode_str.length() / 2];
-  Utils::hex2bin(bytecode_str, bytecode_array);
+  std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
   AccountState as(accountItems);
@@ -84,7 +81,7 @@ TEST_CASE("Swap stack item", "[SWAP1]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytecode_array, sizeof(bytecode_array), sm, as);
+  vm.execute(bytes, sm, as);
 
   // then
   CHECK("2" == 
@@ -116,8 +113,7 @@ TEST_CASE("Swap stack item at 16", "[SWAP16]") {
   // (PUSH1 ((60)17))
 	// (SWAP16 (9F))
   std::string bytecode_str = "600160026003600460056006600760086009601060116012601360146015601660179F";
-  char bytecode_array[bytecode_str.length() / 2];
-  Utils::hex2bin(bytecode_str, bytecode_array);
+  std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
   AccountState as(accountItems);
@@ -125,7 +121,7 @@ TEST_CASE("Swap stack item at 16", "[SWAP16]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytecode_array, sizeof(bytecode_array), sm, as);
+  vm.execute(bytes, sm, as);
 
   // then
   CHECK("1" == 
@@ -151,7 +147,7 @@ TEST_CASE("Swap stack item at 16", "[SWAP16]") {
 // //   StackMachine sm(stackItems);
 
 // //   // when
-// //   vm.execute(bytecode_array, sizeof(bytecode_array), sm, as);
+// //   vm.execute(bytes, sm, as);
 
 // //   // then
 // //   CHECK("?" == 
@@ -174,7 +170,7 @@ TEST_CASE("Swap stack item at 16", "[SWAP16]") {
 // //    StackMachine sm(stackItems);
 
 // //   // when
-// //   vm.execute(bytecode_array, sizeof(bytecode_array), sm, as);
+// //   vm.execute(bytes, sm, as);
 
 // //   // then
 // //   CHECK("?" == 

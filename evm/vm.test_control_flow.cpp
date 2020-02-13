@@ -19,8 +19,7 @@ TEST_CASE("Conditional jump to destination truthy", "[jumps]") {
   // (PUSH1 ((60)10))
 	// (DIV (04))
   std::string bytecode_str = "6006600310600F57600660030200025B6002601604";
-  char bytecode_array[bytecode_str.length() / 2];
-  Utils::hex2bin(bytecode_str, bytecode_array);
+  std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
   AccountState as(accountItems);
@@ -28,7 +27,7 @@ TEST_CASE("Conditional jump to destination truthy", "[jumps]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytecode_array, sizeof(bytecode_array), sm, as);
+  vm.execute(bytes, sm, as);
 
   // then
   CHECK("b" == 
@@ -52,8 +51,7 @@ TEST_CASE("Conditional jump to destination not true", "[jumps]") {
   // (PUSH1 ((60)10))
 	// (DIV (04))
   std::string bytecode_str = "6003600610600F57600660030200025B6002601604";
-  char bytecode_array[bytecode_str.length() / 2];
-  Utils::hex2bin(bytecode_str, bytecode_array);
+  std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
   AccountState as(accountItems);
@@ -61,7 +59,7 @@ TEST_CASE("Conditional jump to destination not true", "[jumps]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytecode_array, sizeof(bytecode_array), sm, as);
+  vm.execute(bytes, sm, as);
 
   // then
   CHECK("12" == 
@@ -79,8 +77,7 @@ TEST_CASE("Unconditional jump to destination", "[jumps]") {
   // (JUMPDEST (5B))
 	// (DIV (04))
   std::string bytecode_str = "60036006600856025B04";
-  char bytecode_array[bytecode_str.length() / 2];
-  Utils::hex2bin(bytecode_str, bytecode_array);
+  std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
   std::map<uint256_t, uint256_t>* accountItems = new std::map<uint256_t,uint256_t>();
   AccountState as(accountItems);
@@ -88,7 +85,7 @@ TEST_CASE("Unconditional jump to destination", "[jumps]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytecode_array, sizeof(bytecode_array), sm, as);
+  vm.execute(bytes, sm, as);
 
   // then
   CHECK("2" == 
@@ -114,7 +111,7 @@ TEST_CASE("Unconditional jump to destination", "[jumps]") {
 //   StackMachine sm(stackItems);
 
 //   // when
-//   vm.execute(bytecode_array, sizeof(bytecode_array), sm, as);
+//   vm.execute(bytes, sm, as);
 
 //   // then
 //   CHECK("2" == 
