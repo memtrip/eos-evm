@@ -8,7 +8,7 @@ CONTRACT eos_evm : public contract {
   public:
     using contract::contract;
 
-    ACTION raw(name sender, string code);
+    ACTION raw(name from, string code, string sender);
     ACTION create(name sender, string message);
     ACTION writelog(name from, string message);
     ACTION clearlog();

@@ -2,14 +2,14 @@
 #include <eos_evm.hpp>
 #include <eos_utils.hpp>
 
-ACTION eos_evm::raw(name sender, string code) {
+ACTION eos_evm::raw(name from, string code, string sender) {
   require_auth(get_self());
 
   log_table _log(get_self(), get_self().value);
 
-  _log.emplace(sender, [&](auto& log) {
+  _log.emplace(from, [&](auto& log) {
     log.key = _log.available_primary_key();
-    log.user = sender;
+    log.user = from;
     log.message = std::to_string(eos_utils::timestamp());
   });
 }
