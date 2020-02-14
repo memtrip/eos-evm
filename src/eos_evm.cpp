@@ -1,6 +1,7 @@
 #include <string>
 #include <eos_evm.hpp>
 #include <eos_utils.hpp>
+#include <eos_keccak.hpp>
 
 ACTION eos_evm::raw(name from, string code, string sender) {
   require_auth(get_self());
@@ -18,6 +19,8 @@ ACTION eos_evm::create(name sender, string message) {
   require_auth(sender);
 
   log_table _log(get_self(), get_self().value);
+
+  eos_keccak::keccak256(message);
 
   _log.emplace(sender, [&](auto& log) {
     log.key = _log.available_primary_key();
