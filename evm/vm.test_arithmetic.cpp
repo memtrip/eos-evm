@@ -3,7 +3,7 @@
 #include "utils.h"
 #include "vm.h"
 
-TEST_CASE("Add two large numbers", "[ADD]") {
+TEST_CASE("Add two large numbers", "[arithmetic]") {
   // given
   // (PUSH32 ((7f)fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff))
 	// (PUSH32 ((7f)fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff))
@@ -27,7 +27,7 @@ TEST_CASE("Add two large numbers", "[ADD]") {
   );
 }
 
-TEST_CASE("Multiply two numbers", "[MUL]") {
+TEST_CASE("Multiply two numbers", "[arithmetic]") {
   // given
   // (PUSH1 ((60)03))
 	// (PUSH1 ((60)03))
@@ -51,7 +51,7 @@ TEST_CASE("Multiply two numbers", "[MUL]") {
   );
 }
 
-TEST_CASE("Multiply two larger numbers", "[MUL]") {
+TEST_CASE("Multiply two larger numbers", "[arithmetic]") {
   // given
   // (PUSH2 ((61)0A10))
 	// (PUSH2 ((61)0B12))
@@ -75,7 +75,7 @@ TEST_CASE("Multiply two larger numbers", "[MUL]") {
   );
 }
 
-TEST_CASE("Multiply and store", "[MUL]") {
+TEST_CASE("Multiply and store", "[arithmetic]") {
   // given
   // (PUSH6 ((65) 012365124623))
 	// (PUSH3 ((62) 654321))
@@ -104,7 +104,7 @@ TEST_CASE("Multiply and store", "[MUL]") {
   );
 }
 
-TEST_CASE("Subtract two numbers", "[SUB]") {
+TEST_CASE("Subtract two numbers", "[arithmetic]") {
   // given
   // (PUSH1 ((60)03))
 	// (PUSH1 ((60)05))
@@ -128,7 +128,7 @@ TEST_CASE("Subtract two numbers", "[SUB]") {
   );
 }
 
-TEST_CASE("Subtract and store", "[SUB]") {
+TEST_CASE("Subtract and store", "[arithmetic]") {
   // given
   // (PUSH6 ((65)012365124623))
 	// (PUSH3 ((62)654321))
@@ -157,7 +157,7 @@ TEST_CASE("Subtract and store", "[SUB]") {
   );
 }
 
-TEST_CASE("Divide two numbers", "[DIV]") {
+TEST_CASE("Divide two numbers", "[arithmetic]") {
   // given
   // (PUSH1 ((60)02))
 	// (PUSH1 ((60)04))
@@ -181,7 +181,7 @@ TEST_CASE("Divide two numbers", "[DIV]") {
   );
 }
 
-TEST_CASE("Divide 2 / 0", "[DIV]") {
+TEST_CASE("Divide 2 / 0", "[arithmetic]") {
   // given
   // (PUSH1 ((60)00))
 	// (PUSH1 ((60)02))
@@ -205,7 +205,7 @@ TEST_CASE("Divide 2 / 0", "[DIV]") {
   );
 }
 
-TEST_CASE("Divide and store", "[DIV]") {
+TEST_CASE("Divide and store", "[arithmetic]") {
   // given
   // (PUSH6 ((65)012365124623))
 	// (PUSH3 ((62)654321))
@@ -234,7 +234,7 @@ TEST_CASE("Divide and store", "[DIV]") {
   );
 }
 
-TEST_CASE("Divide by zero and store", "[DIV]") {
+TEST_CASE("Divide by zero and store", "[arithmetic]") {
   // given
   // (PUSH6 ((65)012365124623))
 	// (PUSH1 ((60)00))
@@ -263,7 +263,7 @@ TEST_CASE("Divide by zero and store", "[DIV]") {
   );
 }
 
-TEST_CASE("Mod and store", "[MOD]") {
+TEST_CASE("Mod and store", "[arithmetic]") {
   std::string bytecode_str = "650123651246236265432290066000556501236512462360009006600155";
   std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
@@ -291,7 +291,7 @@ TEST_CASE("Mod and store", "[MOD]") {
 }
 
 
-TEST_CASE("Modulus 8 % 2", "[MOD]") {
+TEST_CASE("Modulus 8 % 2", "[arithmetic]") {
   // given
   // (PUSH1 ((60)02))
 	// (PUSH1 ((60)08))
@@ -315,7 +315,7 @@ TEST_CASE("Modulus 8 % 2", "[MOD]") {
   );
 }
 
-TEST_CASE("Modulus 5 % 2", "[MOD]") {
+TEST_CASE("Modulus 5 % 2", "[arithmetic]") {
   // given
   // (PUSH1 ((60)05))
 	// (PUSH1 ((60)02))
@@ -339,7 +339,7 @@ TEST_CASE("Modulus 5 % 2", "[MOD]") {
   );
 }
 
-TEST_CASE("Modulus 2 % 0", "[MOD]") {
+TEST_CASE("Modulus 2 % 0", "[arithmetic]") {
   // given
   // (PUSH1 ((60)02))
 	// (PUSH1 ((60)00))
@@ -363,7 +363,7 @@ TEST_CASE("Modulus 2 % 0", "[MOD]") {
   );
 }
 
-TEST_CASE("Byte", "[BYTE]") {
+TEST_CASE("Byte", "[arithmetic]") {
   std::string bytecode_str = "60f061ffff1a600055610fff601f1a600155";
   std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};

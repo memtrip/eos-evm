@@ -171,8 +171,13 @@ InstructionResult VM::executeInstruction(
         break;
       }
     case Opcode::SDIV:
-      printf("(SDIV ");
-      break;
+      {
+        uint256_t a = stack.peek(0);
+        uint256_t b = stack.peek(1);
+        stack.pop(2);
+        stack.push(b != 0 ? intx::sdivrem(a, b).quot : 0);
+        break;
+      }
     case Opcode::MOD:
       {
         // TODO: handle arthemetic overflows
@@ -188,21 +193,55 @@ InstructionResult VM::executeInstruction(
         break;
       }
     case Opcode::SMOD:
-      printf("(SMOD ");
-      break;
+      {
+        uint256_t a = stack.peek(0);
+        uint256_t b = stack.peek(1);
+        stack.pop(2);
+        stack.push(b != 0 ? intx::sdivrem(a, b).rem : 0);
+        break;
+      }
     case Opcode::ADDMOD:
-      printf("(ADDMOD ");
-      break;
+      {
+        uint256_t a = stack.peek(0);
+        uint256_t b = stack.peek(1);
+        uint256_t c = stack.peek(2);
+        stack.pop(3);
+        stack.push(c != 0 ? intx::addmod(a, b, c) : 0);
+        break;
+      }
     case Opcode::MULMOD:
-      printf("(MULMOD ");
-      break;
+      {
+        uint256_t a = stack.peek(0);
+        uint256_t b = stack.peek(1);
+        uint256_t c = stack.peek(2);
+        stack.pop(3);
+        stack.push(c != 0 ? intx::mulmod(a, b, c) : 0);
+        break;
+      }
     case Opcode::EXP:
-      printf("(EXP ");
-      break;
-    case Opcode::SIGNEXTEND:
-      printf("(SIGNEXTEND ");
-      break;
+      {
+        uint256_t a = stack.peek(0);
+        uint256_t b = stack.peek(1);
+        stack.pop(2);
 
+        stack.push(intx::exp(a, b));
+        break;
+      }
+    case Opcode::SIGNEXTEND:
+      {
+        uint256_t a = stack.peek(0);
+        uint256_t b = stack.peek(1);
+        stack.pop(2);
+
+        if (a < 31) {
+          int sign_bit = static_cast<int>(a) * 8 + 7;
+          uint256_t sign_mask = uint256_t{1} << sign_bit;
+          uint256_t value_mask = sign_mask - 1;
+          bool is_neg = (b & sign_mask) != 0;
+          stack.push(is_neg ? b | ~value_mask : b & value_mask);
+        }
+        break;
+      }
     case Opcode::LT:
       {
         bool result = stack.peek(0) < stack.peek(1);
@@ -218,11 +257,29 @@ InstructionResult VM::executeInstruction(
         break;
       }
     case Opcode::SLT:
-      printf("(SLT ");
-      break;
+      {
+        uint256_t a = stack.peek(0);
+        uint256_t b = stack.peek(1);
+        stack.pop(2);
+
+        bool x_neg = static_cast<bool>(a >> 255);
+        bool y_neg = static_cast<bool>(b >> 255);
+
+        stack.pushBool((x_neg ^ y_neg) ? x_neg : a < b);
+        break;
+      }
     case Opcode::SGT:
-      printf("(SGT ");
-      break;
+      {
+        uint256_t a = stack.peek(0);
+        uint256_t b = stack.peek(1);
+        stack.pop(2);
+
+        bool x_neg = static_cast<bool>(a >> 255);
+        bool y_neg = static_cast<bool>(b >> 255);
+
+        stack.pushBool((x_neg ^ y_neg) ? y_neg : a < b);
+        break;
+      }
     case Opcode::EQ:
       {
         bool result = stack.peek(0) == stack.peek(1);
@@ -279,14 +336,40 @@ InstructionResult VM::executeInstruction(
         break;
       }
     case Opcode::SHL:
-      printf("(SHL ");
-      break;
+      {
+        uint256_t a = stack.peek(0);
+        uint256_t b = stack.peek(1);
+        stack.pop(2);
+        stack.push(a <<= b);
+        break;
+      }
     case Opcode::SHR:
-      printf("(SHR ");
-      break;
+      {
+        uint256_t a = stack.peek(0);
+        uint256_t b = stack.peek(1);
+        stack.pop(2);
+        stack.push(a >>= b);
+        break;
+      }
     case Opcode::SAR:
-      printf("(SAR ");
-      break;
+      {
+        uint256_t a = stack.peek(0);
+        uint256_t b = stack.peek(1);
+        
+        if ((b & (uint256_t{1} << 255)) == 0) {
+          stack.push(a >>= b);
+        } else {
+          constexpr auto allones = ~uint256_t{};
+          if (a >= 256) {
+            stack.push(allones);
+          } else {
+            const auto shift = static_cast<unsigned>(a);
+            stack.push((b >> shift) | (allones << (256 - shift)));
+          }
+        }
+
+        break;
+      }
     case Opcode::SHA3:
       {
         uint256_t offset = stack.peek(0);
