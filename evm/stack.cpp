@@ -30,11 +30,6 @@ uint256_t StackMachine::top() {
   return StackMachine::peek(0);
 }
 
-void StackMachine::putMap(std::map<uint256_t,uint256_t>* items) {
-  std::vector<uint256_t> newVec = std::vector<uint256_t>(stack->end() - 2, stack->end() - 1);
-  items->insert(std::make_pair(newVec[0], newVec[1]));
-}
-
 void StackMachine::printSize() {
   printf("size(%lu)", stack->size());
 }

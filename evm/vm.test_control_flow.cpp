@@ -32,7 +32,7 @@ TEST_CASE("Conditional jump to destination truthy", "[jumps]") {
   vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
-  CHECK("b" == 
+  CHECK("000000000000000000000000000000000000000000000000000000000000000b" == 
     Utils::uint256_2str(sm.top())
   );
 }
@@ -66,7 +66,7 @@ TEST_CASE("Conditional jump to destination not true", "[jumps]") {
   vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
-  CHECK("12" == 
+  CHECK("0000000000000000000000000000000000000000000000000000000000000012" == 
     Utils::uint256_2str(sm.top())
   );
 }
@@ -94,25 +94,20 @@ TEST_CASE("Unconditional jump to destination", "[jumps]") {
   vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
-  CHECK("2" == 
+  CHECK("0000000000000000000000000000000000000000000000000000000000000002" == 
     Utils::uint256_2str(sm.top())
   );
 }
 
-//TODO: this test should asser that the account store has set values
+// TODO: uses SLOAD
 // TEST_CASE("Jumps", "[jumps]") {
-//   // given
-//   // (PUSH1 ((60)06))
-// 	 // (PUSH1 ((60)03))
-//   // (JUMP (56))
-// 	 // (MUL (02))
-// 	 // (DIV (04))
 //   std::string bytecode_str = "600160015560066000555b60016000540380806000551560245760015402600155600a565b";
-//   char bytecode_array[bytecode_str.length() / 2];
-//   Utils::hex2bin(bytecode_str, bytecode_array);
+//   std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
 //   VM vm {};
 //   account_store_t* accountItems = new account_store_t();
 //   AccountState as(accountItems);
+//   std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
+//   Memory mem(memoryBytes);
 //   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
 //   StackMachine sm(stackItems);
 
@@ -120,7 +115,14 @@ TEST_CASE("Unconditional jump to destination", "[jumps]") {
 //   vm.execute(bytes, mem, sm, as, Utils::env());
 
 //   // then
-//   CHECK("2" == 
-//     Utils::uint256_2str(sm.top())
+//   store_item_t item1 = Utils::accountStoreValue(0, accountItems);
+//   store_item_t item2 = Utils::accountStoreValue(1, accountItems);
+
+//   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
+//     Utils::uint256_2str(item1.second)
+//   );
+
+//   CHECK("0000000000000000000000000000000000000000000000000000000000000078" == 
+//     Utils::uint256_2str(item2.second)
 //   );
 // }

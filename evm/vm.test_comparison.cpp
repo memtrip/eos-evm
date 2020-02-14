@@ -22,7 +22,7 @@ TEST_CASE("Less than comparison truthy", "[LT]") {
   vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
-  CHECK("1" == 
+  CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
     Utils::uint256_2str(sm.top())
   );
 }
@@ -46,7 +46,7 @@ TEST_CASE("Less than comparison not true", "[LT]") {
   vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
-  CHECK("0" == 
+  CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
     Utils::uint256_2str(sm.top())
   );
 }
@@ -70,7 +70,7 @@ TEST_CASE("Greater than comparison truthy", "[GT]") {
   vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
-  CHECK("1" == 
+  CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
     Utils::uint256_2str(sm.top())
   );
 }
@@ -94,7 +94,7 @@ TEST_CASE("Greater than comparison not true", "[GT]") {
   vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
-  CHECK("0" == 
+  CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
     Utils::uint256_2str(sm.top())
   );
 }
@@ -118,7 +118,7 @@ TEST_CASE("Equal comparison truthy", "[EQ]") {
   vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
-  CHECK("1" == 
+  CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
     Utils::uint256_2str(sm.top())
   );
 }
@@ -142,7 +142,7 @@ TEST_CASE("Equal comparison not true", "[EQ]") {
   vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
-  CHECK("0" == 
+  CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
     Utils::uint256_2str(sm.top())
   );
 }
@@ -165,7 +165,7 @@ TEST_CASE("Is zero comparison truthy", "[ISZERO]") {
   vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
-  CHECK("1" == 
+  CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
     Utils::uint256_2str(sm.top())
   );
 }
@@ -188,7 +188,7 @@ TEST_CASE("Is zero comparison not true", "[ISZERO]") {
   vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
-  CHECK("0" == 
+  CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
     Utils::uint256_2str(sm.top())
   );
 }
@@ -213,19 +213,19 @@ TEST_CASE("Comparison with many instructions", "[comparison]") {
   store_item_t item3 = Utils::accountStoreValue(2, accountItems);
   store_item_t item4 = Utils::accountStoreValue(3, accountItems);
 
-  CHECK("0" == 
+  CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
     Utils::uint256_2str(item1.second)
   );
 
-  CHECK("1" == 
+  CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
     Utils::uint256_2str(item2.second)
   );
 
-  CHECK("0" == 
+  CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
     Utils::uint256_2str(item3.second)
   );
 
-  CHECK("1" == 
+  CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
     Utils::uint256_2str(item4.second)
   );
 }

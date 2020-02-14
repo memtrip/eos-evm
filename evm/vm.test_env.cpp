@@ -3,12 +3,11 @@
 #include "utils.h"
 #include "vm.h"
 
-TEST_CASE("Push1", "[push]") {
+TEST_CASE("Blockhash", "[stub]") {
   // given
-  // (PUSH1 ((60)06))
-	// (PUSH1 ((60)03))
-  // (ADD (01))
-  std::string bytecode_str = "6006600301";
+  // (PUSH1 ((60)00))
+  // (BLOCKHASH 40)
+  std::string bytecode_str = "600040";
   std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
   account_store_t* accountItems = new account_store_t();
@@ -22,17 +21,13 @@ TEST_CASE("Push1", "[push]") {
   vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
-  CHECK("0000000000000000000000000000000000000000000000000000000000000009" == 
-    Utils::uint256_2str(sm.top())
-  );
+  CHECK(StackMachine::STUB == sm.top());
 }
 
-TEST_CASE("Push2", "[push]") {
+TEST_CASE("Coinbase", "[stub]") {
   // given
-  // (PUSH2 ((61)AB00))
-	// (PUSH2 ((61)AC00))
-  // (ADD (01))
-  std::string bytecode_str = "61AB0061AC0001";
+  // (COINBASE 41)
+  std::string bytecode_str = "41";
   std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
   account_store_t* accountItems = new account_store_t();
@@ -46,17 +41,13 @@ TEST_CASE("Push2", "[push]") {
   vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
-  CHECK("0000000000000000000000000000000000000000000000000000000000015700" == 
-    Utils::uint256_2str(sm.top())
-  );
+  CHECK(StackMachine::STUB == sm.top());
 }
 
-TEST_CASE("Push3", "[push]") {
+TEST_CASE("Difficulty", "[env]") {
   // given
-  // (PUSH3 ((62)AB00EF))
-	// (PUSH3 ((62)AC00EF))
-  // (ADD (01))
-  std::string bytecode_str = "62AB00EF62AC00EF01";
+  // (DIFFICULTY 44)
+  std::string bytecode_str = "44";
   std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
   account_store_t* accountItems = new account_store_t();
@@ -70,17 +61,13 @@ TEST_CASE("Push3", "[push]") {
   vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
-  CHECK("00000000000000000000000000000000000000000000000000000000015701de" == 
-    Utils::uint256_2str(sm.top())
-  );
+  CHECK(StackMachine::STUB == sm.top());
 }
 
-TEST_CASE("Push4", "[push]") {
+TEST_CASE("Timestamp", "[env]") {
   // given
-  // (PUSH4 ((63)12345678))
-	// (PUSH4 ((63)12345300))
-  // (ADD (01))
-  std::string bytecode_str = "6312345678631234530001";
+  // (TIMESTAMP 42)
+  std::string bytecode_str = "42";
   std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
   account_store_t* accountItems = new account_store_t();
@@ -94,17 +81,13 @@ TEST_CASE("Push4", "[push]") {
   vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
-  CHECK("000000000000000000000000000000000000000000000000000000002468a978" == 
-    Utils::uint256_2str(sm.top())
-  );
+  CHECK(1581632422128 == sm.top());
 }
 
-TEST_CASE("Push5", "[push]") {
+TEST_CASE("Number", "[env]") {
   // given
-  // (PUSH5 ((64)1234567812))
-	// (PUSH5 ((64)1234530012))
-  // (ADD (01))
-  std::string bytecode_str = "64123456781264123453001201";
+  // (NUMBER 43)
+  std::string bytecode_str = "43";
   std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
   account_store_t* accountItems = new account_store_t();
@@ -118,17 +101,13 @@ TEST_CASE("Push5", "[push]") {
   vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
-  CHECK("0000000000000000000000000000000000000000000000000000002468a97824" == 
-    Utils::uint256_2str(sm.top())
-  );
+  CHECK(16339169 == sm.top());
 }
 
-TEST_CASE("Push6", "[push]") {
+TEST_CASE("Gas limit", "[env]") {
   // given
-  // (PUSH6 ((65)123456781234))
-	// (PUSH6 ((65)123453001234))
-  // (ADD (01))
-  std::string bytecode_str = "651234567812346512345300123401";
+  // (GASLIMIT 45)
+  std::string bytecode_str = "45";
   std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
   account_store_t* accountItems = new account_store_t();
@@ -142,17 +121,13 @@ TEST_CASE("Push6", "[push]") {
   vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
-  CHECK("00000000000000000000000000000000000000000000000000002468a9782468" == 
-    Utils::uint256_2str(sm.top())
-  );
+  CHECK(100000 == sm.top());
 }
 
-TEST_CASE("Push7", "[push]") {
+TEST_CASE("Chain id", "[env]") {
   // given
-  // (PUSH7 ((66)10000000000012))
-	// (PUSH7 ((66)10000000000012))
-  // (ADD (01))
-  std::string bytecode_str = "6610000000000012661000000000001201";
+  // (CHAINID 45)
+  std::string bytecode_str = "46";
   std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
   account_store_t* accountItems = new account_store_t();
@@ -166,31 +141,5 @@ TEST_CASE("Push7", "[push]") {
   vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
-  CHECK("0000000000000000000000000000000000000000000000000020000000000024" == 
-    Utils::uint256_2str(sm.top())
-  );
-}
-
-TEST_CASE("Push8", "[push]") {
-  // given
-  // (PUSH8 ((67)1000000000000012))
-	// (PUSH8 ((67)1000000000000012))
-  // (ADD (01))
-  std::string bytecode_str = "67100000000000001267100000000000001201";
-  std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
-  VM vm {};
-  account_store_t* accountItems = new account_store_t();
-  AccountState as(accountItems);
-  std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
-
-  // when
-  vm.execute(bytes, mem, sm, as, Utils::env());
-
-  // then
-  CHECK("0000000000000000000000000000000000000000000000002000000000000024" == 
-    Utils::uint256_2str(sm.top())
-  );
+  CHECK(1 == sm.top());
 }

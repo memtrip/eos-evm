@@ -4,6 +4,7 @@
 #include "jumps.h"
 #include "big_int.h"
 #include "hash.h"
+#include "overflow.h"
 #include "utils.h" // TODO: remove this
 
 ExecResult VM::execute(
@@ -11,7 +12,7 @@ ExecResult VM::execute(
   Memory& memory,
   StackMachine& stack, 
   AccountState& accountState,
-  env_t envInfo
+  env_t env
 ) {
 
   ExecResult result;
@@ -20,7 +21,7 @@ ExecResult VM::execute(
   ByteReader reader(0, bytes);
 
   do {
-    result = VM::step(jumps, memory, stack, reader, accountState, envInfo);
+    result = VM::step(jumps, memory, stack, reader, accountState, env);
   } while(result == ExecResult::CONTINUE);
 
   return result;
@@ -32,9 +33,9 @@ ExecResult VM::step(
   StackMachine& stack,
   ByteReader& reader, 
   AccountState& accountState,
-  env_t envInfo
+  env_t env
 ) {
-  return VM::stepInner(jumps, memory, stack, reader, accountState, envInfo);
+  return VM::stepInner(jumps, memory, stack, reader, accountState, env);
 }
 
 ExecResult VM::stepInner(
@@ -43,7 +44,7 @@ ExecResult VM::stepInner(
   StackMachine& stack,
   ByteReader& reader, 
   AccountState& accountState,
-  env_t envInfo
+  env_t env
 ) {
   unsigned char opcode = reader.bytes[reader.position];
   unsigned int instruction = Instruction::values[opcode];
@@ -64,7 +65,7 @@ ExecResult VM::stepInner(
     stack,
     reader, 
     accountState,
-    envInfo
+    env
   );
 
   switch (result) {
@@ -124,9 +125,8 @@ InstructionResult VM::executeInstruction(
   StackMachine& stack,
   ByteReader& reader, 
   AccountState& accountState,
-  env_t envInfo
+  env_t env
 ) {
-  //Utils::printInstruction(instruction);
   switch (Instruction::opcode(instruction)) {
     case Opcode::STOP: {
       return InstructionResult::STOP_EXEC;
@@ -258,7 +258,6 @@ InstructionResult VM::executeInstruction(
         stack.push(result);
         break;
       }
-    // TODO: write a test for this
     case Opcode::NOT:
       {
         uint256_t item = stack.peek(0);
@@ -267,8 +266,18 @@ InstructionResult VM::executeInstruction(
         break;
       }
     case Opcode::BYTE:
-      printf("(BYTE ");
-      break;
+      {
+        uint256_t word = stack.peek(0);
+        uint256_t val = stack.peek(1);
+        stack.pop(2);
+        if (word < uint256_t(32)) {
+          uint64_t word64 = static_cast<uint64_t>(word);
+          stack.push(val >> (8 * (31 - word64)) & uint256_t(0xff));
+        } else {
+          stack.push(uint256_t(0));
+        }
+        break;
+      }
     case Opcode::SHL:
       printf("(SHL ");
       break;
@@ -346,22 +355,19 @@ InstructionResult VM::executeInstruction(
       stack.push(StackMachine::STUB);
       break;
     case Opcode::TIMESTAMP:
-      // TODO: this comes from eos
-      printf("(TIMESTAMP ");
+      stack.push(env.timestamp);
       break;
     case Opcode::NUMBER:
-      // TODO: this comes from eos
-      printf("(NUMBER ");
+      stack.push(env.blockNumber);
       break;
     case Opcode::DIFFICULTY:
       stack.push(StackMachine::STUB);
       break;
     case Opcode::GASLIMIT:
-      // TODO: this comes from the smart contract
+      stack.push(env.gasLimit);
       break;
     case Opcode::CHAINID:
-      // TODO: this comes from the smart contract
-      printf("(CHAINID ");
+      stack.push(env.chainId);
       break;
     case Opcode::SELFBALANCE:
       printf("(SELFBALANCE ");

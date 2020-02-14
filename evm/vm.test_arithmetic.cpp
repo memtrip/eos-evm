@@ -46,7 +46,7 @@ TEST_CASE("Multiply two numbers", "[MUL]") {
   vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
-  CHECK("9" == 
+  CHECK("0000000000000000000000000000000000000000000000000000000000000009" == 
     Utils::uint256_2str(sm.top())
   );
 }
@@ -70,7 +70,7 @@ TEST_CASE("Multiply two larger numbers", "[MUL]") {
   vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
-  CHECK("1e4" == 
+  CHECK("00000000000000000000000000000000000000000000000000000000000001e4" == 
     Utils::uint256_2str(sm.top())
   );
 }
@@ -99,7 +99,7 @@ TEST_CASE("Multiply and store", "[MUL]") {
   // then
   store_item_t item = Utils::accountStoreValue(0, accountItems);
 
-  CHECK("734349397b853383" == 
+  CHECK("000000000000000000000000000000000000000000000000734349397b853383" == 
     Utils::uint256_2str(item.second)
   );
 }
@@ -123,7 +123,7 @@ TEST_CASE("Subtract two numbers", "[SUB]") {
   vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
-  CHECK("2" == 
+  CHECK("0000000000000000000000000000000000000000000000000000000000000002" == 
     Utils::uint256_2str(sm.top())
   );
 }
@@ -152,7 +152,7 @@ TEST_CASE("Subtract and store", "[SUB]") {
   // then
   store_item_t item = Utils::accountStoreValue(0, accountItems);
 
-  CHECK("12364ad0302" == 
+  CHECK("0000000000000000000000000000000000000000000000000000012364ad0302" == 
     Utils::uint256_2str(item.second)
   );
 }
@@ -176,7 +176,7 @@ TEST_CASE("Divide two numbers", "[DIV]") {
   vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
-  CHECK("2" == 
+  CHECK("0000000000000000000000000000000000000000000000000000000000000002" == 
     Utils::uint256_2str(sm.top())
   );
 }
@@ -200,7 +200,7 @@ TEST_CASE("Divide 2 / 0", "[DIV]") {
   vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
-  CHECK("0" == 
+  CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
     Utils::uint256_2str(sm.top())
   );
 }
@@ -229,7 +229,7 @@ TEST_CASE("Divide and store", "[DIV]") {
   // then
   store_item_t item = Utils::accountStoreValue(0, accountItems);
 
-  CHECK("2e0ac" == 
+  CHECK("000000000000000000000000000000000000000000000000000000000002e0ac" == 
     Utils::uint256_2str(item.second)
   );
 }
@@ -258,7 +258,7 @@ TEST_CASE("Divide by zero and store", "[DIV]") {
   // then
   store_item_t item = Utils::accountStoreValue(0, accountItems);
 
-  CHECK("0" == 
+  CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
     Utils::uint256_2str(item.second)
   );
 }
@@ -281,11 +281,11 @@ TEST_CASE("Mod and store", "[MOD]") {
   store_item_t item1 = Utils::accountStoreValue(0, accountItems);
   store_item_t item2 = Utils::accountStoreValue(1, accountItems);
 
-  CHECK("76b4b" == 
+  CHECK("0000000000000000000000000000000000000000000000000000000000076b4b" == 
     Utils::uint256_2str(item1.second)
   );
 
-  CHECK("0" == 
+  CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
     Utils::uint256_2str(item2.second)
   );
 }
@@ -310,7 +310,7 @@ TEST_CASE("Modulus 8 % 2", "[MOD]") {
   vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
-  CHECK("0" == 
+  CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
     Utils::uint256_2str(sm.top())
   );
 }
@@ -334,7 +334,7 @@ TEST_CASE("Modulus 5 % 2", "[MOD]") {
   vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
-  CHECK("1" == 
+  CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
     Utils::uint256_2str(sm.top())
   );
 }
@@ -358,7 +358,34 @@ TEST_CASE("Modulus 2 % 0", "[MOD]") {
   vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
-  CHECK("0" == 
+  CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
     Utils::uint256_2str(sm.top())
+  );
+}
+
+TEST_CASE("Byte", "[BYTE]") {
+  std::string bytecode_str = "60f061ffff1a600055610fff601f1a600155";
+  std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
+  VM vm {};
+  account_store_t* accountItems = new account_store_t();
+  AccountState as(accountItems);
+  std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
+  Memory mem(memoryBytes);
+  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
+  StackMachine sm(stackItems);
+
+  // when
+  vm.execute(bytes, mem, sm, as, Utils::env());
+
+  // then
+  store_item_t item1 = Utils::accountStoreValue(0, accountItems);
+  store_item_t item2 = Utils::accountStoreValue(1, accountItems);
+
+  CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
+    Utils::uint256_2str(item1.second)
+  );
+
+  CHECK("00000000000000000000000000000000000000000000000000000000000000ff" == 
+    Utils::uint256_2str(item2.second)
   );
 }

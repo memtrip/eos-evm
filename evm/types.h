@@ -2,11 +2,10 @@
 #define FUNCTIONS_H_INCLUDED
 
 #include <set>
-#include "boost/multiprecision/cpp_int.hpp"
+#include <intx/intx.hpp>
 #include "keccak/hash_types.hpp"
 
-typedef boost::multiprecision::uint256_t uint256_t;
-typedef boost::multiprecision::limb_type limb_type_t;
+typedef intx::uint256 uint256_t;
 
 typedef unsigned int instruct_t; 
 typedef std::set<unsigned long> jump_set_t;

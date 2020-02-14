@@ -21,7 +21,7 @@ TEST_CASE("Bitwise AND", "[bitwise]") {
   vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
-  CHECK("1" == 
+  CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
     Utils::uint256_2str(sm.top())
   );
 }
@@ -44,7 +44,7 @@ TEST_CASE("Bitwise OR", "[bitwise]") {
   vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
-  CHECK("6" == 
+  CHECK("0000000000000000000000000000000000000000000000000000000000000006" == 
     Utils::uint256_2str(sm.top())
   );
 }
@@ -67,7 +67,7 @@ TEST_CASE("Bitwise XOR", "[bitwise]") {
   vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
-  CHECK("5" == 
+  CHECK("0000000000000000000000000000000000000000000000000000000000000005" == 
     Utils::uint256_2str(sm.top())
   );
 }
@@ -94,10 +94,10 @@ TEST_CASE("Bitops", "[bitwise]") {
   store_item_t item6 = Utils::accountStoreValue(5, accountItems);
 
   // then
-  CHECK("f0" == Utils::uint256_2str(item1.second));
-  CHECK("fff" == Utils::uint256_2str(item2.second));
-  CHECK("f0f" == Utils::uint256_2str(item3.second));
-  CHECK("1" == Utils::uint256_2str(item4.second));
-  CHECK("0" == Utils::uint256_2str(item5.second));
+  CHECK("00000000000000000000000000000000000000000000000000000000000000f0" == Utils::uint256_2str(item1.second));
+  CHECK("0000000000000000000000000000000000000000000000000000000000000fff" == Utils::uint256_2str(item2.second));
+  CHECK("0000000000000000000000000000000000000000000000000000000000000f0f" == Utils::uint256_2str(item3.second));
+  CHECK("0000000000000000000000000000000000000000000000000000000000000001" == Utils::uint256_2str(item4.second));
+  CHECK("0000000000000000000000000000000000000000000000000000000000000000" == Utils::uint256_2str(item5.second));
   CHECK("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" == Utils::uint256_2str(item6.second));
 }

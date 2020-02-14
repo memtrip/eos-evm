@@ -1,6 +1,8 @@
-#include <stdio.h>
+#include <sstream>
+#include <iostream>
 #include <stdexcept>
 #include <string>
+
 #include "opcode.h"
 #include "instruction.h"
 #include "gas_tier_price.h"
@@ -509,9 +511,8 @@ std::vector<uint8_t> Utils::hex2bin(const std::string& hex) {
 }
 
 std::string Utils::uint256_2str(uint256_t value) {
-  std::ostringstream ost;
-  ost << std::hex << value;
-  return ost.str();
+  std::vector<uint8_t> bytes = BigInt::toBytes(value);
+  return Utils::bytesTohex(bytes);
 }
 
 void Utils::print_uint256(uint256_t value) {
@@ -528,11 +529,18 @@ store_item_t Utils::accountStoreValue(size_t index, account_store_t* store) {
   return store->at(index);
 }
 
-std::string Utils::bytesTohex(std::vector<uint8_t>* bytes) {
-  std::stringstream ss;
-  for(int i = 0; i < bytes->size(); ++i)
-    ss << std::hex << (int)bytes->at(i);
-  return ss.str();
+std::string Utils::bytesTohex(std::vector<uint8_t>& bytes) {
+  std::string result;
+  result.reserve(bytes.size() * 2);
+
+  static constexpr char hex[] = "0123456789abcdef";
+
+  for (uint8_t c : bytes) {
+    result.push_back(hex[c / 16]);
+    result.push_back(hex[c % 16]);
+  }
+
+  return result;
 }
 
 env_t Utils::env() {

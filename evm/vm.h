@@ -17,7 +17,7 @@ class VM {
       StackMachine& stack,
       ByteReader& reader, 
       AccountState& accountState,
-      env_t envInfo
+      env_t env
     );
 
     ExecResult stepInner(
@@ -26,7 +26,7 @@ class VM {
       StackMachine& stack,
       ByteReader& reader, 
       AccountState& accountState,
-      env_t envInfo
+      env_t env
     );
 
     InstructionResult executeInstruction(
@@ -35,7 +35,7 @@ class VM {
       StackMachine& stack,
       ByteReader& reader, 
       AccountState& accountState,
-      env_t envInfo
+      env_t env
     );
 
   public:
@@ -44,6 +44,6 @@ class VM {
       Memory& memory,
       StackMachine& stack, 
       AccountState& accountState,
-      env_t envInfo
+      env_t env
     );
 };

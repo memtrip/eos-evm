@@ -24,7 +24,7 @@ TEST_CASE("Store two values", "[store]") {
   // then
   store_item_t item = Utils::accountStoreValue(0, accountItems);
 
-  CHECK("2" == 
+  CHECK("0000000000000000000000000000000000000000000000000000000000000002" == 
     Utils::uint256_2str(item.second)
   );
 }

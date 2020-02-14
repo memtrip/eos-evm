@@ -22,13 +22,13 @@ TEST_CASE("Duplicate stack item", "[DUP1]") {
   vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
-  CHECK("3" == 
+  CHECK("0000000000000000000000000000000000000000000000000000000000000003" == 
     Utils::uint256_2str(sm.top())
   );
-  CHECK("3" == 
+  CHECK("0000000000000000000000000000000000000000000000000000000000000003" == 
     Utils::uint256_2str(sm.peek(1))
   );
-  CHECK("2" == 
+  CHECK("0000000000000000000000000000000000000000000000000000000000000002" == 
     Utils::uint256_2str(sm.peek(2))
   );
 }
@@ -66,7 +66,7 @@ TEST_CASE("Duplicate stack item at 16", "[DUP1]") {
   vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
-  CHECK("1" == 
+  CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
     Utils::uint256_2str(sm.top())
   );
 }
@@ -90,10 +90,10 @@ TEST_CASE("Swap stack item", "[SWAP1]") {
   vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
-  CHECK("2" == 
+  CHECK("0000000000000000000000000000000000000000000000000000000000000002" == 
     Utils::uint256_2str(sm.top())
   );
-  CHECK("3" == 
+  CHECK("0000000000000000000000000000000000000000000000000000000000000003" == 
     Utils::uint256_2str(sm.peek(1))
   );
 }
@@ -132,10 +132,10 @@ TEST_CASE("Swap stack item at 16", "[SWAP16]") {
   vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
-  CHECK("1" == 
+  CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
     Utils::uint256_2str(sm.top())
   );
-  CHECK("17" == 
+  CHECK("0000000000000000000000000000000000000000000000000000000000000017" == 
     Utils::uint256_2str(sm.peek(16))
   );
 }
@@ -164,7 +164,7 @@ TEST_CASE("Program counter", "[PC]") {
   vm.execute(bytes, mem, sm, as, Utils::env());
 
   // then
-  CHECK("e" == 
+  CHECK("000000000000000000000000000000000000000000000000000000000000000e" == 
     Utils::uint256_2str(sm.top())
   );
 }
@@ -195,7 +195,7 @@ TEST_CASE("Pop", "[POP]") {
   // then
   store_item_t item1 = Utils::accountStoreValue(0, accountItems);
 
-  CHECK("f0" == 
+  CHECK("00000000000000000000000000000000000000000000000000000000000000f0" == 
     Utils::uint256_2str(item1.second)
   );
 }
