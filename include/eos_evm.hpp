@@ -9,6 +9,7 @@ CONTRACT eos_evm : public contract {
     using contract::contract;
 
     ACTION raw(name sender, string code);
+    ACTION create(name sender, string message);
     ACTION writelog(name from, string message);
     ACTION clearlog();
 
@@ -17,8 +18,10 @@ CONTRACT eos_evm : public contract {
       name account;
       uint64_t nonce;
       asset balance;
+      checksum256 accountIdentifier;
 
       name primary_key() const { return account; }
+      checksum256 secondary_key() const { return accountIdentifier; }
     };
     typedef multi_index<name("account"), account> account_table;
 

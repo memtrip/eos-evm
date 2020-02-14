@@ -14,6 +14,18 @@ ACTION eos_evm::raw(name sender, string code) {
   });
 }
 
+ACTION eos_evm::create(name sender, string message) {
+  require_auth(sender);
+
+  log_table _log(get_self(), get_self().value);
+
+  _log.emplace(sender, [&](auto& log) {
+    log.key = _log.available_primary_key();
+    log.user = sender;
+    log.message = std::to_string(eos_utils::block_num());
+  });
+}
+
 ACTION eos_evm::writelog(name from, string message) {
   require_auth(get_self());
 
