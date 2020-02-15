@@ -117,7 +117,7 @@ bytes_t RLPEncode::encodeList(RLPItem item) {
     for (int i = 0; i < values.size(); i++) {
       result = concat(result, encode(values[i]));
     }
-    return encode(bytes_t(), OFFSET_SHORT_LIST);
+    return encode(result, OFFSET_SHORT_LIST);
   }
 }
 
@@ -129,8 +129,9 @@ bytes_t RLPEncode::encode(bytes_t bytesValue, uint16_t offset) {
   ) {
     return bytesValue;
   } else if (bytesValue.size() <= 55) {
-    bytes_t result = bytes_t(bytesValue.size() + 1);
-    result[0] = static_cast<uint8_t>(offset + bytesValue.size());
+    bytes_t result;
+    result.reserve(bytesValue.size() + 1);
+    result.push_back(static_cast<uint8_t>(offset + bytesValue.size()));
     result.insert(result.begin() + 1, std::begin(bytesValue), std::end(bytesValue));
     return result;
   } else {
@@ -160,7 +161,7 @@ bytes_t RLPEncode::toByteArray(uint16_t value) {
 };
 
 bytes_t RLPEncode::concat(bytes_t b1, bytes_t b2) {
-  bytes_t result;
-  result.insert(result.begin() + b1.size(), std::begin(b2), std::end(b2));
+  bytes_t result = b1;
+  result.insert(result.end(), b2.begin(), b2.end());
   return result;
 };

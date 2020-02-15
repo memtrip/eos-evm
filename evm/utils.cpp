@@ -551,3 +551,7 @@ env_t Utils::env() {
     1
   };
 };
+
+void Utils::printBytes(std::vector<uint8_t>& bytes) {
+  std::cout << bytesTohex(bytes);
+}
