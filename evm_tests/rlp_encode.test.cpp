@@ -3,6 +3,7 @@
 #include "types.h"
 #include "big_int.h"
 #include "utils.h"
+#include "hex.h"
 
 TEST_CASE("empty string", "[rlp_encode]") {
 
@@ -21,7 +22,7 @@ TEST_CASE("empty string", "[rlp_encode]") {
 
   // then
   CHECK(1 == result.size());
-  CHECK("80" == Utils::bytesTohex(result)); 
+  CHECK("80" == Hex::bytesToHex(result)); 
 }
 
 TEST_CASE("Short string", "[rlp_encode]") {
@@ -41,7 +42,7 @@ TEST_CASE("Short string", "[rlp_encode]") {
 
   // then
   CHECK(4 == result.size());
-  CHECK("83646f67" == Utils::bytesTohex(result)); 
+  CHECK("83646f67" == Hex::bytesToHex(result)); 
 }
 
 TEST_CASE("empty list", "[rlp_encode]") {
@@ -58,7 +59,7 @@ TEST_CASE("empty list", "[rlp_encode]") {
 
   // then
   CHECK(1 == result.size());
-  CHECK("c0" == Utils::bytesTohex(result)); 
+  CHECK("c0" == Hex::bytesToHex(result)); 
 }
 
 TEST_CASE("Short string list", "[rlp_encode]") {
@@ -90,7 +91,7 @@ TEST_CASE("Short string list", "[rlp_encode]") {
 
   // then
   CHECK(9 == result.size());
-  CHECK("c88363617483646f67" == Utils::bytesTohex(result)); 
+  CHECK("c88363617483646f67" == Hex::bytesToHex(result)); 
 }
 
 TEST_CASE("Mixed nested list", "[rlp_encode]") {
@@ -136,7 +137,7 @@ TEST_CASE("Mixed nested list", "[rlp_encode]") {
 
   // then
   CHECK(7 == result.size());
-  CHECK("c6827a77c10401" == Utils::bytesTohex(result)); 
+  CHECK("c6827a77c10401" == Hex::bytesToHex(result)); 
 }
 
 TEST_CASE("Multiple nested lists", "[rlp_encode]") {
@@ -199,7 +200,7 @@ TEST_CASE("Multiple nested lists", "[rlp_encode]") {
 
   // then
   CHECK(8 == result.size());
-  CHECK("c7c0c1c0c3c0c1c0" == Utils::bytesTohex(result)); 
+  CHECK("c7c0c1c0c3c0c1c0" == Hex::bytesToHex(result)); 
 }
 
 TEST_CASE("Single int", "[rlp_encode]") {
@@ -219,7 +220,7 @@ TEST_CASE("Single int", "[rlp_encode]") {
 
   // then
   CHECK(1 == result.size());
-  CHECK("0f" == Utils::bytesTohex(result)); 
+  CHECK("0f" == Hex::bytesToHex(result)); 
 }
 
 TEST_CASE("Int", "[rlp_encode]") {
@@ -239,7 +240,7 @@ TEST_CASE("Int", "[rlp_encode]") {
 
   // then
   CHECK(3 == result.size());
-  CHECK("820400" == Utils::bytesTohex(result)); 
+  CHECK("820400" == Hex::bytesToHex(result)); 
 }
 
 TEST_CASE("Long string encode", "[rlp_encode]") {
@@ -275,6 +276,6 @@ TEST_CASE("Long string encode", "[rlp_encode]") {
   // then
   CHECK(58 == result.size());
   CHECK("b8384c6f72656d20697073756d20646f6c6f722073697420616d65742c20636f6e7365637465747572206164697069736963696e6720656c6974" == 
-    Utils::bytesTohex(result)
+    Hex::bytesToHex(result)
   ); 
 }

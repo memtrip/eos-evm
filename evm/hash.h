@@ -3,6 +3,6 @@
 
 class Hash {
   public:
-    static uint256_t keccak256(std::vector<uint8_t>& bytes);
-    static uint256_t keccak512(std::vector<uint8_t>& bytes);
+    static bytes_t keccak256(bytes_t& bytes);
+    static bytes_t keccak512(bytes_t& bytes);
 };

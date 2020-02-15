@@ -3,6 +3,7 @@
 #include "memory.h"
 #include "types.h"
 #include "utils.h"
+#include "hex.h"
 
 TEST_CASE("Memory write and read", "[memory]") {
   // given
@@ -81,12 +82,12 @@ TEST_CASE("Memory read slice and write slice", "[memory]") {
   std::vector<uint8_t> slice1 = Utils::hex2bin("aabbccee112233445566778899");
   memory.writeSlice(uint256_t(0x00), slice1);
   std::vector<uint8_t> readSlice1 = memory.readSlice(uint256_t(0x00), uint256_t(0x0D));
-  REQUIRE("aabbccee112233445566778899" == Utils::bytesTohex(readSlice1)); 
+  REQUIRE("aabbccee112233445566778899" == Hex::bytesToHex(readSlice1)); 
   
   std::vector<uint8_t> slice2 = Utils::hex2bin("FFFF");
   memory.writeSlice(uint256_t(0x01), slice2);
   std::vector<uint8_t> readSlice2 = memory.readSlice(uint256_t(0x00), uint256_t(0x06));
-  REQUIRE("aaffffee1122" == Utils::bytesTohex(readSlice2)); 
+  REQUIRE("aaffffee1122" == Hex::bytesToHex(readSlice2)); 
 
   std::vector<uint8_t> emptySlice = std::vector<uint8_t>();
   memory.writeSlice(uint256_t(0x1000), emptySlice);

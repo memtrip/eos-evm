@@ -376,7 +376,7 @@ InstructionResult VM::executeInstruction(
         uint256_t size = stack.peek(1);
         stack.pop(2);
         std::vector<uint8_t> bytes = memory.readSlice(offset, size);
-        stack.push(Hash::keccak256(bytes));
+        stack.push(BigInt::fromBigEndianBytes(Hash::keccak256(bytes)));
         break;
       }
     case Opcode::ADDRESS:

@@ -8,6 +8,7 @@
 #include "gas_tier_price.h"
 #include "utils.h"
 #include "big_int.h"
+#include "hex.h"
 
 void Utils::printOpcode(unsigned char value) {
   switch (value) {
@@ -512,7 +513,7 @@ std::vector<uint8_t> Utils::hex2bin(const std::string& hex) {
 
 std::string Utils::uint256_2str(uint256_t value) {
   std::vector<uint8_t> bytes = BigInt::toBytes(value);
-  return Utils::bytesTohex(bytes);
+  return Hex::bytesToHex(bytes);
 }
 
 void Utils::print_uint256(uint256_t value) {
@@ -529,20 +530,6 @@ store_item_t Utils::accountStoreValue(size_t index, account_store_t* store) {
   return store->at(index);
 }
 
-std::string Utils::bytesTohex(std::vector<uint8_t>& bytes) {
-  std::string result;
-  result.reserve(bytes.size() * 2);
-
-  static constexpr char hex[] = "0123456789abcdef";
-
-  for (uint8_t c : bytes) {
-    result.push_back(hex[c / 16]);
-    result.push_back(hex[c % 16]);
-  }
-
-  return result;
-}
-
 env_t Utils::env() {
   return {
     16339169,
@@ -553,5 +540,5 @@ env_t Utils::env() {
 };
 
 void Utils::printBytes(std::vector<uint8_t>& bytes) {
-  std::cout << bytesTohex(bytes);
+  std::cout << Hex::bytesToHex(bytes);
 }

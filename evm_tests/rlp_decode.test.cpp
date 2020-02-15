@@ -3,6 +3,7 @@
 #include "types.h"
 #include "big_int.h"
 #include "utils.h"
+#include "hex.h"
 
 TEST_CASE("Empty byte array", "[rlp_decode]") {
 
@@ -264,7 +265,7 @@ TEST_CASE("Payload (1)", "[rlp_decode]") {
 
   // to
   CHECK("095e7baea6a6c7c4c2dfeb977efac326af552d87" == 
-    Utils::bytesTohex(items[0].values[3].bytes)
+    Hex::bytesToHex(items[0].values[3].bytes)
   );
 
   // value
@@ -274,7 +275,7 @@ TEST_CASE("Payload (1)", "[rlp_decode]") {
 
   // data
   CHECK("" == 
-    Utils::bytesTohex(items[0].values[5].bytes)
+    Hex::bytesToHex(items[0].values[5].bytes)
   );
 
   // v
@@ -284,12 +285,12 @@ TEST_CASE("Payload (1)", "[rlp_decode]") {
   
   // r
   CHECK("48b55bfa915ac795c431978d8a6a992b628d557da5ff759b307d495a36649353" == 
-    Utils::bytesTohex(items[0].values[7].bytes)
+    Hex::bytesToHex(items[0].values[7].bytes)
   );
   
 
   // s
   CHECK("efffd310ac743f371de3b9f7f9cb56c0b28ad43601b4ab949f53faa07bd2c804" == 
-    Utils::bytesTohex(items[0].values[8].bytes)
+    Hex::bytesToHex(items[0].values[8].bytes)
   );
 }
