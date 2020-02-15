@@ -7,6 +7,5 @@
 
 .DS_Store
 
-evm/main.out
 
-evm/out/
+out/
