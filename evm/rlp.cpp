@@ -1,4 +1,5 @@
 #include "rlp.h"
+#include "utils.h"
 
 RLPItem RLPDecode::createStr(bytes_t bytes) {
   return {
@@ -135,8 +136,21 @@ bytes_t RLPEncode::encode(bytes_t bytesValue, uint16_t offset) {
     result.insert(result.begin() + 1, std::begin(bytesValue), std::end(bytesValue));
     return result;
   } else {
-    // TODO: implement
-    return bytesValue;
+    bytes_t encodedStringLength = toMinimalByteArray(bytesValue.size());
+    bytes_t result;
+    result.reserve(bytesValue.size() + encodedStringLength.size() + 1);
+    result.push_back(static_cast<uint8_t>((offset + 0x37) + encodedStringLength.size()));
+    result.insert(
+      result.begin() + 1,
+      encodedStringLength.begin(), 
+      encodedStringLength.end()
+    );
+    result.insert(
+      result.begin() + 1 + encodedStringLength.size(), 
+      bytesValue.begin(), 
+      bytesValue.end()
+    );
+    return result;
   }
 };
 

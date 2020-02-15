@@ -139,6 +139,68 @@ TEST_CASE("Mixed nested list", "[rlp_encode]") {
   CHECK("c6827a77c10401" == Utils::bytesTohex(result)); 
 }
 
+TEST_CASE("Multiple nested lists", "[rlp_encode]") {
+
+  // given
+  bytes_t bytes1 = { 'z', 'w' };
+  bytes_t bytes2 = { 0x04 };
+  bytes_t bytes3 = { 0x01 };
+  
+  RLPItem item8 {
+    RLPType::LIST,
+    bytes_t {},
+    std::vector<RLPItem> {}
+  };
+
+  RLPItem item7 {
+    RLPType::LIST,
+    bytes_t {},
+    std::vector<RLPItem> { item8 }
+  };
+
+  RLPItem item6 {
+    RLPType::LIST,
+    bytes_t {},
+    std::vector<RLPItem> { }
+  };
+
+  RLPItem item5 {
+    RLPType::LIST,
+    bytes_t {},
+    std::vector<RLPItem> { item6, item7 }
+  };
+
+  RLPItem item4 {
+    RLPType::LIST,
+    bytes_t {},
+    std::vector<RLPItem> { }
+  };
+
+  RLPItem item3 {
+    RLPType::LIST,
+    bytes_t {},
+    std::vector<RLPItem> { item4 }
+  };
+
+  RLPItem item2 {
+    RLPType::LIST,
+    bytes_t {},
+    std::vector<RLPItem> { }
+  };
+
+  RLPItem item1 {
+    RLPType::LIST,
+    bytes_t {},
+    std::vector<RLPItem> { item2, item3, item5 }
+  };
+
+  // when
+  bytes_t result = RLPEncode::encode(item1);
+
+  // then
+  CHECK(8 == result.size());
+  CHECK("c7c0c1c0c3c0c1c0" == Utils::bytesTohex(result)); 
+}
 
 TEST_CASE("Single int", "[rlp_encode]") {
 
@@ -178,4 +240,41 @@ TEST_CASE("Int", "[rlp_encode]") {
   // then
   CHECK(3 == result.size());
   CHECK("820400" == Utils::bytesTohex(result)); 
+}
+
+TEST_CASE("Long string encode", "[rlp_encode]") {
+
+  // given
+  bytes_t bytes = { 
+    'L', 'o', 'r', 'e',
+    'm', ' ', 'i', 'p',
+    's', 'u', 'm', ' ',
+    'd', 'o', 'l', 'o',
+    'r', ' ', 's', 'i',
+    't', ' ', 'a', 'm',
+    'e', 't', ',', ' ',
+    'c', 'o', 'n', 's',
+    'e', 'c', 't', 'e',
+    't', 'u', 'r', ' ',
+    'a', 'd', 'i', 'p',
+    'i', 's', 'i', 'c',
+    'i', 'n', 'g', ' ',
+    'e', 'l', 'i', 't'
+  };
+  std::vector<RLPItem> values;
+
+  RLPItem item {
+    RLPType::STRING,
+    bytes,
+    values
+  };
+
+  // when
+  bytes_t result = RLPEncode::encode(item);
+
+  // then
+  CHECK(58 == result.size());
+  CHECK("b8384c6f72656d20697073756d20646f6c6f722073697420616d65742c20636f6e7365637465747572206164697069736963696e6720656c6974" == 
+    Utils::bytesTohex(result)
+  ); 
 }
