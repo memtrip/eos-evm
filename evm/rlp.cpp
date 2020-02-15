@@ -1,11 +1,6 @@
 #include "rlp.h"
 
-const uint8_t RLPDecode::OFFSET_SHORT_STRING = 0x80;
-const uint8_t RLPDecode::OFFSET_LONG_STRING = 0xb7;
-const uint8_t RLPDecode::OFFSET_SHORT_LIST = 0xc0;
-const uint8_t RLPDecode::OFFSET_LONG_LIST = 0xf7;
-
-RLPItem RLPDecode::createStr(std::vector<uint8_t> bytes) {
+RLPItem RLPDecode::createStr(bytes_t bytes) {
   return {
     RLPType::STRING,
     bytes,
@@ -16,17 +11,17 @@ RLPItem RLPDecode::createStr(std::vector<uint8_t> bytes) {
 RLPItem RLPDecode::createList(std::vector<RLPItem> values) {
   return {
     RLPType::LIST,
-    std::vector<uint8_t>(),
+    bytes_t(),
     values
   };
 }
 
-void RLPDecode::decode(std::vector<uint8_t> encoded, std::vector<RLPItem>& list) {
+void RLPDecode::decode(bytes_t encoded, std::vector<RLPItem>& list) {
   traverse(encoded, 0, encoded.size(), list);
 }
 
 void RLPDecode::traverse(
-  std::vector<uint8_t>& data, 
+  bytes_t& data, 
   uint16_t startPos,
   uint16_t end, 
   std::vector<RLPItem>& list
@@ -36,17 +31,17 @@ void RLPDecode::traverse(
   while (startPos < end) {
     uint8_t prefix = data[startPos] & 0xff;
     if (prefix < OFFSET_SHORT_STRING) {
-      std::vector<uint8_t> item = { prefix };
+      bytes_t item = { prefix };
       list.push_back(createStr(item));
       startPos += 1;
     } else if (prefix == OFFSET_SHORT_STRING) {
-      list.push_back(createStr(std::vector<uint8_t>()) );
+      list.push_back(createStr(bytes_t()) );
       startPos += 1;
     } else if (prefix > OFFSET_SHORT_STRING && prefix <= OFFSET_LONG_STRING) {
       uint8_t strLen = prefix - OFFSET_SHORT_STRING;
       list.push_back(
         createStr(
-          std::vector<uint8_t>(
+          bytes_t(
             data.begin() + startPos + 1, 
             data.begin() + startPos + strLen + 1
           )
@@ -58,7 +53,7 @@ void RLPDecode::traverse(
       uint16_t strLen = calculateLength(lenOfStrLen, data, startPos);
       list.push_back(
         createStr(
-          std::vector<uint8_t>(
+          bytes_t(
             data.begin() + startPos + lenOfStrLen + 1, 
             data.begin() + startPos + lenOfStrLen + strLen + 1
           )
@@ -89,7 +84,7 @@ void RLPDecode::traverse(
 
 uint16_t RLPDecode::calculateLength(
   uint8_t lengthOfLength, 
-  std::vector<uint8_t>& data,
+  bytes_t& data,
   uint16_t pos
 ) {
   uint8_t pow = lengthOfLength - 1;
@@ -100,3 +95,72 @@ uint16_t RLPDecode::calculateLength(
   }
   return length;
 }
+
+bytes_t RLPEncode::encode(RLPItem item) {
+  if (item.type == RLPType::STRING) {
+    return encodeString(item);
+  } else {
+    return encodeList(item);
+  }
+}
+
+bytes_t RLPEncode::encodeString(RLPItem item) {
+  return encode(item.bytes, OFFSET_SHORT_STRING);
+}
+
+bytes_t RLPEncode::encodeList(RLPItem item) {
+  std::vector<RLPItem> values = item.values;
+  if (values.size() == 0) {
+    return encode(bytes_t(), OFFSET_SHORT_LIST);
+  } else {
+    bytes_t result;
+    for (int i = 0; i < values.size(); i++) {
+      result = concat(result, encode(values[i]));
+    }
+    return encode(bytes_t(), OFFSET_SHORT_LIST);
+  }
+}
+
+bytes_t RLPEncode::encode(bytes_t bytesValue, uint16_t offset) {
+  if (bytesValue.size() == 1
+    && offset == OFFSET_SHORT_STRING
+    && bytesValue[0] >= 0x00
+    && bytesValue[0] <= 0x7f
+  ) {
+    return bytesValue;
+  } else if (bytesValue.size() <= 55) {
+    bytes_t result = bytes_t(bytesValue.size() + 1);
+    result[0] = static_cast<uint8_t>(offset + bytesValue.size());
+    result.insert(result.begin() + 1, std::begin(bytesValue), std::end(bytesValue));
+    return result;
+  } else {
+    // TODO: implement
+    return bytesValue;
+  }
+};
+
+bytes_t RLPEncode::toMinimalByteArray(uint16_t value) {
+  bytes_t encoded = toByteArray(value);
+  for (int i = 0; i < encoded.size(); i++) {
+    if (encoded[i] != 0) {
+      return bytes_t(std::begin(encoded) + i, std::end(encoded));
+    } 
+  }
+
+  return bytes_t();
+};
+
+bytes_t RLPEncode::toByteArray(uint16_t value) {
+  return {
+    static_cast<uint8_t>((value >> 24) & 0xff),
+    static_cast<uint8_t>((value >> 16) & 0xff),
+    static_cast<uint8_t>((value >> 8) & 0xff),
+    static_cast<uint8_t>(value & 0xff)
+  };
+};
+
+bytes_t RLPEncode::concat(bytes_t b1, bytes_t b2) {
+  bytes_t result;
+  result.insert(result.begin() + b1.size(), std::begin(b2), std::end(b2));
+  return result;
+};

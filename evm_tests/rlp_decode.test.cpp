@@ -4,7 +4,7 @@
 #include "big_int.h"
 #include "utils.h"
 
-TEST_CASE("Empty byte array", "[rlp)]") {
+TEST_CASE("Empty byte array", "[rlp_decode]") {
 
   // given
   std::vector<uint8_t> bytes = std::vector<uint8_t>();
@@ -19,7 +19,7 @@ TEST_CASE("Empty byte array", "[rlp)]") {
 
 //std::string str(v.begin(), v.end());
 
-TEST_CASE("Small string", "[rlp)]") {
+TEST_CASE("Small string", "[rlp_decode]") {
 
   // given
   std::vector<uint8_t> bytes = { 0x83, 'd', 'o', 'g' };
@@ -35,7 +35,7 @@ TEST_CASE("Small string", "[rlp)]") {
   REQUIRE("dog" == result); 
 }
 
-TEST_CASE("Two small strings", "[rlp)]") {
+TEST_CASE("Two small strings", "[rlp_decode]") {
 
   // given
   std::vector<uint8_t> bytes = { 
@@ -56,7 +56,7 @@ TEST_CASE("Two small strings", "[rlp)]") {
   REQUIRE("dog" == result2); 
 }
 
-TEST_CASE("Null string", "[rlp)]") {
+TEST_CASE("Null string", "[rlp_decode]") {
 
   // given
   std::vector<uint8_t> bytes = { 0x80 };
@@ -72,7 +72,7 @@ TEST_CASE("Null string", "[rlp)]") {
   REQUIRE("" == result);
 }
 
-TEST_CASE("Empty list", "[rlp)]") {
+TEST_CASE("Empty list", "[rlp_decode]") {
 
   // given
   std::vector<uint8_t> bytes = { 0xc0 };
@@ -88,7 +88,7 @@ TEST_CASE("Empty list", "[rlp)]") {
   REQUIRE(0 == items[0].values.size());
 }
 
-TEST_CASE("Encoded integer (0x00)", "[rlp)]") {
+TEST_CASE("Encoded integer (0x00)", "[rlp_decode]") {
 
   // given
   std::vector<uint8_t> bytes = { 0x00 };
@@ -102,7 +102,7 @@ TEST_CASE("Encoded integer (0x00)", "[rlp)]") {
   REQUIRE(uint256_t(0) == BigInt::fromBigEndianBytes(items[0].bytes));
 }
 
-TEST_CASE("Encoded integer (0x0f)", "[rlp)]") {
+TEST_CASE("Encoded integer (0x0f)", "[rlp_decode]") {
 
   // given
   std::vector<uint8_t> bytes = { 0x0f };
@@ -116,7 +116,7 @@ TEST_CASE("Encoded integer (0x0f)", "[rlp)]") {
   REQUIRE(uint256_t(15) == BigInt::fromBigEndianBytes(items[0].bytes));
 }
 
-TEST_CASE("Encoded integer (0x82, 0x04, 0x00)", "[rlp)]") {
+TEST_CASE("Encoded integer (0x82, 0x04, 0x00)", "[rlp_decode]") {
 
   // given
   std::vector<uint8_t> bytes = { 0x82, 0x04, 0x00 };
@@ -132,7 +132,7 @@ TEST_CASE("Encoded integer (0x82, 0x04, 0x00)", "[rlp)]") {
   REQUIRE(uint256_t(1024) == BigInt::fromBigEndianBytes(items[0].bytes));
 }
 
-TEST_CASE("Set", "[rlp)]") {
+TEST_CASE("Set", "[rlp_decode]") {
 
   // given
   std::vector<uint8_t> bytes = { 
@@ -155,7 +155,7 @@ TEST_CASE("Set", "[rlp)]") {
   REQUIRE(1 == items[0].values[2].values[1].values.size());
 }
 
-TEST_CASE("Long string", "[rlp)]") {
+TEST_CASE("Long string", "[rlp_decode]") {
 
   // given
   std::vector<uint8_t> bytes = { 
@@ -189,7 +189,7 @@ TEST_CASE("Long string", "[rlp)]") {
   REQUIRE("Lorem ipsum dolor sit amet, consectetur adipisicing elit" == result);
 }
 
-TEST_CASE("Long string in bytes", "[rlp)]") {
+TEST_CASE("Long string in bytes", "[rlp_decode]") {
 
   // given
   std::vector<uint8_t> bytes = { 
@@ -213,7 +213,7 @@ TEST_CASE("Long string in bytes", "[rlp)]") {
   REQUIRE(uint256_t(1) == BigInt::fromBigEndianBytes(items[0].values[2].bytes));
 }
 
-TEST_CASE("Payload", "[rlp)]") {
+TEST_CASE("Payload", "[rlp_decode]") {
 
   // given
   std::string hex = "F86E12F86B80881BC16D674EC8000094CD2A3D9F938E13CD947EC05ABC7FE734DF8DD8268609184E72A00064801BA0C52C114D4F5A3BA904A9B3036E5E118FE0DBB987FE3955DA20F2CD8F6C21AB9CA06BA4C2874299A55AD947DBC98A25EE895AABF6B625C26C435E84BFD70EDF2F69";
@@ -231,7 +231,7 @@ TEST_CASE("Payload", "[rlp)]") {
   REQUIRE(9 == items[0].values[1].values.size());
 }
 
-TEST_CASE("Payload (1)", "[rlp)]") {
+TEST_CASE("Payload (1)", "[rlp_decode]") {
 
   // given
   std::string hex = "f85f800182520894095e7baea6a6c7c4c2dfeb977efac326af552d870a801ba048b55bfa915ac795c431978d8a6a992b628d557da5ff759b307d495a36649353a0efffd310ac743f371de3b9f7f9cb56c0b28ad43601b4ab949f53faa07bd2c804";
