@@ -15,7 +15,7 @@ uint256_t BigInt::fromBytes(std::vector<uint8_t> bytes) {
   uint8_t data[WORD_SIZE];
   uint8_t offset = WORD_SIZE - bytes.size();
   std::fill_n(data, WORD_SIZE, 0);
-  std::copy(bytes.begin() + offset, bytes.end(), data);
+  std::copy(bytes.begin(), bytes.end(), data + offset);
   return intx::le::load<uint256_t>(data);
 }
 

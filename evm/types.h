@@ -1,6 +1,7 @@
 #ifndef FUNCTIONS_H_INCLUDED
 #define FUNCTIONS_H_INCLUDED
 
+#include <vector>
 #include <set>
 #include <intx/intx.hpp>
 #include "keccak/hash_types.hpp"
@@ -16,6 +17,9 @@ typedef std::vector<store_item_t> account_store_t;
 typedef ethash::hash256 keccak256_t;
 typedef ethash::hash512 keccak512_t;
 
+typedef std::vector<uint8_t> address_t;
+typedef std::vector<uint8_t> bytes_t;
+
 struct EnvInfo {
   uint256_t blockNumber;
   uint64_t timestamp;
@@ -24,6 +28,28 @@ struct EnvInfo {
 };
 
 typedef EnvInfo env_t;
+
+enum TransactionActionType {
+  TRANSACTION_CREATE,
+  TRANSACTION_CALL,
+};
+
+typedef TransactionActionType transaction_action_t;
+
+struct TransactionData {
+  transaction_action_t action; /* ? */
+  uint256_t nonce;
+  uint256_t gas_price;
+  uint256_t gas_limit;
+  address_t to;
+  uint256_t value;
+  bytes_t data;
+  uint256_t v;
+  bytes_t r;
+  bytes_t s;
+};
+
+typedef TransactionData transaction_t;
 
 const unsigned long INVALID_ARGUMENT = 0xFFFFFFFFFFFFFFFF;
 
