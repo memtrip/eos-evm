@@ -500,17 +500,6 @@ void Utils::printInstructionList() {
   }
 }
 
-bytes_t Utils::hex2bin(const std::string& hex) {
-
-  bytes_t bytes;
-  for (unsigned int i = 0; i < hex.length(); i+=2) {
-    std::string byteString = hex.substr(i, 2);
-    bytes.push_back((uint8_t) strtol(byteString.c_str(), NULL, 16));
-  }
-
-  return bytes;
-}
-
 std::string Utils::uint256_2str(uint256_t value) {
   bytes_t bytes = BigInt::toBytes(value);
   return Hex::bytesToHex(bytes);
@@ -523,7 +512,7 @@ void Utils::print_uint256(uint256_t value) {
 }
 
 uint256_t Utils::bigIntFromBigEndianBytes(std::string bytecode_str) {
-  return BigInt::fromBigEndianBytes(Utils::hex2bin(bytecode_str));
+  return BigInt::fromBigEndianBytes(Hex::hexToBytes(bytecode_str));
 }
 
 store_item_t Utils::accountStoreValue(size_t index, account_store_t* store) {

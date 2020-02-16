@@ -2,6 +2,7 @@
 #include "catch.hpp"
 #include "utils.h"
 #include <evm/vm.h>
+#include <evm/hex.h>
 
 TEST_CASE("Duplicate stack item", "[DUP1]") {
   // given
@@ -9,7 +10,7 @@ TEST_CASE("Duplicate stack item", "[DUP1]") {
 	// (PUSH1 ((60)03))
 	// (DUP1 (80))
   std::string bytecode_str = "6002600380";
-  bytes_t bytes = Utils::hex2bin(bytecode_str);
+  bytes_t bytes = Hex::hexToBytes(bytecode_str);
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -53,7 +54,7 @@ TEST_CASE("Duplicate stack item at 16", "[DUP1]") {
   // (PUSH1 ((60)16))
 	// (DUP16 (8F))
   std::string bytecode_str = "60016002600360046005600660076008600960106011601260136014601560168F";
-  bytes_t bytes = Utils::hex2bin(bytecode_str);
+  bytes_t bytes = Hex::hexToBytes(bytecode_str);
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -77,7 +78,7 @@ TEST_CASE("Swap stack item", "[SWAP1]") {
 	// (PUSH1 ((60)03))
 	// (SWAP1 (90))
   std::string bytecode_str = "6002600390";
-  bytes_t bytes = Utils::hex2bin(bytecode_str);
+  bytes_t bytes = Hex::hexToBytes(bytecode_str);
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -119,7 +120,7 @@ TEST_CASE("Swap stack item at 16", "[SWAP16]") {
   // (PUSH1 ((60)17))
 	// (SWAP16 (9F))
   std::string bytecode_str = "600160026003600460056006600760086009601060116012601360146015601660179F";
-  bytes_t bytes = Utils::hex2bin(bytecode_str);
+  bytes_t bytes = Hex::hexToBytes(bytecode_str);
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -151,7 +152,7 @@ TEST_CASE("Program counter", "[PC]") {
   // (PUSH1 ((60)07))
   // (PC (58))
   std::string bytecode_str = "600160026003600460056006600758";
-  bytes_t bytes = Utils::hex2bin(bytecode_str);
+  bytes_t bytes = Hex::hexToBytes(bytecode_str);
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -180,7 +181,7 @@ TEST_CASE("Pop", "[POP]") {
   // (PUSH1 ((60)07))
   // (PC (58))
   std::string bytecode_str = "60f060aa50600055";
-  bytes_t bytes = Utils::hex2bin(bytecode_str);
+  bytes_t bytes = Hex::hexToBytes(bytecode_str);
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);

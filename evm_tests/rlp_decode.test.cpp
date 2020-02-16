@@ -219,7 +219,7 @@ TEST_CASE("Payload", "[rlp_decode]") {
   // given
   std::string hex = "F86E12F86B80881BC16D674EC8000094CD2A3D9F938E13CD947EC05ABC7FE734DF8DD8268609184E72A00064801BA0C52C114D4F5A3BA904A9B3036E5E118FE0DBB987FE3955DA20F2CD8F6C21AB9CA06BA4C2874299A55AD947DBC98A25EE895AABF6B625C26C435E84BFD70EDF2F69";
 
-  bytes_t bytes = Utils::hex2bin(hex);
+  bytes_t bytes = Hex::hexToBytes(hex);
 
   std::vector<RLPItem> items = std::vector<RLPItem>();
 
@@ -237,7 +237,7 @@ TEST_CASE("Payload (1)", "[rlp_decode]") {
   // given
   std::string hex = "f85f800182520894095e7baea6a6c7c4c2dfeb977efac326af552d870a801ba048b55bfa915ac795c431978d8a6a992b628d557da5ff759b307d495a36649353a0efffd310ac743f371de3b9f7f9cb56c0b28ad43601b4ab949f53faa07bd2c804";
 
-  bytes_t bytes = Utils::hex2bin(hex);
+  bytes_t bytes = Hex::hexToBytes(hex);
 
   std::vector<RLPItem> items = std::vector<RLPItem>();
 

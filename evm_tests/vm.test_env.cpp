@@ -2,13 +2,14 @@
 #include "catch.hpp"
 #include "utils.h"
 #include <evm/vm.h>
+#include <evm/hex.h>
 
 TEST_CASE("Blockhash", "[stub]") {
   // given
   // (PUSH1 ((60)00))
   // (BLOCKHASH 40)
   std::string bytecode_str = "600040";
-  bytes_t bytes = Utils::hex2bin(bytecode_str);
+  bytes_t bytes = Hex::hexToBytes(bytecode_str);
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -28,7 +29,7 @@ TEST_CASE("Coinbase", "[stub]") {
   // given
   // (COINBASE 41)
   std::string bytecode_str = "41";
-  bytes_t bytes = Utils::hex2bin(bytecode_str);
+  bytes_t bytes = Hex::hexToBytes(bytecode_str);
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -48,7 +49,7 @@ TEST_CASE("Difficulty", "[env]") {
   // given
   // (DIFFICULTY 44)
   std::string bytecode_str = "44";
-  bytes_t bytes = Utils::hex2bin(bytecode_str);
+  bytes_t bytes = Hex::hexToBytes(bytecode_str);
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -68,7 +69,7 @@ TEST_CASE("Timestamp", "[env]") {
   // given
   // (TIMESTAMP 42)
   std::string bytecode_str = "42";
-  bytes_t bytes = Utils::hex2bin(bytecode_str);
+  bytes_t bytes = Hex::hexToBytes(bytecode_str);
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -88,7 +89,7 @@ TEST_CASE("Number", "[env]") {
   // given
   // (NUMBER 43)
   std::string bytecode_str = "43";
-  bytes_t bytes = Utils::hex2bin(bytecode_str);
+  bytes_t bytes = Hex::hexToBytes(bytecode_str);
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -108,7 +109,7 @@ TEST_CASE("Gas limit", "[env]") {
   // given
   // (GASLIMIT 45)
   std::string bytecode_str = "45";
-  bytes_t bytes = Utils::hex2bin(bytecode_str);
+  bytes_t bytes = Hex::hexToBytes(bytecode_str);
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -128,7 +129,7 @@ TEST_CASE("Chain id", "[env]") {
   // given
   // (CHAINID 45)
   std::string bytecode_str = "46";
-  bytes_t bytes = Utils::hex2bin(bytecode_str);
+  bytes_t bytes = Hex::hexToBytes(bytecode_str);
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);

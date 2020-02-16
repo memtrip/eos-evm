@@ -10,7 +10,7 @@ ACTION eos_evm::raw(name from, string code, string sender) {
   if (eos_bridge::signatureExists(transaction)) {
     check(1 != 1, "Execute transaction for account identifier, resolved by signature");
   } else {
-    check(has_auth(from) == false, "You must provide a permission for the account performing this action.");
+    check(has_auth(from), "You must provide a permission for the account performing this action.");
 
     account_table _account(get_self(), get_self().value);
 

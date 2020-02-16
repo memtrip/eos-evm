@@ -79,12 +79,12 @@ TEST_CASE("Memory read slice and write slice", "[memory]") {
   // when
   memory.resize(32);
 
-  bytes_t slice1 = Utils::hex2bin("aabbccee112233445566778899");
+  bytes_t slice1 = Hex::hexToBytes("aabbccee112233445566778899");
   memory.writeSlice(uint256_t(0x00), slice1);
   bytes_t readSlice1 = memory.readSlice(uint256_t(0x00), uint256_t(0x0D));
   REQUIRE("aabbccee112233445566778899" == Hex::bytesToHex(readSlice1)); 
   
-  bytes_t slice2 = Utils::hex2bin("FFFF");
+  bytes_t slice2 = Hex::hexToBytes("FFFF");
   memory.writeSlice(uint256_t(0x01), slice2);
   bytes_t readSlice2 = memory.readSlice(uint256_t(0x00), uint256_t(0x06));
   REQUIRE("aaffffee1122" == Hex::bytesToHex(readSlice2)); 

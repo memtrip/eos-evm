@@ -2,6 +2,7 @@
 #include "catch.hpp"
 #include "utils.h"
 #include <evm/vm.h>
+#include <evm/hex.h>
 
 TEST_CASE("Conditional jump to destination truthy", "[jumps]") {
   // given
@@ -19,7 +20,7 @@ TEST_CASE("Conditional jump to destination truthy", "[jumps]") {
   // (PUSH1 ((60)10))
 	// (DIV (04))
   std::string bytecode_str = "6006600310600F57600660030200025B6002601604";
-  bytes_t bytes = Utils::hex2bin(bytecode_str);
+  bytes_t bytes = Hex::hexToBytes(bytecode_str);
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -53,7 +54,7 @@ TEST_CASE("Conditional jump to destination not true", "[jumps]") {
   // (PUSH1 ((60)10))
 	// (DIV (04))
   std::string bytecode_str = "6003600610600F57600660030200025B6002601604";
-  bytes_t bytes = Utils::hex2bin(bytecode_str);
+  bytes_t bytes = Hex::hexToBytes(bytecode_str);
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -81,7 +82,7 @@ TEST_CASE("Unconditional jump to destination", "[jumps]") {
   // (JUMPDEST (5B))
 	// (DIV (04))
   std::string bytecode_str = "60036006600856025B04";
-  bytes_t bytes = Utils::hex2bin(bytecode_str);
+  bytes_t bytes = Hex::hexToBytes(bytecode_str);
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -102,7 +103,7 @@ TEST_CASE("Unconditional jump to destination", "[jumps]") {
 // TODO: uses SLOAD
 // TEST_CASE("Jumps", "[jumps]") {
 //   std::string bytecode_str = "600160015560066000555b60016000540380806000551560245760015402600155600a565b";
-//   bytes_t bytes = Utils::hex2bin(bytecode_str);
+//   bytes_t bytes = Hex::hexToBytes(bytecode_str);
 //   VM vm {};
 //   account_store_t* accountItems = new account_store_t();
 //   AccountState as(accountItems);

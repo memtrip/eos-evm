@@ -2,6 +2,7 @@
 #include "catch.hpp"
 #include "utils.h"
 #include <evm/vm.h>
+#include <evm/hex.h>
 
 TEST_CASE("Store two values", "[store]") {
   // given
@@ -9,7 +10,7 @@ TEST_CASE("Store two values", "[store]") {
 	// (PUSH1 ((60) 01))
 	// (SSTORE (55))
   std::string bytecode_str = "6002600155";
-  bytes_t bytes = Utils::hex2bin(bytecode_str);
+  bytes_t bytes = Hex::hexToBytes(bytecode_str);
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);

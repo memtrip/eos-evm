@@ -8,7 +8,6 @@ class Utils {
     static void printOpcodeHex(unsigned char value);
     static void printInstruction(unsigned int value);
     static void printInstructionList();
-    static bytes_t hex2bin(const std::string& hex);
     static std::string uint256_2str(uint256_t value);
     static void print_uint256(uint256_t value);
     static uint256_t bigIntFromBigEndianBytes(std::string bytecode_str);

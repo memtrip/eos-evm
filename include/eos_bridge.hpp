@@ -1,5 +1,4 @@
 #pragma once
-
 #include <evm/address.h>
 #include <evm/transaction.h>
 
@@ -10,11 +9,10 @@ class eos_bridge {
     }
 
     static transaction_t parseTransaction(string code) {
-      bytes_t bytes(code.begin(), code.end());
-      return Transaction::parse(bytes);
+      return Transaction::parse(code);
     }
 
     static bool signatureExists(transaction_t transaction) {
-      return true;
+      return Transaction::signatureExists(transaction);
     }
 };

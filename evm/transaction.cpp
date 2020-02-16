@@ -1,8 +1,10 @@
 #include <evm/transaction.h>
 #include <evm/rlp.h>
 #include <evm/big_int.h>
+#include <evm/hex.h>
 
-transaction_t Transaction::parse(bytes_t bytes) {
+transaction_t Transaction::parse(std::string hex) {
+  bytes_t bytes = Hex::hexToBytes(hex);
   std::vector<RLPItem> items = std::vector<RLPItem>();
   RLPDecode::decode(bytes, items);
 

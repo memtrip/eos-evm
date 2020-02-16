@@ -2,6 +2,7 @@
 #include "catch.hpp"
 #include "utils.h"
 #include <evm/vm.h>
+#include <evm/hex.h>
 
 TEST_CASE("Save to memory", "[memory]") {
   // given
@@ -9,7 +10,7 @@ TEST_CASE("Save to memory", "[memory]") {
   // (PUSH1 ((60)00))
   // (MSTORE (52))
   std::string bytecode_str = "6006600052";
-  bytes_t bytes = Utils::hex2bin(bytecode_str);
+  bytes_t bytes = Hex::hexToBytes(bytecode_str);
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -36,7 +37,7 @@ TEST_CASE("Save to memory, and retreive", "[memory]") {
   // (PUSH1 ((60)00))
   // (MLOAD (51))
   std::string bytecode_str = "6006600052600051";
-  bytes_t bytes = Utils::hex2bin(bytecode_str);
+  bytes_t bytes = Hex::hexToBytes(bytecode_str);
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -64,7 +65,7 @@ TEST_CASE("Save to memory, retreive, and apply addition", "[memory]") {
   // (MLOAD (51))
   // (ADD (01))
   std::string bytecode_str = "6006600052601260005101";
-  bytes_t bytes = Utils::hex2bin(bytecode_str);
+  bytes_t bytes = Hex::hexToBytes(bytecode_str);
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -92,7 +93,7 @@ TEST_CASE("Save to memory, retreive, and apply addition", "[memory]") {
 //   // (MLOAD (51))
 //   // (ADD (01))
 //   std::string bytecode_str = "6006601F53601260005101";
-//   bytes_t bytes = Utils::hex2bin(bytecode_str);
+//   bytes_t bytes = Hex::hexToBytes(bytecode_str);
 //   VM vm {};
 //   account_store_t* accountItems = new account_store_t();
 //   AccountState as(accountItems);
@@ -115,7 +116,7 @@ TEST_CASE("Memory size", "[memory]") {
   // given
   // (MEMSIZE (59))
   std::string bytecode_str = "59";
-  bytes_t bytes = Utils::hex2bin(bytecode_str);
+  bytes_t bytes = Hex::hexToBytes(bytecode_str);
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);

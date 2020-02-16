@@ -5,11 +5,12 @@
 #include "utils.h"
 #include <evm/types.h>
 #include <evm/opcode.h>
+#include <evm/hex.h>
 
 std::vector<instruct_t> parse(std::string bytecode_str) {
   std::vector<instruct_t> values = std::vector<instruct_t>();
 
-  bytes_t bytes = Utils::hex2bin(bytecode_str);
+  bytes_t bytes = Hex::hexToBytes(bytecode_str);
   
   int position = 0;
 
