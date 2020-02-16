@@ -1,6 +1,3 @@
-#include <vector>
-#include <iostream>
-#include <algorithm>
 #include "byte_reader.h"
 #include "big_int.h"
 
