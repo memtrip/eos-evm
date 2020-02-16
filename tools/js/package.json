@@ -1,0 +1,13 @@
+{
+  "name": "ethereum_transaction_tools",
+  "version": "1.0.0",
+  "description": "Tools for signing and decoding Ethereum transactions",
+  "dependencies": {
+    "bignumber.js": "^9.0.0",
+    "crypto-js": "^4.0.0",
+    "elliptic": "^6.5.2",
+    "ethereum-tx-decoder": "^3.0.0",
+    "rlp": "^2.2.4",
+    "web3": "^1.2.6"
+  }
+}

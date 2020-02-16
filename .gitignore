@@ -7,5 +7,6 @@
 
 .DS_Store
 
+tools/js/node_modules/*
 
 out/
