@@ -9,37 +9,36 @@ CONTRACT eos_evm : public contract {
     using contract::contract;
 
     ACTION raw(name from, string code, string sender);
-    ACTION create(name sender, string message);
+    ACTION create(name from, string message);
     ACTION writelog(name from, string message);
     ACTION clearlog();
 
   private:
     TABLE account {
-      name account;
+      name user;
       uint64_t nonce;
       asset balance;
-      checksum256 accountIdentifier;
+      string accountIdentifier;
 
-      name primary_key() const { return account; }
-      checksum256 secondary_key() const { return accountIdentifier; }
+      auto primary_key() const { return user.value; }
     };
     typedef multi_index<name("account"), account> account_table;
 
     TABLE account_state {
-      name account;
+      name user;
       checksum256 key;
       checksum256 value;
 
-      name primary_key() const { return account; }
+      auto primary_key() const { return user.value; }
       checksum256 secondary_key() const { return key; }
     };
     typedef multi_index<name("accountstate"), account_state> account_state_table;
 
     TABLE account_code {
-      name account;
+      name user;
       string code;
 
-      name primary_key() const { return account; }
+      auto primary_key() const { return user.value; }
     };
     typedef multi_index<name("accountcode"), account_code> account_code_table;
 

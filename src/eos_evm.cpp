@@ -1,6 +1,7 @@
 #include <string>
 #include <eos_evm.hpp>
 #include <eos_system.hpp>
+#include <eos_bridge.hpp>
 
 ACTION eos_evm::raw(name from, string code, string sender) {
   require_auth(get_self());
@@ -14,15 +15,21 @@ ACTION eos_evm::raw(name from, string code, string sender) {
   });
 }
 
-ACTION eos_evm::create(name sender, string message) {
-  require_auth(sender);
+ACTION eos_evm::create(name from, string message) {
+  require_auth(from);
 
-  log_table _log(get_self(), get_self().value);
+  account_table _account(get_self(), get_self().value);
 
-  _log.emplace(sender, [&](auto& log) {
-    log.key = _log.available_primary_key();
-    log.user = sender;
-    log.message = std::to_string(eos_system::block_num());
+  auto iterator = _account.find(from.value);
+  check(iterator == _account.end(), "An Ethereum account already exists for this user.");
+
+  _account.emplace(from, [&](auto& account) {
+    account.user = from;
+    account.nonce = 1;
+    account.accountIdentifier = eos_bridge::createAccountIdentifier(
+      from.to_string(), 
+      message
+    );
   });
 }
 
@@ -49,4 +56,4 @@ ACTION eos_evm::clearlog() {
   }
 }
 
-EOSIO_DISPATCH(eos_evm, (raw)(writelog)(clearlog))
+EOSIO_DISPATCH(eos_evm, (raw)(create)(writelog)(clearlog))
