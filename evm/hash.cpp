@@ -1,4 +1,4 @@
-#include "hash.h"
+#include <evm/hash.h>
 #include <keccak/keccak.hpp>
 
 bytes_t Hash::keccak256(bytes_t& bytes) {

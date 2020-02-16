@@ -1,5 +1,5 @@
-#include "instruction.h"
-#include "opcode.h"
+#include <evm/instruction.h>
+#include <evm/opcode.h>
 
 /*
   A 4 byte representation of an EVM instruction; [opcode][args][return][tier]

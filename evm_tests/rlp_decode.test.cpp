@@ -1,9 +1,9 @@
 #include "catch.hpp"
-#include "rlp.h"
-#include "types.h"
-#include "big_int.h"
+#include <evm/rlp.h>
+#include <evm/types.h>
+#include <evm/big_int.h>
 #include "utils.h"
-#include "hex.h"
+#include <evm/hex.h>
 
 TEST_CASE("Empty byte array", "[rlp_decode]") {
 

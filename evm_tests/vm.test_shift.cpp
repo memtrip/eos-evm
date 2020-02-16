@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "catch.hpp"
 #include "utils.h"
-#include "vm.h"
+#include <evm/vm.h>
 
 TEST_CASE("shift left ", "[shift]") {
   std::string bytecode_str = "600560011b6000526001601ff3";

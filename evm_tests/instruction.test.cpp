@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <vector>
 #include "catch.hpp"
-#include "instruction.h"
+#include <evm/instruction.h>
 #include "utils.h"
-#include "types.h"
-#include "opcode.h"
+#include <evm/types.h>
+#include <evm/opcode.h>
 
 std::vector<instruct_t> parse(std::string bytecode_str) {
   std::vector<instruct_t> values = std::vector<instruct_t>();

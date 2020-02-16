@@ -1,6 +1,6 @@
-#include "instruction.h"
-#include "jumps.h"
-#include "opcode.h"
+#include <evm/instruction.h>
+#include <evm/jumps.h>
+#include <evm/opcode.h>
 
 jump_set_t Jumps::findDestinations(bytes_t bytes) {
   jump_set_t jumps = jump_set_t();

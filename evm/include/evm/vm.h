@@ -1,10 +1,10 @@
 #include "byte_reader.h"
 #include "stack.h"
-#include "types.h"
+#include <evm/types.h>
 #include "params.h"
 #include "account_state.h"
 #include "vm_result.h"
-#include "memory.h"
+#include <evm/memory.h>
 
 
 class VM {

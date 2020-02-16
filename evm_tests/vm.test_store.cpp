@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "catch.hpp"
 #include "utils.h"
-#include "vm.h"
+#include <evm/vm.h>
 
 TEST_CASE("Store two values", "[store]") {
   // given

@@ -1,9 +1,9 @@
 #include <vector>
 #include "catch.hpp"
-#include "memory.h"
-#include "types.h"
+#include <evm/memory.h>
+#include <evm/types.h>
 #include "utils.h"
-#include "hex.h"
+#include <evm/hex.h>
 
 TEST_CASE("Memory write and read", "[memory]") {
   // given

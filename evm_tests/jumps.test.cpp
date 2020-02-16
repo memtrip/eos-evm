@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "catch.hpp"
-#include "jumps.h"
-#include "types.h"
+#include <evm/jumps.h>
+#include <evm/types.h>
 #include "utils.h"
 
 jump_set_t jump_destinations(std::string bytecode_str) {

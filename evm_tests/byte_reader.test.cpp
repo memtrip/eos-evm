@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "catch.hpp"
-#include "byte_reader.h"
-#include "types.h"
+#include <evm/byte_reader.h>
+#include <evm/types.h>
 #include "utils.h"
 
 TEST_CASE("Byte Reader read(32)", "[byte_reader]" ) {

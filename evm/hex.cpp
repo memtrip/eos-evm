@@ -1,4 +1,4 @@
-#include "hex.h"
+#include <evm/hex.h>
 
 std::string Hex::bytesToHex(bytes_t& bytes) {
   std::string result;

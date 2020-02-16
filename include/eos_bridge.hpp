@@ -2,7 +2,7 @@
 
 #ifndef STUB
 
-#include "address.h"
+#include <evm/address.h>
 
 class eos_bridge {
   public:

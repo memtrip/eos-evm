@@ -3,12 +3,12 @@
 #include <stdexcept>
 #include <string>
 
-#include "opcode.h"
-#include "instruction.h"
-#include "gas_tier_price.h"
+#include <evm/opcode.h>
+#include <evm/instruction.h>
+#include <evm/gas_tier_price.h>
 #include "utils.h"
-#include "big_int.h"
-#include "hex.h"
+#include <evm/big_int.h>
+#include <evm/hex.h>
 
 void Utils::printOpcode(unsigned char value) {
   switch (value) {

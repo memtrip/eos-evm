@@ -1,6 +1,6 @@
 #include "catch.hpp"
-#include "types.h"
-#include "stack.h"
+#include <evm/types.h>
+#include <evm/stack.h>
 
 TEST_CASE("Stack pop", "[pop(1)]") {
   // given 

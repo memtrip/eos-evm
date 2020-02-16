@@ -1,7 +1,7 @@
 #include <iostream>
 #include "catch.hpp"
-#include "big_int.h"
-#include "types.h"
+#include <evm/big_int.h>
+#include <evm/types.h>
 #include "utils.h"
 
 /**

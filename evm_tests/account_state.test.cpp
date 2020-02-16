@@ -1,9 +1,8 @@
 #include "catch.hpp"
-#include "types.h"
-#include "account_state.h"
+#include <evm/types.h>
+#include <evm/account_state.h>
+#include <evm/stack.h>
 #include "utils.h"
-#include "stack.h"
-
 
 TEST_CASE("Put pair", "[account_state]") {
   // given 

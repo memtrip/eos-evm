@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "catch.hpp"
 #include "utils.h"
-#include "vm.h"
+#include <evm/vm.h>
 
 TEST_CASE("signed division", "[signed]") {
   std::string bytecode_str = "650123651246236265432290056000556501236512462360009005600155";

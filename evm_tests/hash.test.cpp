@@ -1,7 +1,7 @@
 #include <vector>
 #include "catch.hpp"
-#include "hash.h"
-#include "big_int.h"
+#include <evm/hash.h>
+#include <evm/big_int.h>
 #include "utils.h"
 
 TEST_CASE("keccak256", "[hash]" ) {

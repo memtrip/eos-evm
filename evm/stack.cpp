@@ -1,5 +1,5 @@
 #include <vector>
-#include "stack.h"
+#include <evm/stack.h>
 
 StackMachine::StackMachine(std::vector<uint256_t>* stackArg) {
   stack = stackArg;

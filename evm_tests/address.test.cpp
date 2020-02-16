@@ -1,5 +1,5 @@
 #include "catch.hpp"
-#include "address.h"
+#include <evm/address.h>
 #include "utils.h"
 
 TEST_CASE("Create accountIdentifier", "[address]" ) {
