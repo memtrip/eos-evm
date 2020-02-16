@@ -3,7 +3,7 @@
 #include "utils.h"
 #include "opcode.h"
 
-jump_set_t Jumps::findDestinations(std::vector<uint8_t> bytes) {
+jump_set_t Jumps::findDestinations(bytes_t bytes) {
   jump_set_t jumps = jump_set_t();
 
   int position = 0;

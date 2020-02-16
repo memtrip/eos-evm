@@ -8,7 +8,7 @@
 #include "utils.h" // TODO: remove this
 
 ExecResult VM::execute(
-  std::vector<uint8_t> bytes, 
+  bytes_t bytes, 
   Memory& memory,
   StackMachine& stack, 
   AccountState& accountState,
@@ -375,7 +375,7 @@ InstructionResult VM::executeInstruction(
         uint256_t offset = stack.peek(0);
         uint256_t size = stack.peek(1);
         stack.pop(2);
-        std::vector<uint8_t> bytes = memory.readSlice(offset, size);
+        bytes_t bytes = memory.readSlice(offset, size);
         stack.push(BigInt::fromBigEndianBytes(Hash::keccak256(bytes)));
         break;
       }

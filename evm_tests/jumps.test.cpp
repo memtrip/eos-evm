@@ -5,7 +5,7 @@
 #include "utils.h"
 
 jump_set_t jump_destinations(std::string bytecode_str) {
-  std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
+  bytes_t bytes = Utils::hex2bin(bytecode_str);
   return Jumps::findDestinations(bytes);
 }
 

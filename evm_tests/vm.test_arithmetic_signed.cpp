@@ -5,11 +5,11 @@
 
 TEST_CASE("signed division", "[signed]") {
   std::string bytecode_str = "650123651246236265432290056000556501236512462360009005600155";
-  std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
+  bytes_t bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
-  std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
+  bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
@@ -32,11 +32,11 @@ TEST_CASE("signed division", "[signed]") {
 
 TEST_CASE("signed mod", "[signed]") {
   std::string bytecode_str = "650123651246236265432290076000556501236512462360009007600155";
-  std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
+  bytes_t bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
-  std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
+  bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
@@ -59,11 +59,11 @@ TEST_CASE("signed mod", "[signed]") {
 
 TEST_CASE("add mod, mul mod", "[signed]") {
   std::string bytecode_str = "60ff60f060108282820860005509600155600060f0601082828208196002550919600355";
-  std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
+  bytes_t bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
-  std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
+  bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
@@ -96,11 +96,11 @@ TEST_CASE("add mod, mul mod", "[signed]") {
 
 TEST_CASE("exponent", "[signed]") {
   std::string bytecode_str = "6016650123651246230a6000556001650123651246230a6001556000650123651246230a600255";
-  std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
+  bytes_t bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
-  std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
+  bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
@@ -128,11 +128,11 @@ TEST_CASE("exponent", "[signed]") {
 
 // TEST_CASE("signextend", "[signed]") {
 //   std::string bytecode_str = "610fff60020b60005560ff60200b600155";
-//   std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
+//   bytes_t bytes = Utils::hex2bin(bytecode_str);
 //   VM vm {};
 //   account_store_t* accountItems = new account_store_t();
 //   AccountState as(accountItems);
-//   std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
+//   bytes_t* memoryBytes = new bytes_t();
 //   Memory mem(memoryBytes);
 //   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
 //   StackMachine sm(stackItems);
@@ -155,11 +155,11 @@ TEST_CASE("exponent", "[signed]") {
 
 TEST_CASE("signed comparison", "[signed]") {
   std::string bytecode_str = "60106000036010818112600055136001556010601060000381811260025513600355";
-  std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
+  bytes_t bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
-  std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
+  bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);

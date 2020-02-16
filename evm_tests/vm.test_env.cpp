@@ -8,11 +8,11 @@ TEST_CASE("Blockhash", "[stub]") {
   // (PUSH1 ((60)00))
   // (BLOCKHASH 40)
   std::string bytecode_str = "600040";
-  std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
+  bytes_t bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
-  std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
+  bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
@@ -28,11 +28,11 @@ TEST_CASE("Coinbase", "[stub]") {
   // given
   // (COINBASE 41)
   std::string bytecode_str = "41";
-  std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
+  bytes_t bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
-  std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
+  bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
@@ -48,11 +48,11 @@ TEST_CASE("Difficulty", "[env]") {
   // given
   // (DIFFICULTY 44)
   std::string bytecode_str = "44";
-  std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
+  bytes_t bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
-  std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
+  bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
@@ -68,11 +68,11 @@ TEST_CASE("Timestamp", "[env]") {
   // given
   // (TIMESTAMP 42)
   std::string bytecode_str = "42";
-  std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
+  bytes_t bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
-  std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
+  bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
@@ -88,11 +88,11 @@ TEST_CASE("Number", "[env]") {
   // given
   // (NUMBER 43)
   std::string bytecode_str = "43";
-  std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
+  bytes_t bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
-  std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
+  bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
@@ -108,11 +108,11 @@ TEST_CASE("Gas limit", "[env]") {
   // given
   // (GASLIMIT 45)
   std::string bytecode_str = "45";
-  std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
+  bytes_t bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
-  std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
+  bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
@@ -128,11 +128,11 @@ TEST_CASE("Chain id", "[env]") {
   // given
   // (CHAINID 45)
   std::string bytecode_str = "46";
-  std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
+  bytes_t bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
-  std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
+  bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);

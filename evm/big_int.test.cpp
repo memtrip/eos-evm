@@ -64,28 +64,28 @@ TEST_CASE("Instantiate uint256_t from big endian string", "[fromBigEndianBytes]"
 }
 
 TEST_CASE("Instantiate char* from uint256_t (1)", "[big_int]") {
-  std::vector<uint8_t> output = BigInt::toBytes(uint256_t(21));
+  bytes_t output = BigInt::toBytes(uint256_t(21));
   CHECK("0000000000000000000000000000000000000000000000000000000000000015" == 
     Utils::uint256_2str(BigInt::fromBigEndianBytes(output))
   );
 }
 
 TEST_CASE("Instantiate char* from uint256_t (2)", "[big_int]") {
-  std::vector<uint8_t> output = BigInt::toBytes(uint256_t(2100));
+  bytes_t output = BigInt::toBytes(uint256_t(2100));
   CHECK("0000000000000000000000000000000000000000000000000000000000000834" == 
     Utils::uint256_2str(BigInt::fromBigEndianBytes(output))
   );
 }
 
 TEST_CASE("Instantiate char* from uint256_t (3)", "[big_int]") {
-  std::vector<uint8_t> output = BigInt::toBytes(uint256_t(0x80));
+  bytes_t output = BigInt::toBytes(uint256_t(0x80));
   CHECK("0000000000000000000000000000000000000000000000000000000000000080" == 
     Utils::uint256_2str(BigInt::fromBigEndianBytes(output))
   );
 }
 
 TEST_CASE("Instantiate char* from uint256_t (4)", "[big_int]") {
-  std::vector<uint8_t> output = BigInt::toBytes(uint256_t(0xabcdef));
+  bytes_t output = BigInt::toBytes(uint256_t(0xabcdef));
   CHECK("0000000000000000000000000000000000000000000000000000000000abcdef" == 
     Utils::uint256_2str(BigInt::fromBigEndianBytes(output))
   );
@@ -93,7 +93,7 @@ TEST_CASE("Instantiate char* from uint256_t (4)", "[big_int]") {
 
 TEST_CASE("Instantiate char* from uint256_t (5)", "[big_int]") {
   uint256_t value = uint256_t(0xabcdef12);
-  std::vector<uint8_t> output = BigInt::toBytes(uint256_t(0xabcdef12));
+  bytes_t output = BigInt::toBytes(uint256_t(0xabcdef12));
   CHECK("00000000000000000000000000000000000000000000000000000000abcdef12" == 
     Utils::uint256_2str(BigInt::fromBigEndianBytes(output))
   );
@@ -101,14 +101,14 @@ TEST_CASE("Instantiate char* from uint256_t (5)", "[big_int]") {
 
 TEST_CASE("Instantiate char* from uint256_t (6)", "[big_int]") {
   uint256_t value = Utils::bigIntFromBigEndianBytes("abcdef12");
-  std::vector<uint8_t> output = BigInt::toBytes(value);
+  bytes_t output = BigInt::toBytes(value);
   CHECK("00000000000000000000000000000000000000000000000000000000abcdef12" == 
     Utils::uint256_2str(BigInt::fromBigEndianBytes(output))
   );
 }
 
 TEST_CASE("Instantiate char* from uint256_t (7)", "[big_int]") {
-  std::vector<uint8_t> output = BigInt::toBytes(uint256_t(0xef));
+  bytes_t output = BigInt::toBytes(uint256_t(0xef));
   CHECK("00000000000000000000000000000000000000000000000000000000000000ef" == 
     Utils::uint256_2str(BigInt::fromBigEndianBytes(output))
   );

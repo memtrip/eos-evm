@@ -500,9 +500,9 @@ void Utils::printInstructionList() {
   }
 }
 
-std::vector<uint8_t> Utils::hex2bin(const std::string& hex) {
+bytes_t Utils::hex2bin(const std::string& hex) {
 
-  std::vector<uint8_t> bytes;
+  bytes_t bytes;
   for (unsigned int i = 0; i < hex.length(); i+=2) {
     std::string byteString = hex.substr(i, 2);
     bytes.push_back((uint8_t) strtol(byteString.c_str(), NULL, 16));
@@ -512,7 +512,7 @@ std::vector<uint8_t> Utils::hex2bin(const std::string& hex) {
 }
 
 std::string Utils::uint256_2str(uint256_t value) {
-  std::vector<uint8_t> bytes = BigInt::toBytes(value);
+  bytes_t bytes = BigInt::toBytes(value);
   return Hex::bytesToHex(bytes);
 }
 
@@ -539,6 +539,6 @@ env_t Utils::env() {
   };
 };
 
-void Utils::printBytes(std::vector<uint8_t>& bytes) {
+void Utils::printBytes(bytes_t& bytes) {
   std::cout << Hex::bytesToHex(bytes);
 }

@@ -8,11 +8,11 @@ class Utils {
     static void printOpcodeHex(unsigned char value);
     static void printInstruction(unsigned int value);
     static void printInstructionList();
-    static std::vector<uint8_t> hex2bin(const std::string& hex);
+    static bytes_t hex2bin(const std::string& hex);
     static std::string uint256_2str(uint256_t value);
     static void print_uint256(uint256_t value);
     static uint256_t bigIntFromBigEndianBytes(std::string bytecode_str);
     static store_item_t accountStoreValue(size_t index, account_store_t* store);
-    static void printBytes(std::vector<uint8_t>& bytes);
+    static void printBytes(bytes_t& bytes);
     static env_t env();
 };

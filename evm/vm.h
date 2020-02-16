@@ -40,7 +40,7 @@ class VM {
 
   public:
     ExecResult execute(
-      std::vector<uint8_t> bytes, 
+      bytes_t bytes, 
       Memory& memory,
       StackMachine& stack, 
       AccountState& accountState,

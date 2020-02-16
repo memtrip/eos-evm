@@ -8,11 +8,11 @@ TEST_CASE("Bitwise AND", "[bitwise]") {
   // (PUSH1 ((60)09))
   // (AND (16))
   std::string bytecode_str = "6003600916";
-  std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
+  bytes_t bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
-  std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
+  bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
@@ -31,11 +31,11 @@ TEST_CASE("Bitwise OR", "[bitwise]") {
   // (PUSH1 ((60)04))
   // (AND (17))
   std::string bytecode_str = "6002600417";
-  std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
+  bytes_t bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
-  std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
+  bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
@@ -54,11 +54,11 @@ TEST_CASE("Bitwise XOR", "[bitwise]") {
   // (PUSH1 ((60)07))
   // (XOR (18))
   std::string bytecode_str = "6002600718";
-  std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
+  bytes_t bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
-  std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
+  bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
@@ -74,11 +74,11 @@ TEST_CASE("Bitwise XOR", "[bitwise]") {
 
 TEST_CASE("Bitops", "[bitwise]") {
   std::string bytecode_str = "60ff610ff08181818116600055176001551860025560008015600355198015600455600555";
-  std::vector<uint8_t> bytes = Utils::hex2bin(bytecode_str);
+  bytes_t bytes = Utils::hex2bin(bytecode_str);
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
-  std::vector<uint8_t>* memoryBytes = new std::vector<uint8_t>();
+  bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);

@@ -2,7 +2,7 @@
 #include "rlp.h"
 #include "big_int.h"
 
-transaction_t Transaction::parse(std::vector<uint8_t> bytes) {
+transaction_t Transaction::parse(bytes_t bytes) {
   std::vector<RLPItem> items = std::vector<RLPItem>();
   RLPDecode::decode(bytes, items);
 
