@@ -1,6 +1,6 @@
 #include <string>
 #include <eos_evm.hpp>
-#include <eos_utils.hpp>
+#include <eos_system.hpp>
 
 ACTION eos_evm::raw(name from, string code, string sender) {
   require_auth(get_self());
@@ -10,7 +10,7 @@ ACTION eos_evm::raw(name from, string code, string sender) {
   _log.emplace(from, [&](auto& log) {
     log.key = _log.available_primary_key();
     log.user = from;
-    log.message = std::to_string(eos_utils::timestamp());
+    log.message = std::to_string(eos_system::timestamp());
   });
 }
 
@@ -22,7 +22,7 @@ ACTION eos_evm::create(name sender, string message) {
   _log.emplace(sender, [&](auto& log) {
     log.key = _log.available_primary_key();
     log.user = sender;
-    log.message = std::to_string(eos_utils::block_num());
+    log.message = std::to_string(eos_system::block_num());
   });
 }
 

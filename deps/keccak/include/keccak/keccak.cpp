@@ -13,23 +13,6 @@
 #define __builtin_memcpy memcpy
 #endif
 
-#if _WIN32
-/* On Windows assume little endian. */
-#define __LITTLE_ENDIAN 1234
-#define __BIG_ENDIAN 4321
-#define __BYTE_ORDER __LITTLE_ENDIAN
-#elif __APPLE__
-#include <machine/endian.h>
-#else
-#include <endian.h>
-#endif
-
-#if __BYTE_ORDER == __LITTLE_ENDIAN
-#define to_le64(X) X
-#else
-#define to_le64(X) __builtin_bswap64(X)
-#endif
-
 /** Loads 64-bit integer from given memory location as little-endian number. */
 static INLINE ALWAYS_INLINE uint64_t load_le(const uint8_t* data)
 {
@@ -40,7 +23,7 @@ static INLINE ALWAYS_INLINE uint64_t load_le(const uint8_t* data)
        restrictions with no performance penalty. */
     uint64_t word;
     __builtin_memcpy(&word, data, sizeof(word));
-    return to_le64(word);
+    return word;
 }
 
 static INLINE ALWAYS_INLINE void keccak(
@@ -88,14 +71,14 @@ static INLINE ALWAYS_INLINE void keccak(
         --size;
     }
     *last_word_iter = 0x01;
-    *state_iter ^= to_le64(last_word);
+    *state_iter ^= last_word;
 
     state[(block_size / word_size) - 1] ^= 0x8000000000000000;
 
     Keccakf1600::keccakf1600(state);
 
     for (i = 0; i < (hash_size / word_size); ++i)
-        out[i] = to_le64(state[i]);
+        out[i] = state[i];
 }
 
 union ethash_hash256 ethash_keccak256(const uint8_t* data, size_t size)

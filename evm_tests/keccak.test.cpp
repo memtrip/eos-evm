@@ -1,7 +1,7 @@
 #include "catch.hpp"
-#include "keccak.hpp"
-#include "keccakf800.h"
-#include "keccak_hex.h"
+#include <keccak/keccak.hpp>
+#include <keccak/keccakf800.h>
+#include <keccak/keccak_hex.h>
 
 struct keccak_test_case
 {
