@@ -1,3 +1,0 @@
-[submodule "deps/intx"]
-	path = deps/intx
-	url = https://github.com/chfast/intx.git

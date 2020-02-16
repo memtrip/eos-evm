@@ -51,7 +51,7 @@ struct TransactionData {
 
 typedef TransactionData transaction_t;
 
-const unsigned long INVALID_ARGUMENT = 0xFFFFFFFFFFFFFFFF;
+const unsigned long INVALID_ARGUMENT = 0xFFFFFFFF;
 
 const size_t WORD_SIZE = 32;
 

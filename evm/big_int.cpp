@@ -1,7 +1,5 @@
-#include <iostream>
 #include "big_int.h"
 #include "types.h"
-#include "utils.h" 
 
 uint256_t BigInt::fromBigEndianBytes(std::vector<uint8_t> bytes) {
   uint8_t data[WORD_SIZE];
