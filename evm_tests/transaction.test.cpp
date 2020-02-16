@@ -59,6 +59,7 @@ TEST_CASE("Transaction contract", "[transaction)]") {
   CHECK("1d781f3d6b00ee9f1d7ffef90bd8ff78bfb0a88897b7f9a6c8cb4d923f7363f7" == 
     Hex::bytesToHex(transaction.s)
   );
+  CHECK(true == Transaction::signatureExists(transaction));
 }
 
 TEST_CASE("Transaction call contract", "[transaction)]") {
@@ -90,4 +91,30 @@ TEST_CASE("Transaction call contract", "[transaction)]") {
   CHECK("2c2171570feb5e6855a62c4a9562b219ea4daeea98376a06f170e352035d353c" == 
     Hex::bytesToHex(transaction.s)
   );
+  CHECK(true == Transaction::signatureExists(transaction));
+}
+
+TEST_CASE("Unsigned transaction", "[transaction)]") {
+
+  // given
+  std::string hex = "e6808609184e72a0008303000094b0920c523d582040f2bcb1bd7fb1c7c1ecebdb3480801c8080";
+
+  bytes_t bytes = Utils::hex2bin(hex);
+
+  // when
+  transaction_t transaction = Transaction::parse(bytes);
+
+  // then
+  CHECK(transaction_action_t::TRANSACTION_CALL == transaction.action);
+  CHECK(uint256_t(0) == transaction.nonce);
+  CHECK(uint256_t(0x09184e72a000) == transaction.gas_price);
+  CHECK(uint256_t(0x030000) == transaction.gas_limit);
+  CHECK("b0920c523d582040f2bcb1bd7fb1c7c1ecebdb34" == 
+    Hex::bytesToHex(transaction.to)
+  );
+  CHECK(uint256_t(0x0) == transaction.value);
+  CHECK(uint256_t(28) == transaction.v);
+  CHECK(0 == transaction.r.size());
+  CHECK(0 == transaction.s.size());
+  CHECK(false == Transaction::signatureExists(transaction));
 }

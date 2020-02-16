@@ -23,3 +23,7 @@ transaction_t Transaction::parse(bytes_t bytes) {
     items[0].values[8].bytes /* s */
   };
 }
+
+bool Transaction::signatureExists(transaction_t transaction) {
+  return transaction.r.size() != 0 && transaction.s.size() != 0;
+}

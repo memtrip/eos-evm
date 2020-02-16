@@ -3,10 +3,10 @@
  * Licensed under the Apache License, Version 2.0.
  */
 
-#include "keccak.h"
-#include "keccakf1600.h"
+#include <keccak/keccak.h>
+#include <keccak/keccakf1600.h>
 
-#include "attributes.h"
+#include <keccak/attributes.h>
 
 #if _MSC_VER
 #include <string.h>

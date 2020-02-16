@@ -4,15 +4,21 @@
 #include <eos_bridge.hpp>
 
 ACTION eos_evm::raw(name from, string code, string sender) {
-  require_auth(get_self());
 
-  log_table _log(get_self(), get_self().value);
+  transaction_t transaction = eos_bridge::parseTransaction(code);
 
-  _log.emplace(from, [&](auto& log) {
-    log.key = _log.available_primary_key();
-    log.user = from;
-    log.message = std::to_string(eos_system::timestamp());
-  });
+  if (eos_bridge::signatureExists(transaction)) {
+    check(1 != 1, "Execute transaction for account identifier, resolved by signature");
+  } else {
+    check(has_auth(from) == false, "You must provide a permission for the account performing this action.");
+
+    account_table _account(get_self(), get_self().value);
+
+    auto iterator = _account.find(from.value);
+    check(iterator != _account.end(), "You must create an Ethereum account via the create() action before executing transactions.");
+
+    check(1 != 1, "Execute transaction for account identifier, resolved by eosio");
+  }
 }
 
 ACTION eos_evm::create(name from, string message) {
