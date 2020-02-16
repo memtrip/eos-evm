@@ -1,5 +1,4 @@
 #include "rlp.h"
-#include "utils.h"
 
 RLPItem RLPDecode::createStr(bytes_t bytes) {
   return {

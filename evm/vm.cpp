@@ -5,7 +5,6 @@
 #include "big_int.h"
 #include "hash.h"
 #include "overflow.h"
-#include "utils.h" // TODO: remove this
 
 ExecResult VM::execute(
   bytes_t bytes, 

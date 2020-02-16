@@ -1,6 +1,5 @@
 #include "hash.h"
-#include "keccak/keccak.hpp"
-#include "utils.h"
+#include <keccak/keccak.hpp>
 
 bytes_t Hash::keccak256(bytes_t& bytes) {
   ethash::hash256 result = ethash::keccak256(bytes.data(), bytes.size());

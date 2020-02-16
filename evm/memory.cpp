@@ -1,7 +1,6 @@
 #include "memory.h"
 #include "overflow.h"
 #include "big_int.h"
-#include "utils.h"
 
 static constexpr size_t capacity = 4 * 1024;
 
