@@ -12,7 +12,9 @@ function signHex(keypair, hex) {
   return {
     v: UNCOMPRESSED_PUBKEY_HEADER + signature.recoveryParam,
     r: signature.r.toString(16),
-    s: signature.s.toString(16)
+    s: signature.s.toString(16),
+    raw: signature,
+    digest: hex
   };
 }
 
@@ -49,10 +51,14 @@ params.push(signedMessage.v);
 params.push("0x" + signedMessage.r);
 params.push("0x" + signedMessage.s);
 
-console.dir(params);
-
-console.log("PUBLIC_KEY");
+console.log("PUBLIC_KEY::");
 console.dir("0x" + publicKeyHex.substr(publicKeyHex.length - 40));
 
-console.log("TRANSACTION");
+console.log("TRANSACTION::");
 console.dir("0x" + bufferToHex(RLP.encode(params)));
+
+console.log("SIGNATURE BYTES::");
+console.dir(signedMessage.r + signedMessage.s + signedMessage.v);
+
+console.log("DIGEST::");
+console.dir(signedMessage.digest);
