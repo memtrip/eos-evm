@@ -32,7 +32,6 @@ function bufferToHex(buffer) {
 }
 
 var keypair = generateKeyPair(ec);
-var signedMessage = signMessageHash(keypair, process.argv[2]);
 var publicKeyHex = keypair.getPublic().encode("hex");
 
 var params = [
@@ -41,11 +40,16 @@ var params = [
   "0x2700",
   "0x0000000000000000000000000000000000000000",
   "0x00",
-  "0x7f7465737432000000000000000000000000000000000000000000000000000000600057",
-  signedMessage.v,
-  "0x" + signedMessage.r,
-  "0x" + signedMessage.s
+  "0x7f7465737432000000000000000000000000000000000000000000000000000000600057"
 ];
+
+var signedMessage = signMessageHash(keypair, RLP.encode(params));
+
+params.push(signedMessage.v);
+params.push("0x" + signedMessage.r);
+params.push("0x" + signedMessage.s);
+
+console.dir(params);
 
 console.log("PUBLIC_KEY");
 console.dir("0x" + publicKeyHex.substr(publicKeyHex.length - 40));
