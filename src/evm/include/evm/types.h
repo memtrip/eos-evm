@@ -4,7 +4,7 @@
 #include <vector>
 #include <set>
 #include <intx/intx.hpp>
-#include "keccak/hash_types.hpp"
+#include <keccak/hash_types.hpp>
 
 typedef intx::uint256 uint256_t;
 
@@ -47,9 +47,23 @@ struct TransactionData {
   uint256_t v;
   bytes_t r;
   bytes_t s;
+  bytes_t digest;
 };
 
 typedef TransactionData transaction_t;
+
+enum RLPType {
+  STRING,
+  LIST
+};
+
+struct RLPItem {
+  RLPType type;
+  bytes_t bytes;
+  std::vector<RLPItem> values;
+};
+
+typedef std::vector<RLPItem> rlp_t;
 
 const unsigned long INVALID_ARGUMENT = 0xFFFFFFFF;
 

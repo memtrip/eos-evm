@@ -10,3 +10,5 @@
 tools/js/node_modules/*
 
 out/
+
+build/

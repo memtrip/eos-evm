@@ -45,7 +45,8 @@ var params = [
   "0x7f7465737432000000000000000000000000000000000000000000000000000000600057"
 ];
 
-var signedMessage = signMessageHash(keypair, RLP.encode(params));
+var unsignedTransaction = bufferToHex(RLP.encode(params));
+var signedMessage = signMessageHash(keypair, unsignedTransaction);
 
 params.push(signedMessage.v);
 params.push("0x" + signedMessage.r);
@@ -53,6 +54,9 @@ params.push("0x" + signedMessage.s);
 
 console.log("PUBLIC_KEY::");
 console.dir("0x" + publicKeyHex.substr(publicKeyHex.length - 40));
+
+console.log("UNSIGNED TRANSACTION::");
+console.dir("0x" + unsignedTransaction);
 
 console.log("TRANSACTION::");
 console.dir("0x" + bufferToHex(RLP.encode(params)));

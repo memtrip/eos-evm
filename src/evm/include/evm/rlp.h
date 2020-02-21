@@ -1,17 +1,6 @@
 #include <vector>
 #include <evm/types.h>
 
-enum RLPType {
-  STRING,
-  LIST
-};
-
-struct RLPItem {
-  RLPType type;
-  bytes_t bytes;
-  std::vector<RLPItem> values;
-};
-
 const uint8_t OFFSET_SHORT_STRING = 0x80;
 const uint8_t OFFSET_LONG_STRING = 0xb7;
 const uint8_t OFFSET_SHORT_LIST = 0xc0;

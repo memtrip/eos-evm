@@ -3,6 +3,8 @@
 
 class Transaction {
   public:
-    static transaction_t parse(std::string hex);
+    static transaction_t parse(std::string hex, uint8_t chainId);
     static bool signatureExists(transaction_t transaction);
+  private:
+    static bytes_t digest(rlp_t rlp, uint8_t chainId);
 };

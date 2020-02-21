@@ -1,2 +1,2 @@
-g++ -std=c++17 ./evm/*.cpp ./evm_tests/*.cpp ./deps/keccak/*.cpp ./deps/intx/lib/intx/*.cpp -I ./evm/ -I ./deps/intx/include/ -I ./deps/keccak/include/ -I ./deps/catch2/ -I ./evm/include -o ./out/test_suite.out
+g++ -std=c++17 ./src/evm/src/*.cpp ./evm_tests/*.cpp ./src/evm/deps/keccak/src/*.cpp ./src/evm/deps/intx/src/*.cpp -I ./src/evm/include/ -I ./src/evm/deps/intx/include/ -I ./src/evm/deps/keccak/include/ -I ./evm_tests/include/ -o ./out/test_suite.out
 ./out/test_suite.out
