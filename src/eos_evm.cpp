@@ -1,17 +1,22 @@
 #include <string>
+#include <eosio/crypto.hpp>
 #include <eos_evm.hpp>
 #include <eos_system.hpp>
-#include <eos_bridge.hpp>
+
+#include <evm/address.h>
+#include <evm/transaction.h>
 
 ACTION eos_evm::raw(name from, string code, string sender) {
 
-  transaction_t transaction = eos_bridge::parseTransaction(code);
+  transaction_t transaction = Transaction::parse(code, 0x01);
 
-  if (eos_bridge::signatureExists(transaction)) {
+  if (Transaction::signatureExists(transaction)) {
     check(1 != 1, "Execute transaction for account identifier, resolved by signature");
   } else {
     check(has_auth(from), "You must provide a permission for the account performing this action.");
 
+    // TODO: check if the sender exists in the account table
+    // TODO: compare the account associated with the sender to the `from` name
     account_table _account(get_self(), get_self().value);
 
     auto iterator = _account.find(from.value);
@@ -32,7 +37,7 @@ ACTION eos_evm::create(name from, string message) {
   _account.emplace(from, [&](auto& account) {
     account.user = from;
     account.nonce = 1;
-    account.accountIdentifier = eos_bridge::createAccountIdentifier(
+    account.accountIdentifier = Address::createAccountIdentifier(
       from.to_string(), 
       message
     );

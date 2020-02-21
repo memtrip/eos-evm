@@ -22,7 +22,7 @@ TEST_CASE("Transaction call", "[transaction)]") {
   );
   CHECK(uint256_t(0x0a) == transaction.value);
   CHECK("" == Hex::bytesToHex(transaction.data));
-  CHECK(uint256_t(27) == transaction.v);
+  CHECK("1b" == Hex::bytesToHex(transaction.v));
   CHECK("48b55bfa915ac795c431978d8a6a992b628d557da5ff759b307d495a36649353" == 
     Hex::bytesToHex(transaction.r)
   );
@@ -48,7 +48,7 @@ TEST_CASE("Transaction contract", "[transaction)]") {
   CHECK("6060604052341561000f57600080fd5b6101708061001e6000396000f3006060604052600436106100405763ffffffff7c010000000000000000000000000000000000000000000000000000000060003504166390b98a118114610045575b600080fd5b341561005057600080fd5b61007473ffffffffffffffffffffffffffffffffffffffff60043516602435610086565b60405190815260200160405180910390f35b600073521db06bf657ed1d6c98553a70319a8ddbac75a38373ffffffffffffffffffffffffffffffffffffffff811663a9059cbb83866040517c010000000000000000000000000000000000000000000000000000000063ffffffff851602815273ffffffffffffffffffffffffffffffffffffffff90921660048301526024820152604401600060405180830381600087803b151561012557600080fd5b6102c65a03f1151561013657600080fd5b5060019796505050505050505600a165627a7a723058203f339a2d354208169adb91e00c0cc7ffc9a9f9e67930818df75c3724b686179d0029" == 
     Hex::bytesToHex(transaction.data)
   );
-  CHECK(uint256_t(37) == transaction.v);
+  CHECK("25" == Hex::bytesToHex(transaction.v));
   CHECK("54a1805940f44a31be3fb3e284370f078f50f21e42cf0cbbad6a2f819211b2fe" == 
     Hex::bytesToHex(transaction.r)
   );
@@ -78,7 +78,7 @@ TEST_CASE("Transaction call contract", "[transaction)]") {
   CHECK("59f9cf0c000000000000000000000000000000000000000000000000000000000000004b00000000000000000000000000000000000000000000000000000000000000450000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a00000000000000000000000000000000000000000000000000000000000000041d2eaa477e07126513ab0c83723174b5e2e921382f216647f3cd0b88bffb97faf1767bd51418804947913b905809be585882f350bb272275943e4efdede347c421b00000000000000000000000000000000000000000000000000000000000000" == 
     Hex::bytesToHex(transaction.data)
   );
-  CHECK(uint256_t(37) == transaction.v);
+  CHECK("25" == Hex::bytesToHex(transaction.v));
   CHECK("6a744032ad48eb8188d2f03ccc57bf9d91a45f780152288ee7abb700ee286393" == 
     Hex::bytesToHex(transaction.r)
   );
@@ -86,6 +86,22 @@ TEST_CASE("Transaction call contract", "[transaction)]") {
     Hex::bytesToHex(transaction.s)
   );
   CHECK(true == Transaction::signatureExists(transaction));
+}
+
+TEST_CASE("Transaction create (1)", "[transaction)]") {
+
+  // given
+  std::string hex = "f855018203e88207d0808088000000000000000025a06466e4898d9d78cb4e28adcafcead07a725862d7e4e870a1a50b77e43c83e1a4a03ed35cfb1d08662ab0438cba09018254da38dc1b50c5b653c4231616602d9a70";
+
+  // when
+  transaction_t transaction = Transaction::parse(hex, 0x01);
+
+  // then
+  bytes_t signatureBytes = Transaction::signatureBytes(transaction);
+  
+  CHECK("256466e4898d9d78cb4e28adcafcead07a725862d7e4e870a1a50b77e43c83e1a43ed35cfb1d08662ab0438cba09018254da38dc1b50c5b653c4231616602d9a70" == 
+    Hex::bytesToHex(signatureBytes)
+  );
 }
 
 TEST_CASE("Unsigned transaction", "[transaction)]") {
@@ -105,7 +121,7 @@ TEST_CASE("Unsigned transaction", "[transaction)]") {
     Hex::bytesToHex(transaction.to)
   );
   CHECK(uint256_t(0x0) == transaction.value);
-  CHECK(uint256_t(28) == transaction.v);
+  CHECK("1c" == Hex::bytesToHex(transaction.v));
   CHECK(0 == transaction.r.size());
   CHECK(0 == transaction.s.size());
   CHECK(false == Transaction::signatureExists(transaction));
@@ -126,7 +142,7 @@ TEST_CASE("Transaction digest", "[transaction)]") {
   CHECK(uint256_t(0x07d0) == transaction.gas_limit);
   CHECK(uint256_t(0x0) == transaction.value);
   CHECK("0000000000000000" == Hex::bytesToHex(transaction.data));
-  CHECK(uint256_t(1) == transaction.v);
+  CHECK("01" == Hex::bytesToHex(transaction.v));
   CHECK("" == 
     Hex::bytesToHex(transaction.r)
   );

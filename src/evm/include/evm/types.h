@@ -44,7 +44,7 @@ struct TransactionData {
   address_t to;
   uint256_t value;
   bytes_t data;
-  uint256_t v;
+  bytes_t v;
   bytes_t r;
   bytes_t s;
   bytes_t digest;

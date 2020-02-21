@@ -21,7 +21,7 @@ transaction_t Transaction::parse(std::string hex, uint8_t chainId) {
     address, /* to */
     BigInt::fromBigEndianBytes(items[0].values[4].bytes), /* value */
     items[0].values[5].bytes, /* data */
-    BigInt::fromBigEndianBytes(items[0].values[6].bytes), /* v */
+    items[0].values[6].bytes, /* v */
     items[0].values[7].bytes, /* r */
     items[0].values[8].bytes, /* s */
     Transaction::digest(items, chainId)
@@ -30,6 +30,15 @@ transaction_t Transaction::parse(std::string hex, uint8_t chainId) {
 
 bool Transaction::signatureExists(transaction_t transaction) {
   return transaction.r.size() != 0 && transaction.s.size() != 0;
+}
+
+bytes_t Transaction::signatureBytes(transaction_t transaction) {
+  bytes_t signatureBytes;
+  signatureBytes.reserve(1 + transaction.r.size() + transaction.s.size());
+  signatureBytes.push_back(transaction.v[0]);
+  signatureBytes.insert(signatureBytes.end(), transaction.r.begin(), transaction.r.end());
+  signatureBytes.insert(signatureBytes.end(), transaction.s.begin(), transaction.s.end());
+  return signatureBytes;
 }
 
 bytes_t Transaction::digest(rlp_t rlp, uint8_t chainId) {
