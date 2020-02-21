@@ -12,6 +12,9 @@ link_libraries(intx)
 add_subdirectory(deps/keccak)
 link_libraries(keccak)
 
+add_subdirectory(deps/secp256k1)
+link_libraries(secp256k1)
+
 file(GLOB SOURCES "src/*.cpp")
 
 add_library(evm STATIC
