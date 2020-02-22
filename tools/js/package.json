@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Tools for signing and decoding Ethereum transactions",
   "dependencies": {
+    "big-integer": "^1.6.48",
     "bignumber.js": "^9.0.0",
     "crypto-js": "^4.0.0",
     "elliptic": "^6.5.2",
