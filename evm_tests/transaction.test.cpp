@@ -99,12 +99,12 @@ TEST_CASE("Transaction create (1)", "[transaction)]") {
   // then
   bytes_t signatureBytes = Transaction::signatureBytes(transaction);
   
-  uint8_t v = static_cast<uint8_t>(signatureBytes[64]);
+  uint8_t v = static_cast<uint8_t>(signatureBytes[0]);
 
   // Address: 0x8e2cec90ff1c67f51a7a3b986780d7c933f47fa9
   CHECK(65 == signatureBytes.size());
   CHECK(37 == v);
-  CHECK("6db1bf318e29ca002dc5314af1c0d1722659ad2dcb79357d7b7746aa5510afda336e5414d221f6280598a5ac338a17331e2b925bd6ca693d85961248acefea7225" == 
+  CHECK("256db1bf318e29ca002dc5314af1c0d1722659ad2dcb79357d7b7746aa5510afda336e5414d221f6280598a5ac338a17331e2b925bd6ca693d85961248acefea72" == 
     Hex::bytesToHex(signatureBytes)
   );
   CHECK("699f057e0ec6cf7ee1986c47e518b42ac4bdfe007c415097638c3b7166b65063" ==

@@ -15,8 +15,8 @@ ACTION eos_evm::raw(name from, string code, string sender) {
   // TODO: transactions and addresses will include th `0x` prefix
   if (Transaction::signatureExists(transaction)) {
     string accountIdentifier = ecrecover::recover(
-      Transaction::signatureBytes(transaction), 
-      transaction.digest
+      transaction.digest,
+      Transaction::signatureBytes(transaction)
     );
     // TODO: check if the accountIdentifier exists in the accounts table
     check(1 != 1, "Execute transaction for: " + accountIdentifier);

@@ -34,10 +34,10 @@ bool Transaction::signatureExists(transaction_t transaction) {
 
 bytes_t Transaction::signatureBytes(transaction_t transaction) {
   bytes_t signatureBytes;
-  signatureBytes.reserve(transaction.r.size() + transaction.s.size() + 1);
+  signatureBytes.reserve(1 + transaction.r.size() + transaction.s.size());
+  signatureBytes.push_back(transaction.v[0]);
   signatureBytes.insert(signatureBytes.end(), transaction.r.begin(), transaction.r.end());
   signatureBytes.insert(signatureBytes.end(), transaction.s.begin(), transaction.s.end());
-  signatureBytes.push_back(transaction.v[0]);
   return signatureBytes;
 }
 
