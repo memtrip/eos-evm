@@ -19,6 +19,7 @@ typedef ethash::hash512 keccak512_t;
 
 typedef std::vector<uint8_t> address_t;
 typedef std::vector<uint8_t> bytes_t;
+typedef std::array<char, 33> compressed_key_t;
 
 struct EnvInfo {
   uint256_t blockNumber;
