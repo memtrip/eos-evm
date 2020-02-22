@@ -1,8 +1,8 @@
-#include <evm/transaction.h>
 #include <evm/rlp.h>
 #include <evm/big_int.h>
 #include <evm/hex.h>
 #include <evm/hash.h>
+#include <evm/transaction.h>
 
 transaction_t Transaction::parse(std::string hex, uint8_t chainId) {
   bytes_t bytes = Hex::hexToBytes(hex);
@@ -121,4 +121,11 @@ uint8_t Transaction::eip155Compat(bytes_t bytes) {
   if (v == 28) return 1;
   if (v >= 35) return ((v - 1) % 2);
   return 4;
+}
+
+bytes_t Transaction::prefixedBytes(bytes_t hash) {
+  std::string prefix = "\u0019Ethereum Signed Message:\n" + std::to_string(hash.size());
+  std::vector<uint8_t> messagePrefix(prefix.begin(), prefix.end());
+  messagePrefix.insert(messagePrefix.end(), hash.begin(), hash.end());
+  return Hash::keccak256(messagePrefix);
 }
