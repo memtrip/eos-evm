@@ -8,4 +8,5 @@ class Transaction {
     static bytes_t signatureBytes(transaction_t transaction);
   private:
     static bytes_t digest(rlp_t rlp, uint8_t chainId);
+    static uint8_t eip155Compat(bytes_t bytes);
 };

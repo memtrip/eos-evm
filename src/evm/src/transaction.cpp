@@ -35,7 +35,11 @@ bool Transaction::signatureExists(transaction_t transaction) {
 bytes_t Transaction::signatureBytes(transaction_t transaction) {
   bytes_t signatureBytes;
   signatureBytes.reserve(1 + transaction.r.size() + transaction.s.size());
-  signatureBytes.push_back(transaction.v[0]);
+
+  uint8_t v = eip155Compat(transaction.v);
+  v += 27;
+
+  signatureBytes.push_back(v);
   signatureBytes.insert(signatureBytes.end(), transaction.r.begin(), transaction.r.end());
   signatureBytes.insert(signatureBytes.end(), transaction.s.begin(), transaction.s.end());
   return signatureBytes;
@@ -109,4 +113,12 @@ bytes_t Transaction::digest(rlp_t rlp, uint8_t chainId) {
 
   bytes_t rlpBytes = RLPEncode::encode(itemList);
   return Hash::keccak256(rlpBytes);
+}
+
+uint8_t Transaction::eip155Compat(bytes_t bytes) {
+  uint8_t v = static_cast<uint8_t>(bytes[0]);
+  if (v == 27) return 0;
+  if (v == 28) return 1;
+  if (v >= 35) return ((v - 1) % 2);
+  return 4;
 }
