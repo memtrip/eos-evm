@@ -2,19 +2,25 @@
 #include <eosio/crypto.hpp>
 #include <eos_evm.hpp>
 #include <eos_system.hpp>
+#include <ecrecover.hpp>
 
 #include <evm/address.h>
 #include <evm/transaction.h>
 
 ACTION eos_evm::raw(name from, string code, string sender) {
+  require_auth(from);
 
   transaction_t transaction = Transaction::parse(code, 0x01);
 
+  // TODO: transactions and addresses will include th `0x` prefix
   if (Transaction::signatureExists(transaction)) {
-    check(1 != 1, "Execute transaction for account identifier, resolved by signature");
+    string accountIdentifier = ecrecover::recover(
+      Transaction::signatureBytes(transaction), 
+      transaction.digest
+    );
+    // TODO: check if the accountIdentifier exists in the accounts table
+    check(1 != 1, "Execute transaction for: " + accountIdentifier);
   } else {
-    check(has_auth(from), "You must provide a permission for the account performing this action.");
-
     // TODO: check if the sender exists in the account table
     // TODO: compare the account associated with the sender to the `from` name
     account_table _account(get_self(), get_self().value);

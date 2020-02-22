@@ -31,3 +31,13 @@ TEST_CASE("Create accountIdentifier (2)", "[address]" ) {
     accountIdentifier
   );
 }
+
+TEST_CASE("Create accountIdentifier (3)", "[address]" ) {
+
+  std::string accountIdentifier = Address::createAccountIdentifier("evm5", "0x0dfef8b14c0aa5db1daa1853fe191d0415fe70dd");
+
+  CHECK(40 == accountIdentifier.length());
+  CHECK("d1c81da825345ebe56e5d49107d10cd0738036ec" == 
+    accountIdentifier
+  );
+}
