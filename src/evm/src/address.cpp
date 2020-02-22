@@ -3,10 +3,14 @@
 #include <evm/rlp.h>
 #include <evm/hex.h>
 
-std::string Address::createAccountIdentifier(std::string accountName, std::string salt) {
+std::string Address::createFromString(std::string accountName, std::string addressString) {
+  bytes_t address = Hex::hexToBytes(addressString);
+  return createFromBytes(accountName, address);
+};
 
+std::string Address::createFromBytes(std::string accountName, bytes_t address) {
+  
   bytes_t accountNameBytes(accountName.begin(), accountName.end());
-  bytes_t saltBytes(salt.begin(), salt.end());
 
   RLPItem accountNameItem {
     RLPType::STRING,
@@ -14,23 +18,23 @@ std::string Address::createAccountIdentifier(std::string accountName, std::strin
     std::vector<RLPItem> {}
   };
 
-  RLPItem saltItem {
+  RLPItem addressItem {
     RLPType::STRING,
-    saltBytes,
+    address,
     std::vector<RLPItem> {}
   };
 
-  RLPItem accountNameSaltList {
+  RLPItem accountNameAddressList {
     RLPType::LIST,
     bytes_t {},
-    std::vector<RLPItem> { accountNameItem, saltItem }
+    std::vector<RLPItem> { accountNameItem, addressItem }
   };
 
-  bytes_t result = RLPEncode::encode(accountNameSaltList);
+  bytes_t result = RLPEncode::encode(accountNameAddressList);
 
   bytes_t hashBytes = Hash::keccak256(result);
 
   bytes_t addressBytes(hashBytes.end() - ADDRESS_SIZE, hashBytes.end());
 
   return Hex::bytesToHex(addressBytes);
-};
+}

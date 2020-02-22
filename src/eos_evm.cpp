@@ -15,6 +15,7 @@ ACTION eos_evm::raw(name from, string code, string sender) {
   // TODO: transactions and addresses will include th `0x` prefix
   if (Transaction::signatureExists(transaction)) {
     string accountIdentifier = ecrecover::recover(
+      from.to_string(),
       transaction.digest,
       Transaction::signatureBytes(transaction)
     );
@@ -43,7 +44,7 @@ ACTION eos_evm::create(name from, string message) {
   _account.emplace(from, [&](auto& account) {
     account.user = from;
     account.nonce = 1;
-    account.accountIdentifier = Address::createAccountIdentifier(
+    account.accountIdentifier = Address::createFromString(
       from.to_string(), 
       message
     );

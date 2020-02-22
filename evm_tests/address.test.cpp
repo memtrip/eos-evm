@@ -1,43 +1,30 @@
 #include "catch.hpp"
 #include <evm/address.h>
 #include "utils.h"
+#include <evm/hex.h>
 
-TEST_CASE("Create accountIdentifier", "[address]" ) {
+TEST_CASE("createFromString", "[address]" ) {
 
-  std::string accountIdentifier = Address::createAccountIdentifier("eosio", "An arbitrary length string");
+  std::string accountIdentifier = Address::createFromString(
+    "evm5", 
+    "8d7332e9640fe8952e436dda2d5c2ac93d6870f3"
+  );
 
   CHECK(40 == accountIdentifier.length());
-  CHECK("e432070b2193e81d086a3b1c4234f4b3c0dba3af" == 
+  CHECK("86a2700da1f451fa70a0dd52225f986d552eda0f" == 
     accountIdentifier
   );
 }
 
-TEST_CASE("Create accountIdentifier (1)", "[address]" ) {
+TEST_CASE("createFromBytes", "[address]" ) {
 
-  std::string accountIdentifier = Address::createAccountIdentifier("samkirton", "What is this salt up to then?");
-
-  CHECK(40 == accountIdentifier.length());
-  CHECK("8d7332e9640fe8952e436dda2d5c2ac93d6870f3" == 
-    accountIdentifier
+  std::string accountIdentifier = Address::createFromBytes(
+    "evm5", 
+    Hex::hexToBytes("8d7332e9640fe8952e436dda2d5c2ac93d6870f3")
   );
-}
-
-TEST_CASE("Create accountIdentifier (2)", "[address]" ) {
-
-  std::string accountIdentifier = Address::createAccountIdentifier("skream", "Essential Mix – Radio 1 – 17.06.2007");
 
   CHECK(40 == accountIdentifier.length());
-  CHECK("41dba7d0bfd0f623d2a2d0524c11e9878a8ea06e" == 
-    accountIdentifier
-  );
-}
-
-TEST_CASE("Create accountIdentifier (3)", "[address]" ) {
-
-  std::string accountIdentifier = Address::createAccountIdentifier("evm5", "0x0dfef8b14c0aa5db1daa1853fe191d0415fe70dd");
-
-  CHECK(40 == accountIdentifier.length());
-  CHECK("d1c81da825345ebe56e5d49107d10cd0738036ec" == 
+  CHECK("86a2700da1f451fa70a0dd52225f986d552eda0f" == 
     accountIdentifier
   );
 }
