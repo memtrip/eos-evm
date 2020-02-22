@@ -27,10 +27,6 @@ class ecrecover {
       }
 
       eosio::signature sig(std::in_place_index<0>, signatureData);
-      
-      std::string v((uint8_t) signatureData[0]);
-
-      eosio::check(1 != 1, "v: " + v);
 
       eosio::public_key pub = eosio::recover_key(digestBytes, sig);
 
