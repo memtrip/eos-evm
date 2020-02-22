@@ -18,7 +18,6 @@ function pad_with_zeroes(number, length) {
 function decompress(comp, pIdent) {
   var signY = new Number(comp[1]) - 2;
   var x = new bigInt(comp.substring(2), 16);
-  console.dir(x);
   // y mod p = +-(x^3 + 7)^((p+1)/4) mod p
   var y = x
     .modPow(3, prime)
