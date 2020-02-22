@@ -34,28 +34,12 @@ class ecrecover {
       eosio::signature sig(std::in_place_index<0>, signatureData);
 
       // recover public key
-      std::array<char, 33> pub = std::get<0>(eosio::recover_key(digestBytes, sig));
+      std::array<char, 33> compressedPubKey = std::get<0>(eosio::recover_key(digestBytes, sig));
 
-      // convert the public key char items to uint8_t items for keccak hash
-      std::vector<uint8_t> publicKeyBytes;
+      bytes_t uncompressedPubKey = Hex::hexToBytes("630f70ad9f6e943088a4677e9ccf132cb2ae8bafd4a1538b42cd78454e037730c6e09149f4bae8e136794e950a072368a0a3926083017d8b7b6c20d3f8a6f2e6");
 
-      for (int i = 0; i < pub.size(); i++) {
-        publicKeyBytes.push_back((uint8_t) pub[i]);
-      }
+      bytes_t ethereumAddress = Address::ethereumAddress(uncompressedPubKey);
 
-      bytes_t hash = Hash::keccak256(publicKeyBytes);
-
-      // last 20 bytes of the hash
-      // std::vector<uint8_t> address;
-
-      // for (int i = hash.size() - 20 - 1; i < hash.size(); i++) {
-      //   address.push_back(hash[i]);
-      // }
-
-      // bytes_t hashEnd = bytes_t(hash.end() - 20, hash.end());
-
-      // 037e7d763719127cf96fb8f1f6f68b12fca179487a8907b2bd4155870ad3e62119
-
-      return Hex::bytesToHex(hash);
+      return Hex::fixedToHex(compressedPubKey) + " - " + Hex::bytesToHex(ethereumAddress);
     }
 };

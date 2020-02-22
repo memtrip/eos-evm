@@ -38,3 +38,16 @@ std::string Address::createFromBytes(std::string accountName, bytes_t address) {
 
   return Hex::bytesToHex(addressBytes);
 }
+
+bytes_t Address::ethereumAddress(bytes_t uncompressedPubKey) {
+
+  bytes_t hash = Hash::keccak256(uncompressedPubKey);
+
+  std::vector<uint8_t> address;
+
+  for (int i = hash.size() - 20; i < hash.size(); i++) {
+    address.push_back(hash[i]);
+  }
+
+  return address;
+}

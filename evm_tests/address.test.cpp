@@ -28,3 +28,14 @@ TEST_CASE("createFromBytes", "[address]" ) {
     accountIdentifier
   );
 }
+
+TEST_CASE("Uncompressed public key", "[address]" ) {
+
+  bytes_t address = Address::ethereumAddress(
+    Hex::hexToBytes("630f70ad9f6e943088a4677e9ccf132cb2ae8bafd4a1538b42cd78454e037730c6e09149f4bae8e136794e950a072368a0a3926083017d8b7b6c20d3f8a6f2e6")
+  );
+
+  CHECK("7a5470ca3884388f8a284ac0c63eaf0695a200ea" == 
+    Hex::bytesToHex(address)
+  );
+}
