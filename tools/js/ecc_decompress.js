@@ -1,5 +1,3 @@
-// https://bitcointalk.org/index.php?topic=644919.msg7205689#msg7205689
-// https://stackoverflow.com/a/53480175/832397
 const bigInt = require("big-integer");
 
 function pad_with_zeroes(number, length) {
@@ -11,6 +9,8 @@ function pad_with_zeroes(number, length) {
 }
 
 /**
+ * https://bitcointalk.org/index.php?topic=644919.msg7205689#msg7205689
+ * https://stackoverflow.com/a/53480175/832397
  * Point decompress secp256k1 curve
  * @param {string} Compressed representation in hex string
  * @return {string} Uncompressed representation in hex string
@@ -18,6 +18,7 @@ function pad_with_zeroes(number, length) {
 function decompress(comp, pIdent) {
   var signY = new Number(comp[1]) - 2;
   var x = new bigInt(comp.substring(2), 16);
+  console.dir(x);
   // y mod p = +-(x^3 + 7)^((p+1)/4) mod p
   var y = x
     .modPow(3, prime)
