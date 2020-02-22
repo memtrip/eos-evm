@@ -91,7 +91,7 @@ TEST_CASE("Transaction call contract", "[transaction)]") {
 TEST_CASE("Transaction create (1)", "[transaction)]") {
 
   // given
-  std::string hex = "f855018203e88207d0808088000000000000000026a02157cbde2db7bed3560b153ec41b3b2473b7cebfc43323920bc88678214e59d3a02020b741b0f473520f38a4f61de223265eeba8dc23197abda360569c99831a64";
+  std::string hex = "f855018203e88207d0808088000000000000000025a06db1bf318e29ca002dc5314af1c0d1722659ad2dcb79357d7b7746aa5510afdaa0336e5414d221f6280598a5ac338a17331e2b925bd6ca693d85961248acefea72";
 
   // when
   transaction_t transaction = Transaction::parse(hex, 0x01);
@@ -99,8 +99,12 @@ TEST_CASE("Transaction create (1)", "[transaction)]") {
   // then
   bytes_t signatureBytes = Transaction::signatureBytes(transaction);
   
-  // Address: 0x0dfef8b14c0aa5db1daa1853fe191d0415fe70dd
-  CHECK("262157cbde2db7bed3560b153ec41b3b2473b7cebfc43323920bc88678214e59d32020b741b0f473520f38a4f61de223265eeba8dc23197abda360569c99831a64" == 
+  uint8_t v = static_cast<uint8_t>(signatureBytes[64]);
+
+  // Address: 0x8e2cec90ff1c67f51a7a3b986780d7c933f47fa9
+  CHECK(65 == signatureBytes.size());
+  CHECK(37 == v);
+  CHECK("6db1bf318e29ca002dc5314af1c0d1722659ad2dcb79357d7b7746aa5510afda336e5414d221f6280598a5ac338a17331e2b925bd6ca693d85961248acefea7225" == 
     Hex::bytesToHex(signatureBytes)
   );
   CHECK("699f057e0ec6cf7ee1986c47e518b42ac4bdfe007c415097638c3b7166b65063" ==
