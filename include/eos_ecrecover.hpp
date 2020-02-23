@@ -10,7 +10,7 @@
 #include <evm/transaction.h>
 #include <evm/decompress_key.h>
 
-class ecrecover {
+class eos_ecrecover {
   public:
     static string recover(std::string accountName, bytes_t digest, bytes_t signature) {
 
@@ -38,6 +38,9 @@ class ecrecover {
 
       bytes_t ethereumAddress = Address::ethereumAddress(uncompressedPubKey);
 
-      return Hex::bytesToHex(uncompressedPubKey) + " - " + Hex::bytesToHex(ethereumAddress);
+      return Address::createFromBytes(
+        accountName, 
+        ethereumAddress
+      );
     }
 };

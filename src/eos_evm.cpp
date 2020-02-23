@@ -2,7 +2,7 @@
 #include <eosio/crypto.hpp>
 #include <eos_evm.hpp>
 #include <eos_system.hpp>
-#include <ecrecover.hpp>
+#include <eos_ecrecover.hpp>
 
 #include <evm/address.h>
 #include <evm/transaction.h>
@@ -14,7 +14,7 @@ ACTION eos_evm::raw(name from, string code, string sender) {
 
   // TODO: transactions and addresses will include th `0x` prefix
   if (Transaction::signatureExists(transaction)) {
-    string accountIdentifier = ecrecover::recover(
+    string accountIdentifier = eos_ecrecover::recover(
       from.to_string(),
       transaction.digest,
       Transaction::signatureBytes(transaction)
