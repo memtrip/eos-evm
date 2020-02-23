@@ -3,9 +3,11 @@
 #include <eos_evm.hpp>
 #include <eos_system.hpp>
 #include <eos_ecrecover.hpp>
+#include <eos_utils.hpp>
 
 #include <evm/address.h>
 #include <evm/transaction.h>
+#include <evm/hex.h>
 
 ACTION eos_evm::raw(name from, string code, string sender) {
   require_auth(from);
@@ -14,20 +16,26 @@ ACTION eos_evm::raw(name from, string code, string sender) {
 
   // TODO: transactions and addresses will include th `0x` prefix
   if (Transaction::signatureExists(transaction)) {
-    string accountIdentifier = eos_ecrecover::recover(
+    eosio::checksum256 accountIdentifier = eos_utils::hexToFixed(eos_ecrecover::recover(
       from.to_string(),
       transaction.digest,
       Transaction::signatureBytes(transaction)
-    );
-    // TODO: check if the accountIdentifier exists in the accounts table
-    check(1 != 1, "Execute transaction for: " + accountIdentifier);
-  } else {
-    // TODO: check if the sender exists in the account table
-    // TODO: compare the account associated with the sender to the `from` name
-    account_table _account(get_self(), get_self().value);
+    ));
 
-    auto iterator = _account.find(from.value);
-    check(iterator != _account.end(), "You must create an Ethereum account via the create() action before executing transactions.");
+    account_table _account(get_self(), get_self().value);
+    auto idx = _account.get_index<name("accountid")>();
+    auto itr = idx.find(accountIdentifier);
+
+    check(itr != idx.end(), "The account identifier associated with this transaction does not exist.");
+
+    check(1 != 1, eos_utils::fixedToHex(itr->accountIdentifier) + " - " + eos_utils::fixedToHex(accountIdentifier));
+  } else {
+    account_table _account(get_self(), get_self().value);
+    auto idx = _account.get_index<name("accountid")>();
+    auto itr = idx.find(eos_utils::hexToFixed(sender));
+
+    // TODO: check if sender exists in the account table
+    check(has_auth(itr->user), "You do not have permission to execute a transaction for the specified sender.");
 
     check(1 != 1, "Execute transaction for account identifier, resolved by eosio");
   }
@@ -44,9 +52,11 @@ ACTION eos_evm::create(name from, string message) {
   _account.emplace(from, [&](auto& account) {
     account.user = from;
     account.nonce = 1;
-    account.accountIdentifier = Address::createFromString(
-      from.to_string(), 
-      message
+    account.accountIdentifier = eos_utils::hexToFixed(
+      Address::accountIdentifierFromString(
+        from.to_string(), 
+        message
+      )
     );
   });
 }

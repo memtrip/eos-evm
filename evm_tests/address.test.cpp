@@ -3,29 +3,29 @@
 #include "utils.h"
 #include <evm/hex.h>
 
-TEST_CASE("createFromString", "[address]" ) {
+TEST_CASE("accountIdentifierFromString", "[address]" ) {
 
-  std::string accountIdentifier = Address::createFromString(
+  bytes_t accountIdentifier = Address::accountIdentifierFromString(
     "evm5", 
     "8d7332e9640fe8952e436dda2d5c2ac93d6870f3"
   );
 
-  CHECK(40 == accountIdentifier.length());
+  CHECK(20 == accountIdentifier.size());
   CHECK("86a2700da1f451fa70a0dd52225f986d552eda0f" == 
-    accountIdentifier
+    Hex::bytesToHex(accountIdentifier)
   );
 }
 
-TEST_CASE("createFromBytes", "[address]" ) {
+TEST_CASE("accountIdentifierFromBytes", "[address]" ) {
 
-  std::string accountIdentifier = Address::createFromBytes(
+  bytes_t accountIdentifier = Address::accountIdentifierFromBytes(
     "evm5", 
     Hex::hexToBytes("8d7332e9640fe8952e436dda2d5c2ac93d6870f3")
   );
 
-  CHECK(40 == accountIdentifier.length());
+  CHECK(20 == accountIdentifier.size());
   CHECK("86a2700da1f451fa70a0dd52225f986d552eda0f" == 
-    accountIdentifier
+    Hex::bytesToHex(accountIdentifier)
   );
 }
 

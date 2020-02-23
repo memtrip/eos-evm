@@ -12,7 +12,7 @@
 
 class eos_ecrecover {
   public:
-    static string recover(std::string accountName, bytes_t digest, bytes_t signature) {
+    static bytes_t recover(std::string accountName, bytes_t digest, bytes_t signature) {
 
       std::array<uint8_t, 32> digestData;
 
@@ -38,7 +38,7 @@ class eos_ecrecover {
 
       bytes_t ethereumAddress = Address::ethereumAddress(uncompressedPubKey);
 
-      return Address::createFromBytes(
+      return Address::accountIdentifierFromBytes(
         accountName, 
         ethereumAddress
       );

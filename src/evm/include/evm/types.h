@@ -72,6 +72,6 @@ const size_t WORD_SIZE = 32;
 
 const size_t ADDRESS_SIZE = 20;
 
-constexpr char hex[] = "0123456789abcdef";
+constexpr char HEX_VALUES[] = "0123456789abcdef";
 
 #endif

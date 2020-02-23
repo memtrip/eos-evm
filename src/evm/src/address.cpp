@@ -3,12 +3,12 @@
 #include <evm/rlp.h>
 #include <evm/hex.h>
 
-std::string Address::createFromString(std::string accountName, std::string addressString) {
+bytes_t Address::accountIdentifierFromString(std::string accountName, std::string addressString) {
   bytes_t address = Hex::hexToBytes(addressString);
-  return createFromBytes(accountName, address);
+  return accountIdentifierFromBytes(accountName, address);
 };
 
-std::string Address::createFromBytes(std::string accountName, bytes_t address) {
+bytes_t Address::accountIdentifierFromBytes(std::string accountName, bytes_t address) {
   
   bytes_t accountNameBytes(accountName.begin(), accountName.end());
 
@@ -34,9 +34,9 @@ std::string Address::createFromBytes(std::string accountName, bytes_t address) {
 
   bytes_t hashBytes = Hash::keccak256(result);
 
-  bytes_t addressBytes(hashBytes.end() - ADDRESS_SIZE, hashBytes.end());
+  bytes_t accountIdentifierBytes(hashBytes.end() - ADDRESS_SIZE, hashBytes.end());
 
-  return Hex::bytesToHex(addressBytes);
+  return accountIdentifierBytes;
 }
 
 bytes_t Address::ethereumAddress(bytes_t uncompressedPubKey) {
