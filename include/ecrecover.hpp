@@ -8,6 +8,7 @@
 #include <evm/address.h>
 #include <evm/hex.h>
 #include <evm/transaction.h>
+#include <evm/decompress_key.h>
 
 class ecrecover {
   public:
@@ -36,10 +37,10 @@ class ecrecover {
       // recover public key
       std::array<char, 33> compressedPubKey = std::get<0>(eosio::recover_key(digestBytes, sig));
 
-      bytes_t uncompressedPubKey = Hex::hexToBytes("630f70ad9f6e943088a4677e9ccf132cb2ae8bafd4a1538b42cd78454e037730c6e09149f4bae8e136794e950a072368a0a3926083017d8b7b6c20d3f8a6f2e6");
+      bytes_t uncompressedPubKey = DecompressKey::decompress(compressedPubKey);
 
       bytes_t ethereumAddress = Address::ethereumAddress(uncompressedPubKey);
 
-      return Hex::fixedToHex(compressedPubKey) + " - " + Hex::bytesToHex(ethereumAddress);
+      return Hex::bytesToHex(uncompressedPubKey) + " - " + Hex::bytesToHex(ethereumAddress);
     }
 };
