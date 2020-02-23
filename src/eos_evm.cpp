@@ -14,13 +14,16 @@ ACTION eos_evm::raw(name from, string code, string sender) {
 
   transaction_t transaction = Transaction::parse(code, 0x01);
 
-  // TODO: transactions and addresses will include th `0x` prefix
+  // TODO: code and addresses will include th `0x` prefix
   if (Transaction::signatureExists(transaction)) {
-    eosio::checksum256 accountIdentifier = eos_utils::hexToFixed(eos_ecrecover::recover(
+
+    bytes_t accountIdentifierBytes = eos_ecrecover::recover(
       from.to_string(),
       transaction.digest,
       Transaction::signatureBytes(transaction)
-    ));
+    );
+
+    eosio::checksum256 accountIdentifier = eos_utils::hexToFixed(accountIdentifierBytes);
 
     account_table _account(get_self(), get_self().value);
     auto idx = _account.get_index<name("accountid")>();
@@ -28,16 +31,18 @@ ACTION eos_evm::raw(name from, string code, string sender) {
 
     check(itr != idx.end(), "The account identifier associated with this transaction does not exist.");
 
-    check(1 != 1, eos_utils::fixedToHex(itr->accountIdentifier) + " - " + eos_utils::fixedToHex(accountIdentifier));
+    check(1 != 1, "TODO: Execute transaction signed transaction");
   } else {
+    eosio::checksum256 accountIdentifier = eos_utils::hexToFixed(sender);
     account_table _account(get_self(), get_self().value);
     auto idx = _account.get_index<name("accountid")>();
-    auto itr = idx.find(eos_utils::hexToFixed(sender));
+    auto itr = idx.find(accountIdentifier);
 
-    // TODO: check if sender exists in the account table
+    check(itr != idx.end(), "Could not find sender, did you provide the correct account identifier?");
+
     check(has_auth(itr->user), "You do not have permission to execute a transaction for the specified sender.");
 
-    check(1 != 1, "Execute transaction for account identifier, resolved by eosio");
+    check(1 != 1, "TODO: Execute transaction for account identifier, resolved by eosio");
   }
 }
 

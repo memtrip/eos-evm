@@ -44,6 +44,3 @@ const prime = new bigInt(
 pIdent = prime.add(1).divide(4);
 
 console.dir(decompress(process.argv[2], pIdent));
-
-// 630f70ad9f6e943088a4677e9ccf132cb2ae8bafd4a1538b42cd78454e037730c6e09149f4bae8e136794e950a072368a0a3926083017d8b7b6c20d3f8a6f2e6
-// 04876f5fdda1d03bef724e0634dfb18c530b67078ac8c2ee0be850201658ec83c4297c87de32981f6b8a83892a5d18a1fa034b0ed17193347aed2ca66fbe04e1e8

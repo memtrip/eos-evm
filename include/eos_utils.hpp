@@ -1,22 +1,22 @@
 #pragma once
 #include <eosio/eosio.hpp>
 #include <evm/types.h>
+#include <evm/hex.h>
 
 class eos_utils {
   public:
     static std::array<uint8_t, 32> hexToFixed(bytes_t bytes) {
       std::array<uint8_t, 32> checksum256;
 
-      for (int i = 0; i < bytes.size(); i++) {
-        checksum256[i] = bytes[i];
+      for (int i = 0; i < 32; i++) {
+        checksum256[i] = (i < 20) ? bytes[i] : 0;
       }
 
       return checksum256;
     }
 
     static std::array<uint8_t, 32> hexToFixed(std::string message) {
-      std::vector<uint8_t> data(message.begin(), message.end());
-      return hexToFixed(data);
+      return hexToFixed(Hex::hexToBytes(message));
     }
 
     static std::string fixedToHex(eosio::fixed_bytes<32> data) {
