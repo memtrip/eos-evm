@@ -14,9 +14,6 @@ class ecrecover {
   public:
     static string recover(std::string accountName, bytes_t digest, bytes_t signature) {
 
-      // digest
-      // bytes_t digestWithPrefix = Transaction::prefixedBytes(digest);
-
       std::array<uint8_t, 32> digestData;
 
       for (int i = 0; i < digest.size(); i++) {

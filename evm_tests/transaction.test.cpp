@@ -162,3 +162,17 @@ TEST_CASE("Transaction digest", "[transaction)]") {
     Hex::bytesToHex(transaction.digest)
   );
 }
+
+TEST_CASE("Transaction message prefix", "[transaction)]") {
+
+  // given
+  std::string unsignedTransaction = "d5018203e88207d08080880000000000000000018080";
+
+  // when
+  bytes_t digestWithPrefix = Transaction::prefixedBytes(Hex::hexToBytes(unsignedTransaction));
+
+  // then
+  CHECK("4f92172f1dfe85393316b4655808578b12882443614025a19d726ce8c0a6212f" == 
+    Hex::bytesToHex(digestWithPrefix)
+  );
+}
