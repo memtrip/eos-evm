@@ -1,5 +1,6 @@
-package com.memtrip.eos_evm.ethereum
+package com.memtrip.eos_evm.eos
 
+import com.memtrip.eos_evm.ethereum.toHex
 import org.web3j.crypto.Hash
 import org.web3j.rlp.RlpEncoder
 import org.web3j.rlp.RlpList
@@ -13,7 +14,7 @@ object AccountIdentifier {
 
         val rlpList = RlpList(ArrayList<RlpType>().apply {
             add(RlpString.create(name))
-            add(RlpString.create(address.toHex()))
+            add(RlpString.create(address.substring(2).toHex()))
         })
 
         val hash = Hash.sha3(RlpEncoder.encode(rlpList))

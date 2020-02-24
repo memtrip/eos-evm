@@ -4,7 +4,7 @@ import com.memtrip.eos.chain.actions.transaction.TransactionContext
 import com.memtrip.eos.core.crypto.EosPrivateKey
 import com.memtrip.eos.http.rpc.Api
 import com.memtrip.eos_evm.eos.create.CreateAction
-import com.memtrip.eos_evm.ethereum.Account
+import com.memtrip.eos_evm.ethereum.EthAccount
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.junit.Assert.assertEquals
@@ -33,12 +33,12 @@ class CreateTest {
         val newAccountName = generateUniqueAccountName()
         val newAccountPrivateKey = EosPrivateKey()
 
-        val createAccount = setupTransactions.createAccount(
+        setupTransactions.createAccount(
             newAccountName,
             newAccountPrivateKey
         ).blockingGet()
 
-        val ethAccount = Account.create()
+        val ethAccount = EthAccount.create()
 
         // when
         val response1 = createAction.pushTransaction(

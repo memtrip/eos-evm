@@ -1,11 +1,8 @@
 package com.memtrip.eos_evm.ethereum
 
-import com.memtrip.eos_evm.ethereum.Account
-import com.memtrip.eos_evm.ethereum.Transaction
-import com.memtrip.eos_evm.ethereum.toHex
 import org.junit.Test
 
-class EthereumTransactionTest {
+class EthTransactionTest {
 
     @Test
     fun signTransaction() {
@@ -20,7 +17,7 @@ class EthereumTransactionTest {
         )
 
         // when
-        val signedTransaction = transaction.sign(Account.create())
+        val signedTransaction = transaction.sign(EthAccount.create())
 
         // then
         println("Unsigned transaction::")

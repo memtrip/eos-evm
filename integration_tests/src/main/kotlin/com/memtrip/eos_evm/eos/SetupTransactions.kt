@@ -9,9 +9,12 @@ import io.reactivex.Single
 import com.memtrip.eos.chain.actions.transaction.account.CreateAccountChain
 import com.memtrip.eos_evm.eos.Config.CONTRACT_ACCOUNT_NAME
 import com.memtrip.eos_evm.eos.Config.ISSUE_PRIVATE_KEY
+import com.memtrip.eos_evm.eos.create.CreateAction
+import com.memtrip.eos_evm.ethereum.EthAccount
 
 class SetupTransactions(
-    private val chainApi: ChainApi
+    private val chainApi: ChainApi,
+    private val createAction: CreateAction = CreateAction(chainApi)
 ) {
 
     fun createAccount(
@@ -35,6 +38,23 @@ class SetupTransactions(
             TransactionContext(
                 CONTRACT_ACCOUNT_NAME,
                 signatureProviderPrivateKey,
+                transactionDefaultExpiry()
+            )
+        )
+    }
+
+    fun createEthAccount(
+        accountName: String,
+        privateKey: EosPrivateKey,
+        ethAccount: EthAccount
+    ): Single<ChainResponse<TransactionCommitted>> {
+
+        return createAction.pushTransaction(
+            accountName,
+            ethAccount.address,
+            TransactionContext(
+                accountName,
+                privateKey,
                 transactionDefaultExpiry()
             )
         )

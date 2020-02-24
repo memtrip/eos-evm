@@ -35,7 +35,7 @@ data class Transaction(
         }
     }
 
-    fun sign(account: Account): SignedTransaction {
+    fun sign(ethAccount: EthAccount): SignedTransaction {
 
         val rawTransaction = createTransaction()
 
@@ -44,7 +44,7 @@ data class Transaction(
             CHAIN_ID
         )
 
-        val signatureData = Sign.signMessage(unsignedTransaction, account.keyPair)
+        val signatureData = Sign.signMessage(unsignedTransaction, ethAccount.keyPair)
 
         val eip155SignatureData: SignatureData = TransactionEncoder.createEip155SignatureData(
             signatureData,
@@ -59,7 +59,7 @@ data class Transaction(
             signedTransaction,
             unsignedTransaction,
             createKeccakDigest(unsignedTransaction),
-            account.address
+            ethAccount.address
         )
     }
 

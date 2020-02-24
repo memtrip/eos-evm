@@ -1,5 +1,7 @@
 package com.memtrip.eos_evm.eos
 
+import com.memtrip.eos.chain.actions.ChainResponse
+import com.memtrip.eos_evm.ethereum.Transaction
 import java.util.*
 import kotlin.streams.asSequence
 
@@ -21,3 +23,17 @@ fun transactionDefaultExpiry(): Date = with(Calendar.getInstance()) {
     set(Calendar.MINUTE, get(Calendar.MINUTE) + 2)
     this
 }.time
+
+fun stubTransaction(): Transaction {
+    return Transaction(
+        1,
+        1000,
+        2000,
+        0,
+        "0x000000000000000"
+    )
+}
+
+fun <T> ChainResponse<T>.containsErrorString(value: String): Boolean {
+    return errorBody?.error?.details?.get(0)?.message?.contains(value) ?: false
+}
