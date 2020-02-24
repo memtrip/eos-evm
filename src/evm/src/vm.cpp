@@ -391,7 +391,7 @@ InstructionResult VM::executeInstruction(
       printf("(CALLER ");
       break;
     case Opcode::CALLVALUE:
-      printf("(CALLVALUE ");
+      stack.push(env.value);
       break;
     case Opcode::CALLDATALOAD:
       printf("(CALLDATALOAD ");
@@ -604,24 +604,24 @@ InstructionResult VM::executeInstruction(
     case Opcode::CREATE:
       printf("(CREATE ");
       break;
-    case Opcode::CALL:
-      printf("(CALL ");
-      break;
-    case Opcode::CALLCODE:
-      printf("(CALLCODE ");
-      break;
     case Opcode::RETURN:
       printf("(RETURN ");
-      break;
-    case Opcode::DELEGATECALL:
-      printf("(DELEGATECALL ");
       break;
     case Opcode::CREATE2:
       printf("(CREATE2 ");
       break;
+    case Opcode::CALL:
+    case Opcode::CALLCODE:
+    case Opcode::DELEGATECALL:
     case Opcode::STATICCALL:
-      printf("(STATICCALL ");
-      break;
+      {
+        printf("(CALL* ");
+        stack.pop(1);
+        uint256_t codeAddress = stack.peek(1);
+        stack.pop(1);
+
+        break;
+      }
     case Opcode::REVERT:
       printf("(REVERT ");
       break;

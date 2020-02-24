@@ -26,6 +26,7 @@ struct EnvInfo {
   uint64_t timestamp;
   uint32_t gasLimit;
   uint32_t chainId;
+  uint256_t value;
 };
 
 typedef EnvInfo env_t;

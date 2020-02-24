@@ -27,6 +27,7 @@ ACTION eos_evm::raw(name from, string code, string sender) {
     auto itr = idx.find(accountIdentifier);
 
     check(itr != idx.end(), "The account identifier associated with this transaction does not exist.");
+    // itr-user is used in the transaction
     check(1 != 1, "TODO: Execute transaction signed transaction");
   } else {
     eosio::checksum256 accountIdentifier = eos_utils::hexToFixed(sender);
@@ -36,6 +37,7 @@ ACTION eos_evm::raw(name from, string code, string sender) {
 
     check(itr != idx.end(), "Could not find sender, did you provide the correct account identifier?");
     check(has_auth(itr->user), "You do not have permission to execute a transaction for the specified sender.");
+    // itr->user is used in the transaction
     check(1 != 1, "TODO: Execute transaction for account identifier, resolved by eosio");
   }
 }
