@@ -5,7 +5,7 @@
 #include <evm/transaction.h>
 
 transaction_t Transaction::parse(std::string hex, uint8_t chainId) {
-  bytes_t bytes = Hex::hexToBytes(hex);
+  bytes_t bytes = Hex::hexToBytes(hex.substr(2, hex.size()));
   std::vector<RLPItem> items = std::vector<RLPItem>();
   RLPDecode::decode(bytes, items);
 
