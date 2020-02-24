@@ -4,7 +4,7 @@
 #include <evm/hex.h>
 
 bytes_t Address::accountIdentifierFromString(std::string accountName, std::string addressString) {
-  bytes_t address = Hex::hexToBytes(addressString);
+  bytes_t address = Hex::hexToBytes(addressString.substr(2, addressString.size()));
   return accountIdentifierFromBytes(accountName, address);
 };
 

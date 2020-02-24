@@ -7,7 +7,7 @@ TEST_CASE("accountIdentifierFromString", "[address]" ) {
 
   bytes_t accountIdentifier = Address::accountIdentifierFromString(
     "evm5", 
-    "8d7332e9640fe8952e436dda2d5c2ac93d6870f3"
+    "0x8d7332e9640fe8952e436dda2d5c2ac93d6870f3"
   );
 
   CHECK(20 == accountIdentifier.size());
