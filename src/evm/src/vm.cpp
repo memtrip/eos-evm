@@ -611,17 +611,30 @@ InstructionResult VM::executeInstruction(
       printf("(CREATE2 ");
       break;
     case Opcode::CALL:
+      printf("(CALL ");
+      break;
     case Opcode::CALLCODE:
+      printf("(CALLCODE ");
+      break;
     case Opcode::DELEGATECALL:
-    case Opcode::STATICCALL:
       {
-        printf("(CALL* ");
-        stack.pop(1);
-        uint256_t codeAddress = stack.peek(1);
-        stack.pop(1);
+        uint256_t codeAddress = stack.peek(0);
+        uint256_t inOffset = stack.peek(1);
+        uint256_t inSize = stack.peek(2);
+        uint256_t outOffset = stack.peek(3);
+        uint256_t outSize = stack.peek(4);
+        stack.pop(5);
+
+        // TODO: if there is not enough balance, or the stack depth is reached, return 0
+
+        bytes_t input = memory.readSlice(inOffset, inSize);
+        // TODO: external call with result
 
         break;
       }
+    case Opcode::STATICCALL:
+      printf("(STATICCALL ");
+      break;
     case Opcode::REVERT:
       printf("(REVERT ");
       break;

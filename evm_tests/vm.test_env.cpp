@@ -144,3 +144,23 @@ TEST_CASE("Chain id", "[env]") {
   // then
   CHECK(1 == sm.top());
 }
+
+TEST_CASE("Call value", "[env]") {
+  // given
+  // (CALLVALUE 34)
+  std::string bytecode_str = "34";
+  bytes_t bytes = Hex::hexToBytes(bytecode_str);
+  VM vm {};
+  account_store_t* accountItems = new account_store_t();
+  AccountState as(accountItems);
+  bytes_t* memoryBytes = new bytes_t();
+  Memory mem(memoryBytes);
+  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
+  StackMachine sm(stackItems);
+
+  // when
+  vm.execute(bytes, mem, sm, as, Utils::env());
+
+  // then
+  CHECK(34 == sm.top());
+}
