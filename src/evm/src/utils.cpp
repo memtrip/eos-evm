@@ -6,7 +6,7 @@
 #include <evm/opcode.h>
 #include <evm/instruction.h>
 #include <evm/gas_tier_price.h>
-#include "utils.h"
+#include <evm/utils.h>
 #include <evm/big_int.h>
 #include <evm/hex.h>
 

@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "catch.hpp"
-#include "utils.h"
+#include <evm/utils.h>
 #include <evm/vm.h>
 #include <evm/hex.h>
 
@@ -100,7 +100,6 @@ TEST_CASE("Unconditional jump to destination", "[jumps]") {
   );
 }
 
-// TODO: uses SLOAD
 // TEST_CASE("Jumps", "[jumps]") {
 //   std::string bytecode_str = "600160015560066000555b60016000540380806000551560245760015402600155600a565b";
 //   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
@@ -116,14 +115,14 @@ TEST_CASE("Unconditional jump to destination", "[jumps]") {
 //   vm.execute(mem, sm, as, params, Utils::env());
 
 //   // then
-//   store_item_t item1 = Utils::accountStoreValue(0, accountItems);
-//   store_item_t item2 = Utils::accountStoreValue(1, accountItems);
+//   // store_item_t item1 = Utils::accountStoreValue(0, accountItems);
+//   // store_item_t item2 = Utils::accountStoreValue(1, accountItems);
 
-//   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
-//     Utils::uint256_2str(item1.second)
-//   );
+//   // CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
+//   //   Utils::uint256_2str(item1.second)
+//   // );
 
-//   CHECK("0000000000000000000000000000000000000000000000000000000000000078" == 
-//     Utils::uint256_2str(item2.second)
-//   );
+//   // CHECK("0000000000000000000000000000000000000000000000000000000000000078" == 
+//   //   Utils::uint256_2str(item2.second)
+//   // );
 // }

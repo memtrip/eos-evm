@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "catch.hpp"
-#include "utils.h"
+#include <evm/utils.h>
 #include <evm/vm.h>
 #include <evm/hex.h>
 
@@ -16,6 +16,7 @@ TEST_CASE("shift left ", "[shift]") {
   StackMachine sm(stackItems);
 
   // when
+  mem.resize(32);
   vm.execute(mem, sm, as, params, Utils::env());
 
   // then
@@ -34,6 +35,7 @@ TEST_CASE("shift right ", "[shift]") {
   StackMachine sm(stackItems);
 
   // when
+  mem.resize(32);
   vm.execute(mem, sm, as, params, Utils::env());
 
   // then
@@ -52,6 +54,7 @@ TEST_CASE("sar", "[shift]") {
   StackMachine sm(stackItems);
 
   // when
+  mem.resize(32);
   vm.execute(mem, sm, as, params, Utils::env());
 
   // then

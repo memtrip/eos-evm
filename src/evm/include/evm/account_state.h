@@ -6,4 +6,5 @@ class AccountState {
     AccountState(account_store_t* itemsArg);
     account_store_t* items;
     void putTopPair(std::vector<uint256_t>* stackItems);
+    uint256_t get(uint256_t key);
 };

@@ -2,7 +2,7 @@
 #include "catch.hpp"
 #include <evm/memory.h>
 #include <evm/types.h>
-#include "utils.h"
+#include <evm/utils.h>
 #include <evm/hex.h>
 
 TEST_CASE("Memory write and read", "[memory]") {
@@ -92,4 +92,36 @@ TEST_CASE("Memory read slice and write slice", "[memory]") {
   bytes_t emptySlice = bytes_t();
   memory.writeSlice(uint256_t(0x1000), emptySlice);
   REQUIRE(32 == memory.size()); 
+}
+
+TEST_CASE("Memory write at index", "[memory]") {
+  // given
+  bytes_t* bytes = new bytes_t();
+  Memory memory(bytes);
+  
+  // when
+  memory.resize(32);
+  memory.write(
+    Utils::bigIntFromBigEndianBytes("0000000000000000000000000000000000000000000000000000000000000000"),
+    Utils::bigIntFromBigEndianBytes("0000000000000000000000000000000000000000000000000000000000000000")
+  );
+
+  REQUIRE("0000000000000000000000000000000000000000000000000000000000000000" == 
+    Utils::uint256_2str(memory.read(uint256_t(0x00)))); 
+}
+
+TEST_CASE("Memory write at index (1)", "[memory]") {
+  // given
+  bytes_t* bytes = new bytes_t();
+  Memory memory(bytes);
+  
+  // when
+  memory.resize(32);
+  memory.write(
+    Utils::bigIntFromBigEndianBytes("0000000000000000000000000000000000000000000000000000000000000000"),
+    Utils::bigIntFromBigEndianBytes("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff")
+  );
+
+  REQUIRE("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" == 
+    Utils::uint256_2str(memory.read(uint256_t(0x00)))); 
 }

@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "catch.hpp"
-#include "utils.h"
+#include <evm/utils.h>
 #include <evm/vm.h>
 #include <evm/hex.h>
 
@@ -127,32 +127,32 @@ TEST_CASE("exponent", "[signed]") {
   );
 }
 
-// TEST_CASE("signextend", "[signed]") {
-//   std::string bytecode_str = "610fff60020b60005560ff60200b600155";
-//   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
-//   VM vm {};
-//   account_store_t* accountItems = new account_store_t();
-//   AccountState as(accountItems);
-//   bytes_t* memoryBytes = new bytes_t();
-//   Memory mem(memoryBytes);
-//   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-//   StackMachine sm(stackItems);
+TEST_CASE("signextend", "[signed]") {
+  std::string bytecode_str = "610fff60020b60005560ff60200b600155";
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  VM vm {};
+  account_store_t* accountItems = new account_store_t();
+  AccountState as(accountItems);
+  bytes_t* memoryBytes = new bytes_t();
+  Memory mem(memoryBytes);
+  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
+  StackMachine sm(stackItems);
 
-//   // when
-//   vm.execute(mem, sm, as, params, Utils::env());
+  // when
+  vm.execute(mem, sm, as, params, Utils::env());
 
-//   // then
-//   store_item_t item1 = Utils::accountStoreValue(0, accountItems);
-//   store_item_t item2 = Utils::accountStoreValue(1, accountItems);
+  // then
+  store_item_t item1 = Utils::accountStoreValue(0, accountItems);
+  store_item_t item2 = Utils::accountStoreValue(1, accountItems);
 
-//   CHECK("0000000000000000000000000000000000000000000000000000000000000fff" == 
-//     Utils::uint256_2str(item1.second)
-//   );
+  CHECK("0000000000000000000000000000000000000000000000000000000000000fff" == 
+    Utils::uint256_2str(item1.second)
+  );
 
-//   CHECK("00000000000000000000000000000000000000000000000000000000000000ff" == 
-//     Utils::uint256_2str(item2.second)
-//   );
-// }
+  CHECK("00000000000000000000000000000000000000000000000000000000000000ff" == 
+    Utils::uint256_2str(item2.second)
+  );
+}
 
 TEST_CASE("signed comparison", "[signed]") {
   std::string bytecode_str = "60106000036010818112600055136001556010601060000381811260025513600355";

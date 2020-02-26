@@ -3,7 +3,7 @@
 #include <evm/jumps.h>
 #include <evm/types.h>
 #include <evm/hex.h>
-#include "utils.h"
+#include <evm/utils.h>
 
 jump_set_t jump_destinations(std::string bytecode_str) {
   bytes_t bytes = Hex::hexToBytes(bytecode_str);

@@ -2,7 +2,7 @@
 #include <evm/rlp.h>
 #include <evm/types.h>
 #include <evm/big_int.h>
-#include "utils.h"
+#include <evm/utils.h>
 #include <evm/hex.h>
 
 TEST_CASE("empty string", "[rlp_encode]") {

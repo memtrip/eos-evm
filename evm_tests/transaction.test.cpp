@@ -1,6 +1,6 @@
 #include "catch.hpp"
 #include <evm/transaction.h>
-#include "utils.h"
+#include <evm/utils.h>
 #include <evm/types.h>
 #include <evm/hex.h>
 

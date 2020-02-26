@@ -244,6 +244,7 @@ const instruct_t Instruction::values[] = {
   0x000000FF, // Unassigned
   0x000000FF, // Unassigned
   0x000000FF, // Unassigned
+  0x000000FF, // Unassigned
   0xF0030107, // ((CREATE (0xF0)), 3, 1, SPECIAL)
   0xF1070107, // ((CALL (0xF1)), 7, 1, SPECIAL)
   0xF2070107, // ((CALLCODE (0xF2)), 7, 1, SPECIAL)
@@ -263,7 +264,7 @@ const instruct_t Instruction::values[] = {
 };
 
 unsigned char Instruction::byteAt(instruct_t instruction, int pos) {
-  return (instruction >> (8*pos)) & 0xff;
+  return (instruction >> (8 * pos)) & 0xff;
 }
 
 unsigned char Instruction::opcode(instruct_t instruction) {

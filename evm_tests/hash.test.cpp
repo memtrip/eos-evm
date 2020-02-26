@@ -2,7 +2,7 @@
 #include "catch.hpp"
 #include <evm/hash.h>
 #include <evm/big_int.h>
-#include "utils.h"
+#include <evm/utils.h>
 
 TEST_CASE("keccak256", "[hash]" ) {
   bytes_t bytes = bytes_t();

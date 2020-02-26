@@ -1,6 +1,6 @@
 #include "catch.hpp"
 #include <evm/address.h>
-#include "utils.h"
+#include <evm/utils.h>
 #include <evm/hex.h>
 
 TEST_CASE("accountIdentifierFromString", "[address]" ) {

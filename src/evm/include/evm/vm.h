@@ -29,7 +29,7 @@ class VM {
       env_t env
     );
 
-    InstructionResult executeInstruction(
+    instruction_result_t executeInstruction(
       instruct_t instruction, 
       Memory& memory,
       StackMachine& stack,

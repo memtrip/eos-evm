@@ -3,7 +3,7 @@
 #include <evm/big_int.h>
 #include <evm/types.h>
 #include <evm/hex.h>
-#include "utils.h"
+#include <evm/utils.h>
 
 /**
   These tests assume little-endian byte ordering

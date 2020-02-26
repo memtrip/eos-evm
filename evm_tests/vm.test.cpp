@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "catch.hpp"
-#include "utils.h"
+#include <evm/utils.h>
 #include <evm/vm.h>
 #include <evm/hex.h>
 

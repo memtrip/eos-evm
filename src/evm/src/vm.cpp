@@ -5,6 +5,8 @@
 #include <evm/big_int.h>
 #include <evm/hash.h>
 #include <evm/overflow.h>
+#include <evm/hex.h>
+#include <evm/utils.h>
 
 ExecResult VM::execute(
   Memory& memory,
@@ -60,7 +62,7 @@ ExecResult VM::stepInner(
 
   // TODO: calculate gas cost
 
-  InstructionResult result = VM::executeInstruction(
+  instruction_result_t result = VM::executeInstruction(
     instruction, 
     memory,
     stack,
@@ -70,30 +72,14 @@ ExecResult VM::stepInner(
     env
   );
 
-  switch (result) {
+  switch (result.first) {
     case InstructionResult::OK:
       break;
     case InstructionResult::UNUSED_GAS:
       break;
     case InstructionResult::JUMP_POSITION:
       {
-        uint256_t position = stack.peek(0);
-        stack.pop(1);
-
-        if (jumps.size() == 0) {
-          // TODO: check jump position for child contracts?
-          // i.e; resolve the jumps from the code attached to the VM
-        }
-
-        unsigned long pos = Jumps::verifyJump(position, jumps);
-        if (pos == INVALID_ARGUMENT) return ExecResult::STOPPED; // TODO: handle error
-        reader.position = pos;
-        break;
-      }
-      case InstructionResult::JUMP_CONDITIONAL_POSITION:
-      {
-        uint256_t position = stack.peek(0);
-        stack.pop(2);
+        uint256_t position = std::get<uint256_t>(result.second);
 
         if (jumps.size() == 0) {
           // TODO: check jump position for child contracts?
@@ -106,7 +92,9 @@ ExecResult VM::stepInner(
         break;
       }
     case InstructionResult::STOP_EXEC_RETURN:
-      break;
+      // TODO: clear memory
+      // TODO: return actual values 
+      return ExecResult::DONE;
     case InstructionResult::STOP_EXEC:
       // TODO: return the amount of gas left, before execution was stopped
       return ExecResult::STOPPED;
@@ -121,7 +109,7 @@ ExecResult VM::stepInner(
   return ExecResult::CONTINUE;
 }
 
-InstructionResult VM::executeInstruction(
+instruction_result_t VM::executeInstruction(
   instruct_t instruction,
   Memory& memory,
   StackMachine& stack,
@@ -130,9 +118,10 @@ InstructionResult VM::executeInstruction(
   params_t& params,
   env_t env
 ) {
+  Utils::printInstruction(instruction);
   switch (Instruction::opcode(instruction)) {
     case Opcode::STOP: {
-      return InstructionResult::STOP_EXEC;
+      return std::make_pair(InstructionResult::STOP_EXEC, 0);
     }
     case Opcode::ADD:
       {
@@ -487,8 +476,13 @@ InstructionResult VM::executeInstruction(
         break;
       }
     case Opcode::SLOAD:
-      printf("(SLOAD ");
-      break;
+      {
+        uint256_t key = stack.peek(0);
+        uint256_t word = accountState.get(key);
+        stack.pop(1);
+        stack.push(word);
+        break;
+      }
     case Opcode::SSTORE:
       {
         // TODO: support clear by index
@@ -498,12 +492,25 @@ InstructionResult VM::executeInstruction(
         break;
       }
     case Opcode::JUMP:
-      return InstructionResult::JUMP_POSITION;
+      {
+        uint256_t position = stack.peek(0);
+        stack.pop(1);
+        return std::make_pair(
+          InstructionResult::JUMP_POSITION, 
+          position
+        );
+      }
     case Opcode::JUMPI:
       {
         uint256_t condition = stack.peek(1);
-        if (condition == StackMachine::TRUE) return InstructionResult::JUMP_CONDITIONAL_POSITION;
-        stack.pop(2);
+        if (condition == StackMachine::TRUE) {
+          uint256_t position = stack.peek(0);
+          stack.pop(2);
+          return std::make_pair(
+            InstructionResult::JUMP_POSITION, 
+            position
+          );
+        }
         break;
       }
     case Opcode::PC:
@@ -609,8 +616,20 @@ InstructionResult VM::executeInstruction(
       printf("(CREATE ");
       break;
     case Opcode::RETURN:
-      printf("(RETURN ");
-      break;
+      {
+        uint256_t initOff = stack.peek(0);
+        uint256_t initSize = stack.peek(1);
+        stack.pop(2);
+        StopExecutionResult result {
+          initOff,
+          initSize,
+          true
+        };
+        return std::make_pair(
+          InstructionResult::STOP_EXEC_RETURN,
+          result
+        );
+      }
     case Opcode::CREATE2:
       printf("(CREATE2 ");
       break;
@@ -647,5 +666,5 @@ InstructionResult VM::executeInstruction(
       break;
   }
 
-  return InstructionResult::OK;
+  return std::make_pair(InstructionResult::OK, 0);
 }

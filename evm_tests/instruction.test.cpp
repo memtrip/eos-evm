@@ -2,7 +2,7 @@
 #include <vector>
 #include "catch.hpp"
 #include <evm/instruction.h>
-#include "utils.h"
+#include <evm/utils.h>
 #include <evm/types.h>
 #include <evm/opcode.h>
 #include <evm/hex.h>
@@ -120,6 +120,13 @@ TEST_CASE("Instruction lookup 10-20", "[instruction]" ) {
   REQUIRE(0x1C == Instruction::opcode(instructions.at(12)));
   REQUIRE(0x1D == Instruction::opcode(instructions.at(13)));
   REQUIRE(0x20 == Instruction::opcode(instructions.at(14)));
+}
+
+TEST_CASE("Instruction RETURN", "[instruction]" ) {
+
+  std::vector<instruct_t> instructions = parse("f3");
+
+  REQUIRE(0xf3 == Instruction::opcode(instructions.at(0)));
 }
 
 TEST_CASE("Instruction pushBytes(PUSH32)", "[instruction]" ) {

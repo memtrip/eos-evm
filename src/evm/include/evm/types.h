@@ -74,6 +74,12 @@ struct TransactionData {
 
 typedef TransactionData transaction_t;
 
+struct Gas {
+
+};
+
+typedef Gas gas_t;
+
 enum RLPType {
   STRING,
   LIST
