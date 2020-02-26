@@ -221,16 +221,16 @@ instruction_result_t VM::executeInstruction(
       }
     case Opcode::SIGNEXTEND:
       {
-        uint256_t a = stack.peek(0);
-        uint256_t b = stack.peek(1);
-        stack.pop(2);
-
-        if (a < 31) {
-          int sign_bit = static_cast<int>(a) * 8 + 7;
-          uint256_t sign_mask = uint256_t{1} << sign_bit;
-          uint256_t value_mask = sign_mask - 1;
-          bool is_neg = (b & sign_mask) != 0;
-          stack.push(is_neg ? b | ~value_mask : b & value_mask);
+        uint256_t ext = stack.peek(0);
+        uint256_t x = stack.peek(1);
+        stack.pop(1);
+        if (ext < 31) {
+          stack.pop(1);
+          auto sign_bit = static_cast<int>(ext) * 8 + 7;
+          auto sign_mask = uint256_t{1} << sign_bit;
+          auto value_mask = sign_mask - 1;
+          auto is_neg = (x & sign_mask) != 0;
+          stack.push(is_neg ? x | ~value_mask : x & value_mask);
         }
         break;
       }
