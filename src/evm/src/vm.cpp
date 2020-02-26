@@ -8,7 +8,7 @@
 #include <evm/hex.h>
 #include <evm/utils.h>
 
-ExecResult VM::execute(
+exec_result_t VM::execute(
   Memory& memory,
   StackMachine& stack, 
   AccountState& accountState,
@@ -16,19 +16,19 @@ ExecResult VM::execute(
   env_t env
 ) {
 
-  ExecResult result;
+  exec_result_t result;
 
   jump_set_t jumps = Jumps::findDestinations(params.data);
   ByteReader reader(0, params.data);
 
   do {
     result = VM::step(jumps, memory, stack, reader, accountState, params, env);
-  } while(result == ExecResult::CONTINUE);
+  } while(result.first == ExecResult::CONTINUE);
 
   return result;
 }
 
-ExecResult VM::step(
+exec_result_t VM::step(
   jump_set_t& jumps, 
   Memory& memory,
   StackMachine& stack,
@@ -40,7 +40,7 @@ ExecResult VM::step(
   return VM::stepInner(jumps, memory, stack, reader, accountState, params, env);
 }
 
-ExecResult VM::stepInner(
+exec_result_t VM::stepInner(
   jump_set_t& jumps,
   Memory& memory,
   StackMachine& stack,
@@ -54,7 +54,7 @@ ExecResult VM::stepInner(
   reader.position += 1;
 
   // TODO: handle this properly with an invalid instruction error 
-  if (instruction == 0x000000FF) return ExecResult::DONE;
+  if (instruction == 0x000000FF) return std::make_pair(ExecResult::DONE, 0);
 
   last_stack_ret_len = Instruction::ret(instruction);
 
@@ -87,26 +87,42 @@ ExecResult VM::stepInner(
         }
 
         unsigned long pos = Jumps::verifyJump(position, jumps);
-        if (pos == INVALID_ARGUMENT) return ExecResult::STOPPED; // TODO: handle error
+        if (pos == INVALID_ARGUMENT) return std::make_pair(ExecResult::STOPPED, 0); // TODO: handle error
         reader.position = pos;
         break;
       }
     case InstructionResult::STOP_EXEC_RETURN:
-      // TODO: clear memory
-      // TODO: return actual values 
-      return ExecResult::DONE;
+      {
+        // TODO: clear memory
+        // TODO: return actual GAS value
+        StopExecutionResult stop = std::get<StopExecutionResult>(result.second);
+        NeedsReturn needsReturn {
+          uint256_t(0),
+          memory.intoReturnData(stop.initOff, stop.initSize),
+          stop.apply
+        };
+        
+        return std::make_pair(
+          ExecResult::DONE, 
+          std::make_pair(GasType::NEEDS_RETURN, needsReturn)
+        );
+      }
     case InstructionResult::STOP_EXEC:
       // TODO: return the amount of gas left, before execution was stopped
-      return ExecResult::STOPPED;
+      return std::make_pair(ExecResult::DONE, 0);
     case InstructionResult::INSTRUCTION_TRAP:
       break;
   }
   
   if (reader.position >= reader.len()) {
-    return ExecResult::DONE;
+    // TODO: return value from gasometer
+    return std::make_pair(
+      ExecResult::DONE, 
+      std::make_pair(GasType::KNOWN, uint256_t(0))
+    );
   }
 
-  return ExecResult::CONTINUE;
+  return std::make_pair(ExecResult::CONTINUE, 0);
 }
 
 instruction_result_t VM::executeInstruction(
@@ -517,7 +533,7 @@ instruction_result_t VM::executeInstruction(
       stack.push(uint256_t(reader.position - 1));
       break;
     case Opcode::MSIZE:
-      stack.push(uint256_t(memory.size()));
+      stack.push(uint256_t(memory.length()));
       break;
     case Opcode::GAS:
       printf("(GAS ");

@@ -91,7 +91,7 @@ TEST_CASE("Memory read slice and write slice", "[memory]") {
 
   bytes_t emptySlice = bytes_t();
   memory.writeSlice(uint256_t(0x1000), emptySlice);
-  REQUIRE(32 == memory.size()); 
+  REQUIRE(32 == memory.length()); 
 }
 
 TEST_CASE("Memory write at index", "[memory]") {

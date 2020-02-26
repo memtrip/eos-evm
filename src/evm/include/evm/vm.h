@@ -9,7 +9,7 @@ class VM {
   private:
     unsigned char last_stack_ret_len;
 
-    ExecResult step(
+    exec_result_t step(
       jump_set_t& jumps, 
       Memory& memory,
       StackMachine& stack,
@@ -19,7 +19,7 @@ class VM {
       env_t env
     );
 
-    ExecResult stepInner(
+    exec_result_t stepInner(
       jump_set_t& jumps, 
       Memory& memory,
       StackMachine& stack,
@@ -40,7 +40,7 @@ class VM {
     );
 
   public:
-    ExecResult execute(
+    exec_result_t execute(
       Memory& memory,
       StackMachine& stack, 
       AccountState& accountState,

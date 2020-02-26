@@ -1,11 +1,12 @@
 #include <vector>
 #include <evm/types.h>
+#include <evm/return_data.h>
 
 class Memory {
   public:
     Memory(bytes_t* memoryArg);
     bytes_t* memory;
-    unsigned int size();
+    unsigned int length();
     void resize(unsigned int newSize);
     void expand(unsigned int size);
     void writeByte(uint256_t offset, uint256_t value);
@@ -15,4 +16,5 @@ class Memory {
     bytes_t readSlice(uint256_t offsetArg, uint256_t sizeArg);
     void writeableSlice(uint256_t offsetArg, uint256_t sizeArg);
     bool isValidRange(size_t offset, size_t size);
+    ReturnData intoReturnData(uint256_t offsetArg, uint256_t sizeArg);
 };

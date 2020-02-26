@@ -4,12 +4,14 @@
 
 static constexpr size_t capacity = 4 * 1024;
 
+static const size_t MAX_RETURN_WASTE_BYTES = 16384;
+
 Memory::Memory(bytes_t* memoryArg) {
   memory = memoryArg;
   memory->reserve(capacity);
 }
 
-unsigned int Memory::size() {
+unsigned int Memory::length() {
   return memory->size();
 }
 
@@ -68,4 +70,38 @@ void Memory::writeableSlice(uint256_t offsetArg, uint256_t sizeArg) {
 bool Memory::isValidRange(size_t offset, size_t size) {
   std::pair<unsigned int, bool> overflow = Overflow::add(offset, size);
   return size > 0 && !overflow.second;
+}
+
+ReturnData Memory::intoReturnData(uint256_t offsetArg, uint256_t sizeArg) {
+  size_t offset = static_cast<size_t>(offsetArg);
+  size_t size = static_cast<size_t>(sizeArg);
+  if (!isValidRange(offset, size)) { 
+    ReturnData returnData {
+      bytes_t(),
+      uint256_t(0),
+      uint256_t(0)
+    };
+    return returnData;
+  }
+
+  if ((length() - size) > MAX_RETURN_WASTE_BYTES) {
+    if (offset == 0) {
+      resize(size);
+    } else {
+      ReturnData returnData {
+        bytes_t(memory->begin() + offset, memory->begin() + offset + size),
+        uint256_t(0),
+        uint256_t(size)
+      };
+      return returnData;
+    }
+  }
+
+  ReturnData returnData {
+    bytes_t(memory->begin(), memory->end()),
+    uint256_t(offset),
+    uint256_t(size)
+  };
+
+  return returnData;
 }

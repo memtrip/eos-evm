@@ -1,10 +1,27 @@
+#pragma once
+#include <variant>
 #include <evm/types.h>
 
-class ReturnData {
-  public:
-    ReturnData();
-    bytes_t mem;
-    uint16_t offset;
-    uint16_t size;
-    void set(bytes_t memArg, uint16_t offsetArg, uint16_t sizeArg);
+struct ReturnData {
+  bytes_t mem;
+  uint256_t offset;
+  uint256_t size;
 };
+
+enum GasType {
+  KNOWN,
+  NEEDS_RETURN
+};
+
+struct NeedsReturn {
+  uint256_t gasLeft;
+  ReturnData data;
+  bool apply;
+};
+
+typedef std::variant<
+  uint256_t,
+  NeedsReturn
+> gas_return_t;
+
+typedef std::pair<GasType, gas_return_t> gas_left_t;

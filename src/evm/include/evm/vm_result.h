@@ -1,5 +1,20 @@
 #include <variant>
 #include <evm/types.h>
+#include <evm/return_data.h>
+
+// trap
+enum TrapKind {
+  TRAP_NONE,
+  TRAP_CALL,
+  TRAP_CREATE
+};
+
+struct TrapInfo {
+  params_t params;
+  uint256_t address;
+};
+
+typedef std::pair<TrapKind, TrapInfo> trap_t;
 
 enum ExecResult {
   STOPPED,
@@ -7,6 +22,15 @@ enum ExecResult {
   CONTINUE,
   INTERPRETER_TRAP
 };
+
+// exec result
+typedef std::variant<
+  gas_left_t,
+  trap_t,
+  unsigned char
+> exec_result_info_t;
+
+typedef std::pair<ExecResult, exec_result_info_t> exec_result_t;
 
 enum InstructionResult {
   OK,
@@ -24,23 +48,8 @@ struct StopExecutionResult {
   bool apply;
 };
 
-// trap
-enum TrapKind {
-  TRAP_NONE,
-  TRAP_CALL,
-  TRAP_CREATE
-};
-
-struct TrapInfo {
-  params_t params;
-  uint256_t address;
-};
-
-typedef std::pair<TrapKind, TrapInfo> trap_t;
-
 // instruction result
 typedef std::variant<
-  gas_t,
   uint256_t,
   StopExecutionResult,
   trap_t,
