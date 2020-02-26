@@ -20,7 +20,7 @@ TEST_CASE("Conditional jump to destination truthy", "[jumps]") {
   // (PUSH1 ((60)10))
 	// (DIV (04))
   std::string bytecode_str = "6006600310600F57600660030200025B6002601604";
-  bytes_t bytes = Hex::hexToBytes(bytecode_str);
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -30,7 +30,7 @@ TEST_CASE("Conditional jump to destination truthy", "[jumps]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as, Utils::env());
+  vm.execute(mem, sm, as, params, Utils::env());
 
   // then
   CHECK("000000000000000000000000000000000000000000000000000000000000000b" == 
@@ -54,7 +54,7 @@ TEST_CASE("Conditional jump to destination not true", "[jumps]") {
   // (PUSH1 ((60)10))
 	// (DIV (04))
   std::string bytecode_str = "6003600610600F57600660030200025B6002601604";
-  bytes_t bytes = Hex::hexToBytes(bytecode_str);
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -64,7 +64,7 @@ TEST_CASE("Conditional jump to destination not true", "[jumps]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as, Utils::env());
+  vm.execute(mem, sm, as, params, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000012" == 
@@ -82,7 +82,7 @@ TEST_CASE("Unconditional jump to destination", "[jumps]") {
   // (JUMPDEST (5B))
 	// (DIV (04))
   std::string bytecode_str = "60036006600856025B04";
-  bytes_t bytes = Hex::hexToBytes(bytecode_str);
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -92,7 +92,7 @@ TEST_CASE("Unconditional jump to destination", "[jumps]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as, Utils::env());
+  vm.execute(mem, sm, as, params, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000002" == 
@@ -103,7 +103,7 @@ TEST_CASE("Unconditional jump to destination", "[jumps]") {
 // TODO: uses SLOAD
 // TEST_CASE("Jumps", "[jumps]") {
 //   std::string bytecode_str = "600160015560066000555b60016000540380806000551560245760015402600155600a565b";
-//   bytes_t bytes = Hex::hexToBytes(bytecode_str);
+//   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
 //   VM vm {};
 //   account_store_t* accountItems = new account_store_t();
 //   AccountState as(accountItems);
@@ -113,7 +113,7 @@ TEST_CASE("Unconditional jump to destination", "[jumps]") {
 //   StackMachine sm(stackItems);
 
 //   // when
-//   vm.execute(bytes, mem, sm, as, Utils::env());
+//   vm.execute(mem, sm, as, params, Utils::env());
 
 //   // then
 //   store_item_t item1 = Utils::accountStoreValue(0, accountItems);

@@ -10,7 +10,7 @@ TEST_CASE("Push1", "[push]") {
 	// (PUSH1 ((60)03))
   // (ADD (01))
   std::string bytecode_str = "6006600301";
-  bytes_t bytes = Hex::hexToBytes(bytecode_str);
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -20,7 +20,7 @@ TEST_CASE("Push1", "[push]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as, Utils::env());
+  vm.execute(mem, sm, as, params, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000009" == 
@@ -34,7 +34,7 @@ TEST_CASE("Push2", "[push]") {
 	// (PUSH2 ((61)AC00))
   // (ADD (01))
   std::string bytecode_str = "61AB0061AC0001";
-  bytes_t bytes = Hex::hexToBytes(bytecode_str);
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -44,7 +44,7 @@ TEST_CASE("Push2", "[push]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as, Utils::env());
+  vm.execute(mem, sm, as, params, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000015700" == 
@@ -58,7 +58,7 @@ TEST_CASE("Push3", "[push]") {
 	// (PUSH3 ((62)AC00EF))
   // (ADD (01))
   std::string bytecode_str = "62AB00EF62AC00EF01";
-  bytes_t bytes = Hex::hexToBytes(bytecode_str);
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -68,7 +68,7 @@ TEST_CASE("Push3", "[push]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as, Utils::env());
+  vm.execute(mem, sm, as, params, Utils::env());
 
   // then
   CHECK("00000000000000000000000000000000000000000000000000000000015701de" == 
@@ -82,7 +82,7 @@ TEST_CASE("Push4", "[push]") {
 	// (PUSH4 ((63)12345300))
   // (ADD (01))
   std::string bytecode_str = "6312345678631234530001";
-  bytes_t bytes = Hex::hexToBytes(bytecode_str);
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -92,7 +92,7 @@ TEST_CASE("Push4", "[push]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as, Utils::env());
+  vm.execute(mem, sm, as, params, Utils::env());
 
   // then
   CHECK("000000000000000000000000000000000000000000000000000000002468a978" == 
@@ -106,7 +106,7 @@ TEST_CASE("Push5", "[push]") {
 	// (PUSH5 ((64)1234530012))
   // (ADD (01))
   std::string bytecode_str = "64123456781264123453001201";
-  bytes_t bytes = Hex::hexToBytes(bytecode_str);
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -116,7 +116,7 @@ TEST_CASE("Push5", "[push]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as, Utils::env());
+  vm.execute(mem, sm, as, params, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000002468a97824" == 
@@ -130,7 +130,7 @@ TEST_CASE("Push6", "[push]") {
 	// (PUSH6 ((65)123453001234))
   // (ADD (01))
   std::string bytecode_str = "651234567812346512345300123401";
-  bytes_t bytes = Hex::hexToBytes(bytecode_str);
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -140,7 +140,7 @@ TEST_CASE("Push6", "[push]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as, Utils::env());
+  vm.execute(mem, sm, as, params, Utils::env());
 
   // then
   CHECK("00000000000000000000000000000000000000000000000000002468a9782468" == 
@@ -154,7 +154,7 @@ TEST_CASE("Push7", "[push]") {
 	// (PUSH7 ((66)10000000000012))
   // (ADD (01))
   std::string bytecode_str = "6610000000000012661000000000001201";
-  bytes_t bytes = Hex::hexToBytes(bytecode_str);
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -164,7 +164,7 @@ TEST_CASE("Push7", "[push]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as, Utils::env());
+  vm.execute(mem, sm, as, params, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000020000000000024" == 
@@ -178,7 +178,7 @@ TEST_CASE("Push8", "[push]") {
 	// (PUSH8 ((67)1000000000000012))
   // (ADD (01))
   std::string bytecode_str = "67100000000000001267100000000000001201";
-  bytes_t bytes = Hex::hexToBytes(bytecode_str);
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -188,7 +188,7 @@ TEST_CASE("Push8", "[push]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as, Utils::env());
+  vm.execute(mem, sm, as, params, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000002000000000000024" == 

@@ -9,7 +9,7 @@ TEST_CASE("Bitwise AND", "[bitwise]") {
   // (PUSH1 ((60)09))
   // (AND (16))
   std::string bytecode_str = "6003600916";
-  bytes_t bytes = Hex::hexToBytes(bytecode_str);
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -19,7 +19,7 @@ TEST_CASE("Bitwise AND", "[bitwise]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as, Utils::env());
+  vm.execute(mem, sm, as, params, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
@@ -32,7 +32,7 @@ TEST_CASE("Bitwise OR", "[bitwise]") {
   // (PUSH1 ((60)04))
   // (AND (17))
   std::string bytecode_str = "6002600417";
-  bytes_t bytes = Hex::hexToBytes(bytecode_str);
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -42,7 +42,7 @@ TEST_CASE("Bitwise OR", "[bitwise]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as, Utils::env());
+  vm.execute(mem, sm, as, params, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000006" == 
@@ -55,7 +55,7 @@ TEST_CASE("Bitwise XOR", "[bitwise]") {
   // (PUSH1 ((60)07))
   // (XOR (18))
   std::string bytecode_str = "6002600718";
-  bytes_t bytes = Hex::hexToBytes(bytecode_str);
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -65,7 +65,7 @@ TEST_CASE("Bitwise XOR", "[bitwise]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as, Utils::env());
+  vm.execute(mem, sm, as, params, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000005" == 
@@ -75,7 +75,7 @@ TEST_CASE("Bitwise XOR", "[bitwise]") {
 
 TEST_CASE("Bitops", "[bitwise]") {
   std::string bytecode_str = "60ff610ff08181818116600055176001551860025560008015600355198015600455600555";
-  bytes_t bytes = Hex::hexToBytes(bytecode_str);
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -85,7 +85,7 @@ TEST_CASE("Bitops", "[bitwise]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as, Utils::env());
+  vm.execute(mem, sm, as, params, Utils::env());
 
   store_item_t item1 = Utils::accountStoreValue(0, accountItems);
   store_item_t item2 = Utils::accountStoreValue(1, accountItems);

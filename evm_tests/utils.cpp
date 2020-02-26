@@ -524,8 +524,20 @@ env_t Utils::env() {
     16339169,
     1581632422128,
     100000,
-    1,
-    uint256_t(34)
+    1
+  };
+};
+
+params_t Utils::params(bytes_t data) {
+  return {
+    uint256_t(0xea0e9f),
+    uint256_t(0xf9313a),
+    uint256_t(0x193821),
+    uint256_t(0xea0e9a),
+    uint256_t(0xea0e9e),
+    uint256_t(0x1283fe),
+    uint256_t(34),
+    data
   };
 };
 

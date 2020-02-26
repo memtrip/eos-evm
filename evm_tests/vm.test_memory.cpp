@@ -10,7 +10,7 @@ TEST_CASE("Save to memory", "[memory]") {
   // (PUSH1 ((60)00))
   // (MSTORE (52))
   std::string bytecode_str = "6006600052";
-  bytes_t bytes = Hex::hexToBytes(bytecode_str);
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -21,7 +21,7 @@ TEST_CASE("Save to memory", "[memory]") {
 
   // when
   mem.resize(32); // TODO: this should happen via requirements (memoryRequiredSize)
-  vm.execute(bytes, mem, sm, as, Utils::env());
+  vm.execute(mem, sm, as, params, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000006" == 
@@ -37,7 +37,7 @@ TEST_CASE("Save to memory, and retreive", "[memory]") {
   // (PUSH1 ((60)00))
   // (MLOAD (51))
   std::string bytecode_str = "6006600052600051";
-  bytes_t bytes = Hex::hexToBytes(bytecode_str);
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -48,7 +48,7 @@ TEST_CASE("Save to memory, and retreive", "[memory]") {
 
   // when
   mem.resize(32); // TODO: this should happen via requirements (memoryRequiredSize)
-  vm.execute(bytes, mem, sm, as, Utils::env());
+  vm.execute(mem, sm, as, params, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000006" == 
@@ -65,7 +65,7 @@ TEST_CASE("Save to memory, retreive, and apply addition", "[memory]") {
   // (MLOAD (51))
   // (ADD (01))
   std::string bytecode_str = "6006600052601260005101";
-  bytes_t bytes = Hex::hexToBytes(bytecode_str);
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -76,7 +76,7 @@ TEST_CASE("Save to memory, retreive, and apply addition", "[memory]") {
 
   // when
   mem.resize(32); // TODO: this should happen via requirements (memoryRequiredSize)
-  vm.execute(bytes, mem, sm, as, Utils::env());
+  vm.execute(mem, sm, as, params, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000018" == 
@@ -93,7 +93,7 @@ TEST_CASE("Save to memory, retreive, and apply addition", "[memory]") {
 //   // (MLOAD (51))
 //   // (ADD (01))
 //   std::string bytecode_str = "6006601F53601260005101";
-//   bytes_t bytes = Hex::hexToBytes(bytecode_str);
+//   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
 //   VM vm {};
 //   account_store_t* accountItems = new account_store_t();
 //   AccountState as(accountItems);
@@ -104,7 +104,7 @@ TEST_CASE("Save to memory, retreive, and apply addition", "[memory]") {
 
 //   // when
 //   mem.resize(32); // TODO: this should happen via requirements (memoryRequiredSize)
-//   vm.execute(bytes, mem, sm, as, Utils::env());
+//   vm.execute(mem, sm, as, params, Utils::env());
 
 //   // then
 //   CHECK("18" == 
@@ -116,7 +116,7 @@ TEST_CASE("Memory size", "[memory]") {
   // given
   // (MEMSIZE (59))
   std::string bytecode_str = "59";
-  bytes_t bytes = Hex::hexToBytes(bytecode_str);
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -127,7 +127,7 @@ TEST_CASE("Memory size", "[memory]") {
 
   // when
   mem.resize(32); // TODO: this should happen via requirements (memoryRequiredSize)
-  vm.execute(bytes, mem, sm, as, Utils::env());
+  vm.execute(mem, sm, as, params, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000020" /* 32 in hex */ == 

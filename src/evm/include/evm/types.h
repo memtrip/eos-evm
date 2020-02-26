@@ -26,10 +26,30 @@ struct EnvInfo {
   uint64_t timestamp;
   uint32_t gasLimit;
   uint32_t chainId;
-  uint256_t value;
 };
 
 typedef EnvInfo env_t;
+
+enum ActionType {
+  ACTION_CREATE,
+  ACTION_CALL,
+  ACTION_CALL_CODE
+};
+
+typedef ActionType action_type_t;
+
+struct Params {
+  uint256_t codeAddress;
+  uint256_t codeHash;
+  uint256_t codeVersion;
+  uint256_t address;
+  uint256_t sender;
+  uint256_t origin;
+  uint256_t value;
+  bytes_t data;
+};
+
+typedef Params params_t;
 
 enum TransactionActionType {
   TRANSACTION_CREATE,

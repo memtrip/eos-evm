@@ -6,7 +6,7 @@
 
 TEST_CASE("shift left ", "[shift]") {
   std::string bytecode_str = "600560011b6000526001601ff3";
-  bytes_t bytes = Hex::hexToBytes(bytecode_str);
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -16,7 +16,7 @@ TEST_CASE("shift left ", "[shift]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as, Utils::env());
+  vm.execute(mem, sm, as, params, Utils::env());
 
   // then
   // TODO: assert against return data
@@ -24,7 +24,7 @@ TEST_CASE("shift left ", "[shift]") {
 
 TEST_CASE("shift right ", "[shift]") {
   std::string bytecode_str = "600560011c6000526001601ff3";
-  bytes_t bytes = Hex::hexToBytes(bytecode_str);
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -34,7 +34,7 @@ TEST_CASE("shift right ", "[shift]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as, Utils::env());
+  vm.execute(mem, sm, as, params, Utils::env());
 
   // then
   // TODO: assert against return data
@@ -42,7 +42,7 @@ TEST_CASE("shift right ", "[shift]") {
 
 TEST_CASE("sar", "[shift]") {
   std::string bytecode_str = "600160000360021d60005260016000f3";
-  bytes_t bytes = Hex::hexToBytes(bytecode_str);
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -52,7 +52,7 @@ TEST_CASE("sar", "[shift]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as, Utils::env());
+  vm.execute(mem, sm, as, params, Utils::env());
 
   // then
   // TODO: assert against return data

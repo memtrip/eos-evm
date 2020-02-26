@@ -10,7 +10,7 @@ TEST_CASE("Add two large numbers", "[arithmetic]") {
 	// (PUSH32 ((7f)fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff))
 	// (ADD (01))
   std::string bytecode_str = "7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff01";
-  bytes_t bytes = Hex::hexToBytes(bytecode_str);
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -20,7 +20,7 @@ TEST_CASE("Add two large numbers", "[arithmetic]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as, Utils::env());
+  vm.execute(mem, sm, as, params, Utils::env());
 
   // then
   CHECK("fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe" == 
@@ -34,7 +34,7 @@ TEST_CASE("Multiply two numbers", "[arithmetic]") {
 	// (PUSH1 ((60)03))
 	// (MUL (02))
   std::string bytecode_str = "6003600302";
-  bytes_t bytes = Hex::hexToBytes(bytecode_str);
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -44,7 +44,7 @@ TEST_CASE("Multiply two numbers", "[arithmetic]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as, Utils::env());
+  vm.execute(mem, sm, as, params, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000009" == 
@@ -58,7 +58,7 @@ TEST_CASE("Multiply two larger numbers", "[arithmetic]") {
 	// (PUSH2 ((61)0B12))
 	// (MUL (02))
   std::string bytecode_str = "6016601602";
-  bytes_t bytes = Hex::hexToBytes(bytecode_str);
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -68,7 +68,7 @@ TEST_CASE("Multiply two larger numbers", "[arithmetic]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as, Utils::env());
+  vm.execute(mem, sm, as, params, Utils::env());
 
   // then
   CHECK("00000000000000000000000000000000000000000000000000000000000001e4" == 
@@ -85,7 +85,7 @@ TEST_CASE("Multiply and store", "[arithmetic]") {
   // (PUSH1 ((60) 00))
   // (SSTORE 55)
   std::string bytecode_str = "65012365124623626543219002600055";
-  bytes_t bytes = Hex::hexToBytes(bytecode_str);
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -95,7 +95,7 @@ TEST_CASE("Multiply and store", "[arithmetic]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as, Utils::env());
+  vm.execute(mem, sm, as, params, Utils::env());
 
   // then
   store_item_t item = Utils::accountStoreValue(0, accountItems);
@@ -111,7 +111,7 @@ TEST_CASE("Subtract two numbers", "[arithmetic]") {
 	// (PUSH1 ((60)05))
 	// (SUB (03))
   std::string bytecode_str = "6003600503";
-  bytes_t bytes = Hex::hexToBytes(bytecode_str);
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -121,7 +121,7 @@ TEST_CASE("Subtract two numbers", "[arithmetic]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as, Utils::env());
+  vm.execute(mem, sm, as, params, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000002" == 
@@ -138,7 +138,7 @@ TEST_CASE("Subtract and store", "[arithmetic]") {
 	// (PUSH1 (60)00)
   // (SSTORE 55)
   std::string bytecode_str = "65012365124623626543219003600055";
-  bytes_t bytes = Hex::hexToBytes(bytecode_str);
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -148,7 +148,7 @@ TEST_CASE("Subtract and store", "[arithmetic]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as, Utils::env());
+  vm.execute(mem, sm, as, params, Utils::env());
 
   // then
   store_item_t item = Utils::accountStoreValue(0, accountItems);
@@ -164,7 +164,7 @@ TEST_CASE("Divide two numbers", "[arithmetic]") {
 	// (PUSH1 ((60)04))
 	// (DIV (04))
   std::string bytecode_str = "6002600404";
-  bytes_t bytes = Hex::hexToBytes(bytecode_str);
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -174,7 +174,7 @@ TEST_CASE("Divide two numbers", "[arithmetic]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as, Utils::env());
+  vm.execute(mem, sm, as, params, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000002" == 
@@ -188,7 +188,7 @@ TEST_CASE("Divide 2 / 0", "[arithmetic]") {
 	// (PUSH1 ((60)02))
 	// (DIV (04))
   std::string bytecode_str = "6000600204";
-  bytes_t bytes = Hex::hexToBytes(bytecode_str);
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -198,7 +198,7 @@ TEST_CASE("Divide 2 / 0", "[arithmetic]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as, Utils::env());
+  vm.execute(mem, sm, as, params, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
@@ -215,7 +215,7 @@ TEST_CASE("Divide and store", "[arithmetic]") {
 	// (PUSH1 (60)00)
   // (SSTORE 55)
   std::string bytecode_str = "65012365124623626543219004600055";
-  bytes_t bytes = Hex::hexToBytes(bytecode_str);
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -225,7 +225,7 @@ TEST_CASE("Divide and store", "[arithmetic]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as, Utils::env());
+  vm.execute(mem, sm, as, params, Utils::env());
 
   // then
   store_item_t item = Utils::accountStoreValue(0, accountItems);
@@ -244,7 +244,7 @@ TEST_CASE("Divide by zero and store", "[arithmetic]") {
 	// (PUSH1 (60)00)
   // (SSTORE 55)
   std::string bytecode_str = "6501236512462360009004600055";
-  bytes_t bytes = Hex::hexToBytes(bytecode_str);
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -254,7 +254,7 @@ TEST_CASE("Divide by zero and store", "[arithmetic]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as, Utils::env());
+  vm.execute(mem, sm, as, params, Utils::env());
 
   // then
   store_item_t item = Utils::accountStoreValue(0, accountItems);
@@ -266,7 +266,7 @@ TEST_CASE("Divide by zero and store", "[arithmetic]") {
 
 TEST_CASE("Mod and store", "[arithmetic]") {
   std::string bytecode_str = "650123651246236265432290066000556501236512462360009006600155";
-  bytes_t bytes = Hex::hexToBytes(bytecode_str);
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -276,7 +276,7 @@ TEST_CASE("Mod and store", "[arithmetic]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as, Utils::env());
+  vm.execute(mem, sm, as, params, Utils::env());
 
   // then
   store_item_t item1 = Utils::accountStoreValue(0, accountItems);
@@ -298,7 +298,7 @@ TEST_CASE("Modulus 8 % 2", "[arithmetic]") {
 	// (PUSH1 ((60)08))
 	// (MOD (06))
   std::string bytecode_str = "6002600806";
-  bytes_t bytes = Hex::hexToBytes(bytecode_str);
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -308,7 +308,7 @@ TEST_CASE("Modulus 8 % 2", "[arithmetic]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as, Utils::env());
+  vm.execute(mem, sm, as, params, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
@@ -322,7 +322,7 @@ TEST_CASE("Modulus 5 % 2", "[arithmetic]") {
 	// (PUSH1 ((60)02))
 	// (MOD (06))
   std::string bytecode_str = "6002600506";
-  bytes_t bytes = Hex::hexToBytes(bytecode_str);
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -332,7 +332,7 @@ TEST_CASE("Modulus 5 % 2", "[arithmetic]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as, Utils::env());
+  vm.execute(mem, sm, as, params, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
@@ -346,7 +346,7 @@ TEST_CASE("Modulus 2 % 0", "[arithmetic]") {
 	// (PUSH1 ((60)00))
 	// (MOD (06))
   std::string bytecode_str = "6000600206";
-  bytes_t bytes = Hex::hexToBytes(bytecode_str);
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -356,7 +356,7 @@ TEST_CASE("Modulus 2 % 0", "[arithmetic]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as, Utils::env());
+  vm.execute(mem, sm, as, params, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
@@ -366,7 +366,7 @@ TEST_CASE("Modulus 2 % 0", "[arithmetic]") {
 
 TEST_CASE("Byte", "[arithmetic]") {
   std::string bytecode_str = "60f061ffff1a600055610fff601f1a600155";
-  bytes_t bytes = Hex::hexToBytes(bytecode_str);
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -376,7 +376,7 @@ TEST_CASE("Byte", "[arithmetic]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as, Utils::env());
+  vm.execute(mem, sm, as, params, Utils::env());
 
   // then
   store_item_t item1 = Utils::accountStoreValue(0, accountItems);

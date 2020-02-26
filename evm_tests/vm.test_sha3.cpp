@@ -10,7 +10,7 @@ TEST_CASE("Hash zero", "[sha3]") {
 	// (PUSH1 ((60) 00))
 	// (SHA3 (20))
   std::string bytecode_str = "6000600020";
-  bytes_t bytes = Hex::hexToBytes(bytecode_str);
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -20,7 +20,7 @@ TEST_CASE("Hash zero", "[sha3]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(bytes, mem, sm, as, Utils::env());
+  vm.execute(mem, sm, as, params, Utils::env());
 
   // then
   REQUIRE("c5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470" == 

@@ -1,11 +1,9 @@
 #include "byte_reader.h"
 #include "stack.h"
 #include <evm/types.h>
-#include "params.h"
 #include "account_state.h"
 #include "vm_result.h"
 #include <evm/memory.h>
-
 
 class VM {
   private:
@@ -17,6 +15,7 @@ class VM {
       StackMachine& stack,
       ByteReader& reader, 
       AccountState& accountState,
+      params_t& params,
       env_t env
     );
 
@@ -26,6 +25,7 @@ class VM {
       StackMachine& stack,
       ByteReader& reader, 
       AccountState& accountState,
+      params_t& params,
       env_t env
     );
 
@@ -35,15 +35,16 @@ class VM {
       StackMachine& stack,
       ByteReader& reader, 
       AccountState& accountState,
+      params_t& params,
       env_t env
     );
 
   public:
     ExecResult execute(
-      bytes_t bytes, 
       Memory& memory,
       StackMachine& stack, 
       AccountState& accountState,
+      params_t& params,
       env_t env
     );
 };

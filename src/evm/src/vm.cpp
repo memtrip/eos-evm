@@ -7,20 +7,20 @@
 #include <evm/overflow.h>
 
 ExecResult VM::execute(
-  bytes_t bytes, 
   Memory& memory,
   StackMachine& stack, 
   AccountState& accountState,
+  params_t& params,
   env_t env
 ) {
 
   ExecResult result;
 
-  jump_set_t jumps = Jumps::findDestinations(bytes);
-  ByteReader reader(0, bytes);
+  jump_set_t jumps = Jumps::findDestinations(params.data);
+  ByteReader reader(0, params.data);
 
   do {
-    result = VM::step(jumps, memory, stack, reader, accountState, env);
+    result = VM::step(jumps, memory, stack, reader, accountState, params, env);
   } while(result == ExecResult::CONTINUE);
 
   return result;
@@ -32,9 +32,10 @@ ExecResult VM::step(
   StackMachine& stack,
   ByteReader& reader, 
   AccountState& accountState,
+  params_t& params,
   env_t env
 ) {
-  return VM::stepInner(jumps, memory, stack, reader, accountState, env);
+  return VM::stepInner(jumps, memory, stack, reader, accountState, params, env);
 }
 
 ExecResult VM::stepInner(
@@ -43,6 +44,7 @@ ExecResult VM::stepInner(
   StackMachine& stack,
   ByteReader& reader, 
   AccountState& accountState,
+  params_t& params,
   env_t env
 ) {
   unsigned char opcode = reader.bytes[reader.position];
@@ -64,6 +66,7 @@ ExecResult VM::stepInner(
     stack,
     reader, 
     accountState,
+    params,
     env
   );
 
@@ -124,6 +127,7 @@ InstructionResult VM::executeInstruction(
   StackMachine& stack,
   ByteReader& reader, 
   AccountState& accountState,
+  params_t& params,
   env_t env
 ) {
   switch (Instruction::opcode(instruction)) {
@@ -391,7 +395,7 @@ InstructionResult VM::executeInstruction(
       printf("(CALLER ");
       break;
     case Opcode::CALLVALUE:
-      stack.push(env.value);
+      stack.push(params.value);
       break;
     case Opcode::CALLDATALOAD:
       printf("(CALLDATALOAD ");
