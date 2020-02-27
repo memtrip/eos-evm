@@ -3,6 +3,7 @@
 #include <evm/utils.h>
 #include <evm/vm.h>
 #include <evm/hex.h>
+#include "external_mock.h"
 
 TEST_CASE("Less than comparison truthy", "[LT]") {
   // given
@@ -11,6 +12,7 @@ TEST_CASE("Less than comparison truthy", "[LT]") {
 	// (LT (10))
   std::string bytecode_str = "6003600110";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -20,7 +22,7 @@ TEST_CASE("Less than comparison truthy", "[LT]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, Utils::env());
+  vm.execute(mem, sm, as, params, ext, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
@@ -35,6 +37,7 @@ TEST_CASE("Less than comparison not true", "[LT]") {
 	// (LT (10))
   std::string bytecode_str = "6001600310";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -44,7 +47,7 @@ TEST_CASE("Less than comparison not true", "[LT]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, Utils::env());
+  vm.execute(mem, sm, as, params, ext, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
@@ -59,6 +62,7 @@ TEST_CASE("Greater than comparison truthy", "[GT]") {
 	// (GT (11))
   std::string bytecode_str = "6001600311";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -68,7 +72,7 @@ TEST_CASE("Greater than comparison truthy", "[GT]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, Utils::env());
+  vm.execute(mem, sm, as, params, ext, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
@@ -83,6 +87,7 @@ TEST_CASE("Greater than comparison not true", "[GT]") {
 	// (GT (11))
   std::string bytecode_str = "6003600111";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -92,7 +97,7 @@ TEST_CASE("Greater than comparison not true", "[GT]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, Utils::env());
+  vm.execute(mem, sm, as, params, ext, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
@@ -107,6 +112,7 @@ TEST_CASE("Equal comparison truthy", "[EQ]") {
 	// (EQ (14))
   std::string bytecode_str = "6003600314";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -116,7 +122,7 @@ TEST_CASE("Equal comparison truthy", "[EQ]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, Utils::env());
+  vm.execute(mem, sm, as, params, ext, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
@@ -131,6 +137,7 @@ TEST_CASE("Equal comparison not true", "[EQ]") {
 	// (EQ (14))
   std::string bytecode_str = "6003600114";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -140,7 +147,7 @@ TEST_CASE("Equal comparison not true", "[EQ]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, Utils::env());
+  vm.execute(mem, sm, as, params, ext, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
@@ -154,6 +161,7 @@ TEST_CASE("Is zero comparison truthy", "[ISZERO]") {
 	// (ISZERO (15))
   std::string bytecode_str = "600015";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -163,7 +171,7 @@ TEST_CASE("Is zero comparison truthy", "[ISZERO]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, Utils::env());
+  vm.execute(mem, sm, as, params, ext, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
@@ -177,6 +185,7 @@ TEST_CASE("Is zero comparison not true", "[ISZERO]") {
 	// (ISZERO (15))
   std::string bytecode_str = "600115";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -186,7 +195,7 @@ TEST_CASE("Is zero comparison not true", "[ISZERO]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, Utils::env());
+  vm.execute(mem, sm, as, params, ext, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
@@ -197,6 +206,7 @@ TEST_CASE("Is zero comparison not true", "[ISZERO]") {
 TEST_CASE("Comparison with many instructions", "[comparison]") {
   std::string bytecode_str = "601665012365124623818181811060005511600155146002556415235412358014600355";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -206,7 +216,7 @@ TEST_CASE("Comparison with many instructions", "[comparison]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, Utils::env());
+  vm.execute(mem, sm, as, params, ext, Utils::env());
 
   // then
   store_item_t item1 = Utils::accountStoreValue(0, accountItems);

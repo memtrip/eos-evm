@@ -4,6 +4,7 @@
 #include "account_state.h"
 #include "vm_result.h"
 #include <evm/memory.h>
+#include <evm/external.h>
 
 class VM {
   private:
@@ -16,6 +17,7 @@ class VM {
       ByteReader& reader, 
       AccountState& accountState,
       params_t& params,
+      External& external,
       env_t env
     );
 
@@ -26,6 +28,7 @@ class VM {
       ByteReader& reader, 
       AccountState& accountState,
       params_t& params,
+      External& external,
       env_t env
     );
 
@@ -36,6 +39,7 @@ class VM {
       ByteReader& reader, 
       AccountState& accountState,
       params_t& params,
+      External& external,
       env_t env
     );
 
@@ -45,6 +49,7 @@ class VM {
       StackMachine& stack, 
       AccountState& accountState,
       params_t& params,
+      External& external,
       env_t env
     );
 };

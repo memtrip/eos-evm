@@ -3,6 +3,7 @@
 #include <evm/utils.h>
 #include <evm/vm.h>
 #include <evm/hex.h>
+#include "external_mock.h"
 
 TEST_CASE("Hash zero", "[sha3]") {
   // given
@@ -11,6 +12,7 @@ TEST_CASE("Hash zero", "[sha3]") {
 	// (SHA3 (20))
   std::string bytecode_str = "6000600020";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -20,7 +22,7 @@ TEST_CASE("Hash zero", "[sha3]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, Utils::env());
+  vm.execute(mem, sm, as, params, ext, Utils::env());
 
   // then
   REQUIRE("c5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470" == 

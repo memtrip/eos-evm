@@ -5,10 +5,12 @@
 #include <evm/vm.h>
 #include <evm/hex.h>
 #include <evm/return_data.h>
+#include "external_mock.h"
 
 TEST_CASE("shift left ", "[shift]") {
   std::string bytecode_str = "7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff60ff1b";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -18,7 +20,7 @@ TEST_CASE("shift left ", "[shift]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, Utils::env());
+  vm.execute(mem, sm, as, params, ext, Utils::env());
 
   // then
   REQUIRE("8000000000000000000000000000000000000000000000000000000000000000" 
@@ -29,6 +31,7 @@ TEST_CASE("shift left ", "[shift]") {
 TEST_CASE("shift left (2)", "[shift]") {
   std::string bytecode_str = "7f7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff60011b";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -38,7 +41,7 @@ TEST_CASE("shift left (2)", "[shift]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, Utils::env());
+  vm.execute(mem, sm, as, params, ext, Utils::env());
 
   // then
   REQUIRE("fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe" 
@@ -49,6 +52,7 @@ TEST_CASE("shift left (2)", "[shift]") {
 TEST_CASE("shift left (3)", "[shift]") {
   std::string bytecode_str = "600560011b";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -58,7 +62,7 @@ TEST_CASE("shift left (3)", "[shift]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, Utils::env());
+  vm.execute(mem, sm, as, params, ext, Utils::env());
 
   // then
   REQUIRE("000000000000000000000000000000000000000000000000000000000000000a" 
@@ -69,6 +73,7 @@ TEST_CASE("shift left (3)", "[shift]") {
 TEST_CASE("shift right ", "[shift]") {
   std::string bytecode_str = "7f800000000000000000000000000000000000000000000000000000000000000060011c";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -78,7 +83,7 @@ TEST_CASE("shift right ", "[shift]") {
   StackMachine sm(stackItems);
 
   // when
-  exec_result_t result = vm.execute(mem, sm, as, params, Utils::env());
+  exec_result_t result = vm.execute(mem, sm, as, params, ext, Utils::env());
 
   // then
   REQUIRE("4000000000000000000000000000000000000000000000000000000000000000" 
@@ -89,6 +94,7 @@ TEST_CASE("shift right ", "[shift]") {
 TEST_CASE("shift right (1)", "[shift]") {
   std::string bytecode_str = "7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff60011c";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -98,7 +104,7 @@ TEST_CASE("shift right (1)", "[shift]") {
   StackMachine sm(stackItems);
 
   // when
-  exec_result_t result = vm.execute(mem, sm, as, params, Utils::env());
+  exec_result_t result = vm.execute(mem, sm, as, params, ext, Utils::env());
 
   // then
   REQUIRE("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" 
@@ -109,6 +115,7 @@ TEST_CASE("shift right (1)", "[shift]") {
 TEST_CASE("shift right (2)", "[shift]") {
   std::string bytecode_str = "600560011c";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -118,7 +125,7 @@ TEST_CASE("shift right (2)", "[shift]") {
   StackMachine sm(stackItems);
 
   // when
-  exec_result_t result = vm.execute(mem, sm, as, params, Utils::env());
+  exec_result_t result = vm.execute(mem, sm, as, params, ext, Utils::env());
 
   // then
   REQUIRE("0000000000000000000000000000000000000000000000000000000000000002" == Utils::uint256_2str(sm.top()));
@@ -127,6 +134,7 @@ TEST_CASE("shift right (2)", "[shift]") {
 TEST_CASE("sar", "[shift]") {
   std::string bytecode_str = "7f800000000000000000000000000000000000000000000000000000000000000060011d";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -137,7 +145,7 @@ TEST_CASE("sar", "[shift]") {
 
   // when
   mem.resize(32);
-  exec_result_t result = vm.execute(mem, sm, as, params, Utils::env());
+  exec_result_t result = vm.execute(mem, sm, as, params, ext, Utils::env());
 
   // then
   REQUIRE("c000000000000000000000000000000000000000000000000000000000000000" 
@@ -148,6 +156,7 @@ TEST_CASE("sar", "[shift]") {
 TEST_CASE("sar (1)", "[shift]") {
   std::string bytecode_str = "7f400000000000000000000000000000000000000000000000000000000000000060fe1d";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -158,7 +167,7 @@ TEST_CASE("sar (1)", "[shift]") {
 
   // when
   mem.resize(32);
-  exec_result_t result = vm.execute(mem, sm, as, params, Utils::env());
+  exec_result_t result = vm.execute(mem, sm, as, params, ext, Utils::env());
 
   // then
   REQUIRE("0000000000000000000000000000000000000000000000000000000000000001" 
@@ -169,6 +178,7 @@ TEST_CASE("sar (1)", "[shift]") {
 TEST_CASE("sar (2)", "[shift]") {
   std::string bytecode_str = "7f7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff60f81d";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -179,7 +189,7 @@ TEST_CASE("sar (2)", "[shift]") {
 
   // when
   mem.resize(32);
-  exec_result_t result = vm.execute(mem, sm, as, params, Utils::env());
+  exec_result_t result = vm.execute(mem, sm, as, params, ext, Utils::env());
 
   // then
   REQUIRE("000000000000000000000000000000000000000000000000000000000000007f" 
@@ -190,6 +200,7 @@ TEST_CASE("sar (2)", "[shift]") {
 TEST_CASE("sar (3)", "[shift]") {
   std::string bytecode_str = "600160000360021d";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -200,7 +211,7 @@ TEST_CASE("sar (3)", "[shift]") {
 
   // when
   mem.resize(32);
-  exec_result_t result = vm.execute(mem, sm, as, params, Utils::env());
+  exec_result_t result = vm.execute(mem, sm, as, params, ext, Utils::env());
 
   // then
   REQUIRE("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" == Utils::uint256_2str(sm.top())

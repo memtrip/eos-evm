@@ -3,6 +3,7 @@
 #include <evm/utils.h>
 #include <evm/vm.h>
 #include <evm/hex.h>
+#include "external_mock.h"
 
 TEST_CASE("Add two large numbers", "[arithmetic]") {
   // given
@@ -11,6 +12,7 @@ TEST_CASE("Add two large numbers", "[arithmetic]") {
 	// (ADD (01))
   std::string bytecode_str = "7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff01";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -20,7 +22,7 @@ TEST_CASE("Add two large numbers", "[arithmetic]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, Utils::env());
+  vm.execute(mem, sm, as, params, ext, Utils::env());
 
   // then
   CHECK("fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe" == 
@@ -35,6 +37,7 @@ TEST_CASE("Multiply two numbers", "[arithmetic]") {
 	// (MUL (02))
   std::string bytecode_str = "6003600302";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -44,7 +47,7 @@ TEST_CASE("Multiply two numbers", "[arithmetic]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, Utils::env());
+  vm.execute(mem, sm, as, params, ext, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000009" == 
@@ -59,6 +62,7 @@ TEST_CASE("Multiply two larger numbers", "[arithmetic]") {
 	// (MUL (02))
   std::string bytecode_str = "6016601602";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -68,7 +72,7 @@ TEST_CASE("Multiply two larger numbers", "[arithmetic]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, Utils::env());
+  vm.execute(mem, sm, as, params, ext, Utils::env());
 
   // then
   CHECK("00000000000000000000000000000000000000000000000000000000000001e4" == 
@@ -86,6 +90,7 @@ TEST_CASE("Multiply and store", "[arithmetic]") {
   // (SSTORE 55)
   std::string bytecode_str = "65012365124623626543219002600055";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -95,7 +100,7 @@ TEST_CASE("Multiply and store", "[arithmetic]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, Utils::env());
+  vm.execute(mem, sm, as, params, ext, Utils::env());
 
   // then
   store_item_t item = Utils::accountStoreValue(0, accountItems);
@@ -112,6 +117,7 @@ TEST_CASE("Subtract two numbers", "[arithmetic]") {
 	// (SUB (03))
   std::string bytecode_str = "6003600503";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -121,7 +127,7 @@ TEST_CASE("Subtract two numbers", "[arithmetic]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, Utils::env());
+  vm.execute(mem, sm, as, params, ext, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000002" == 
@@ -139,6 +145,7 @@ TEST_CASE("Subtract and store", "[arithmetic]") {
   // (SSTORE 55)
   std::string bytecode_str = "65012365124623626543219003600055";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -148,7 +155,7 @@ TEST_CASE("Subtract and store", "[arithmetic]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, Utils::env());
+  vm.execute(mem, sm, as, params, ext, Utils::env());
 
   // then
   store_item_t item = Utils::accountStoreValue(0, accountItems);
@@ -165,6 +172,7 @@ TEST_CASE("Divide two numbers", "[arithmetic]") {
 	// (DIV (04))
   std::string bytecode_str = "6002600404";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -174,7 +182,7 @@ TEST_CASE("Divide two numbers", "[arithmetic]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, Utils::env());
+  vm.execute(mem, sm, as, params, ext, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000002" == 
@@ -189,6 +197,7 @@ TEST_CASE("Divide 2 / 0", "[arithmetic]") {
 	// (DIV (04))
   std::string bytecode_str = "6000600204";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -198,7 +207,7 @@ TEST_CASE("Divide 2 / 0", "[arithmetic]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, Utils::env());
+  vm.execute(mem, sm, as, params, ext, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
@@ -216,6 +225,7 @@ TEST_CASE("Divide and store", "[arithmetic]") {
   // (SSTORE 55)
   std::string bytecode_str = "65012365124623626543219004600055";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -225,7 +235,7 @@ TEST_CASE("Divide and store", "[arithmetic]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, Utils::env());
+  vm.execute(mem, sm, as, params, ext, Utils::env());
 
   // then
   store_item_t item = Utils::accountStoreValue(0, accountItems);
@@ -245,6 +255,7 @@ TEST_CASE("Divide by zero and store", "[arithmetic]") {
   // (SSTORE 55)
   std::string bytecode_str = "6501236512462360009004600055";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -254,7 +265,7 @@ TEST_CASE("Divide by zero and store", "[arithmetic]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, Utils::env());
+  vm.execute(mem, sm, as, params, ext, Utils::env());
 
   // then
   store_item_t item = Utils::accountStoreValue(0, accountItems);
@@ -267,6 +278,7 @@ TEST_CASE("Divide by zero and store", "[arithmetic]") {
 TEST_CASE("Mod and store", "[arithmetic]") {
   std::string bytecode_str = "650123651246236265432290066000556501236512462360009006600155";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -276,7 +288,7 @@ TEST_CASE("Mod and store", "[arithmetic]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, Utils::env());
+  vm.execute(mem, sm, as, params, ext, Utils::env());
 
   // then
   store_item_t item1 = Utils::accountStoreValue(0, accountItems);
@@ -299,6 +311,7 @@ TEST_CASE("Modulus 8 % 2", "[arithmetic]") {
 	// (MOD (06))
   std::string bytecode_str = "6002600806";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -308,7 +321,7 @@ TEST_CASE("Modulus 8 % 2", "[arithmetic]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, Utils::env());
+  vm.execute(mem, sm, as, params, ext, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
@@ -323,6 +336,7 @@ TEST_CASE("Modulus 5 % 2", "[arithmetic]") {
 	// (MOD (06))
   std::string bytecode_str = "6002600506";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -332,7 +346,7 @@ TEST_CASE("Modulus 5 % 2", "[arithmetic]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, Utils::env());
+  vm.execute(mem, sm, as, params, ext, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
@@ -347,6 +361,7 @@ TEST_CASE("Modulus 2 % 0", "[arithmetic]") {
 	// (MOD (06))
   std::string bytecode_str = "6000600206";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -356,7 +371,7 @@ TEST_CASE("Modulus 2 % 0", "[arithmetic]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, Utils::env());
+  vm.execute(mem, sm, as, params, ext, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
@@ -367,6 +382,7 @@ TEST_CASE("Modulus 2 % 0", "[arithmetic]") {
 TEST_CASE("Byte", "[arithmetic]") {
   std::string bytecode_str = "60f061ffff1a600055610fff601f1a600155";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -376,7 +392,7 @@ TEST_CASE("Byte", "[arithmetic]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, Utils::env());
+  vm.execute(mem, sm, as, params, ext, Utils::env());
 
   // then
   store_item_t item1 = Utils::accountStoreValue(0, accountItems);

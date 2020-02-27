@@ -3,6 +3,7 @@
 #include <evm/utils.h>
 #include <evm/vm.h>
 #include <evm/hex.h>
+#include "external_mock.h"
 
 TEST_CASE("Blockhash (stub)", "[env]") {
   // given
@@ -10,6 +11,7 @@ TEST_CASE("Blockhash (stub)", "[env]") {
   // (BLOCKHASH 40)
   std::string bytecode_str = "600040";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -19,7 +21,7 @@ TEST_CASE("Blockhash (stub)", "[env]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, Utils::env());
+  vm.execute(mem, sm, as, params, ext, Utils::env());
 
   // then
   CHECK(StackMachine::STUB == sm.top());
@@ -30,6 +32,7 @@ TEST_CASE("Coinbase (stub)", "[env]") {
   // (COINBASE 41)
   std::string bytecode_str = "41";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -39,7 +42,7 @@ TEST_CASE("Coinbase (stub)", "[env]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, Utils::env());
+  vm.execute(mem, sm, as, params, ext, Utils::env());
 
   // then
   CHECK(StackMachine::STUB == sm.top());
@@ -50,6 +53,7 @@ TEST_CASE("Difficulty (stub)", "[env]") {
   // (DIFFICULTY 44)
   std::string bytecode_str = "44";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -59,7 +63,7 @@ TEST_CASE("Difficulty (stub)", "[env]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, Utils::env());
+  vm.execute(mem, sm, as, params, ext, Utils::env());
 
   // then
   CHECK(StackMachine::STUB == sm.top());
@@ -70,6 +74,7 @@ TEST_CASE("Timestamp", "[env]") {
   // (TIMESTAMP 42)
   std::string bytecode_str = "42";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -79,7 +84,7 @@ TEST_CASE("Timestamp", "[env]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, Utils::env());
+  vm.execute(mem, sm, as, params, ext, Utils::env());
 
   // then
   CHECK(1581632422128 == sm.top());
@@ -90,6 +95,7 @@ TEST_CASE("Number", "[env]") {
   // (NUMBER 43)
   std::string bytecode_str = "43";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -99,7 +105,7 @@ TEST_CASE("Number", "[env]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, Utils::env());
+  vm.execute(mem, sm, as, params, ext, Utils::env());
 
   // then
   CHECK(16339169 == sm.top());
@@ -110,6 +116,7 @@ TEST_CASE("Gas limit", "[env]") {
   // (GASLIMIT 45)
   std::string bytecode_str = "45";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -119,7 +126,7 @@ TEST_CASE("Gas limit", "[env]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, Utils::env());
+  vm.execute(mem, sm, as, params, ext, Utils::env());
 
   // then
   CHECK(100000 == sm.top());
@@ -130,6 +137,7 @@ TEST_CASE("Chain id", "[env]") {
   // (CHAINID 45)
   std::string bytecode_str = "46";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -139,7 +147,7 @@ TEST_CASE("Chain id", "[env]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, Utils::env());
+  vm.execute(mem, sm, as, params, ext, Utils::env());
 
   // then
   CHECK(1 == sm.top());
@@ -150,6 +158,7 @@ TEST_CASE("Call value", "[env]") {
   // (CALLVALUE 34)
   std::string bytecode_str = "34";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -159,7 +168,7 @@ TEST_CASE("Call value", "[env]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, Utils::env());
+  vm.execute(mem, sm, as, params, ext, Utils::env());
 
   // then
   CHECK(34 == sm.top());

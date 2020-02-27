@@ -3,6 +3,7 @@
 #include <evm/utils.h>
 #include <evm/vm.h>
 #include <evm/hex.h>
+#include "external_mock.h"
 
 TEST_CASE("Conditional jump to destination truthy", "[jumps]") {
   // given
@@ -21,6 +22,7 @@ TEST_CASE("Conditional jump to destination truthy", "[jumps]") {
 	// (DIV (04))
   std::string bytecode_str = "6006600310600F57600660030200025B6002601604";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -30,7 +32,7 @@ TEST_CASE("Conditional jump to destination truthy", "[jumps]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, Utils::env());
+  vm.execute(mem, sm, as, params, ext, Utils::env());
 
   // then
   CHECK("000000000000000000000000000000000000000000000000000000000000000b" == 
@@ -55,6 +57,7 @@ TEST_CASE("Conditional jump to destination not true", "[jumps]") {
 	// (DIV (04))
   std::string bytecode_str = "6003600610600F57600660030200025B6002601604";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -64,7 +67,7 @@ TEST_CASE("Conditional jump to destination not true", "[jumps]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, Utils::env());
+  vm.execute(mem, sm, as, params, ext, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000012" == 
@@ -83,6 +86,7 @@ TEST_CASE("Unconditional jump to destination", "[jumps]") {
 	// (DIV (04))
   std::string bytecode_str = "60036006600856025B04";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -92,7 +96,7 @@ TEST_CASE("Unconditional jump to destination", "[jumps]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, Utils::env());
+  vm.execute(mem, sm, as, params, ext, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000002" == 
@@ -103,7 +107,8 @@ TEST_CASE("Unconditional jump to destination", "[jumps]") {
 // TEST_CASE("Jumps", "[jumps]") {
 //   std::string bytecode_str = "600160015560066000555b60016000540380806000551560245760015402600155600a565b";
 //   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
-//   VM vm {};
+//   ExternalMock ext {};
+  VM vm {};
 //   account_store_t* accountItems = new account_store_t();
 //   AccountState as(accountItems);
 //   bytes_t* memoryBytes = new bytes_t();
@@ -112,7 +117,7 @@ TEST_CASE("Unconditional jump to destination", "[jumps]") {
 //   StackMachine sm(stackItems);
 
 //   // when
-//   vm.execute(mem, sm, as, params, Utils::env());
+//   vm.execute(mem, sm, as, params, ext, Utils::env());
 
 //   // then
 //   // store_item_t item1 = Utils::accountStoreValue(0, accountItems);

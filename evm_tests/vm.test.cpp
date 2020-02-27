@@ -3,6 +3,7 @@
 #include <evm/utils.h>
 #include <evm/vm.h>
 #include <evm/hex.h>
+#include "external_mock.h"
 
 TEST_CASE("Duplicate stack item", "[DUP1]") {
   // given
@@ -11,6 +12,7 @@ TEST_CASE("Duplicate stack item", "[DUP1]") {
 	// (DUP1 (80))
   std::string bytecode_str = "6002600380";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -20,7 +22,7 @@ TEST_CASE("Duplicate stack item", "[DUP1]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, Utils::env());
+  vm.execute(mem, sm, as, params, ext, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000003" == 
@@ -55,6 +57,7 @@ TEST_CASE("Duplicate stack item at 16", "[DUP1]") {
 	// (DUP16 (8F))
   std::string bytecode_str = "60016002600360046005600660076008600960106011601260136014601560168F";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -64,7 +67,7 @@ TEST_CASE("Duplicate stack item at 16", "[DUP1]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, Utils::env());
+  vm.execute(mem, sm, as, params, ext, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
@@ -79,6 +82,7 @@ TEST_CASE("Swap stack item", "[SWAP1]") {
 	// (SWAP1 (90))
   std::string bytecode_str = "6002600390";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -88,7 +92,7 @@ TEST_CASE("Swap stack item", "[SWAP1]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, Utils::env());
+  vm.execute(mem, sm, as, params, ext, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000002" == 
@@ -121,6 +125,7 @@ TEST_CASE("Swap stack item at 16", "[SWAP16]") {
 	// (SWAP16 (9F))
   std::string bytecode_str = "600160026003600460056006600760086009601060116012601360146015601660179F";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -130,7 +135,7 @@ TEST_CASE("Swap stack item at 16", "[SWAP16]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, Utils::env());
+  vm.execute(mem, sm, as, params, ext, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
@@ -153,6 +158,7 @@ TEST_CASE("Program counter", "[PC]") {
   // (PC (58))
   std::string bytecode_str = "600160026003600460056006600758";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -162,7 +168,7 @@ TEST_CASE("Program counter", "[PC]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, Utils::env());
+  vm.execute(mem, sm, as, params, ext, Utils::env());
 
   // then
   CHECK("000000000000000000000000000000000000000000000000000000000000000e" == 
@@ -182,6 +188,7 @@ TEST_CASE("Pop", "[POP]") {
   // (PC (58))
   std::string bytecode_str = "60f060aa50600055";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -191,7 +198,7 @@ TEST_CASE("Pop", "[POP]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, Utils::env());
+  vm.execute(mem, sm, as, params, ext, Utils::env());
 
   // then
   store_item_t item1 = Utils::accountStoreValue(0, accountItems);

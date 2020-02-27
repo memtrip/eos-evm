@@ -13,6 +13,7 @@ exec_result_t VM::execute(
   StackMachine& stack, 
   AccountState& accountState,
   params_t& params,
+  External& external,
   env_t env
 ) {
 
@@ -22,7 +23,7 @@ exec_result_t VM::execute(
   ByteReader reader(0, params.data);
 
   do {
-    result = VM::step(jumps, memory, stack, reader, accountState, params, env);
+    result = VM::step(jumps, memory, stack, reader, accountState, params, external, env);
   } while(result.first == ExecResult::CONTINUE);
 
   return result;
@@ -35,9 +36,10 @@ exec_result_t VM::step(
   ByteReader& reader, 
   AccountState& accountState,
   params_t& params,
+  External& external,
   env_t env
 ) {
-  return VM::stepInner(jumps, memory, stack, reader, accountState, params, env);
+  return VM::stepInner(jumps, memory, stack, reader, accountState, params, external, env);
 }
 
 exec_result_t VM::stepInner(
@@ -47,6 +49,7 @@ exec_result_t VM::stepInner(
   ByteReader& reader, 
   AccountState& accountState,
   params_t& params,
+  External& external,
   env_t env
 ) {
   uint8_t opcode = reader.bytes[reader.position];
@@ -69,6 +72,7 @@ exec_result_t VM::stepInner(
     reader, 
     accountState,
     params,
+    external,
     env
   );
 
@@ -133,6 +137,7 @@ instruction_result_t VM::executeInstruction(
   ByteReader& reader, 
   AccountState& accountState,
   params_t& params,
+  External& external,
   env_t env
 ) {
   switch (Instruction::opcode(instruction)) {
@@ -622,6 +627,7 @@ instruction_result_t VM::executeInstruction(
       uint256_t offset = stack.peek(0);
       uint256_t size = stack.peek(1);
       std::vector<uint256_t> topics = stack.peekMany(2, numberOfTopics); 
+      stack.pop(2 + numberOfTopics);
       break;
     }
     case Opcode::CREATE:
