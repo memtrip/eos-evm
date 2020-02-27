@@ -618,8 +618,10 @@ instruction_result_t VM::executeInstruction(
     case Opcode::LOG3:
     case Opcode::LOG4:
     {
-      
-      printf("(LOG4 ");
+      uint8_t numberOfTopics = Instruction::logTopics(instruction);
+      uint256_t offset = stack.peek(0);
+      uint256_t size = stack.peek(1);
+      std::vector<uint256_t> topics = stack.peekMany(2, numberOfTopics); 
       break;
     }
     case Opcode::CREATE:
