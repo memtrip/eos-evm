@@ -626,8 +626,15 @@ instruction_result_t VM::executeInstruction(
       uint8_t numberOfTopics = Instruction::logTopics(instruction);
       uint256_t offset = stack.peek(0);
       uint256_t size = stack.peek(1);
+
       std::vector<uint256_t> topics = stack.peekMany(2, numberOfTopics); 
+
       stack.pop(2 + numberOfTopics);
+
+      bytes_t bytes = memory.readSlice(offset, size);
+
+      external.log(topics, bytes);
+      
       break;
     }
     case Opcode::CREATE:
