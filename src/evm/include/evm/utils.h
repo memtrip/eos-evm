@@ -4,9 +4,9 @@
 
 class Utils {
   public:
-    static void printOpcode(unsigned char value);
-    static void printTier(unsigned char value);
-    static void printOpcodeHex(unsigned char value);
+    static void printOpcode(uint8_t value);
+    static void printTier(uint8_t value);
+    static void printOpcodeHex(uint8_t value);
     static void printInstruction(unsigned int value);
     static void printInstructionList();
     static std::string uint256_2str(uint256_t value);

@@ -10,7 +10,7 @@
 #include <evm/big_int.h>
 #include <evm/hex.h>
 
-void Utils::printOpcode(unsigned char value) {
+void Utils::printOpcode(uint8_t value) {
   switch (value) {
     case Opcode::STOP:
       printf("(STOP ");
@@ -447,7 +447,7 @@ void Utils::printOpcode(unsigned char value) {
   }
 }
 
-void Utils::printTier(unsigned char value) {
+void Utils::printTier(uint8_t value) {
   switch (value) {
     case GasTierPrice::ZERO:
       printf("ZERO");
@@ -476,7 +476,7 @@ void Utils::printTier(unsigned char value) {
   }
 }
 
-void Utils::printOpcodeHex(unsigned char value) {
+void Utils::printOpcodeHex(uint8_t value) {
   printf("(0x%02X)", (unsigned int)(value & 0xFF));
 }
 

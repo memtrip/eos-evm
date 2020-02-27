@@ -1,4 +1,4 @@
-enum GasTierPrice: unsigned char {
+enum GasTierPrice: uint8_t {
   ZERO = 0x00,
   BASE = 0x01,
   VERY_LOW = 0x02,

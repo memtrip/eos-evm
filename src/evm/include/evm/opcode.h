@@ -1,4 +1,4 @@
-enum Opcode: unsigned char { 
+enum Opcode: uint8_t { 
   STOP = 0x00,
   ADD = 0x01,
   MUL = 0x02,

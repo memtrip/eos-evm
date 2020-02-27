@@ -49,7 +49,7 @@ exec_result_t VM::stepInner(
   params_t& params,
   env_t env
 ) {
-  unsigned char opcode = reader.bytes[reader.position];
+  uint8_t opcode = reader.bytes[reader.position];
   unsigned int instruction = Instruction::values[opcode];
   reader.position += 1;
 
@@ -613,21 +613,15 @@ instruction_result_t VM::executeInstruction(
       break;
 
     case Opcode::LOG0:
-      printf("(LOG0 ");
-      break;
     case Opcode::LOG1:
-      printf("(LOG1 ");
-      break;
     case Opcode::LOG2:
-      printf("(LOG2 ");
-      break;
     case Opcode::LOG3:
-      printf("(LOG3 ");
-      break;
     case Opcode::LOG4:
+    {
+      
       printf("(LOG4 ");
       break;
-
+    }
     case Opcode::CREATE:
       printf("(CREATE ");
       break;

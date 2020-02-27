@@ -7,7 +7,7 @@
 
 class VM {
   private:
-    unsigned char last_stack_ret_len;
+    uint8_t last_stack_ret_len;
 
     exec_result_t step(
       jump_set_t& jumps, 

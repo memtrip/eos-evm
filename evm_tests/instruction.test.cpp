@@ -166,9 +166,9 @@ TEST_CASE("Instruction swapPosition(SWAP1)", "[instruction]" ) {
 }
 
 TEST_CASE("Instruction logBytes(LOG4)", "[instruction]" ) {
-  REQUIRE(4 == Instruction::logBytes(Instruction::values[Opcode::LOG4]));
+  REQUIRE(4 == Instruction::logTopics(Instruction::values[Opcode::LOG4]));
 }
 
 TEST_CASE("Instruction logBytes(LOG0)", "[instruction]" ) {
-  REQUIRE(0 == Instruction::logBytes(Instruction::values[Opcode::LOG0]));
+  REQUIRE(0 == Instruction::logTopics(Instruction::values[Opcode::LOG0]));
 }

@@ -263,56 +263,56 @@ const instruct_t Instruction::values[] = {
   0xFF010007, // ((SELFDESTRUCT (0xFF)), 1, 0, SPECIAL)
 };
 
-unsigned char Instruction::byteAt(instruct_t instruction, int pos) {
+uint8_t Instruction::byteAt(instruct_t instruction, int pos) {
   return (instruction >> (8 * pos)) & 0xff;
 }
 
-unsigned char Instruction::opcode(instruct_t instruction) {
+uint8_t Instruction::opcode(instruct_t instruction) {
   return Instruction::byteAt(instruction, 3);
 }
 
-unsigned char Instruction::args(instruct_t instruction) {
+uint8_t Instruction::args(instruct_t instruction) {
   return Instruction::byteAt(instruction, 2);
 } 
 
-unsigned char Instruction::ret(instruct_t instruction) {
+uint8_t Instruction::ret(instruct_t instruction) {
   return Instruction::byteAt(instruction, 1);
 } 
 
-unsigned char Instruction::tier(instruct_t instruction) {
+uint8_t Instruction::tier(instruct_t instruction) {
   return Instruction::byteAt(instruction, 0);
 }
 
 bool Instruction::isPush(instruct_t instruction) {
-  unsigned char op = Instruction::opcode(instruction);
+  uint8_t op = Instruction::opcode(instruction);
   return op >= Opcode::PUSH1 && op <= Opcode::PUSH32;
 }
 
-unsigned char Instruction::pushBytes(instruct_t instruction) {
+uint8_t Instruction::pushBytes(instruct_t instruction) {
   if (Instruction::isPush(instruction)) {
     return Instruction::opcode(instruction) - Opcode::PUSH1 + 1;
   } 
   return 0;
 }
 
-unsigned char Instruction::dupPosition(instruct_t instruction) {
-  unsigned char op = Instruction::opcode(instruction);
+uint8_t Instruction::dupPosition(instruct_t instruction) {
+  uint8_t op = Instruction::opcode(instruction);
   if (op >= Opcode::DUP1 && op <= Opcode::DUP16) {
     return op - Opcode::DUP1;
   }
   return 0;
 }
 
-unsigned char Instruction::swapPosition(instruct_t instruction) {
-  unsigned char op = Instruction::opcode(instruction);
+uint8_t Instruction::swapPosition(instruct_t instruction) {
+  uint8_t op = Instruction::opcode(instruction);
   if (op >= Opcode::SWAP1 && op <= Opcode::SWAP16) {
     return op - Opcode::SWAP1 + 1;
   }
   return 0;
 }
 
-unsigned char Instruction::logBytes(instruct_t instruction) {
-  unsigned char op = Instruction::opcode(instruction);
+uint8_t Instruction::logTopics(instruct_t instruction) {
+  uint8_t op = Instruction::opcode(instruction);
   if (op >= Opcode::LOG0 && op <= Opcode::LOG4) {
     return op - Opcode::LOG0;
   }

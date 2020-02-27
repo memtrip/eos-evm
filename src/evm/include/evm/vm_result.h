@@ -27,7 +27,7 @@ enum ExecResult {
 typedef std::variant<
   gas_left_t,
   trap_t,
-  unsigned char
+  uint8_t
 > exec_result_info_t;
 
 typedef std::pair<ExecResult, exec_result_info_t> exec_result_t;
@@ -53,7 +53,7 @@ typedef std::variant<
   uint256_t,
   StopExecutionResult,
   trap_t,
-  unsigned char
+  uint8_t
 > instruction_result_info_t;
 
 typedef std::pair<InstructionResult, instruction_result_info_t> instruction_result_t;
