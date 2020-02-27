@@ -677,8 +677,22 @@ instruction_result_t VM::executeInstruction(
       printf("(STATICCALL ");
       break;
     case Opcode::REVERT:
-      printf("(REVERT ");
-      break;
+      {
+        uint256_t initOff = stack.peek(0);
+        uint256_t initSize = stack.peek(1);
+        stack.pop(2);
+
+        StopExecutionResult result {
+          initOff,
+          initSize,
+          false
+        };
+        
+        return std::make_pair(
+          InstructionResult::STOP_EXEC_RETURN,
+          result
+        );
+      }
     case Opcode::SELFDESTRUCT:
       printf("(SELFDESTRUCT ");
       break;
