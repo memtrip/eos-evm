@@ -397,7 +397,7 @@ instruction_result_t VM::executeInstruction(
       stack.push(params.origin);
       break;
     case Opcode::CALLER:
-      printf("(CALLER ");
+      stack.push(params.sender);
       break;
     case Opcode::CALLVALUE:
       stack.push(params.value);
