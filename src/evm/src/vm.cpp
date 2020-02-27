@@ -96,6 +96,7 @@ exec_result_t VM::stepInner(
         // TODO: clear memory
         // TODO: return actual GAS value
         StopExecutionResult stop = std::get<StopExecutionResult>(result.second);
+
         NeedsReturn needsReturn {
           uint256_t(0),
           memory.intoReturnData(stop.initOff, stop.initSize),
@@ -134,7 +135,6 @@ instruction_result_t VM::executeInstruction(
   params_t& params,
   env_t env
 ) {
-  Utils::printInstruction(instruction);
   switch (Instruction::opcode(instruction)) {
     case Opcode::STOP: {
       return std::make_pair(InstructionResult::STOP_EXEC, 0);
@@ -348,7 +348,7 @@ instruction_result_t VM::executeInstruction(
         uint256_t a = stack.peek(0);
         uint256_t b = stack.peek(1);
         stack.pop(2);
-        stack.push(a <<= b);
+        stack.push(b <<= a);
         break;
       }
     case Opcode::SHR:
@@ -356,7 +356,7 @@ instruction_result_t VM::executeInstruction(
         uint256_t a = stack.peek(0);
         uint256_t b = stack.peek(1);
         stack.pop(2);
-        stack.push(a >>= b);
+        stack.push(b >>= a);
         break;
       }
     case Opcode::SAR:
@@ -365,7 +365,7 @@ instruction_result_t VM::executeInstruction(
         uint256_t b = stack.peek(1);
         
         if ((b & (uint256_t{1} << 255)) == 0) {
-          stack.push(a >>= b);
+          stack.push(b >>= a);
         } else {
           constexpr auto allones = ~uint256_t{};
           if (a >= 256) {
@@ -636,11 +636,13 @@ instruction_result_t VM::executeInstruction(
         uint256_t initOff = stack.peek(0);
         uint256_t initSize = stack.peek(1);
         stack.pop(2);
+
         StopExecutionResult result {
           initOff,
           initSize,
           true
         };
+        
         return std::make_pair(
           InstructionResult::STOP_EXEC_RETURN,
           result

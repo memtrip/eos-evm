@@ -1,5 +1,6 @@
 #include <vector>
 #include <evm/types.h>
+#include <evm/return_data.h>
 
 class Utils {
   public:
@@ -15,4 +16,5 @@ class Utils {
     static void printBytes(bytes_t& bytes);
     static env_t env();
     static params_t params(bytes_t data);
+    static bytes_t returnDataSlice(ReturnData returnData);
 };

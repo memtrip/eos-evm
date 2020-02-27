@@ -544,3 +544,13 @@ params_t Utils::params(bytes_t data) {
 void Utils::printBytes(bytes_t& bytes) {
   std::cout << Hex::bytesToHex(bytes);
 }
+
+bytes_t Utils::returnDataSlice(ReturnData returnData) {
+  size_t offset = static_cast<size_t>(returnData.offset);
+  size_t size = static_cast<size_t>(returnData.size);
+  bytes_t returnDataSlice(
+    returnData.mem.begin() + offset, 
+    returnData.mem.begin() + offset + size
+  );
+  return returnDataSlice;
+}

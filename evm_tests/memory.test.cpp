@@ -4,6 +4,7 @@
 #include <evm/types.h>
 #include <evm/utils.h>
 #include <evm/hex.h>
+#include <evm/return_data.h>
 
 TEST_CASE("Memory write and read", "[memory]") {
   // given
@@ -125,3 +126,31 @@ TEST_CASE("Memory write at index (1)", "[memory]") {
   REQUIRE("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" == 
     Utils::uint256_2str(memory.read(uint256_t(0x00)))); 
 }
+
+// TEST_CASE("Memory to return", "[memory]") {
+//   // given
+//   bytes_t* bytes = new bytes_t();
+//   Memory memory(bytes);
+  
+//   // when
+//   memory.resize(32);
+//   memory.write(
+//     Utils::bigIntFromBigEndianBytes("0000000000000000000000000000000000000000000000000000000000000000"),
+//     Utils::bigIntFromBigEndianBytes("000000000000000000000000000000000000000000000000000000000000000a")
+//   );
+//   memory.write(
+//     Utils::bigIntFromBigEndianBytes("0000000000000000000000000000000000000000000000000000000000000020"),
+//     Utils::bigIntFromBigEndianBytes("0000000000000000000000000000000000000000000000000000000000000000")
+//   );
+
+//   CHECK("000000000000000000000000000000000000000000000000000000000000000a" == 
+//     Utils::uint256_2str(memory.read(uint256_t(0x00)))); 
+//   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
+//     Utils::uint256_2str(memory.read(uint256_t(0x20)))); 
+
+//   ReturnData returnData = memory.intoReturnData(uint256_t(0x1f), uint256_t(0x20));
+
+//   CHECK("000000000000000000000000000000000000000000000000000000000000000a0000000000000000000000000000000000000000000000000000000000000000" ==
+//     Hex::bytesToHex(returnData.mem)
+//   );
+// }
