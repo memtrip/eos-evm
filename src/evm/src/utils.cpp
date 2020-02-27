@@ -528,15 +528,27 @@ env_t Utils::env() {
   };
 };
 
+/*
+struct Params {
+  uint256_t codeAddress;
+  uint256_t codeHash;
+  uint256_t codeVersion;
+  uint256_t address;
+  uint256_t sender;
+  uint256_t origin;
+  uint256_t value;
+  bytes_t data;
+};
+*/
 params_t Utils::params(bytes_t data) {
   return {
-    uint256_t(0xea0e9f),
-    uint256_t(0xf9313a),
-    uint256_t(0x193821),
-    uint256_t(0xea0e9a),
-    uint256_t(0xea0e9e),
-    uint256_t(0x1283fe),
-    uint256_t(34),
+    uint256_t(0xea0e9f), /* codeAddress*/
+    uint256_t(0xf9313a), /* codeHash */
+    uint256_t(0x193821), /* codeVersion */
+    uint256_t(0xea0e9a), /* address */
+    uint256_t(0xea0e9e), /* sender */
+    uint256_t(0x1283fe), /* origin */
+    uint256_t(34), /* value */
     data
   };
 };

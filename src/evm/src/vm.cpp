@@ -388,13 +388,13 @@ instruction_result_t VM::executeInstruction(
         break;
       }
     case Opcode::ADDRESS:
-      printf("(ADDRESS ");
+      stack.push(params.address);
       break;
     case Opcode::BALANCE:
       printf("(BALANCE ");
       break;
     case Opcode::ORIGIN:
-      printf("(ORIGIN ");
+      stack.push(params.origin);
       break;
     case Opcode::CALLER:
       printf("(CALLER ");

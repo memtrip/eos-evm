@@ -4,7 +4,7 @@
 #include <evm/vm.h>
 #include <evm/hex.h>
 
-TEST_CASE("Blockhash", "[stub]") {
+TEST_CASE("Blockhash (stub)", "[env]") {
   // given
   // (PUSH1 ((60)00))
   // (BLOCKHASH 40)
@@ -25,7 +25,7 @@ TEST_CASE("Blockhash", "[stub]") {
   CHECK(StackMachine::STUB == sm.top());
 }
 
-TEST_CASE("Coinbase", "[stub]") {
+TEST_CASE("Coinbase (stub)", "[env]") {
   // given
   // (COINBASE 41)
   std::string bytecode_str = "41";
@@ -45,7 +45,7 @@ TEST_CASE("Coinbase", "[stub]") {
   CHECK(StackMachine::STUB == sm.top());
 }
 
-TEST_CASE("Difficulty", "[env]") {
+TEST_CASE("Difficulty (stub)", "[env]") {
   // given
   // (DIFFICULTY 44)
   std::string bytecode_str = "44";
