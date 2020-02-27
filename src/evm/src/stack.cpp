@@ -15,8 +15,8 @@ uint256_t StackMachine::peek(unsigned int n) {
 
 std::vector<uint256_t> StackMachine::peekMany(unsigned int offset, unsigned int n) {
   std::vector<uint256_t> items;
-  for (int i = n - 1; i >= 0; i--) {
-    items.push_back(peek(offset - n));
+  for (int i = offset; i < offset + n; i++) {
+    items.push_back(peek(i));
   }
   return items;
 }
