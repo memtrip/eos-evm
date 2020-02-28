@@ -521,25 +521,13 @@ store_item_t Utils::accountStoreValue(size_t index, account_store_t* store) {
 
 env_t Utils::env() {
   return {
-    16339169,
-    1581632422128,
-    100000,
-    1
+    16339169, /* blockNumber */
+    1581632422128, /* timestamp */
+    100000, /* gasLimit */
+    1 /* chainId */
   };
 };
 
-/*
-struct Params {
-  uint256_t codeAddress;
-  uint256_t codeHash;
-  uint256_t codeVersion;
-  uint256_t address;
-  uint256_t sender;
-  uint256_t origin;
-  uint256_t value;
-  bytes_t data;
-};
-*/
 params_t Utils::params(bytes_t data) {
   return {
     uint256_t(0xea0e9f), /* codeAddress*/
