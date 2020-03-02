@@ -417,10 +417,10 @@ instruction_result_t VM::executeInstruction(
       printf("(CALLDATACOPY ");
       break;
     case Opcode::CODESIZE:
-      printf("(CODESIZE ");
+      stack.push(uint256_t(reader.bytes.size()));
       break;
     case Opcode::CODECOPY:
-      printf("(CODECOPY ");
+      memory.copyData(stack, reader.bytes);
       break;
     case Opcode::GASPRICE:
       printf("(GASPRICE ");
