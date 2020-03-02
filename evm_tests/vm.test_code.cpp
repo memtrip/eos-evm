@@ -59,7 +59,7 @@ TEST_CASE("calldataload", "[code]") {
 
   std::string bytecode_str = "600135600055";
   std::string calldata_str = "0123ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff23";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), Hex::hexToBytes(calldata_str));
   ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();

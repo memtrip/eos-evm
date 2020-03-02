@@ -408,8 +408,16 @@ instruction_result_t VM::executeInstruction(
       stack.push(params.value);
       break;
     case Opcode::CALLDATALOAD:
-      printf("(CALLDATALOAD ");
-      break;
+      {
+        uint256_t index = stack.peek(0);
+        if (params.data.size() < index) {
+          stack.push(StackMachine::FALSE);
+        } else {
+          size_t begin = static_cast<size_t>(index);
+          stack.push(BigInt::load32(begin, params.data));
+        }
+        break;
+      }
     case Opcode::CALLDATASIZE:
       stack.push(uint256_t(params.data.size()));
       break;

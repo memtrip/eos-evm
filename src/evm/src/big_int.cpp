@@ -32,3 +32,11 @@ bytes_t BigInt::toBytes(uint256_t input) {
   data.insert(data.end(), bytes, bytes + 32);
   return data;
 }
+
+uint256_t BigInt::load32(size_t begin, bytes_t bytes) {
+  size_t end = std::min(begin + 32, bytes.size());
+  uint8_t data[32] = {};
+  for (size_t i = 0; i < (end - begin); ++i)
+    data[i] = bytes[begin + i];
+  return intx::be::load<uint256_t>(data);
+}
