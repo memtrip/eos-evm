@@ -749,10 +749,13 @@ instruction_result_t VM::executeInstruction(
             }
         }
 
+        returnData = ReturnData::empty();
         // TODO: if there is not enough balance, or the stack depth is reached, return 0
 
         bytes_t input = memory.readSlice(inOffset, inSize);
         // TODO: external call with result
+
+        // TODO: setup resume output range
 
         break;
       }
