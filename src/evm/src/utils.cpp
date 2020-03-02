@@ -1,6 +1,3 @@
-#include <sstream>
-#include <iostream>
-#include <stdexcept>
 #include <string>
 
 #include <evm/opcode.h>
@@ -505,12 +502,6 @@ std::string Utils::uint256_2str(uint256_t value) {
   return Hex::bytesToHex(bytes);
 }
 
-void Utils::print_uint256(uint256_t value) {
-  printf("{");
-  std::cout << Utils::uint256_2str(value);
-  printf("}\n");
-}
-
 uint256_t Utils::bigIntFromBigEndianBytes(std::string bytecode_str) {
   return BigInt::fromBigEndianBytes(Hex::hexToBytes(bytecode_str));
 }
@@ -541,10 +532,6 @@ params_t Utils::params(bytes_t code, bytes_t data) {
     data /* data */
   };
 };
-
-void Utils::printBytes(bytes_t& bytes) {
-  std::cout << Hex::bytesToHex(bytes);
-}
 
 bytes_t Utils::returnDataSlice(ReturnData returnData) {
   size_t offset = static_cast<size_t>(returnData.offset);
