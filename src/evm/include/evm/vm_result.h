@@ -1,6 +1,7 @@
 #include <variant>
 #include <evm/types.h>
 #include <evm/return_data.h>
+#include <evm/call.h>
 
 // trap
 enum TrapKind {

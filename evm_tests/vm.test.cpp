@@ -4,6 +4,7 @@
 #include <evm/vm.h>
 #include <evm/hex.h>
 #include <evm/return_data.h>
+#include <evm/call.h>
 #include "external_mock.h"
 
 TEST_CASE("Duplicate stack item", "[DUP1]") {
@@ -16,6 +17,7 @@ TEST_CASE("Duplicate stack item", "[DUP1]") {
   ExternalMock ext {};
   VM vm {};
   ReturnData returnData = ReturnData::empty();
+  Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   bytes_t* memoryBytes = new bytes_t();
@@ -24,7 +26,7 @@ TEST_CASE("Duplicate stack item", "[DUP1]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, ext, returnData, Utils::env());
+  vm.execute(mem, sm, as, params, ext, returnData, call, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000003" == 
@@ -62,6 +64,7 @@ TEST_CASE("Duplicate stack item at 16", "[DUP1]") {
   ExternalMock ext {};
   VM vm {};
   ReturnData returnData = ReturnData::empty();
+  Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   bytes_t* memoryBytes = new bytes_t();
@@ -70,7 +73,7 @@ TEST_CASE("Duplicate stack item at 16", "[DUP1]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, ext, returnData, Utils::env());
+  vm.execute(mem, sm, as, params, ext, returnData, call, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
@@ -88,6 +91,7 @@ TEST_CASE("Swap stack item", "[SWAP1]") {
   ExternalMock ext {};
   VM vm {};
   ReturnData returnData = ReturnData::empty();
+  Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   bytes_t* memoryBytes = new bytes_t();
@@ -96,7 +100,7 @@ TEST_CASE("Swap stack item", "[SWAP1]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, ext, returnData, Utils::env());
+  vm.execute(mem, sm, as, params, ext, returnData, call, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000002" == 
@@ -132,6 +136,7 @@ TEST_CASE("Swap stack item at 16", "[SWAP16]") {
   ExternalMock ext {};
   VM vm {};
   ReturnData returnData = ReturnData::empty();
+  Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   bytes_t* memoryBytes = new bytes_t();
@@ -140,7 +145,7 @@ TEST_CASE("Swap stack item at 16", "[SWAP16]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, ext, returnData, Utils::env());
+  vm.execute(mem, sm, as, params, ext, returnData, call, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
@@ -166,6 +171,7 @@ TEST_CASE("Program counter", "[PC]") {
   ExternalMock ext {};
   VM vm {};
   ReturnData returnData = ReturnData::empty();
+  Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   bytes_t* memoryBytes = new bytes_t();
@@ -174,7 +180,7 @@ TEST_CASE("Program counter", "[PC]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, ext, returnData, Utils::env());
+  vm.execute(mem, sm, as, params, ext, returnData, call, Utils::env());
 
   // then
   CHECK("000000000000000000000000000000000000000000000000000000000000000e" == 
@@ -197,6 +203,7 @@ TEST_CASE("Pop", "[POP]") {
   ExternalMock ext {};
   VM vm {};
   ReturnData returnData = ReturnData::empty();
+  Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   bytes_t* memoryBytes = new bytes_t();
@@ -205,7 +212,7 @@ TEST_CASE("Pop", "[POP]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, ext, returnData, Utils::env());
+  vm.execute(mem, sm, as, params, ext, returnData, call, Utils::env());
 
   // then
   store_item_t item1 = Utils::accountStoreValue(0, accountItems);

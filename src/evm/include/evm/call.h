@@ -1,6 +1,7 @@
 #pragma once
 #include <evm/types.h>
 #include <evm/return_data.h>
+#include <evm/call.h>
 #include <evm/external.h>
 
 enum MessageCallResult {

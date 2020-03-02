@@ -15,6 +15,7 @@ exec_result_t VM::execute(
   params_t& params,
   External& external,
   ReturnData& returnData,
+  Call& call,
   env_t env
 ) {
 
@@ -24,7 +25,7 @@ exec_result_t VM::execute(
   ByteReader reader(0, params.code);
 
   do {
-    result = VM::step(jumps, memory, stack, reader, accountState, params, external, returnData, env);
+    result = VM::step(jumps, memory, stack, reader, accountState, params, external, returnData, call, env);
   } while(result.first == ExecResult::CONTINUE);
 
   return result;
@@ -39,9 +40,10 @@ exec_result_t VM::step(
   params_t& params,
   External& external,
   ReturnData& returnData,
+  Call& call,
   env_t env
 ) {
-  return VM::stepInner(jumps, memory, stack, reader, accountState, params, external, returnData, env);
+  return VM::stepInner(jumps, memory, stack, reader, accountState, params, external, returnData, call, env);
 }
 
 exec_result_t VM::stepInner(
@@ -53,6 +55,7 @@ exec_result_t VM::stepInner(
   params_t& params,
   External& external,
   ReturnData& returnData,
+  Call& call,
   env_t env
 ) {
   uint8_t opcode = reader.bytes[reader.position];
@@ -77,6 +80,7 @@ exec_result_t VM::stepInner(
     params,
     external,
     returnData,
+    call,
     env
   );
 
@@ -143,6 +147,7 @@ instruction_result_t VM::executeInstruction(
   params_t& params,
   External& external,
   ReturnData& returnData,
+  Call& call,
   env_t env
 ) {
   switch (Instruction::opcode(instruction)) {

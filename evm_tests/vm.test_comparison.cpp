@@ -4,6 +4,7 @@
 #include <evm/vm.h>
 #include <evm/hex.h>
 #include <evm/return_data.h>
+#include <evm/call.h>
 #include "external_mock.h"
 
 TEST_CASE("Less than comparison truthy", "[LT]") {
@@ -16,6 +17,7 @@ TEST_CASE("Less than comparison truthy", "[LT]") {
   ExternalMock ext {};
   VM vm {};
   ReturnData returnData = ReturnData::empty();
+  Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   bytes_t* memoryBytes = new bytes_t();
@@ -24,7 +26,7 @@ TEST_CASE("Less than comparison truthy", "[LT]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, ext, returnData, Utils::env());
+  vm.execute(mem, sm, as, params, ext, returnData, call, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
@@ -42,6 +44,7 @@ TEST_CASE("Less than comparison not true", "[LT]") {
   ExternalMock ext {};
   VM vm {};
   ReturnData returnData = ReturnData::empty();
+  Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   bytes_t* memoryBytes = new bytes_t();
@@ -50,7 +53,7 @@ TEST_CASE("Less than comparison not true", "[LT]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, ext, returnData, Utils::env());
+  vm.execute(mem, sm, as, params, ext, returnData, call, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
@@ -68,6 +71,7 @@ TEST_CASE("Greater than comparison truthy", "[GT]") {
   ExternalMock ext {};
   VM vm {};
   ReturnData returnData = ReturnData::empty();
+  Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   bytes_t* memoryBytes = new bytes_t();
@@ -76,7 +80,7 @@ TEST_CASE("Greater than comparison truthy", "[GT]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, ext, returnData, Utils::env());
+  vm.execute(mem, sm, as, params, ext, returnData, call, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
@@ -94,6 +98,7 @@ TEST_CASE("Greater than comparison not true", "[GT]") {
   ExternalMock ext {};
   VM vm {};
   ReturnData returnData = ReturnData::empty();
+  Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   bytes_t* memoryBytes = new bytes_t();
@@ -102,7 +107,7 @@ TEST_CASE("Greater than comparison not true", "[GT]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, ext, returnData, Utils::env());
+  vm.execute(mem, sm, as, params, ext, returnData, call, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
@@ -120,6 +125,7 @@ TEST_CASE("Equal comparison truthy", "[EQ]") {
   ExternalMock ext {};
   VM vm {};
   ReturnData returnData = ReturnData::empty();
+  Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   bytes_t* memoryBytes = new bytes_t();
@@ -128,7 +134,7 @@ TEST_CASE("Equal comparison truthy", "[EQ]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, ext, returnData, Utils::env());
+  vm.execute(mem, sm, as, params, ext, returnData, call, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
@@ -146,6 +152,7 @@ TEST_CASE("Equal comparison not true", "[EQ]") {
   ExternalMock ext {};
   VM vm {};
   ReturnData returnData = ReturnData::empty();
+  Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   bytes_t* memoryBytes = new bytes_t();
@@ -154,7 +161,7 @@ TEST_CASE("Equal comparison not true", "[EQ]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, ext, returnData, Utils::env());
+  vm.execute(mem, sm, as, params, ext, returnData, call, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
@@ -171,6 +178,7 @@ TEST_CASE("Is zero comparison truthy", "[ISZERO]") {
   ExternalMock ext {};
   VM vm {};
   ReturnData returnData = ReturnData::empty();
+  Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   bytes_t* memoryBytes = new bytes_t();
@@ -179,7 +187,7 @@ TEST_CASE("Is zero comparison truthy", "[ISZERO]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, ext, returnData, Utils::env());
+  vm.execute(mem, sm, as, params, ext, returnData, call, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
@@ -196,6 +204,7 @@ TEST_CASE("Is zero comparison not true", "[ISZERO]") {
   ExternalMock ext {};
   VM vm {};
   ReturnData returnData = ReturnData::empty();
+  Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   bytes_t* memoryBytes = new bytes_t();
@@ -204,7 +213,7 @@ TEST_CASE("Is zero comparison not true", "[ISZERO]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, ext, returnData, Utils::env());
+  vm.execute(mem, sm, as, params, ext, returnData, call, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
@@ -218,6 +227,7 @@ TEST_CASE("Comparison with many instructions", "[comparison]") {
   ExternalMock ext {};
   VM vm {};
   ReturnData returnData = ReturnData::empty();
+  Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   bytes_t* memoryBytes = new bytes_t();
@@ -226,7 +236,7 @@ TEST_CASE("Comparison with many instructions", "[comparison]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, ext, returnData, Utils::env());
+  vm.execute(mem, sm, as, params, ext, returnData, call, Utils::env());
 
   // then
   store_item_t item1 = Utils::accountStoreValue(0, accountItems);

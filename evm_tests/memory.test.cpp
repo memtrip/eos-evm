@@ -5,6 +5,7 @@
 #include <evm/utils.h>
 #include <evm/hex.h>
 #include <evm/return_data.h>
+#include <evm/call.h>
 
 TEST_CASE("Memory write and read", "[memory]") {
   // given

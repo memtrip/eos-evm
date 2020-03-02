@@ -4,6 +4,7 @@
 #include <evm/vm.h>
 #include <evm/hex.h>
 #include <evm/return_data.h>
+#include <evm/call.h>
 #include "external_mock.h"
 
 TEST_CASE("Bitwise AND", "[bitwise]") {
@@ -15,6 +16,7 @@ TEST_CASE("Bitwise AND", "[bitwise]") {
   ExternalMock ext {};
   VM vm {};
   ReturnData returnData = ReturnData::empty();
+  Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   bytes_t* memoryBytes = new bytes_t();
@@ -23,7 +25,7 @@ TEST_CASE("Bitwise AND", "[bitwise]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, ext, returnData, Utils::env());
+  vm.execute(mem, sm, as, params, ext, returnData, call, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
@@ -40,6 +42,7 @@ TEST_CASE("Bitwise OR", "[bitwise]") {
   ExternalMock ext {};
   VM vm {};
   ReturnData returnData = ReturnData::empty();
+  Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   bytes_t* memoryBytes = new bytes_t();
@@ -48,7 +51,7 @@ TEST_CASE("Bitwise OR", "[bitwise]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, ext, returnData, Utils::env());
+  vm.execute(mem, sm, as, params, ext, returnData, call, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000006" == 
@@ -65,6 +68,7 @@ TEST_CASE("Bitwise XOR", "[bitwise]") {
   ExternalMock ext {};
   VM vm {};
   ReturnData returnData = ReturnData::empty();
+  Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   bytes_t* memoryBytes = new bytes_t();
@@ -73,7 +77,7 @@ TEST_CASE("Bitwise XOR", "[bitwise]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, ext, returnData, Utils::env());
+  vm.execute(mem, sm, as, params, ext, returnData, call, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000005" == 
@@ -87,6 +91,7 @@ TEST_CASE("Bitops", "[bitwise]") {
   ExternalMock ext {};
   VM vm {};
   ReturnData returnData = ReturnData::empty();
+  Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   bytes_t* memoryBytes = new bytes_t();
@@ -95,7 +100,7 @@ TEST_CASE("Bitops", "[bitwise]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, ext, returnData, Utils::env());
+  vm.execute(mem, sm, as, params, ext, returnData, call, Utils::env());
 
   store_item_t item1 = Utils::accountStoreValue(0, accountItems);
   store_item_t item2 = Utils::accountStoreValue(1, accountItems);

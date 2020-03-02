@@ -5,6 +5,7 @@
 #include <evm/vm.h>
 #include <evm/hex.h>
 #include <evm/return_data.h>
+#include <evm/call.h>
 #include "external_mock.h"
 
 TEST_CASE("shift left, write to memory, return", "[return_memory]") {
@@ -13,6 +14,7 @@ TEST_CASE("shift left, write to memory, return", "[return_memory]") {
   ExternalMock ext {};
   VM vm {};
   ReturnData returnData = ReturnData::empty();
+  Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   bytes_t* memoryBytes = new bytes_t();
@@ -22,7 +24,7 @@ TEST_CASE("shift left, write to memory, return", "[return_memory]") {
 
   // when
   mem.resize(32);
-  exec_result_t result = vm.execute(mem, sm, as, params, ext, returnData, Utils::env());
+  exec_result_t result = vm.execute(mem, sm, as, params, ext, returnData, call, Utils::env());
 
   // then
   REQUIRE(ExecResult::DONE == result.first);
@@ -41,6 +43,7 @@ TEST_CASE("shift right, write to memory, return", "[return_memory]") {
   ExternalMock ext {};
   VM vm {};
   ReturnData returnData = ReturnData::empty();
+  Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   bytes_t* memoryBytes = new bytes_t();
@@ -50,7 +53,7 @@ TEST_CASE("shift right, write to memory, return", "[return_memory]") {
 
   // when
   mem.resize(32);
-  exec_result_t result = vm.execute(mem, sm, as, params, ext, returnData, Utils::env());
+  exec_result_t result = vm.execute(mem, sm, as, params, ext, returnData, call, Utils::env());
 
   // then
   REQUIRE(ExecResult::DONE == result.first);
@@ -69,6 +72,7 @@ TEST_CASE("sar, write to memory, revert", "[return_memory]") {
   ExternalMock ext {};
   VM vm {};
   ReturnData returnData = ReturnData::empty();
+  Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   bytes_t* memoryBytes = new bytes_t();
@@ -78,7 +82,7 @@ TEST_CASE("sar, write to memory, revert", "[return_memory]") {
 
   // when
   mem.resize(32);
-  exec_result_t result = vm.execute(mem, sm, as, params, ext, returnData, Utils::env());
+  exec_result_t result = vm.execute(mem, sm, as, params, ext, returnData, call, Utils::env());
 
   // then
   REQUIRE(ExecResult::DONE == result.first);

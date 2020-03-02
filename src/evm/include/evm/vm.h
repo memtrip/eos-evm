@@ -19,6 +19,7 @@ class VM {
       params_t& params,
       External& external,
       ReturnData& returnData,
+      Call& call,
       env_t env
     );
 
@@ -31,6 +32,7 @@ class VM {
       params_t& params,
       External& external,
       ReturnData& returnData,
+      Call& call,
       env_t env
     );
 
@@ -43,6 +45,7 @@ class VM {
       params_t& params,
       External& external,
       ReturnData& returnData,
+      Call& call,
       env_t env
     );
 
@@ -54,6 +57,7 @@ class VM {
       params_t& params,
       External& external,
       ReturnData& returnData,
+      Call& call,
       env_t env
     );
 };

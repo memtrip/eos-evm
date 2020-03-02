@@ -4,6 +4,7 @@
 #include <evm/vm.h>
 #include <evm/hex.h>
 #include <evm/return_data.h>
+#include <evm/call.h>
 #include "external_mock.h"
 
 TEST_CASE("Store two values", "[store]") {
@@ -16,6 +17,7 @@ TEST_CASE("Store two values", "[store]") {
   ExternalMock ext {};
   VM vm {};
   ReturnData returnData = ReturnData::empty();
+  Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   bytes_t* memoryBytes = new bytes_t();
@@ -24,7 +26,7 @@ TEST_CASE("Store two values", "[store]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, ext, returnData, Utils::env());
+  vm.execute(mem, sm, as, params, ext, returnData, call, Utils::env());
 
   // then
   store_item_t item = Utils::accountStoreValue(0, accountItems);

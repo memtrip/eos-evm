@@ -1,6 +1,7 @@
 #include <vector>
 #include <evm/types.h>
 #include <evm/return_data.h>
+#include <evm/call.h>
 #include <evm/stack.h>
 
 class Memory {

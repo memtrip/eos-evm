@@ -4,6 +4,7 @@
 #include <evm/vm.h>
 #include <evm/hex.h>
 #include <evm/return_data.h>
+#include <evm/call.h>
 #include "external_mock.h"
 
 TEST_CASE("Conditional jump to destination truthy", "[jumps]") {
@@ -26,6 +27,7 @@ TEST_CASE("Conditional jump to destination truthy", "[jumps]") {
   ExternalMock ext {};
   VM vm {};
   ReturnData returnData = ReturnData::empty();
+  Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   bytes_t* memoryBytes = new bytes_t();
@@ -34,7 +36,7 @@ TEST_CASE("Conditional jump to destination truthy", "[jumps]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, ext, returnData, Utils::env());
+  vm.execute(mem, sm, as, params, ext, returnData, call, Utils::env());
 
   // then
   CHECK("000000000000000000000000000000000000000000000000000000000000000b" == 
@@ -62,6 +64,7 @@ TEST_CASE("Conditional jump to destination not true", "[jumps]") {
   ExternalMock ext {};
   VM vm {};
   ReturnData returnData = ReturnData::empty();
+  Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   bytes_t* memoryBytes = new bytes_t();
@@ -70,7 +73,7 @@ TEST_CASE("Conditional jump to destination not true", "[jumps]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, ext, returnData, Utils::env());
+  vm.execute(mem, sm, as, params, ext, returnData, call, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000012" == 
@@ -92,6 +95,7 @@ TEST_CASE("Unconditional jump to destination", "[jumps]") {
   ExternalMock ext {};
   VM vm {};
   ReturnData returnData = ReturnData::empty();
+  Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   bytes_t* memoryBytes = new bytes_t();
@@ -100,7 +104,7 @@ TEST_CASE("Unconditional jump to destination", "[jumps]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, ext, returnData, Utils::env());
+  vm.execute(mem, sm, as, params, ext, returnData, call, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000002" == 
@@ -114,6 +118,7 @@ TEST_CASE("Unconditional jump to destination", "[jumps]") {
 //   ExternalMock ext {};
   VM vm {};
   ReturnData returnData = ReturnData::empty();
+  Call call {};
 //   account_store_t* accountItems = new account_store_t();
 //   AccountState as(accountItems);
 //   bytes_t* memoryBytes = new bytes_t();
@@ -122,7 +127,7 @@ TEST_CASE("Unconditional jump to destination", "[jumps]") {
 //   StackMachine sm(stackItems);
 
 //   // when
-//   vm.execute(mem, sm, as, params, ext, returnData, Utils::env());
+//   vm.execute(mem, sm, as, params, ext, returnData, call, Utils::env());
 
 //   // then
 //   // store_item_t item1 = Utils::accountStoreValue(0, accountItems);

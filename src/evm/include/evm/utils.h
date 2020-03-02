@@ -1,6 +1,7 @@
 #include <vector>
 #include <evm/types.h>
 #include <evm/return_data.h>
+#include <evm/call.h>
 
 class Utils {
   public:
