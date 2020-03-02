@@ -1,6 +1,7 @@
 #include <vector>
 #include <evm/types.h>
 #include <evm/return_data.h>
+#include <evm/stack.h>
 
 class Memory {
   public:
@@ -17,4 +18,5 @@ class Memory {
     void writeableSlice(uint256_t offsetArg, uint256_t sizeArg);
     bool isValidRange(size_t offset, size_t size);
     ReturnData intoReturnData(uint256_t offsetArg, uint256_t sizeArg);
+    void copyData(StackMachine& stack, bytes_t& bytes);
 };

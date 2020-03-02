@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <evm/memory.h>
 #include <evm/overflow.h>
 #include <evm/big_int.h>
@@ -104,4 +105,23 @@ ReturnData Memory::intoReturnData(uint256_t offsetArg, uint256_t sizeArg) {
   };
 
   return returnData;
+}
+
+void Memory::copyData(StackMachine& stack, bytes_t& bytes) {
+  uint256_t destOffset = stack.peek(0);
+  uint256_t sourceOffset = stack.peek(1);
+  uint256_t sizeItem = stack.peek(2);
+
+  size_t sourceOffsetSize = static_cast<size_t>(sourceOffset);
+
+  size_t dest = static_cast<size_t>(destOffset);
+  size_t src = bytes.size() < sourceOffsetSize ? bytes.size() : sourceOffsetSize;
+  size_t size = static_cast<size_t>(sizeItem);
+  size_t copySize = std::min(size, bytes.size() - src);
+
+  if (copySize > 0)
+    writeSlice(dest, bytes_t(bytes.begin() + sourceOffsetSize, bytes.end()));
+
+  if ((size - copySize) > 0)
+    std::fill(memory->begin() + dest + copySize, memory->end(), 0);
 }

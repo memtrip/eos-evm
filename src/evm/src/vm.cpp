@@ -426,11 +426,21 @@ instruction_result_t VM::executeInstruction(
       printf("(GASPRICE ");
       break;
     case Opcode::EXTCODESIZE:
-      printf("(EXTCODESIZE ");
-      break;
+      {
+        uint256_t address = stack.peek(0);
+        stack.pop(1);
+        size_t codeSize = external.code(address).size();
+        stack.push(uint256_t(codeSize));
+        break;
+      }
     case Opcode::EXTCODECOPY:
-      printf("(EXTCODECOPY ");
-      break;
+      {
+        uint256_t address = stack.peek(0);
+        stack.pop(1);
+        bytes_t code = external.code(address);
+        memory.copyData(stack, code);
+        break;
+      }
     case Opcode::RETURNDATASIZE:
       printf("(RETURNDATASIZE ");
       break;
