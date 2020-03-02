@@ -411,7 +411,7 @@ instruction_result_t VM::executeInstruction(
       printf("(CALLDATALOAD ");
       break;
     case Opcode::CALLDATASIZE:
-      printf("(CALLDATASIZE ");
+      stack.push(uint256_t(params.data.size()));
       break;
     case Opcode::CALLDATACOPY:
       printf("(CALLDATACOPY ");

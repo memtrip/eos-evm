@@ -65,5 +65,29 @@ TEST_CASE("Caller", "[params]") {
   vm.execute(mem, sm, as, params, ext, Utils::env());
 
   // then
-  CHECK("0000000000000000000000000000000000000000000000000000000000ea0e9e" == Utils::uint256_2str(sm.top()));
+  CHECK("0000000000000000000000000000000000000000000000000000000000ea0e9e" == 
+    Utils::uint256_2str(sm.top())
+  );
+}
+
+TEST_CASE("Call data size", "[params]") {
+  // given
+  std::string bytecode_str = "60006000600060006000600060006000600036";
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  ExternalMock ext {};
+  VM vm {};
+  account_store_t* accountItems = new account_store_t();
+  AccountState as(accountItems);
+  bytes_t* memoryBytes = new bytes_t();
+  Memory mem(memoryBytes);
+  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
+  StackMachine sm(stackItems);
+
+  // when
+  vm.execute(mem, sm, as, params, ext, Utils::env());
+
+  // then
+  CHECK("0000000000000000000000000000000000000000000000000000000000000013" == 
+    Utils::uint256_2str(sm.top())
+  );
 }
