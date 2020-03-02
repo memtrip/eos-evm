@@ -691,20 +691,20 @@ instruction_result_t VM::executeInstruction(
         uint256_t codeAddress = stack.peek(0);
 
         size_t stackOffset = 0;
-        uint256_t value;
+        uint64_t value;
 
         uint8_t callOpcode = Instruction::opcode(instruction);
 
         switch (callOpcode) {
           case Opcode::DELEGATECALL:
-            value = uint256_t();
+            value = 0;
             break;
           case Opcode::STATICCALL:
-            value = uint256_t(0);
+            value = 0;
             break;
           default:
             {
-              value = stack.peek(1);
+              value = static_cast<uint64_t>(stack.peek(1));
               stackOffset += 1;
               break;
             }
@@ -726,10 +726,16 @@ instruction_result_t VM::executeInstruction(
 
         switch (callOpcode) {
           case Opcode::CALL:
-            printf("(CALL ");
+            senderAddress = params.address;
+            receiveAddress = codeAddress;
+            hasBalance = external.balance(params.address) >= value;
+            callType = ActionType::ACTION_CALL_CODE;
             break;
           case Opcode::CALLCODE:
-            printf("CALLCODE ");
+            senderAddress = params.address;
+            receiveAddress = params.address;
+            hasBalance = external.balance(params.address) >= value;
+            callType = ActionType::ACTION_CALL_CODE;
             break;
           case Opcode::DELEGATECALL:
             {
