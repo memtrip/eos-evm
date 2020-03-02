@@ -18,6 +18,7 @@ class VM {
       AccountState& accountState,
       params_t& params,
       External& external,
+      ReturnData& returnData,
       env_t env
     );
 
@@ -29,6 +30,7 @@ class VM {
       AccountState& accountState,
       params_t& params,
       External& external,
+      ReturnData& returnData,
       env_t env
     );
 
@@ -40,6 +42,7 @@ class VM {
       AccountState& accountState,
       params_t& params,
       External& external,
+      ReturnData& returnData,
       env_t env
     );
 
@@ -50,6 +53,7 @@ class VM {
       AccountState& accountState,
       params_t& params,
       External& external,
+      ReturnData& returnData,
       env_t env
     );
 };

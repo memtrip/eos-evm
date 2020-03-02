@@ -33,7 +33,10 @@ typedef EnvInfo env_t;
 enum ActionType {
   ACTION_CREATE,
   ACTION_CALL,
-  ACTION_CALL_CODE
+  ACTION_CALL_CODE,
+  ACTION_DELEGATE_CALL,
+  ACTION_STATIC_CALL,
+  ACTION_CREATE2
 };
 
 typedef ActionType action_type_t;

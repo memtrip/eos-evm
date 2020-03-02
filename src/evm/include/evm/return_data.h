@@ -2,10 +2,12 @@
 #include <variant>
 #include <evm/types.h>
 
-struct ReturnData {
-  bytes_t mem;
-  uint256_t offset;
-  uint256_t size;
+class ReturnData {
+  public:
+    bytes_t mem;
+    uint256_t offset;
+    uint256_t size;;
+    static ReturnData empty();
 };
 
 enum GasType {

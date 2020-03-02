@@ -14,6 +14,7 @@ exec_result_t VM::execute(
   AccountState& accountState,
   params_t& params,
   External& external,
+  ReturnData& returnData,
   env_t env
 ) {
 
@@ -23,7 +24,7 @@ exec_result_t VM::execute(
   ByteReader reader(0, params.code);
 
   do {
-    result = VM::step(jumps, memory, stack, reader, accountState, params, external, env);
+    result = VM::step(jumps, memory, stack, reader, accountState, params, external, returnData, env);
   } while(result.first == ExecResult::CONTINUE);
 
   return result;
@@ -37,9 +38,10 @@ exec_result_t VM::step(
   AccountState& accountState,
   params_t& params,
   External& external,
+  ReturnData& returnData,
   env_t env
 ) {
-  return VM::stepInner(jumps, memory, stack, reader, accountState, params, external, env);
+  return VM::stepInner(jumps, memory, stack, reader, accountState, params, external, returnData, env);
 }
 
 exec_result_t VM::stepInner(
@@ -50,6 +52,7 @@ exec_result_t VM::stepInner(
   AccountState& accountState,
   params_t& params,
   External& external,
+  ReturnData& returnData,
   env_t env
 ) {
   uint8_t opcode = reader.bytes[reader.position];
@@ -73,6 +76,7 @@ exec_result_t VM::stepInner(
     accountState,
     params,
     external,
+    returnData,
     env
   );
 
@@ -138,6 +142,7 @@ instruction_result_t VM::executeInstruction(
   AccountState& accountState,
   params_t& params,
   External& external,
+  ReturnData& returnData,
   env_t env
 ) {
   switch (Instruction::opcode(instruction)) {
@@ -679,19 +684,70 @@ instruction_result_t VM::executeInstruction(
       printf("(CREATE2 ");
       break;
     case Opcode::CALL:
-      printf("(CALL ");
-      break;
     case Opcode::CALLCODE:
-      printf("(CALLCODE ");
-      break;
     case Opcode::DELEGATECALL:
+    case Opcode::STATICCALL:
       {
         uint256_t codeAddress = stack.peek(0);
-        uint256_t inOffset = stack.peek(1);
-        uint256_t inSize = stack.peek(2);
-        uint256_t outOffset = stack.peek(3);
-        uint256_t outSize = stack.peek(4);
-        stack.pop(5);
+
+        size_t stackOffset = 0;
+        uint256_t value;
+
+        uint8_t callOpcode = Instruction::opcode(instruction);
+
+        switch (callOpcode) {
+          case Opcode::DELEGATECALL:
+            value = uint256_t();
+            break;
+          case Opcode::STATICCALL:
+            value = uint256_t(0);
+            break;
+          default:
+            {
+              value = stack.peek(1);
+              stackOffset += 1;
+              break;
+            }
+        }
+
+        uint256_t inOffset = stack.peek(1 + stackOffset);
+        uint256_t inSize = stack.peek(2 + stackOffset);
+        uint256_t outOffset = stack.peek(3 + stackOffset);
+        uint256_t outSize = stack.peek(4 + stackOffset);
+
+        stack.pop(5 + stackOffset);
+
+        // TODO: stipend
+
+        uint256_t senderAddress;
+        uint256_t receiveAddress;
+        bool hasBalance;
+        bool callType;
+
+        switch (callOpcode) {
+          case Opcode::CALL:
+            printf("(CALL ");
+            break;
+          case Opcode::CALLCODE:
+            printf("CALLCODE ");
+            break;
+          case Opcode::DELEGATECALL:
+            {
+              senderAddress = params.sender;
+              receiveAddress = params.address;
+              hasBalance = true;
+              callType = ActionType::ACTION_DELEGATE_CALL;
+              break;
+            }
+          case Opcode::STATICCALL:
+            {
+              senderAddress = params.address;
+              receiveAddress = params.address;
+              hasBalance = true;
+              callType = ActionType::ACTION_STATIC_CALL;
+              break;
+            }
+        }
 
         // TODO: if there is not enough balance, or the stack depth is reached, return 0
 
@@ -700,9 +756,6 @@ instruction_result_t VM::executeInstruction(
 
         break;
       }
-    case Opcode::STATICCALL:
-      printf("(STATICCALL ");
-      break;
     case Opcode::REVERT:
       {
         uint256_t initOff = stack.peek(0);

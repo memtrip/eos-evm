@@ -3,6 +3,7 @@
 #include <evm/utils.h>
 #include <evm/vm.h>
 #include <evm/hex.h>
+#include <evm/return_data.h>
 #include "external_mock.h"
 
 TEST_CASE("Hash zero", "[sha3]") {
@@ -14,6 +15,7 @@ TEST_CASE("Hash zero", "[sha3]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
+  ReturnData returnData = ReturnData::empty();
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   bytes_t* memoryBytes = new bytes_t();
@@ -22,7 +24,7 @@ TEST_CASE("Hash zero", "[sha3]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, ext, Utils::env());
+  vm.execute(mem, sm, as, params, ext, returnData, Utils::env());
 
   // then
   REQUIRE("c5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470" == 

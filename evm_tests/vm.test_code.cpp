@@ -2,6 +2,7 @@
 #include <evm/utils.h>
 #include <evm/vm.h>
 #include <evm/hex.h>
+#include <evm/return_data.h>
 #include "external_mock.h"
 
 TEST_CASE("extcodesize and extcodecopy", "[code]") {
@@ -11,6 +12,7 @@ TEST_CASE("extcodesize and extcodecopy", "[code]") {
   ExternalMock ext {};
   ext.codeResponse = Hex::hexToBytes("6005600055");
   VM vm {};
+  ReturnData returnData = ReturnData::empty();
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   bytes_t* memoryBytes = new bytes_t();
@@ -19,7 +21,7 @@ TEST_CASE("extcodesize and extcodecopy", "[code]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, ext, Utils::env());
+  vm.execute(mem, sm, as, params, ext, returnData, Utils::env());
 
   // then
   store_item_t item1 = Utils::accountStoreValue(0, accountItems);
@@ -39,6 +41,7 @@ TEST_CASE("codesize", "[code]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
+  ReturnData returnData = ReturnData::empty();
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   bytes_t* memoryBytes = new bytes_t();
@@ -47,7 +50,7 @@ TEST_CASE("codesize", "[code]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, ext, Utils::env());
+  vm.execute(mem, sm, as, params, ext, returnData, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000022" == 
@@ -62,6 +65,7 @@ TEST_CASE("calldataload", "[code]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), Hex::hexToBytes(calldata_str));
   ExternalMock ext {};
   VM vm {};
+  ReturnData returnData = ReturnData::empty();
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   bytes_t* memoryBytes = new bytes_t();
@@ -70,7 +74,7 @@ TEST_CASE("calldataload", "[code]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, ext, Utils::env());
+  vm.execute(mem, sm, as, params, ext, returnData, Utils::env());
 
   // then
   store_item_t item1 = Utils::accountStoreValue(0, accountItems);

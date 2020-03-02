@@ -3,6 +3,7 @@
 #include <evm/utils.h>
 #include <evm/vm.h>
 #include <evm/hex.h>
+#include <evm/return_data.h>
 #include "external_mock.h"
 
 TEST_CASE("Push1", "[push]") {
@@ -14,6 +15,7 @@ TEST_CASE("Push1", "[push]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
+  ReturnData returnData = ReturnData::empty();
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   bytes_t* memoryBytes = new bytes_t();
@@ -22,7 +24,7 @@ TEST_CASE("Push1", "[push]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, ext, Utils::env());
+  vm.execute(mem, sm, as, params, ext, returnData, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000009" == 
@@ -39,6 +41,7 @@ TEST_CASE("Push2", "[push]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
+  ReturnData returnData = ReturnData::empty();
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   bytes_t* memoryBytes = new bytes_t();
@@ -47,7 +50,7 @@ TEST_CASE("Push2", "[push]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, ext, Utils::env());
+  vm.execute(mem, sm, as, params, ext, returnData, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000015700" == 
@@ -64,6 +67,7 @@ TEST_CASE("Push3", "[push]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
+  ReturnData returnData = ReturnData::empty();
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   bytes_t* memoryBytes = new bytes_t();
@@ -72,7 +76,7 @@ TEST_CASE("Push3", "[push]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, ext, Utils::env());
+  vm.execute(mem, sm, as, params, ext, returnData, Utils::env());
 
   // then
   CHECK("00000000000000000000000000000000000000000000000000000000015701de" == 
@@ -89,6 +93,7 @@ TEST_CASE("Push4", "[push]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
+  ReturnData returnData = ReturnData::empty();
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   bytes_t* memoryBytes = new bytes_t();
@@ -97,7 +102,7 @@ TEST_CASE("Push4", "[push]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, ext, Utils::env());
+  vm.execute(mem, sm, as, params, ext, returnData, Utils::env());
 
   // then
   CHECK("000000000000000000000000000000000000000000000000000000002468a978" == 
@@ -114,6 +119,7 @@ TEST_CASE("Push5", "[push]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
+  ReturnData returnData = ReturnData::empty();
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   bytes_t* memoryBytes = new bytes_t();
@@ -122,7 +128,7 @@ TEST_CASE("Push5", "[push]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, ext, Utils::env());
+  vm.execute(mem, sm, as, params, ext, returnData, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000002468a97824" == 
@@ -139,6 +145,7 @@ TEST_CASE("Push6", "[push]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
+  ReturnData returnData = ReturnData::empty();
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   bytes_t* memoryBytes = new bytes_t();
@@ -147,7 +154,7 @@ TEST_CASE("Push6", "[push]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, ext, Utils::env());
+  vm.execute(mem, sm, as, params, ext, returnData, Utils::env());
 
   // then
   CHECK("00000000000000000000000000000000000000000000000000002468a9782468" == 
@@ -164,6 +171,7 @@ TEST_CASE("Push7", "[push]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
+  ReturnData returnData = ReturnData::empty();
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   bytes_t* memoryBytes = new bytes_t();
@@ -172,7 +180,7 @@ TEST_CASE("Push7", "[push]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, ext, Utils::env());
+  vm.execute(mem, sm, as, params, ext, returnData, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000020000000000024" == 
@@ -189,6 +197,7 @@ TEST_CASE("Push8", "[push]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
+  ReturnData returnData = ReturnData::empty();
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   bytes_t* memoryBytes = new bytes_t();
@@ -197,7 +206,7 @@ TEST_CASE("Push8", "[push]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, ext, Utils::env());
+  vm.execute(mem, sm, as, params, ext, returnData, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000002000000000000024" == 
