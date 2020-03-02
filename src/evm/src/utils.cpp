@@ -528,7 +528,7 @@ env_t Utils::env() {
   };
 };
 
-params_t Utils::params(bytes_t data) {
+params_t Utils::params(bytes_t code, bytes_t data) {
   return {
     uint256_t(0xea0e9f), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
@@ -537,7 +537,8 @@ params_t Utils::params(bytes_t data) {
     uint256_t(0xea0e9e), /* sender */
     uint256_t(0x1283fe), /* origin */
     uint256_t(34), /* value */
-    data
+    code, /* code */
+    data /* data */
   };
 };
 

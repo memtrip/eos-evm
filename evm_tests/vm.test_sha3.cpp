@@ -11,7 +11,7 @@ TEST_CASE("Hash zero", "[sha3]") {
 	// (PUSH1 ((60) 00))
 	// (SHA3 (20))
   std::string bytecode_str = "6000600020";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();

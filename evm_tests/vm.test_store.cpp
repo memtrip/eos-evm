@@ -11,7 +11,7 @@ TEST_CASE("Store two values", "[store]") {
 	// (PUSH1 ((60) 01))
 	// (SSTORE (55))
   std::string bytecode_str = "6002600155";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();

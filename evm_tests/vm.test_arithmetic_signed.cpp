@@ -7,7 +7,7 @@
 
 TEST_CASE("signed division", "[signed]") {
   std::string bytecode_str = "650123651246236265432290056000556501236512462360009005600155";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
@@ -35,7 +35,7 @@ TEST_CASE("signed division", "[signed]") {
 
 TEST_CASE("signed mod", "[signed]") {
   std::string bytecode_str = "650123651246236265432290076000556501236512462360009007600155";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
@@ -63,7 +63,7 @@ TEST_CASE("signed mod", "[signed]") {
 
 TEST_CASE("add mod, mul mod", "[signed]") {
   std::string bytecode_str = "60ff60f060108282820860005509600155600060f0601082828208196002550919600355";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
@@ -101,7 +101,7 @@ TEST_CASE("add mod, mul mod", "[signed]") {
 
 TEST_CASE("exponent", "[signed]") {
   std::string bytecode_str = "6016650123651246230a6000556001650123651246230a6001556000650123651246230a600255";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
@@ -134,7 +134,7 @@ TEST_CASE("exponent", "[signed]") {
 
 TEST_CASE("signextend", "[signed]") {
   std::string bytecode_str = "610fff60020b60005560ff60200b600155";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
@@ -162,7 +162,7 @@ TEST_CASE("signextend", "[signed]") {
 
 TEST_CASE("signed comparison", "[signed]") {
   std::string bytecode_str = "60106000036010818112600055136001556010601060000381811260025513600355";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();

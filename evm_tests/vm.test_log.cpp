@@ -7,7 +7,7 @@
 TEST_CASE("Log address (LOG0)", "[log]") {
   // given
   std::string bytecode_str = "60006000a0";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
@@ -29,7 +29,7 @@ TEST_CASE("Log address (LOG0)", "[log]") {
 TEST_CASE("Log sender (LOG1)", "[log]") {
   // given
   std::string bytecode_str = "60ff6000533360206000a1";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
@@ -56,7 +56,7 @@ TEST_CASE("Log sender (LOG1)", "[log]") {
 TEST_CASE("Log origin and sender (LOG2)", "[log]") {
   // given
   std::string bytecode_str = "60ff600053333260206000a2";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
@@ -86,7 +86,7 @@ TEST_CASE("Log origin and sender (LOG2)", "[log]") {
 TEST_CASE("Log origin and sender (LOG3)", "[log]") {
   // given
   std::string bytecode_str = "60ff60005333323060206000a3";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
@@ -119,7 +119,7 @@ TEST_CASE("Log origin and sender (LOG3)", "[log]") {
 TEST_CASE("Log origin and sender (LOG4)", "[log]") {
   // given
   std::string bytecode_str = "60ff6000534333323060206000a4";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();

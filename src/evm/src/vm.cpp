@@ -19,8 +19,8 @@ exec_result_t VM::execute(
 
   exec_result_t result;
 
-  jump_set_t jumps = Jumps::findDestinations(params.data);
-  ByteReader reader(0, params.data);
+  jump_set_t jumps = Jumps::findDestinations(params.code);
+  ByteReader reader(0, params.code);
 
   do {
     result = VM::step(jumps, memory, stack, reader, accountState, params, external, env);

@@ -15,6 +15,6 @@ class Utils {
     static store_item_t accountStoreValue(size_t index, account_store_t* store);
     static void printBytes(bytes_t& bytes);
     static env_t env();
-    static params_t params(bytes_t data);
+    static params_t params(bytes_t code, bytes_t data);
     static bytes_t returnDataSlice(ReturnData returnData);
 };

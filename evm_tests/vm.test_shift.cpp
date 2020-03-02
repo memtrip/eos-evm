@@ -9,7 +9,7 @@
 
 TEST_CASE("shift left ", "[shift]") {
   std::string bytecode_str = "7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff60ff1b";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
@@ -30,7 +30,7 @@ TEST_CASE("shift left ", "[shift]") {
 
 TEST_CASE("shift left (2)", "[shift]") {
   std::string bytecode_str = "7f7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff60011b";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
@@ -51,7 +51,7 @@ TEST_CASE("shift left (2)", "[shift]") {
 
 TEST_CASE("shift left (3)", "[shift]") {
   std::string bytecode_str = "600560011b";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
@@ -72,7 +72,7 @@ TEST_CASE("shift left (3)", "[shift]") {
 
 TEST_CASE("shift right ", "[shift]") {
   std::string bytecode_str = "7f800000000000000000000000000000000000000000000000000000000000000060011c";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
@@ -93,7 +93,7 @@ TEST_CASE("shift right ", "[shift]") {
 
 TEST_CASE("shift right (1)", "[shift]") {
   std::string bytecode_str = "7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff60011c";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
@@ -114,7 +114,7 @@ TEST_CASE("shift right (1)", "[shift]") {
 
 TEST_CASE("shift right (2)", "[shift]") {
   std::string bytecode_str = "600560011c";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
@@ -133,7 +133,7 @@ TEST_CASE("shift right (2)", "[shift]") {
 
 TEST_CASE("sar", "[shift]") {
   std::string bytecode_str = "7f800000000000000000000000000000000000000000000000000000000000000060011d";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
@@ -155,7 +155,7 @@ TEST_CASE("sar", "[shift]") {
 
 TEST_CASE("sar (1)", "[shift]") {
   std::string bytecode_str = "7f400000000000000000000000000000000000000000000000000000000000000060fe1d";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
@@ -177,7 +177,7 @@ TEST_CASE("sar (1)", "[shift]") {
 
 TEST_CASE("sar (2)", "[shift]") {
   std::string bytecode_str = "7f7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff60f81d";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
@@ -199,7 +199,7 @@ TEST_CASE("sar (2)", "[shift]") {
 
 TEST_CASE("sar (3)", "[shift]") {
   std::string bytecode_str = "600160000360021d";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();

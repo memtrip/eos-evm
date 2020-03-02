@@ -9,7 +9,7 @@ TEST_CASE("Address", "[params]") {
   // given
   // (ADDRESS 30)
   std::string bytecode_str = "30";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
@@ -30,7 +30,7 @@ TEST_CASE("Origin", "[params]") {
   // given
   // (ORIGIN 32)
   std::string bytecode_str = "32";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
@@ -51,7 +51,7 @@ TEST_CASE("Caller", "[params]") {
   // given
   // (CALLER 33)
   std::string bytecode_str = "33";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
@@ -70,10 +70,11 @@ TEST_CASE("Caller", "[params]") {
   );
 }
 
-TEST_CASE("Call data size", "[params]") {
+TEST_CASE("calldatasize", "[params]") {
   // given
   std::string bytecode_str = "60006000600060006000600060006000600036";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  std::string calldata_str = "60006000";
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), Hex::hexToBytes(calldata_str));
   ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
@@ -87,7 +88,7 @@ TEST_CASE("Call data size", "[params]") {
   vm.execute(mem, sm, as, params, ext, Utils::env());
 
   // then
-  CHECK("0000000000000000000000000000000000000000000000000000000000000013" == 
+  CHECK("0000000000000000000000000000000000000000000000000000000000000004" == 
     Utils::uint256_2str(sm.top())
   );
 }

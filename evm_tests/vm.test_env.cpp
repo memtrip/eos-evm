@@ -10,7 +10,7 @@ TEST_CASE("Blockhash (stub)", "[env]") {
   // (PUSH1 ((60)00))
   // (BLOCKHASH 40)
   std::string bytecode_str = "600040";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
@@ -31,7 +31,7 @@ TEST_CASE("Coinbase (stub)", "[env]") {
   // given
   // (COINBASE 41)
   std::string bytecode_str = "41";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
@@ -52,7 +52,7 @@ TEST_CASE("Difficulty (stub)", "[env]") {
   // given
   // (DIFFICULTY 44)
   std::string bytecode_str = "44";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
@@ -73,7 +73,7 @@ TEST_CASE("Timestamp", "[env]") {
   // given
   // (TIMESTAMP 42)
   std::string bytecode_str = "42";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
@@ -94,7 +94,7 @@ TEST_CASE("Number", "[env]") {
   // given
   // (NUMBER 43)
   std::string bytecode_str = "43";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
@@ -115,7 +115,7 @@ TEST_CASE("Gas limit", "[env]") {
   // given
   // (GASLIMIT 45)
   std::string bytecode_str = "45";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
@@ -136,7 +136,7 @@ TEST_CASE("Chain id", "[env]") {
   // given
   // (CHAINID 45)
   std::string bytecode_str = "46";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
@@ -157,7 +157,7 @@ TEST_CASE("Call value", "[env]") {
   // given
   // (CALLVALUE 34)
   std::string bytecode_str = "34";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();

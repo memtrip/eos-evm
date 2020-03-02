@@ -11,7 +11,7 @@ TEST_CASE("Push1", "[push]") {
 	// (PUSH1 ((60)03))
   // (ADD (01))
   std::string bytecode_str = "6006600301";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
@@ -36,7 +36,7 @@ TEST_CASE("Push2", "[push]") {
 	// (PUSH2 ((61)AC00))
   // (ADD (01))
   std::string bytecode_str = "61AB0061AC0001";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
@@ -61,7 +61,7 @@ TEST_CASE("Push3", "[push]") {
 	// (PUSH3 ((62)AC00EF))
   // (ADD (01))
   std::string bytecode_str = "62AB00EF62AC00EF01";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
@@ -86,7 +86,7 @@ TEST_CASE("Push4", "[push]") {
 	// (PUSH4 ((63)12345300))
   // (ADD (01))
   std::string bytecode_str = "6312345678631234530001";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
@@ -111,7 +111,7 @@ TEST_CASE("Push5", "[push]") {
 	// (PUSH5 ((64)1234530012))
   // (ADD (01))
   std::string bytecode_str = "64123456781264123453001201";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
@@ -136,7 +136,7 @@ TEST_CASE("Push6", "[push]") {
 	// (PUSH6 ((65)123453001234))
   // (ADD (01))
   std::string bytecode_str = "651234567812346512345300123401";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
@@ -161,7 +161,7 @@ TEST_CASE("Push7", "[push]") {
 	// (PUSH7 ((66)10000000000012))
   // (ADD (01))
   std::string bytecode_str = "6610000000000012661000000000001201";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
@@ -186,7 +186,7 @@ TEST_CASE("Push8", "[push]") {
 	// (PUSH8 ((67)1000000000000012))
   // (ADD (01))
   std::string bytecode_str = "67100000000000001267100000000000001201";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();

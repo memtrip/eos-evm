@@ -10,7 +10,7 @@ TEST_CASE("Bitwise AND", "[bitwise]") {
   // (PUSH1 ((60)09))
   // (AND (16))
   std::string bytecode_str = "6003600916";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
@@ -34,7 +34,7 @@ TEST_CASE("Bitwise OR", "[bitwise]") {
   // (PUSH1 ((60)04))
   // (AND (17))
   std::string bytecode_str = "6002600417";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
@@ -58,7 +58,7 @@ TEST_CASE("Bitwise XOR", "[bitwise]") {
   // (PUSH1 ((60)07))
   // (XOR (18))
   std::string bytecode_str = "6002600718";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
@@ -79,7 +79,7 @@ TEST_CASE("Bitwise XOR", "[bitwise]") {
 
 TEST_CASE("Bitops", "[bitwise]") {
   std::string bytecode_str = "60ff610ff08181818116600055176001551860025560008015600355198015600455600555";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();

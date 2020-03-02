@@ -21,7 +21,7 @@ TEST_CASE("Conditional jump to destination truthy", "[jumps]") {
   // (PUSH1 ((60)10))
 	// (DIV (04))
   std::string bytecode_str = "6006600310600F57600660030200025B6002601604";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
@@ -56,7 +56,7 @@ TEST_CASE("Conditional jump to destination not true", "[jumps]") {
   // (PUSH1 ((60)10))
 	// (DIV (04))
   std::string bytecode_str = "6003600610600F57600660030200025B6002601604";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
@@ -85,7 +85,7 @@ TEST_CASE("Unconditional jump to destination", "[jumps]") {
   // (JUMPDEST (5B))
 	// (DIV (04))
   std::string bytecode_str = "60036006600856025B04";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
   account_store_t* accountItems = new account_store_t();
@@ -106,7 +106,7 @@ TEST_CASE("Unconditional jump to destination", "[jumps]") {
 
 // TEST_CASE("Jumps", "[jumps]") {
 //   std::string bytecode_str = "600160015560066000555b60016000540380806000551560245760015402600155600a565b";
-//   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str));
+//   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
 //   ExternalMock ext {};
   VM vm {};
 //   account_store_t* accountItems = new account_store_t();

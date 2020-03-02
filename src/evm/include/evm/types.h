@@ -46,6 +46,7 @@ struct Params {
   uint256_t sender;
   uint256_t origin;
   uint256_t value;
+  bytes_t code;
   bytes_t data;
 };
 
