@@ -41,12 +41,25 @@ call_result_t Call::call(
   Call innerCall {};
 
   ReturnData returnData = ReturnData::empty();
-  vm.execute(mem, sm, accountState, params, external, returnData, innerCall, env);
+  exec_result_t vm_result = vm.execute(mem, sm, accountState, params, external, returnData, innerCall, env);
+
+  switch (vm_result.first) {
+    case ExecResult::STOPPED:
+      break;
+    case ExecResult::DONE:
+      break;
+    case ExecResult::CONTINUE:
+      break;
+    case ExecResult::INTERPRETER_TRAP:
+      break;
+  }
 
   call_result_t result = std::make_pair(
     MessageCallResult::MESSAGE_CALL_FAILED,
     0
   );
+  
+  delete memoryBytes;
 
   return result;
 }
