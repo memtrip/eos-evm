@@ -1,3 +1,4 @@
+#pragma once
 #include <evm/types.h>
 
 class Instruction
