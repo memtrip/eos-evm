@@ -1,3 +1,5 @@
+#pragma once
+
 enum Opcode: uint8_t { 
   STOP = 0x00,
   ADD = 0x01,

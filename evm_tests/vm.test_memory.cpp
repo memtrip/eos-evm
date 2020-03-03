@@ -5,6 +5,7 @@
 #include <evm/hex.h>
 #include <evm/return_data.h>
 #include <evm/call.h>
+#include <evm/gasometer.h>
 #include "external_mock.h"
 
 TEST_CASE("Save to memory", "[memory]") {
@@ -20,6 +21,7 @@ TEST_CASE("Save to memory", "[memory]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
+  Gasometer gasometer {};
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
@@ -27,7 +29,7 @@ TEST_CASE("Save to memory", "[memory]") {
 
   // when
   mem.resize(32); // TODO: this should happen via requirements (memoryRequiredSize)
-  vm.execute(mem, sm, as, params, ext, returnData, call, Utils::env());
+  vm.execute(mem, sm, as, gasometer, params, ext, returnData, call, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000006" == 
@@ -50,6 +52,7 @@ TEST_CASE("Save to memory, and retreive", "[memory]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
+  Gasometer gasometer {};
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
@@ -57,7 +60,7 @@ TEST_CASE("Save to memory, and retreive", "[memory]") {
 
   // when
   mem.resize(32); // TODO: this should happen via requirements (memoryRequiredSize)
-  vm.execute(mem, sm, as, params, ext, returnData, call, Utils::env());
+  vm.execute(mem, sm, as, gasometer, params, ext, returnData, call, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000006" == 
@@ -81,6 +84,7 @@ TEST_CASE("Save to memory, retreive, and apply addition", "[memory]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
+  Gasometer gasometer {};
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
@@ -88,7 +92,7 @@ TEST_CASE("Save to memory, retreive, and apply addition", "[memory]") {
 
   // when
   mem.resize(32); // TODO: this should happen via requirements (memoryRequiredSize)
-  vm.execute(mem, sm, as, params, ext, returnData, call, Utils::env());
+  vm.execute(mem, sm, as, gasometer, params, ext, returnData, call, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000018" == 
@@ -113,6 +117,7 @@ TEST_CASE("Save byte to memory, retreive, and apply addition", "[memory]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
+  Gasometer gasometer {};
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
@@ -120,7 +125,7 @@ TEST_CASE("Save byte to memory, retreive, and apply addition", "[memory]") {
 
   // when
   mem.resize(32); // TODO: this should happen via requirements (memoryRequiredSize)
-  vm.execute(mem, sm, as, params, ext, returnData, call, Utils::env());
+  vm.execute(mem, sm, as, gasometer, params, ext, returnData, call, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000018" == 
@@ -145,6 +150,7 @@ TEST_CASE("Save byte to memory (1)", "[memory]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
+  Gasometer gasometer {};
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
@@ -152,7 +158,7 @@ TEST_CASE("Save byte to memory (1)", "[memory]") {
 
   // when
   mem.resize(32); // TODO: this should happen via requirements (memoryRequiredSize)
-  vm.execute(mem, sm, as, params, ext, returnData, call, Utils::env());
+  vm.execute(mem, sm, as, gasometer, params, ext, returnData, call, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000018" == 
@@ -171,6 +177,7 @@ TEST_CASE("Memory size", "[memory]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
+  Gasometer gasometer {};
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
@@ -178,7 +185,7 @@ TEST_CASE("Memory size", "[memory]") {
 
   // when
   mem.resize(32); // TODO: this should happen via requirements (memoryRequiredSize)
-  vm.execute(mem, sm, as, params, ext, returnData, call, Utils::env());
+  vm.execute(mem, sm, as, gasometer, params, ext, returnData, call, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000020" /* 32 in hex */ == 

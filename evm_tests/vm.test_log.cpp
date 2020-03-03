@@ -4,6 +4,7 @@
 #include <evm/hex.h>
 #include <evm/return_data.h>
 #include <evm/call.h>
+#include <evm/gasometer.h>
 #include "external_mock.h"
 
 TEST_CASE("Log address (LOG0)", "[log]") {
@@ -16,13 +17,14 @@ TEST_CASE("Log address (LOG0)", "[log]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
+  Gasometer gasometer {};
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, ext, returnData, call, Utils::env());
+  vm.execute(mem, sm, as, gasometer, params, ext, returnData, call, Utils::env());
 
   // then
   CHECK(1 == ext.logSpy.size());
@@ -40,13 +42,14 @@ TEST_CASE("Log sender (LOG1)", "[log]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
+  Gasometer gasometer {};
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, ext, returnData, call, Utils::env());
+  vm.execute(mem, sm, as, gasometer, params, ext, returnData, call, Utils::env());
 
   // then
   CHECK(1 == ext.logSpy.size());
@@ -69,13 +72,14 @@ TEST_CASE("Log origin and sender (LOG2)", "[log]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
+  Gasometer gasometer {};
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, ext, returnData, call, Utils::env());
+  vm.execute(mem, sm, as, gasometer, params, ext, returnData, call, Utils::env());
 
   // then
   CHECK(1 == ext.logSpy.size());
@@ -101,13 +105,14 @@ TEST_CASE("Log origin and sender (LOG3)", "[log]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
+  Gasometer gasometer {};
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, ext, returnData, call, Utils::env());
+  vm.execute(mem, sm, as, gasometer, params, ext, returnData, call, Utils::env());
 
   // then
   CHECK(1 == ext.logSpy.size());
@@ -136,13 +141,14 @@ TEST_CASE("Log origin and sender (LOG4)", "[log]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
+  Gasometer gasometer {};
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, ext, returnData, call, Utils::env());
+  vm.execute(mem, sm, as, gasometer, params, ext, returnData, call, Utils::env());
 
   // then
   CHECK(1 == ext.logSpy.size());

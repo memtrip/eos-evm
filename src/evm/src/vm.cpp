@@ -12,6 +12,7 @@ exec_result_t VM::execute(
   Memory& memory,
   StackMachine& stack, 
   AccountState& accountState,
+  Gasometer& gasometer,
   params_t& params,
   External& external,
   ReturnData& returnData,
@@ -25,7 +26,19 @@ exec_result_t VM::execute(
   ByteReader reader(0, params.code);
 
   do {
-    result = VM::step(jumps, memory, stack, reader, accountState, params, external, returnData, call, env);
+    result = VM::step(
+      jumps, 
+      memory, 
+      stack, 
+      reader, 
+      accountState, 
+      gasometer, 
+      params,
+      external, 
+      returnData, 
+      call, 
+      env
+    );
   } while(result.first == ExecResult::CONTINUE);
 
   return result;
@@ -37,13 +50,26 @@ exec_result_t VM::step(
   StackMachine& stack,
   ByteReader& reader, 
   AccountState& accountState,
+  Gasometer& gasometer,
   params_t& params,
   External& external,
   ReturnData& returnData,
   Call& call,
   env_t env
 ) {
-  return VM::stepInner(jumps, memory, stack, reader, accountState, params, external, returnData, call, env);
+  return VM::stepInner(
+    jumps, 
+    memory, 
+    stack, 
+    reader, 
+    accountState, 
+    gasometer, 
+    params, 
+    external, 
+    returnData, 
+    call, 
+    env
+  );
 }
 
 exec_result_t VM::stepInner(
@@ -52,6 +78,7 @@ exec_result_t VM::stepInner(
   StackMachine& stack,
   ByteReader& reader, 
   AccountState& accountState,
+  Gasometer& gasometer,
   params_t& params,
   External& external,
   ReturnData& returnData,
@@ -77,6 +104,7 @@ exec_result_t VM::stepInner(
     stack,
     reader, 
     accountState,
+    gasometer,
     params,
     external,
     returnData,
@@ -144,6 +172,7 @@ instruction_result_t VM::executeInstruction(
   StackMachine& stack,
   ByteReader& reader, 
   AccountState& accountState,
+  Gasometer& gasometer,
   params_t& params,
   External& external,
   ReturnData& returnData,

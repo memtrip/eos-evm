@@ -5,6 +5,7 @@
 #include "vm_result.h"
 #include <evm/memory.h>
 #include <evm/external.h>
+#include <evm/gasometer.h>
 
 class VM {
   private:
@@ -16,6 +17,7 @@ class VM {
       StackMachine& stack,
       ByteReader& reader, 
       AccountState& accountState,
+      Gasometer& gasometer,
       params_t& params,
       External& external,
       ReturnData& returnData,
@@ -29,6 +31,7 @@ class VM {
       StackMachine& stack,
       ByteReader& reader, 
       AccountState& accountState,
+      Gasometer& gasometer,
       params_t& params,
       External& external,
       ReturnData& returnData,
@@ -42,6 +45,7 @@ class VM {
       StackMachine& stack,
       ByteReader& reader, 
       AccountState& accountState,
+      Gasometer& gasometer,
       params_t& params,
       External& external,
       ReturnData& returnData,
@@ -54,6 +58,7 @@ class VM {
       Memory& memory,
       StackMachine& stack, 
       AccountState& accountState,
+      Gasometer& gasometer,
       params_t& params,
       External& external,
       ReturnData& returnData,

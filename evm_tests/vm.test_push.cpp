@@ -5,6 +5,7 @@
 #include <evm/hex.h>
 #include <evm/return_data.h>
 #include <evm/call.h>
+#include <evm/gasometer.h>
 #include "external_mock.h"
 
 TEST_CASE("Push1", "[push]") {
@@ -20,13 +21,14 @@ TEST_CASE("Push1", "[push]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
+  Gasometer gasometer {};
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, ext, returnData, call, Utils::env());
+  vm.execute(mem, sm, as, gasometer, params, ext, returnData, call, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000009" == 
@@ -47,13 +49,14 @@ TEST_CASE("Push2", "[push]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
+  Gasometer gasometer {};
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, ext, returnData, call, Utils::env());
+  vm.execute(mem, sm, as, gasometer, params, ext, returnData, call, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000015700" == 
@@ -74,13 +77,14 @@ TEST_CASE("Push3", "[push]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
+  Gasometer gasometer {};
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, ext, returnData, call, Utils::env());
+  vm.execute(mem, sm, as, gasometer, params, ext, returnData, call, Utils::env());
 
   // then
   CHECK("00000000000000000000000000000000000000000000000000000000015701de" == 
@@ -101,13 +105,14 @@ TEST_CASE("Push4", "[push]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
+  Gasometer gasometer {};
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, ext, returnData, call, Utils::env());
+  vm.execute(mem, sm, as, gasometer, params, ext, returnData, call, Utils::env());
 
   // then
   CHECK("000000000000000000000000000000000000000000000000000000002468a978" == 
@@ -128,13 +133,14 @@ TEST_CASE("Push5", "[push]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
+  Gasometer gasometer {};
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, ext, returnData, call, Utils::env());
+  vm.execute(mem, sm, as, gasometer, params, ext, returnData, call, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000002468a97824" == 
@@ -155,13 +161,14 @@ TEST_CASE("Push6", "[push]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
+  Gasometer gasometer {};
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, ext, returnData, call, Utils::env());
+  vm.execute(mem, sm, as, gasometer, params, ext, returnData, call, Utils::env());
 
   // then
   CHECK("00000000000000000000000000000000000000000000000000002468a9782468" == 
@@ -182,13 +189,14 @@ TEST_CASE("Push7", "[push]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
+  Gasometer gasometer {};
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, ext, returnData, call, Utils::env());
+  vm.execute(mem, sm, as, gasometer, params, ext, returnData, call, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000020000000000024" == 
@@ -209,13 +217,14 @@ TEST_CASE("Push8", "[push]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
+  Gasometer gasometer {};
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, ext, returnData, call, Utils::env());
+  vm.execute(mem, sm, as, gasometer, params, ext, returnData, call, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000002000000000000024" == 

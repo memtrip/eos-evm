@@ -2,6 +2,7 @@
 #include <evm/vm.h>
 #include <evm/return_data.h>
 #include <evm/account_state.h>
+#include <evm/gasometer.h>
 
 call_result_t Call::call(
   uint256_t senderAddress,
@@ -32,6 +33,7 @@ call_result_t Call::call(
 
   VM vm {};
 
+  Gasometer gasometer {};
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
 
@@ -41,7 +43,7 @@ call_result_t Call::call(
   Call innerCall {};
 
   ReturnData returnData = ReturnData::empty();
-  exec_result_t vm_result = vm.execute(mem, sm, accountState, params, external, returnData, innerCall, env);
+  exec_result_t vm_result = vm.execute(mem, sm, accountState, gasometer, params, external, returnData, innerCall, env);
 
   switch (vm_result.first) {
     case ExecResult::STOPPED:

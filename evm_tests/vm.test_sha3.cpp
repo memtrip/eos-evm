@@ -5,6 +5,7 @@
 #include <evm/hex.h>
 #include <evm/return_data.h>
 #include <evm/call.h>
+#include <evm/gasometer.h>
 #include "external_mock.h"
 
 TEST_CASE("Hash zero", "[sha3]") {
@@ -20,13 +21,14 @@ TEST_CASE("Hash zero", "[sha3]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
+  Gasometer gasometer {};
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, params, ext, returnData, call, Utils::env());
+  vm.execute(mem, sm, as, gasometer, params, ext, returnData, call, Utils::env());
 
   // then
   REQUIRE("c5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470" == 

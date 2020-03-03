@@ -85,4 +85,5 @@ class Gasometer {
     gas_result_t gasMem(uint256_t defaultGas, uint256_t memoryNeeded);
     gas_result_t gasMemProvided(uint256_t defaultGas, uint256_t memoryNeeded, uint256_t requested);
     gas_result_t gasMemCopy(uint256_t defaultGas, uint256_t memoryNeeded, uint256_t copy);
+    uint256_t memNeeded(uint256_t mem, uint256_t add);
 };
