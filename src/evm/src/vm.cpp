@@ -727,7 +727,7 @@ instruction_result_t VM::executeInstruction(
         uint256_t senderAddress;
         uint256_t receiveAddress;
         bool hasBalance;
-        bool callType;
+        ActionType callType;
 
         switch (callOpcode) {
           case Opcode::CALL:
@@ -765,6 +765,19 @@ instruction_result_t VM::executeInstruction(
 
         bytes_t input = memory.readSlice(inOffset, inSize);
         // TODO: external call with result
+
+        call_result_t result = call.call(
+          senderAddress, 
+          receiveAddress, 
+          uint256_t(value), 
+          input, 
+          codeAddress, 
+          callType, 
+          true, 
+          env,
+          external,
+          accountState
+        );
 
         // TODO: setup resume output range
 

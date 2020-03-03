@@ -3,6 +3,7 @@
 #include <evm/return_data.h>
 #include <evm/call.h>
 #include <evm/external.h>
+#include <evm/account_state.h>
 
 enum MessageCallResult {
   MESSAGE_CALL_SUCCESS,
@@ -32,6 +33,8 @@ class Call {
       uint256_t codeAddress,
       ActionType callType,
       bool trap,
-      External& external
+      env_t env,
+      External& external,
+      AccountState& accountState
     );
 };
