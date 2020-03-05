@@ -18,7 +18,7 @@ TEST_CASE("extcodesize and extcodecopy", "[code]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
-  Gasometer gasometer {};
+  Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
@@ -49,7 +49,7 @@ TEST_CASE("codesize", "[code]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
-  Gasometer gasometer {};
+  Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
@@ -75,7 +75,7 @@ TEST_CASE("calldataload", "[code]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
-  Gasometer gasometer {};
+  Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();

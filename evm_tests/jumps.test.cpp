@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include "catch.hpp"
 #include <evm/jumps.h>
 #include <evm/types.h>

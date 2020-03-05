@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include "catch.hpp"
 #include <evm/utils.h>
 #include <evm/vm.h>
@@ -21,7 +20,7 @@ TEST_CASE("Duplicate stack item", "[DUP1]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
-  Gasometer gasometer {};
+  Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
@@ -69,7 +68,7 @@ TEST_CASE("Duplicate stack item at 16", "[DUP1]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
-  Gasometer gasometer {};
+  Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
@@ -97,7 +96,7 @@ TEST_CASE("Swap stack item", "[SWAP1]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
-  Gasometer gasometer {};
+  Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
@@ -143,7 +142,7 @@ TEST_CASE("Swap stack item at 16", "[SWAP16]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
-  Gasometer gasometer {};
+  Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
@@ -179,7 +178,7 @@ TEST_CASE("Program counter", "[PC]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
-  Gasometer gasometer {};
+  Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
@@ -212,7 +211,7 @@ TEST_CASE("Pop", "[POP]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
-  Gasometer gasometer {};
+  Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();

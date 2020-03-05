@@ -14,7 +14,6 @@ const size_t SLOAD_GAS = 200;
 const size_t BALANCE_GAS = 400;
 const size_t EXTCODESIZE_GAS = 20;
 const size_t EXTCODEHASH_GAS = 400;
-const bool NO_EMPTY = false;
 const size_t SHA3_GAS = 30;
 const size_t SHA3_WORD_GAS = 6;
 const size_t EXTCODECOPY_BASE_GAS = 20;
@@ -32,6 +31,11 @@ const size_t COPY_GAS = 3;
 const size_t MEMORY_GAS = 3;
 const size_t QUAD_COEFF_DIV = 512;
 
+enum InstructionRequirementsResult {
+  INSTRUCTION_RESULT_OK,
+  INSTRUCTION_RESULT_ERROR
+};
+
 struct InstructionRequirements {
   size_t gasCost;
   size_t provideGas;
@@ -39,32 +43,43 @@ struct InstructionRequirements {
   size_t memoryRequiredSize;
 };
 
+typedef std::variant<
+  uint8_t,
+  InstructionRequirements
+> instruction_requirements_result_t;
+
+typedef std::pair<
+  InstructionRequirementsResult,
+  instruction_requirements_result_t
+> instruction_requirements_t;
+
 enum GasResult {
   GAS_RESULT,
   GAS_MEM_RESULT,
   GAS_MEM_PROVIDE_RESULT,
-  GAS_MEM_COPY_RESULT
+  GAS_MEM_COPY_RESULT,
+  OUT_OF_GAS
 };
 
 struct GasMem {
-  uint256_t defaultGas;
-  uint256_t memoryNeeded;
+  gas_t defaultGas;
+  gas_t memoryNeeded;
 };
 
 struct GasMemProvided {
-  uint256_t defaultGas;
-  uint256_t memoryNeeded;
-  uint256_t requested;
+  gas_t defaultGas;
+  gas_t memoryNeeded;
+  gas_t requested;
 };
 
 struct GasMemCopy {
-  uint256_t defaultGas;
-  uint256_t memoryNeeded;
-  uint256_t copy;
+  gas_t defaultGas;
+  gas_t memoryNeeded;
+  gas_t copy;
 };
 
 typedef std::variant<
-  uint256_t,
+  gas_t,
   GasMem,
   GasMemProvided,
   GasMemCopy
@@ -72,18 +87,36 @@ typedef std::variant<
 
 typedef std::pair<GasResult, gas_result_type_t> gas_result_t;
 
+struct MemGasCost {
+  gas_t memGasCost;
+  gas_t newMemGas;
+  gas_t requiredMemorySize;
+};
+
+typedef MemGasCost mem_gas_cost_t;
+
 class Gasometer {
   public:
-    gas_result_t requirements(
+    Gasometer(gas_t currentGasArg);
+    instruction_requirements_t requirements(
       External& external,
       instruct_t instruction,
       StackMachine& stack,
       size_t currentMemorySize
     );
+    gas_result_t calculate(
+      External& external,
+      instruct_t instruction,
+      StackMachine& stack,
+      size_t currentMemorySize
+    );
+    MemGasCost memGasCost(gas_t currentMemSize, gas_t memSize);
   private:
+    gas_t currentGas;
     gas_result_t gas(uint256_t value);
     gas_result_t gasMem(uint256_t defaultGas, uint256_t memoryNeeded);
     gas_result_t gasMemProvided(uint256_t defaultGas, uint256_t memoryNeeded, uint256_t requested);
     gas_result_t gasMemCopy(uint256_t defaultGas, uint256_t memoryNeeded, uint256_t copy);
+    gas_result_t outOfGas();
     uint256_t memNeeded(uint256_t mem, uint256_t add);
 };

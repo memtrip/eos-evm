@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include "catch.hpp"
 #include <evm/utils.h>
 #include <evm/vm.h>
@@ -20,7 +19,7 @@ TEST_CASE("Blockhash (stub)", "[env]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
-  Gasometer gasometer {};
+  Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
@@ -44,7 +43,7 @@ TEST_CASE("Coinbase (stub)", "[env]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
-  Gasometer gasometer {};
+  Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
@@ -68,7 +67,7 @@ TEST_CASE("Difficulty (stub)", "[env]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
-  Gasometer gasometer {};
+  Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
@@ -92,7 +91,7 @@ TEST_CASE("Timestamp", "[env]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
-  Gasometer gasometer {};
+  Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
@@ -116,7 +115,7 @@ TEST_CASE("Number", "[env]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
-  Gasometer gasometer {};
+  Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
@@ -140,7 +139,7 @@ TEST_CASE("Gas limit", "[env]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
-  Gasometer gasometer {};
+  Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
@@ -164,7 +163,7 @@ TEST_CASE("Chain id", "[env]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
-  Gasometer gasometer {};
+  Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
@@ -188,7 +187,7 @@ TEST_CASE("Call value", "[env]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
-  Gasometer gasometer {};
+  Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();

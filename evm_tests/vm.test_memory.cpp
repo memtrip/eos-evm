@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include "catch.hpp"
 #include <evm/utils.h>
 #include <evm/vm.h>
@@ -21,7 +20,7 @@ TEST_CASE("Save to memory", "[memory]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
-  Gasometer gasometer {};
+  Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
@@ -52,7 +51,7 @@ TEST_CASE("Save to memory, and retreive", "[memory]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
-  Gasometer gasometer {};
+  Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
@@ -84,7 +83,7 @@ TEST_CASE("Save to memory, retreive, and apply addition", "[memory]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
-  Gasometer gasometer {};
+  Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
@@ -117,7 +116,7 @@ TEST_CASE("Save byte to memory, retreive, and apply addition", "[memory]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
-  Gasometer gasometer {};
+  Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
@@ -150,7 +149,7 @@ TEST_CASE("Save byte to memory (1)", "[memory]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
-  Gasometer gasometer {};
+  Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
@@ -177,7 +176,7 @@ TEST_CASE("Memory size", "[memory]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
-  Gasometer gasometer {};
+  Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();

@@ -1,6 +1,64 @@
 #include <evm/gasometer.h>
+#include <evm/overflow.h>
 
-gas_result_t Gasometer::requirements(
+Gasometer::Gasometer(gas_t currentGasArg) {
+  currentGas = currentGasArg;
+}
+
+instruction_requirements_t Gasometer::requirements(
+  External& external,
+  instruct_t instruction,
+  StackMachine& stack,
+  size_t currentMemorySize
+) {
+  gas_result_t result = calculate(
+    external,
+    instruction,
+    stack,
+    currentMemorySize
+  );
+
+  switch (result.first) {
+    case GasResult::GAS_RESULT:
+      {
+        gas_t gas = std::get<gas_t>(result.second);
+
+        InstructionRequirements instructionRequirements {
+          gas,
+          0,
+          0,
+          currentGas
+        };
+
+        return std::make_pair(
+          InstructionRequirementsResult::INSTRUCTION_RESULT_OK,
+          instructionRequirements
+        );
+      }
+    case GasResult::GAS_MEM_RESULT:
+      return std::make_pair(
+        InstructionRequirementsResult::INSTRUCTION_RESULT_OK,
+        0
+      );
+    case GasResult::GAS_MEM_PROVIDE_RESULT:
+      return std::make_pair(
+        InstructionRequirementsResult::INSTRUCTION_RESULT_OK,
+        0
+      );
+    case GasResult::GAS_MEM_COPY_RESULT:
+      return std::make_pair(
+        InstructionRequirementsResult::INSTRUCTION_RESULT_OK,
+        0
+      );
+    case GasResult::OUT_OF_GAS:
+      return std::make_pair(
+        InstructionRequirementsResult::INSTRUCTION_RESULT_OK,
+        0
+      );
+  }
+}
+
+gas_result_t Gasometer::calculate(
   External& external,
   instruct_t instruction,
   StackMachine& stack,
@@ -13,8 +71,15 @@ gas_result_t Gasometer::requirements(
     case Opcode::JUMPDEST:
       return gas(uint256_t(1));
     case Opcode::SSTORE:
-      // TODO
-      return gas(uint256_t(1));
+      {
+        if (currentGas <= CALL_STIPEND) {
+          return outOfGas();
+        }
+
+        // TODO: calculate gas for SSTORE
+
+        return gas(uint256_t(0));
+      }
     case Opcode::SLOAD:
       return gas(uint256_t(SLOAD_GAS));
     case Opcode::BALANCE:
@@ -24,7 +89,7 @@ gas_result_t Gasometer::requirements(
     case Opcode::EXTCODEHASH:
       return gas(uint256_t(EXTCODEHASH_GAS));
     case Opcode::SELFDESTRUCT:
-      // TODO
+      // No empty, new account gas calculation is not included
       return gas(uint256_t(0));
     case Opcode::MSTORE:
     case Opcode::MLOAD:
@@ -35,8 +100,11 @@ gas_result_t Gasometer::requirements(
     case Opcode::REVERT:
       return gasMem(defaultGas, memNeeded(stack.peek(0), stack.peek(1)));
     case Opcode::SHA3:
-      // TODO
-      return gas(uint256_t(1));
+      {
+        gas_t words = Overflow::toWordSize(stack.peek(1)).first;
+        uint256_t gas = (SHA3_GAS + SHA3_WORD_GAS) * words;
+        return gasMem(gas, memNeeded(stack.peek(0), stack.peek(1)));
+      }
     case Opcode::CALLDATACOPY:
     case Opcode::CODECOPY:
     case Opcode::RETURNDATACOPY:
@@ -65,13 +133,35 @@ gas_result_t Gasometer::requirements(
       }
     case Opcode::CALL:
     case Opcode::CALLCODE:
-      // TODO
-      return gas(uint256_t(1));
+      {
+        uint256_t gas = CALL_GAS;
+        uint256_t mem = std::max(
+          memNeeded(stack.peek(5), stack.peek(6)),
+          memNeeded(stack.peek(3), stack.peek(4))
+        );
+        uint256_t address = stack.peek(1);
+        bool isValueTransfer = stack.peek(2) == UINT256_ZERO; 
+
+        // No empty, new account gas calculation is not included
+
+        if (isValueTransfer) {
+          gas = gas + CALL_VALUE_TRANSFER_GAS;
+        }
+
+        uint256_t requested = stack.peek(0);
+
+        return gasMemProvided(gas, mem, requested);
+      }
     case Opcode::DELEGATECALL:
     case Opcode::STATICCALL:
       {
-        // TODO
-        return gas(uint256_t(1));
+        uint256_t gas = CALL_GAS;
+        uint256_t mem = std::max(
+          memNeeded(stack.peek(4), stack.peek(5)),
+          memNeeded(stack.peek(2), stack.peek(3))
+        );
+        uint256_t requested = stack.peek(0);
+        return gasMemProvided(gas, mem, requested);
       }
     case Opcode::CREATE:
       {
@@ -82,11 +172,24 @@ gas_result_t Gasometer::requirements(
         return gasMemProvided(gas, mem, uint256_t());
       }
     case Opcode::CREATE2:
-      // TODO
-      return gas(uint256_t(1));
+      {
+        uint256_t start = stack.peek(1);
+        uint256_t len = stack.peek(2);
+
+        gas_t word = Overflow::toWordSize(len).first;
+        gas_t wordGas = SHA3_WORD_GAS * word;
+        gas_t gas = Overflow::add(CREATE_GAS, wordGas).first;
+        uint256_t mem = memNeeded(stack.peek(2), stack.peek(3));
+
+        return gasMemProvided(uint256_t(gas), mem, uint256_t());
+      }
     case Opcode::EXP:
-      // TODO
-      return gas(uint256_t(1));
+      {
+        uint256_t exponent = stack.peek(1);
+        gas_t bytes = static_cast<gas_t>(intx::count_significant_words<uint8_t>(exponent));
+        gas_t cost = (EXP_GAS + EXP_BYTE_GAS) * bytes;
+        return gas(uint256_t(cost));
+      }
     case Opcode::BLOCKHASH:
       return gas(uint256_t(BLOCK_HASH_GAS));
   }
@@ -99,15 +202,15 @@ gas_result_t Gasometer::gas(uint256_t value) {
 
   gas_result_t result {
     GasResult::GAS_RESULT,
-    value
+    static_cast<gas_t>(value)
   };
   return result;
 }
 
 gas_result_t Gasometer::gasMem(uint256_t defaultGas, uint256_t memoryNeeded) {
   GasMem gasMem {
-    defaultGas,
-    memoryNeeded
+    static_cast<gas_t>(defaultGas),
+    static_cast<gas_t>(memoryNeeded)
   };
   gas_result_t result {
     GasResult::GAS_MEM_RESULT,
@@ -118,9 +221,9 @@ gas_result_t Gasometer::gasMem(uint256_t defaultGas, uint256_t memoryNeeded) {
 
 gas_result_t Gasometer::gasMemProvided(uint256_t defaultGas, uint256_t memoryNeeded, uint256_t requested) {
   GasMemProvided gasMemProvided {
-    defaultGas,
-    memoryNeeded,
-    requested
+    static_cast<gas_t>(defaultGas),
+    static_cast<gas_t>(memoryNeeded),
+    static_cast<gas_t>(requested)
   };
   gas_result_t result {
     GasResult::GAS_MEM_PROVIDE_RESULT,
@@ -131,9 +234,9 @@ gas_result_t Gasometer::gasMemProvided(uint256_t defaultGas, uint256_t memoryNee
 
 gas_result_t Gasometer::gasMemCopy(uint256_t defaultGas, uint256_t memoryNeeded, uint256_t copy) {
   GasMemCopy gasMemCopy {
-    defaultGas,
-    memoryNeeded,
-    copy
+    static_cast<gas_t>(defaultGas),
+    static_cast<gas_t>(memoryNeeded),
+    static_cast<gas_t>(copy)
   };
   gas_result_t result {
     GasResult::GAS_MEM_COPY_RESULT,
@@ -142,6 +245,32 @@ gas_result_t Gasometer::gasMemCopy(uint256_t defaultGas, uint256_t memoryNeeded,
   return result;
 }
 
+gas_result_t Gasometer::outOfGas() {
+  gas_result_t result {
+    GasResult::OUT_OF_GAS,
+    0
+  };
+  return result;
+}
+
 uint256_t Gasometer::memNeeded(uint256_t mem, uint256_t add) {
   return mem + add;
+}
+
+mem_gas_cost_t Gasometer::memGasCost(gas_t currentMemSize, gas_t newSize) {
+
+  gas_t newWords = Overflow::numWords(newSize);
+  gas_t currentWords = static_cast<int>(currentMemSize / WORD_SIZE);
+  gas_t newCost = 3 * newWords + newWords * newWords / 512;
+  gas_t currentCost = 3 * currentWords + currentWords * currentWords / 512;
+  gas_t cost = newCost - currentCost;
+  gas_t requiredMemorySize = newWords * WORD_SIZE;
+
+  mem_gas_cost_t memGasCost {
+    cost,
+    newCost,
+    requiredMemorySize
+  };
+
+  return memGasCost;
 }

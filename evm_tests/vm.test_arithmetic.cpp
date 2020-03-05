@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include "catch.hpp"
 #include <evm/utils.h>
 #include <evm/vm.h>
@@ -21,7 +20,7 @@ TEST_CASE("Add two large numbers", "[arithmetic]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
-  Gasometer gasometer {};
+  Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
@@ -49,7 +48,7 @@ TEST_CASE("Multiply two numbers", "[arithmetic]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
-  Gasometer gasometer {};
+  Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
@@ -77,7 +76,7 @@ TEST_CASE("Multiply two larger numbers", "[arithmetic]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
-  Gasometer gasometer {};
+  Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
@@ -108,7 +107,7 @@ TEST_CASE("Multiply and store", "[arithmetic]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
-  Gasometer gasometer {};
+  Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
@@ -138,7 +137,7 @@ TEST_CASE("Subtract two numbers", "[arithmetic]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
-  Gasometer gasometer {};
+  Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
@@ -169,7 +168,7 @@ TEST_CASE("Subtract and store", "[arithmetic]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
-  Gasometer gasometer {};
+  Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
@@ -199,7 +198,7 @@ TEST_CASE("Divide two numbers", "[arithmetic]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
-  Gasometer gasometer {};
+  Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
@@ -227,7 +226,7 @@ TEST_CASE("Divide 2 / 0", "[arithmetic]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
-  Gasometer gasometer {};
+  Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
@@ -258,7 +257,7 @@ TEST_CASE("Divide and store", "[arithmetic]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
-  Gasometer gasometer {};
+  Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
@@ -291,7 +290,7 @@ TEST_CASE("Divide by zero and store", "[arithmetic]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
-  Gasometer gasometer {};
+  Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
@@ -317,7 +316,7 @@ TEST_CASE("Mod and store", "[arithmetic]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
-  Gasometer gasometer {};
+  Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
@@ -353,7 +352,7 @@ TEST_CASE("Modulus 8 % 2", "[arithmetic]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
-  Gasometer gasometer {};
+  Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
@@ -381,7 +380,7 @@ TEST_CASE("Modulus 5 % 2", "[arithmetic]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
-  Gasometer gasometer {};
+  Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
@@ -409,7 +408,7 @@ TEST_CASE("Modulus 2 % 0", "[arithmetic]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
-  Gasometer gasometer {};
+  Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
@@ -433,7 +432,7 @@ TEST_CASE("Byte", "[arithmetic]") {
   Call call {};
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
-  Gasometer gasometer {};
+  Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();

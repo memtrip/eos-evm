@@ -97,6 +97,7 @@ exec_result_t VM::stepInner(
   // TODO: verify instruction
 
   // TODO: calculate gas cost
+  instruction_requirements_t requirements = gasometer.requirements(external, instruction, stack, memory.length());
 
   instruction_result_t result = VM::executeInstruction(
     instruction, 

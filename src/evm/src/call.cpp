@@ -33,7 +33,7 @@ call_result_t Call::call(
 
   VM vm {};
 
-  Gasometer gasometer {};
+  Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
 

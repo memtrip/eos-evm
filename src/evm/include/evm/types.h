@@ -78,11 +78,7 @@ struct TransactionData {
 
 typedef TransactionData transaction_t;
 
-struct Gas {
-
-};
-
-typedef Gas gas_t;
+typedef unsigned int gas_t;
 
 enum RLPType {
   STRING,
@@ -104,5 +100,8 @@ const size_t WORD_SIZE = 32;
 const size_t ADDRESS_SIZE = 20;
 
 constexpr char HEX_VALUES[] = "0123456789abcdef";
+
+constexpr uint256_t UINT256_ZERO = uint256_t(0);
+constexpr uint256_t UINT256_ONE = uint256_t(1);
 
 #endif

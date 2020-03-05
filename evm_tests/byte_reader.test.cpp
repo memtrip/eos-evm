@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include "catch.hpp"
 #include <evm/byte_reader.h>
 #include <evm/types.h>
