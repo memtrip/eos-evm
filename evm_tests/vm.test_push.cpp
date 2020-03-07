@@ -17,7 +17,7 @@ TEST_CASE("Push1", "[push]") {
   ExternalMock ext {};
   VM vm {};
   ReturnData returnData = ReturnData::empty();
-  Call call {};
+  Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   Gasometer gasometer(0);
@@ -45,7 +45,7 @@ TEST_CASE("Push2", "[push]") {
   ExternalMock ext {};
   VM vm {};
   ReturnData returnData = ReturnData::empty();
-  Call call {};
+  Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   Gasometer gasometer(0);
@@ -73,7 +73,7 @@ TEST_CASE("Push3", "[push]") {
   ExternalMock ext {};
   VM vm {};
   ReturnData returnData = ReturnData::empty();
-  Call call {};
+  Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   Gasometer gasometer(0);
@@ -101,7 +101,7 @@ TEST_CASE("Push4", "[push]") {
   ExternalMock ext {};
   VM vm {};
   ReturnData returnData = ReturnData::empty();
-  Call call {};
+  Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   Gasometer gasometer(0);
@@ -129,7 +129,7 @@ TEST_CASE("Push5", "[push]") {
   ExternalMock ext {};
   VM vm {};
   ReturnData returnData = ReturnData::empty();
-  Call call {};
+  Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   Gasometer gasometer(0);
@@ -157,7 +157,7 @@ TEST_CASE("Push6", "[push]") {
   ExternalMock ext {};
   VM vm {};
   ReturnData returnData = ReturnData::empty();
-  Call call {};
+  Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   Gasometer gasometer(0);
@@ -185,7 +185,7 @@ TEST_CASE("Push7", "[push]") {
   ExternalMock ext {};
   VM vm {};
   ReturnData returnData = ReturnData::empty();
-  Call call {};
+  Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   Gasometer gasometer(0);
@@ -213,7 +213,7 @@ TEST_CASE("Push8", "[push]") {
   ExternalMock ext {};
   VM vm {};
   ReturnData returnData = ReturnData::empty();
-  Call call {};
+  Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   Gasometer gasometer(0);

@@ -15,7 +15,7 @@ TEST_CASE("Address", "[params]") {
   ExternalMock ext {};
   VM vm {};
   ReturnData returnData = ReturnData::empty();
-  Call call {};
+  Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   Gasometer gasometer(0);
@@ -39,7 +39,7 @@ TEST_CASE("Origin", "[params]") {
   ExternalMock ext {};
   VM vm {};
   ReturnData returnData = ReturnData::empty();
-  Call call {};
+  Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   Gasometer gasometer(0);
@@ -63,7 +63,7 @@ TEST_CASE("Caller", "[params]") {
   ExternalMock ext {};
   VM vm {};
   ReturnData returnData = ReturnData::empty();
-  Call call {};
+  Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   Gasometer gasometer(0);
@@ -89,7 +89,7 @@ TEST_CASE("calldatasize", "[params]") {
   ExternalMock ext {};
   VM vm {};
   ReturnData returnData = ReturnData::empty();
-  Call call {};
+  Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   Gasometer gasometer(0);

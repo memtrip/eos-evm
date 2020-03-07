@@ -4,7 +4,12 @@
 #include <evm/account_state.h>
 #include <evm/gasometer.h>
 
+Call::Call(uint16_t stackDepthArg) {
+  stackDepth = stackDepthArg;
+}
+
 call_result_t Call::call(
+  gas_t gas,
   uint256_t senderAddress,
   uint256_t receiveAddress,
   uint256_t value,
@@ -26,42 +31,43 @@ call_result_t Call::call(
     receiveAddress, /* address */
     senderAddress, /* sender */
     uint256_t(0), /* origin */
+    gas, /* gas */
     value, /* value */
     code, /* code */
     bytes_t(data.begin(), data.end()) /* data */
   };
 
-  VM vm {};
+  // VM vm {};
 
-  Gasometer gasometer(0);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
+  // Gasometer gasometer(0);
+  // bytes_t* memoryBytes = new bytes_t();
+  // Memory mem(memoryBytes);
 
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
+  // std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
+  // StackMachine sm(stackItems);
 
-  Call innerCall {};
+  // // Call innerCall {};
 
-  ReturnData returnData = ReturnData::empty();
-  exec_result_t vm_result = vm.execute(mem, sm, accountState, gasometer, params, external, returnData, innerCall, env);
+  // // ReturnData returnData = ReturnData::empty();
+  // // exec_result_t vm_result = vm.execute(mem, sm, accountState, gasometer, params, external, returnData, innerCall, env);
 
-  switch (vm_result.first) {
-    case ExecResult::STOPPED:
-      break;
-    case ExecResult::DONE:
-      break;
-    case ExecResult::CONTINUE:
-      break;
-    case ExecResult::INTERPRETER_TRAP:
-      break;
-  }
+  // // switch (vm_result.first) {
+  // //   case ExecResult::STOPPED:
+  // //     break;
+  // //   case ExecResult::DONE:
+  // //     break;
+  // //   case ExecResult::CONTINUE:
+  // //     break;
+  // //   case ExecResult::INTERPRETER_TRAP:
+  // //     break;
+  // // }
+  
+  // // delete memoryBytes;
 
   call_result_t result = std::make_pair(
     MessageCallResult::MESSAGE_CALL_FAILED,
     0
   );
-  
-  delete memoryBytes;
 
   return result;
 }

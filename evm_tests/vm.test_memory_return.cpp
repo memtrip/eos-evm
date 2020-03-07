@@ -15,7 +15,7 @@ TEST_CASE("shift left, write to memory, return", "[return_memory]") {
   ExternalMock ext {};
   VM vm {};
   ReturnData returnData = ReturnData::empty();
-  Call call {};
+  Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   Gasometer gasometer(0);
@@ -45,7 +45,7 @@ TEST_CASE("shift right, write to memory, return", "[return_memory]") {
   ExternalMock ext {};
   VM vm {};
   ReturnData returnData = ReturnData::empty();
-  Call call {};
+  Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   Gasometer gasometer(0);
@@ -75,7 +75,7 @@ TEST_CASE("sar, write to memory, revert", "[return_memory]") {
   ExternalMock ext {};
   VM vm {};
   ReturnData returnData = ReturnData::empty();
-  Call call {};
+  Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   Gasometer gasometer(0);

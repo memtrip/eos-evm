@@ -15,7 +15,7 @@ TEST_CASE("extcodesize and extcodecopy", "[code]") {
   ext.codeResponse = Hex::hexToBytes("6005600055");
   VM vm {};
   ReturnData returnData = ReturnData::empty();
-  Call call {};
+  Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   Gasometer gasometer(0);
@@ -46,7 +46,7 @@ TEST_CASE("codesize", "[code]") {
   ExternalMock ext {};
   VM vm {};
   ReturnData returnData = ReturnData::empty();
-  Call call {};
+  Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   Gasometer gasometer(0);
@@ -72,7 +72,7 @@ TEST_CASE("calldataload", "[code]") {
   ExternalMock ext {};
   VM vm {};
   ReturnData returnData = ReturnData::empty();
-  Call call {};
+  Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   Gasometer gasometer(0);

@@ -527,6 +527,7 @@ params_t Utils::params(bytes_t code, bytes_t data) {
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xea0e9e), /* sender */
     uint256_t(0x1283fe), /* origin */
+    0, /* gas */
     uint256_t(34), /* value */
     code, /* code */
     data /* data */

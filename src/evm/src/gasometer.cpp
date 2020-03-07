@@ -3,6 +3,7 @@
 
 Gasometer::Gasometer(gas_t currentGasArg) {
   currentGas = currentGasArg;
+  currentMemGas = 0;
 }
 
 instruction_requirements_t Gasometer::requirements(
@@ -27,7 +28,7 @@ instruction_requirements_t Gasometer::requirements(
           gas,
           0,
           0,
-          currentGas
+          currentMemGas
         };
 
         return std::make_pair(
@@ -36,23 +37,73 @@ instruction_requirements_t Gasometer::requirements(
         );
       }
     case GasResult::GAS_MEM_RESULT:
-      return std::make_pair(
-        InstructionRequirementsResult::INSTRUCTION_RESULT_OK,
-        0
-      );
+      {
+        GasMem gasMem = std::get<GasMem>(result.second);
+
+        mem_gas_t memGas = memGasCost(currentMemorySize, gasMem.memSize);
+
+        gas_t gas = gasMem.gas + memGas.memGasCost;
+
+        InstructionRequirements instructionRequirements {
+          gas,
+          0,
+          memGas.newMemSize,
+          memGas.newMemGas
+        };
+
+        return std::make_pair(
+          InstructionRequirementsResult::INSTRUCTION_RESULT_OK,
+          instructionRequirements
+        );
+      }
     case GasResult::GAS_MEM_PROVIDE_RESULT:
-      return std::make_pair(
-        InstructionRequirementsResult::INSTRUCTION_RESULT_OK,
-        0
-      );
+      {
+        GasMemProvided gasMemProvided = std::get<GasMemProvided>(result.second);
+
+        mem_gas_t memGas = memGasCost(currentMemorySize, gasMemProvided.memSize);
+
+        gas_t gas = gasMemProvided.gas + memGas.memGasCost;
+        // TODO: calculate provided
+        gas_t provided = 0;
+        gas_t totalGas = gas + provided;
+
+        InstructionRequirements instructionRequirements {
+          totalGas,
+          provided,
+          memGas.newMemSize,
+          memGas.newMemGas
+        };
+
+        return std::make_pair(
+          InstructionRequirementsResult::INSTRUCTION_RESULT_OK,
+          instructionRequirements
+        );
+      }
     case GasResult::GAS_MEM_COPY_RESULT:
-      return std::make_pair(
-        InstructionRequirementsResult::INSTRUCTION_RESULT_OK,
-        0
-      );
+      {
+        GasMemCopy gasMemCopy = std::get<GasMemCopy>(result.second);
+
+        mem_gas_t memGas = memGasCost(currentMemorySize, gasMemCopy.memSize);
+
+        gas_t copy = Overflow::numWords(gasMemCopy.copy);
+        gas_t copy_gas = COPY_GAS * copy;
+        gas_t gas = gasMemCopy.gas + copy_gas + memGas.memGasCost;
+
+        InstructionRequirements instructionRequirements {
+          gas,
+          0,
+          memGas.newMemSize,
+          memGas.newMemGas
+        };
+
+        return std::make_pair(
+          InstructionRequirementsResult::INSTRUCTION_RESULT_OK,
+          instructionRequirements
+        );
+      }
     case GasResult::OUT_OF_GAS:
       return std::make_pair(
-        InstructionRequirementsResult::INSTRUCTION_RESULT_OK,
+        InstructionRequirementsResult::INSTRUCTION_RESULT_ERROR,
         0
       );
   }
@@ -257,20 +308,20 @@ uint256_t Gasometer::memNeeded(uint256_t mem, uint256_t add) {
   return mem + add;
 }
 
-mem_gas_cost_t Gasometer::memGasCost(gas_t currentMemSize, gas_t newSize) {
+mem_gas_t Gasometer::memGasCost(gas_t currentMemSize, gas_t newSize) {
 
   gas_t newWords = Overflow::numWords(newSize);
   gas_t currentWords = static_cast<int>(currentMemSize / WORD_SIZE);
-  gas_t newCost = 3 * newWords + newWords * newWords / 512;
+  gas_t newMemGas = 3 * newWords + newWords * newWords / 512;
   gas_t currentCost = 3 * currentWords + currentWords * currentWords / 512;
-  gas_t cost = newCost - currentCost;
-  gas_t requiredMemorySize = newWords * WORD_SIZE;
+  gas_t memGasCost = newMemGas - currentCost;
+  gas_t newMemSize = newWords * WORD_SIZE;
 
-  mem_gas_cost_t memGasCost {
-    cost,
-    newCost,
-    requiredMemorySize
+  mem_gas_t memGas {
+    memGasCost,
+    newMemGas,
+    newMemSize
   };
 
-  return memGasCost;
+  return memGas;
 }

@@ -41,6 +41,8 @@ enum ActionType {
 
 typedef ActionType action_type_t;
 
+typedef unsigned int gas_t;
+
 struct Params {
   uint256_t codeAddress;
   uint256_t codeHash;
@@ -48,6 +50,7 @@ struct Params {
   uint256_t address;
   uint256_t sender;
   uint256_t origin;
+  gas_t gas;
   uint256_t value;
   bytes_t code;
   bytes_t data;
@@ -77,8 +80,6 @@ struct TransactionData {
 };
 
 typedef TransactionData transaction_t;
-
-typedef unsigned int gas_t;
 
 enum RLPType {
   STRING,

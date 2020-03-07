@@ -15,7 +15,7 @@ TEST_CASE("shift left ", "[shift]") {
   ExternalMock ext {};
   VM vm {};
   ReturnData returnData = ReturnData::empty();
-  Call call {};
+  Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   Gasometer gasometer(0);
@@ -39,7 +39,7 @@ TEST_CASE("shift left (2)", "[shift]") {
   ExternalMock ext {};
   VM vm {};
   ReturnData returnData = ReturnData::empty();
-  Call call {};
+  Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   Gasometer gasometer(0);
@@ -63,7 +63,7 @@ TEST_CASE("shift left (3)", "[shift]") {
   ExternalMock ext {};
   VM vm {};
   ReturnData returnData = ReturnData::empty();
-  Call call {};
+  Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   Gasometer gasometer(0);
@@ -87,7 +87,7 @@ TEST_CASE("shift right ", "[shift]") {
   ExternalMock ext {};
   VM vm {};
   ReturnData returnData = ReturnData::empty();
-  Call call {};
+  Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   Gasometer gasometer(0);
@@ -111,7 +111,7 @@ TEST_CASE("shift right (1)", "[shift]") {
   ExternalMock ext {};
   VM vm {};
   ReturnData returnData = ReturnData::empty();
-  Call call {};
+  Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   Gasometer gasometer(0);
@@ -135,7 +135,7 @@ TEST_CASE("shift right (2)", "[shift]") {
   ExternalMock ext {};
   VM vm {};
   ReturnData returnData = ReturnData::empty();
-  Call call {};
+  Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   Gasometer gasometer(0);
@@ -157,7 +157,7 @@ TEST_CASE("sar", "[shift]") {
   ExternalMock ext {};
   VM vm {};
   ReturnData returnData = ReturnData::empty();
-  Call call {};
+  Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   Gasometer gasometer(0);
@@ -182,7 +182,7 @@ TEST_CASE("sar (1)", "[shift]") {
   ExternalMock ext {};
   VM vm {};
   ReturnData returnData = ReturnData::empty();
-  Call call {};
+  Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   Gasometer gasometer(0);
@@ -207,7 +207,7 @@ TEST_CASE("sar (2)", "[shift]") {
   ExternalMock ext {};
   VM vm {};
   ReturnData returnData = ReturnData::empty();
-  Call call {};
+  Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   Gasometer gasometer(0);
@@ -232,7 +232,7 @@ TEST_CASE("sar (3)", "[shift]") {
   ExternalMock ext {};
   VM vm {};
   ReturnData returnData = ReturnData::empty();
-  Call call {};
+  Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   Gasometer gasometer(0);

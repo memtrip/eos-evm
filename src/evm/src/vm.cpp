@@ -96,16 +96,38 @@ exec_result_t VM::stepInner(
 
   // TODO: verify instruction
 
-  // TODO: calculate gas cost
-  instruction_requirements_t requirements = gasometer.requirements(external, instruction, stack, memory.length());
+  // Calculate gas cost requirements
+  instruction_requirements_t calculateRequirements = gasometer.requirements(external, instruction, stack, memory.length());
+
+  InstructionRequirements requirements;
+  switch (calculateRequirements.first) {
+    case InstructionRequirementsResult::INSTRUCTION_RESULT_OK:
+      requirements = std::get<InstructionRequirements>(calculateRequirements.second);
+      break;
+    case InstructionRequirementsResult::INSTRUCTION_RESULT_ERROR:
+      return std::make_pair(ExecResult::STOPPED, 0); // TODO: handle error
+  }
+
+  // expand memory
+  gas_t memoryRequiredSize = requirements.memoryRequiredSize;
+  memory.expand(memoryRequiredSize);
+
+  gas_t currentGas = gasometer.currentGas - requirements.gasCost;
+  gasometer.currentGas = currentGas;
+
+  gas_t memoryTotalGas = requirements.memoryTotalGas;
+  gasometer.currentMemGas = memoryTotalGas;
+
+  gas_t provideGas = requirements.provideGas;
 
   instruction_result_t result = VM::executeInstruction(
+    currentGas,
+    provideGas,
     instruction, 
     memory,
     stack,
     reader, 
     accountState,
-    gasometer,
     params,
     external,
     returnData,
@@ -168,12 +190,13 @@ exec_result_t VM::stepInner(
 }
 
 instruction_result_t VM::executeInstruction(
+  gas_t gas,
+  gas_t providedGas,
   instruct_t instruction,
   Memory& memory,
   StackMachine& stack,
   ByteReader& reader, 
   AccountState& accountState,
-  Gasometer& gasometer,
   params_t& params,
   External& external,
   ReturnData& returnData,
@@ -797,6 +820,7 @@ instruction_result_t VM::executeInstruction(
         // TODO: external call with result
 
         call_result_t result = call.call(
+          providedGas,
           senderAddress, 
           receiveAddress, 
           uint256_t(value), 

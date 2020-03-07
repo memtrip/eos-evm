@@ -40,12 +40,13 @@ class VM {
     );
 
     instruction_result_t executeInstruction(
+      gas_t gas,
+      gas_t providedGas,
       instruct_t instruction, 
       Memory& memory,
       StackMachine& stack,
       ByteReader& reader, 
       AccountState& accountState,
-      Gasometer& gasometer,
       params_t& params,
       External& external,
       ReturnData& returnData,

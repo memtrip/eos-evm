@@ -62,19 +62,19 @@ enum GasResult {
 };
 
 struct GasMem {
-  gas_t defaultGas;
-  gas_t memoryNeeded;
+  gas_t gas;
+  gas_t memSize;
 };
 
 struct GasMemProvided {
-  gas_t defaultGas;
-  gas_t memoryNeeded;
+  gas_t gas;
+  gas_t memSize;
   gas_t requested;
 };
 
 struct GasMemCopy {
-  gas_t defaultGas;
-  gas_t memoryNeeded;
+  gas_t gas;
+  gas_t memSize;
   gas_t copy;
 };
 
@@ -87,17 +87,19 @@ typedef std::variant<
 
 typedef std::pair<GasResult, gas_result_type_t> gas_result_t;
 
-struct MemGasCost {
+struct MemGas {
   gas_t memGasCost;
   gas_t newMemGas;
-  gas_t requiredMemorySize;
+  gas_t newMemSize;
 };
 
-typedef MemGasCost mem_gas_cost_t;
+typedef MemGas mem_gas_t;
 
 class Gasometer {
   public:
     Gasometer(gas_t currentGasArg);
+    gas_t currentGas;
+    gas_t currentMemGas;
     instruction_requirements_t requirements(
       External& external,
       instruct_t instruction,
@@ -110,9 +112,8 @@ class Gasometer {
       StackMachine& stack,
       size_t currentMemorySize
     );
-    MemGasCost memGasCost(gas_t currentMemSize, gas_t memSize);
+    mem_gas_t memGasCost(gas_t currentMemSize, gas_t memSize);
   private:
-    gas_t currentGas;
     gas_result_t gas(uint256_t value);
     gas_result_t gasMem(uint256_t defaultGas, uint256_t memoryNeeded);
     gas_result_t gasMemProvided(uint256_t defaultGas, uint256_t memoryNeeded, uint256_t requested);

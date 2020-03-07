@@ -25,7 +25,9 @@ typedef std::pair<MessageCallResult, call_result_data_t> call_result_t;
 
 class Call {
   public:
+    Call(uint16_t stackDepthArg);
     call_result_t call(
+      gas_t gas,
       uint256_t senderAddress,
       uint256_t receiveAddress,
       uint256_t value,
@@ -37,4 +39,6 @@ class Call {
       External& external,
       AccountState& accountState
     );
+  private:
+    uint16_t stackDepth;
 };
