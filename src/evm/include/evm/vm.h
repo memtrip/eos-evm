@@ -8,8 +8,11 @@
 #include <evm/gasometer.h>
 
 class VM {
+  public:
+    VM();
   private:
     uint8_t last_stack_ret_len;
+    ReturnData returnData;
 
     exec_result_t step(
       jump_set_t& jumps, 
@@ -20,7 +23,6 @@ class VM {
       Gasometer& gasometer,
       params_t& params,
       External& external,
-      ReturnData& returnData,
       Call& call,
       env_t env
     );
@@ -34,7 +36,6 @@ class VM {
       Gasometer& gasometer,
       params_t& params,
       External& external,
-      ReturnData& returnData,
       Call& call,
       env_t env
     );
@@ -49,7 +50,6 @@ class VM {
       AccountState& accountState,
       params_t& params,
       External& external,
-      ReturnData& returnData,
       Call& call,
       env_t env
     );
@@ -62,7 +62,6 @@ class VM {
       Gasometer& gasometer,
       params_t& params,
       External& external,
-      ReturnData& returnData,
       Call& call,
       env_t env
     );

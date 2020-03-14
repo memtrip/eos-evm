@@ -1,8 +1,10 @@
+#include <tuple>
 #include <evm/call.h>
 #include <evm/vm.h>
 #include <evm/return_data.h>
 #include <evm/account_state.h>
 #include <evm/gasometer.h>
+#include <evm/execute.h>
 
 Call::Call(uint16_t stackDepthArg) {
   stackDepth = stackDepthArg;
@@ -15,7 +17,7 @@ call_result_t Call::call(
   uint256_t value,
   bytes_t& data,
   uint256_t codeAddress,
-  ActionType callType,
+  action_type_t callType,
   bool trap,
   env_t env,
   External& external,
@@ -37,37 +39,103 @@ call_result_t Call::call(
     bytes_t(data.begin(), data.end()) /* data */
   };
 
-  // VM vm {};
+  return makeCall(
+    params,
+    callType,
+    trap,
+    env,
+    external,
+    accountState
+  );
+}
 
-  // Gasometer gasometer(0);
-  // bytes_t* memoryBytes = new bytes_t();
-  // Memory mem(memoryBytes);
+call_result_t Call::create(
+  gas_t gas,
+  uint256_t address,
+  uint256_t value,
+  bytes_t& code,
+  action_type_t callType,
+  bool trap,
+  env_t env,
+  External& external,
+  AccountState& accountState
+) {
 
-  // std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  // StackMachine sm(stackItems);
+  params_t params = {
+    address, /* codeAddress*/
+    uint256_t(0), /* codeHash */
+    uint256_t(1), /* codeVersion */
+    address, /* address */
+    address, /* sender */
+    uint256_t(0), /* origin */
+    gas, /* gas */
+    value, /* value */
+    code, /* code */
+    bytes_t() /* data */ // TODO: does CREATE ever uses a data arguments
+  };
 
-  // // Call innerCall {};
+  return makeCall(
+    params,
+    callType,
+    trap,
+    env,
+    external,
+    accountState
+  );
+}
 
-  // // ReturnData returnData = ReturnData::empty();
-  // // exec_result_t vm_result = vm.execute(mem, sm, accountState, gasometer, params, external, returnData, innerCall, env);
+call_result_t Call::makeCall(
+  params_t params,
+  action_type_t callType,
+  bool trap,
+  env_t env,
+  External& external,
+  AccountState& accountState
+) {
 
-  // // switch (vm_result.first) {
-  // //   case ExecResult::STOPPED:
-  // //     break;
-  // //   case ExecResult::DONE:
-  // //     break;
-  // //   case ExecResult::CONTINUE:
-  // //     break;
-  // //   case ExecResult::INTERPRETER_TRAP:
-  // //     break;
-  // // }
-  
-  // // delete memoryBytes;
+  substate_t substate = {
+    std::set<uint256_t>(), /* suicides */
+    std::set<uint256_t>(), /* touched */
+    0, /* sstoreClearsRefund */
+    std::vector<uint256_t>() /* contractsCreated */
+  };
 
-  call_result_t result = std::make_pair(
-    MessageCallResult::MESSAGE_CALL_FAILED,
-    0
+  finalization_result_t finalizationResult = Execute::callWithStackDepth(
+    params,
+    stackDepth + 1,
+    substate,
+    external,
+    accountState,
+    env,
+    *this
   );
 
-  return result;
+  switch (finalizationResult.first) {
+    case FINALIZATION_OK:
+      {
+        Finalization finalization = std::get<Finalization>(finalizationResult.second);
+
+        MessageCallReturn messageCallReturn {
+          finalization.gasLeft,
+          finalization.returnData
+        };
+
+        if (finalization.applyState) {
+          return std::make_pair(
+            MessageCallResult::MESSAGE_CALL_SUCCESS,
+            messageCallReturn
+          );
+        } else {
+          return std::make_pair(
+            MessageCallResult::MESSAGE_CALL_REVERTED,
+            messageCallReturn
+          );
+        }
+      } 
+    case FINALIZATION_ERROR:
+      return std::make_pair(
+        MessageCallResult::MESSAGE_CALL_FAILED,
+        0 
+      );
+  }
 }

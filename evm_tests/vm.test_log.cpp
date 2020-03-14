@@ -13,7 +13,6 @@ TEST_CASE("Log address (LOG0)", "[log]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
-  ReturnData returnData = ReturnData::empty();
   Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -24,7 +23,7 @@ TEST_CASE("Log address (LOG0)", "[log]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, gasometer, params, ext, returnData, call, Utils::env());
+  vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
 
   // then
   CHECK(1 == ext.logSpy.size());
@@ -38,7 +37,6 @@ TEST_CASE("Log sender (LOG1)", "[log]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
-  ReturnData returnData = ReturnData::empty();
   Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -49,7 +47,7 @@ TEST_CASE("Log sender (LOG1)", "[log]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, gasometer, params, ext, returnData, call, Utils::env());
+  vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
 
   // then
   CHECK(1 == ext.logSpy.size());
@@ -68,7 +66,6 @@ TEST_CASE("Log origin and sender (LOG2)", "[log]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
-  ReturnData returnData = ReturnData::empty();
   Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -79,7 +76,7 @@ TEST_CASE("Log origin and sender (LOG2)", "[log]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, gasometer, params, ext, returnData, call, Utils::env());
+  vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
 
   // then
   CHECK(1 == ext.logSpy.size());
@@ -101,7 +98,6 @@ TEST_CASE("Log origin and sender (LOG3)", "[log]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
-  ReturnData returnData = ReturnData::empty();
   Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -112,7 +108,7 @@ TEST_CASE("Log origin and sender (LOG3)", "[log]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, gasometer, params, ext, returnData, call, Utils::env());
+  vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
 
   // then
   CHECK(1 == ext.logSpy.size());
@@ -137,7 +133,6 @@ TEST_CASE("Log origin and sender (LOG4)", "[log]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
-  ReturnData returnData = ReturnData::empty();
   Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -148,7 +143,7 @@ TEST_CASE("Log origin and sender (LOG4)", "[log]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, gasometer, params, ext, returnData, call, Utils::env());
+  vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
 
   // then
   CHECK(1 == ext.logSpy.size());

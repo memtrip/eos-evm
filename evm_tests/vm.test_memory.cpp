@@ -16,7 +16,6 @@ TEST_CASE("Save to memory", "[memory]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
-  ReturnData returnData = ReturnData::empty();
   Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -28,7 +27,7 @@ TEST_CASE("Save to memory", "[memory]") {
 
   // when
   mem.resize(32); // TODO: this should happen via requirements (memoryRequiredSize)
-  vm.execute(mem, sm, as, gasometer, params, ext, returnData, call, Utils::env());
+  vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000006" == 
@@ -47,7 +46,6 @@ TEST_CASE("Save to memory, and retreive", "[memory]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
-  ReturnData returnData = ReturnData::empty();
   Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -59,7 +57,7 @@ TEST_CASE("Save to memory, and retreive", "[memory]") {
 
   // when
   mem.resize(32); // TODO: this should happen via requirements (memoryRequiredSize)
-  vm.execute(mem, sm, as, gasometer, params, ext, returnData, call, Utils::env());
+  vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000006" == 
@@ -79,7 +77,6 @@ TEST_CASE("Save to memory, retreive, and apply addition", "[memory]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
-  ReturnData returnData = ReturnData::empty();
   Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -91,7 +88,7 @@ TEST_CASE("Save to memory, retreive, and apply addition", "[memory]") {
 
   // when
   mem.resize(32); // TODO: this should happen via requirements (memoryRequiredSize)
-  vm.execute(mem, sm, as, gasometer, params, ext, returnData, call, Utils::env());
+  vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000018" == 
@@ -112,7 +109,6 @@ TEST_CASE("Save byte to memory, retreive, and apply addition", "[memory]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
-  ReturnData returnData = ReturnData::empty();
   Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -124,7 +120,7 @@ TEST_CASE("Save byte to memory, retreive, and apply addition", "[memory]") {
 
   // when
   mem.resize(32); // TODO: this should happen via requirements (memoryRequiredSize)
-  vm.execute(mem, sm, as, gasometer, params, ext, returnData, call, Utils::env());
+  vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000018" == 
@@ -145,7 +141,6 @@ TEST_CASE("Save byte to memory (1)", "[memory]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
-  ReturnData returnData = ReturnData::empty();
   Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -157,7 +152,7 @@ TEST_CASE("Save byte to memory (1)", "[memory]") {
 
   // when
   mem.resize(32); // TODO: this should happen via requirements (memoryRequiredSize)
-  vm.execute(mem, sm, as, gasometer, params, ext, returnData, call, Utils::env());
+  vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000018" == 
@@ -172,7 +167,6 @@ TEST_CASE("Memory size", "[memory]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
-  ReturnData returnData = ReturnData::empty();
   Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -184,7 +178,7 @@ TEST_CASE("Memory size", "[memory]") {
 
   // when
   mem.resize(32); // TODO: this should happen via requirements (memoryRequiredSize)
-  vm.execute(mem, sm, as, gasometer, params, ext, returnData, call, Utils::env());
+  vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000020" /* 32 in hex */ == 

@@ -26,7 +26,6 @@ TEST_CASE("Conditional jump to destination truthy", "[jumps]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
-  ReturnData returnData = ReturnData::empty();
   Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -37,7 +36,7 @@ TEST_CASE("Conditional jump to destination truthy", "[jumps]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, gasometer, params, ext, returnData, call, Utils::env());
+  vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
 
   // then
   CHECK("000000000000000000000000000000000000000000000000000000000000000b" == 
@@ -64,7 +63,6 @@ TEST_CASE("Conditional jump to destination not true", "[jumps]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
-  ReturnData returnData = ReturnData::empty();
   Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -75,7 +73,7 @@ TEST_CASE("Conditional jump to destination not true", "[jumps]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, gasometer, params, ext, returnData, call, Utils::env());
+  vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000012" == 
@@ -96,7 +94,6 @@ TEST_CASE("Unconditional jump to destination", "[jumps]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
-  ReturnData returnData = ReturnData::empty();
   Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -107,7 +104,7 @@ TEST_CASE("Unconditional jump to destination", "[jumps]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, gasometer, params, ext, returnData, call, Utils::env());
+  vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000002" == 
@@ -120,7 +117,6 @@ TEST_CASE("Unconditional jump to destination", "[jumps]") {
 //   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
 //   ExternalMock ext {};
   VM vm {};
-  ReturnData returnData = ReturnData::empty();
   Call call(0);
 //   account_store_t* accountItems = new account_store_t();
 //   AccountState as(accountItems);
@@ -131,7 +127,7 @@ TEST_CASE("Unconditional jump to destination", "[jumps]") {
 //   StackMachine sm(stackItems);
 
 //   // when
-//   vm.execute(mem, sm, as, gasometer, params, ext, returnData, call, Utils::env());
+//   vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
 
 //   // then
 //   // store_item_t item1 = Utils::accountStoreValue(0, accountItems);

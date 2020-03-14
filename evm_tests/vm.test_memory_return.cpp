@@ -14,7 +14,6 @@ TEST_CASE("shift left, write to memory, return", "[return_memory]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
-  ReturnData returnData = ReturnData::empty();
   Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -26,7 +25,7 @@ TEST_CASE("shift left, write to memory, return", "[return_memory]") {
 
   // when
   mem.resize(32);
-  exec_result_t result = vm.execute(mem, sm, as, gasometer, params, ext, returnData, call, Utils::env());
+  exec_result_t result = vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
 
   // then
   REQUIRE(ExecResult::DONE == result.first);
@@ -44,7 +43,6 @@ TEST_CASE("shift right, write to memory, return", "[return_memory]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
-  ReturnData returnData = ReturnData::empty();
   Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -56,7 +54,7 @@ TEST_CASE("shift right, write to memory, return", "[return_memory]") {
 
   // when
   mem.resize(32);
-  exec_result_t result = vm.execute(mem, sm, as, gasometer, params, ext, returnData, call, Utils::env());
+  exec_result_t result = vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
 
   // then
   REQUIRE(ExecResult::DONE == result.first);
@@ -74,7 +72,6 @@ TEST_CASE("sar, write to memory, revert", "[return_memory]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
-  ReturnData returnData = ReturnData::empty();
   Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -86,7 +83,7 @@ TEST_CASE("sar, write to memory, revert", "[return_memory]") {
 
   // when
   mem.resize(32);
-  exec_result_t result = vm.execute(mem, sm, as, gasometer, params, ext, returnData, call, Utils::env());
+  exec_result_t result = vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
 
   // then
   REQUIRE(ExecResult::DONE == result.first);

@@ -16,7 +16,6 @@ TEST_CASE("Less than comparison truthy", "[LT]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
-  ReturnData returnData = ReturnData::empty();
   Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -27,7 +26,7 @@ TEST_CASE("Less than comparison truthy", "[LT]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, gasometer, params, ext, returnData, call, Utils::env());
+  vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
@@ -44,7 +43,6 @@ TEST_CASE("Less than comparison not true", "[LT]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
-  ReturnData returnData = ReturnData::empty();
   Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -55,7 +53,7 @@ TEST_CASE("Less than comparison not true", "[LT]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, gasometer, params, ext, returnData, call, Utils::env());
+  vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
@@ -72,7 +70,6 @@ TEST_CASE("Greater than comparison truthy", "[GT]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
-  ReturnData returnData = ReturnData::empty();
   Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -83,7 +80,7 @@ TEST_CASE("Greater than comparison truthy", "[GT]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, gasometer, params, ext, returnData, call, Utils::env());
+  vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
@@ -100,7 +97,6 @@ TEST_CASE("Greater than comparison not true", "[GT]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
-  ReturnData returnData = ReturnData::empty();
   Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -111,7 +107,7 @@ TEST_CASE("Greater than comparison not true", "[GT]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, gasometer, params, ext, returnData, call, Utils::env());
+  vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
@@ -128,7 +124,6 @@ TEST_CASE("Equal comparison truthy", "[EQ]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
-  ReturnData returnData = ReturnData::empty();
   Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -139,7 +134,7 @@ TEST_CASE("Equal comparison truthy", "[EQ]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, gasometer, params, ext, returnData, call, Utils::env());
+  vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
@@ -156,7 +151,6 @@ TEST_CASE("Equal comparison not true", "[EQ]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
-  ReturnData returnData = ReturnData::empty();
   Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -167,7 +161,7 @@ TEST_CASE("Equal comparison not true", "[EQ]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, gasometer, params, ext, returnData, call, Utils::env());
+  vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
@@ -183,7 +177,6 @@ TEST_CASE("Is zero comparison truthy", "[ISZERO]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
-  ReturnData returnData = ReturnData::empty();
   Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -194,7 +187,7 @@ TEST_CASE("Is zero comparison truthy", "[ISZERO]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, gasometer, params, ext, returnData, call, Utils::env());
+  vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
@@ -210,7 +203,6 @@ TEST_CASE("Is zero comparison not true", "[ISZERO]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
-  ReturnData returnData = ReturnData::empty();
   Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -221,7 +213,7 @@ TEST_CASE("Is zero comparison not true", "[ISZERO]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, gasometer, params, ext, returnData, call, Utils::env());
+  vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
@@ -234,7 +226,6 @@ TEST_CASE("Comparison with many instructions", "[comparison]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
-  ReturnData returnData = ReturnData::empty();
   Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -245,7 +236,7 @@ TEST_CASE("Comparison with many instructions", "[comparison]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, gasometer, params, ext, returnData, call, Utils::env());
+  vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
 
   // then
   store_item_t item1 = Utils::accountStoreValue(0, accountItems);

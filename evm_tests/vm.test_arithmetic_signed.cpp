@@ -12,7 +12,6 @@ TEST_CASE("signed division", "[signed]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
-  ReturnData returnData = ReturnData::empty();
   Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -23,7 +22,7 @@ TEST_CASE("signed division", "[signed]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, gasometer, params, ext, returnData, call, Utils::env());
+  vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
 
   // then
   store_item_t item1 = Utils::accountStoreValue(0, accountItems);
@@ -43,7 +42,6 @@ TEST_CASE("signed mod", "[signed]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
-  ReturnData returnData = ReturnData::empty();
   Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -54,7 +52,7 @@ TEST_CASE("signed mod", "[signed]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, gasometer, params, ext, returnData, call, Utils::env());
+  vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
 
   // then
   store_item_t item1 = Utils::accountStoreValue(0, accountItems);
@@ -74,7 +72,6 @@ TEST_CASE("add mod, mul mod", "[signed]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
-  ReturnData returnData = ReturnData::empty();
   Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -85,7 +82,7 @@ TEST_CASE("add mod, mul mod", "[signed]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, gasometer, params, ext, returnData, call, Utils::env());
+  vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
 
   // then
   store_item_t item1 = Utils::accountStoreValue(0, accountItems);
@@ -115,7 +112,6 @@ TEST_CASE("exponent", "[signed]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
-  ReturnData returnData = ReturnData::empty();
   Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -126,7 +122,7 @@ TEST_CASE("exponent", "[signed]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, gasometer, params, ext, returnData, call, Utils::env());
+  vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
 
   // then
   store_item_t item1 = Utils::accountStoreValue(0, accountItems);
@@ -151,7 +147,6 @@ TEST_CASE("signextend", "[signed]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
-  ReturnData returnData = ReturnData::empty();
   Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -162,7 +157,7 @@ TEST_CASE("signextend", "[signed]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, gasometer, params, ext, returnData, call, Utils::env());
+  vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
 
   // then
   store_item_t item1 = Utils::accountStoreValue(0, accountItems);
@@ -182,7 +177,6 @@ TEST_CASE("signed comparison", "[signed]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
-  ReturnData returnData = ReturnData::empty();
   Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
@@ -193,7 +187,7 @@ TEST_CASE("signed comparison", "[signed]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, gasometer, params, ext, returnData, call, Utils::env());
+  vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
 
   // then
   store_item_t item1 = Utils::accountStoreValue(0, accountItems);

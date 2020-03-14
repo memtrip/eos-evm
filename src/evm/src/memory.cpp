@@ -76,6 +76,7 @@ bool Memory::isValidRange(size_t offset, size_t size) {
 ReturnData Memory::intoReturnData(uint256_t offsetArg, uint256_t sizeArg) {
   size_t offset = static_cast<size_t>(offsetArg);
   size_t size = static_cast<size_t>(sizeArg);
+
   if (!isValidRange(offset, size)) { 
     ReturnData returnData {
       bytes_t(),
@@ -85,42 +86,32 @@ ReturnData Memory::intoReturnData(uint256_t offsetArg, uint256_t sizeArg) {
     return returnData;
   }
 
-  if ((length() - size) > MAX_RETURN_WASTE_BYTES) {
-    if (offset == 0) {
-      resize(size);
-    } else {
-      ReturnData returnData {
-        bytes_t(memory->begin() + offset, memory->begin() + offset + size),
-        uint256_t(0),
-        uint256_t(size)
-      };
-      return returnData;
-    }
-  }
+  if (offset == 0) resize(size);
 
+  bytes_t data = bytes_t(memory->begin() + offset, memory->begin() + offset + size);
   ReturnData returnData {
-    bytes_t(memory->begin(), memory->end()),
-    uint256_t(offset),
+    data,
+    uint256_t(0),
     uint256_t(size)
   };
-
   return returnData;
 }
 
-void Memory::copyData(StackMachine& stack, bytes_t& bytes) {
-  uint256_t destOffset = stack.peek(0);
-  uint256_t sourceOffset = stack.peek(1);
-  uint256_t sizeItem = stack.peek(2);
-
+void Memory::copyData(
+  uint256_t destOffset, 
+  uint256_t sourceOffset,
+  uint256_t sizeItem,
+  bytes_t data
+) {
   size_t sourceOffsetSize = static_cast<size_t>(sourceOffset);
 
   size_t dest = static_cast<size_t>(destOffset);
-  size_t src = bytes.size() < sourceOffsetSize ? bytes.size() : sourceOffsetSize;
+  size_t src = data.size() < sourceOffsetSize ? data.size() : sourceOffsetSize;
   size_t size = static_cast<size_t>(sizeItem);
-  size_t copySize = std::min(size, bytes.size() - src);
+  size_t copySize = std::min(size, data.size() - src);
 
   if (copySize > 0)
-    writeSlice(dest, bytes_t(bytes.begin() + sourceOffsetSize, bytes.end()));
+    writeSlice(dest, bytes_t(data.begin() + sourceOffsetSize, data.end()));
 
   if ((size - copySize) > 0)
     std::fill(memory->begin() + dest + copySize, memory->end(), 0);

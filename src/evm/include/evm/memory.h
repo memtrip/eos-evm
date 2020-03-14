@@ -19,5 +19,10 @@ class Memory {
     void writeableSlice(uint256_t offsetArg, uint256_t sizeArg);
     bool isValidRange(size_t offset, size_t size);
     ReturnData intoReturnData(uint256_t offsetArg, uint256_t sizeArg);
-    void copyData(StackMachine& stack, bytes_t& bytes);
+    void copyData(
+      uint256_t destOffset, 
+      uint256_t sourceOffset,
+      uint256_t sizeItem,
+      bytes_t bytes
+    );
 };

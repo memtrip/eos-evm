@@ -6,7 +6,8 @@ class ReturnData {
   public:
     bytes_t mem;
     uint256_t offset;
-    uint256_t size;;
+    uint256_t size;
+    ReturnData copy();
     static ReturnData empty();
 };
 

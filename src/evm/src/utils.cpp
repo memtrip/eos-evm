@@ -534,6 +534,21 @@ params_t Utils::params(bytes_t code, bytes_t data) {
   };
 };
 
+params_t Utils::createParams(bytes_t code, bytes_t data) {
+  return {
+    uint256_t(0xea0e9f), /* codeAddress*/
+    uint256_t(0xf9313a), /* codeHash */
+    uint256_t(0x193821), /* codeVersion */
+    uint256_t(0xea0e9a), /* address */
+    uint256_t(0xea0e9e), /* sender */
+    uint256_t(0x1283fe), /* origin */
+    0, /* gas */
+    uint256_t(0), /* value */
+    code, /* code */
+    data /* data */
+  };
+};
+
 bytes_t Utils::returnDataSlice(ReturnData returnData) {
   size_t offset = static_cast<size_t>(returnData.offset);
   size_t size = static_cast<size_t>(returnData.size);

@@ -1,6 +1,8 @@
 #pragma once
 #include <evm/types.h>
 #include <evm/return_data.h>
+#include <evm/account_state.h>
+#include <evm/call.h>
 
 struct Substate {
   std::set<uint256_t> suicides;
@@ -9,18 +11,39 @@ struct Substate {
   std::vector<uint256_t> contractsCreated;
 };
 
-struct FinalizationResult {
+typedef Substate substate_t;
+
+struct Finalization {
   uint256_t gasLeft;
   bool applyState;
   ReturnData returnData;
 };
 
+typedef std::variant<
+  uint8_t,
+  Finalization
+> finalization_t;
+
+enum FinalizationResult {
+  FINALIZATION_OK,
+  FINALIZATION_ERROR
+};
+
+typedef std::pair<
+  FinalizationResult,
+  finalization_t
+> finalization_result_t;
+
 class Execute {
   public:
-    FinalizationResult callWithStackDepth(
-      Params params,
-      Substate substate,
-      size_t stackDepth
+    static finalization_result_t callWithStackDepth(
+      params_t params,
+      size_t stackDepth,
+      Substate& substate,
+      External& external,
+      AccountState& accountState,
+      env_t env,
+      Call& call
       /* tracer */
       /* vm_tracer */
     );

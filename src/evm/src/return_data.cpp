@@ -8,3 +8,11 @@ ReturnData ReturnData::empty() {
     uint256_t()
   };
 }
+
+ReturnData ReturnData::copy() {
+  return {
+    mem,
+    offset,
+    size
+  };
+}

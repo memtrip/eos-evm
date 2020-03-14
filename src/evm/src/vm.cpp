@@ -8,6 +8,10 @@
 #include <evm/hex.h>
 #include <evm/utils.h>
 
+VM::VM() {
+  returnData = ReturnData::empty();
+}
+
 exec_result_t VM::execute(
   Memory& memory,
   StackMachine& stack, 
@@ -15,7 +19,6 @@ exec_result_t VM::execute(
   Gasometer& gasometer,
   params_t& params,
   External& external,
-  ReturnData& returnData,
   Call& call,
   env_t env
 ) {
@@ -35,7 +38,6 @@ exec_result_t VM::execute(
       gasometer, 
       params,
       external, 
-      returnData, 
       call, 
       env
     );
@@ -53,7 +55,6 @@ exec_result_t VM::step(
   Gasometer& gasometer,
   params_t& params,
   External& external,
-  ReturnData& returnData,
   Call& call,
   env_t env
 ) {
@@ -66,7 +67,6 @@ exec_result_t VM::step(
     gasometer, 
     params, 
     external, 
-    returnData, 
     call, 
     env
   );
@@ -81,7 +81,6 @@ exec_result_t VM::stepInner(
   Gasometer& gasometer,
   params_t& params,
   External& external,
-  ReturnData& returnData,
   Call& call,
   env_t env
 ) {
@@ -130,7 +129,6 @@ exec_result_t VM::stepInner(
     accountState,
     params,
     external,
-    returnData,
     call,
     env
   );
@@ -139,7 +137,11 @@ exec_result_t VM::stepInner(
     case InstructionResult::OK:
       break;
     case InstructionResult::UNUSED_GAS:
-      break;
+      {
+        uint256_t gasLeft = std::get<uint256_t>(result.second);
+        gasometer.currentGas = gasometer.currentGas + static_cast<gas_t>(gasLeft);
+        break;
+      }
     case InstructionResult::JUMP_POSITION:
       {
         uint256_t position = std::get<uint256_t>(result.second);
@@ -160,9 +162,11 @@ exec_result_t VM::stepInner(
         // TODO: return actual GAS value
         StopExecutionResult stop = std::get<StopExecutionResult>(result.second);
 
+        ReturnData intoReturnData = memory.intoReturnData(stop.initOff, stop.initSize);
+
         NeedsReturn needsReturn {
           uint256_t(0),
-          memory.intoReturnData(stop.initOff, stop.initSize),
+          intoReturnData,
           stop.apply
         };
         
@@ -199,10 +203,10 @@ instruction_result_t VM::executeInstruction(
   AccountState& accountState,
   params_t& params,
   External& external,
-  ReturnData& returnData,
   Call& call,
   env_t env
 ) {
+  Utils::printInstruction(instruction);
   switch (Instruction::opcode(instruction)) {
     case Opcode::STOP: {
       return std::make_pair(InstructionResult::STOP_EXEC, 0);
@@ -491,8 +495,22 @@ instruction_result_t VM::executeInstruction(
       stack.push(uint256_t(reader.bytes.size()));
       break;
     case Opcode::CODECOPY:
-      memory.copyData(stack, reader.bytes);
-      break;
+      {
+        uint256_t destOffset = stack.peek(0);
+        uint256_t sourceOffset = stack.peek(1);
+        uint256_t sizeItem = stack.peek(2);
+        stack.pop(3);
+
+        bytes_t codeBytes = reader.bytes;
+
+        memory.copyData(
+          destOffset, 
+          sourceOffset, 
+          sizeItem, 
+          codeBytes
+        );
+        break;
+      }
     case Opcode::GASPRICE:
       printf("(GASPRICE ");
       break;
@@ -509,7 +527,18 @@ instruction_result_t VM::executeInstruction(
         uint256_t address = stack.peek(0);
         stack.pop(1);
         bytes_t code = external.code(address);
-        memory.copyData(stack, code);
+
+        uint256_t destOffset = stack.peek(0);
+        uint256_t sourceOffset = stack.peek(1);
+        uint256_t sizeItem = stack.peek(2);
+        stack.pop(3);
+
+        memory.copyData(
+          destOffset, 
+          sourceOffset, 
+          sizeItem, 
+          code
+        );
         break;
       }
     case Opcode::RETURNDATASIZE:
@@ -719,8 +748,88 @@ instruction_result_t VM::executeInstruction(
       break;
     }
     case Opcode::CREATE:
-      printf("(CREATE ");
-      break;
+    case Opcode::CREATE2:
+      {
+        uint256_t endowment = stack.peek(0);
+        uint256_t initOff = stack.peek(1);
+        uint256_t initSize = stack.peek(2);
+        size_t outSize = static_cast<size_t>(initSize);
+        stack.pop(3);
+
+        uint8_t createOpcode = Instruction::opcode(instruction);
+        uint256_t address;
+        action_type_t callType; 
+
+        switch (createOpcode) {
+          case Opcode::CREATE:
+            address = params.address;
+            callType = ActionType::ACTION_CREATE;
+            break;
+          case Opcode::CREATE2:
+            {
+              address = stack.peek(0);
+              callType = ActionType::ACTION_CREATE2;
+              stack.pop(1);
+              break;
+            }
+        }
+
+        this->returnData = ReturnData::empty();
+
+        // TODO: check there is a high enough balance to perform create
+
+        bytes_t contractCode = memory.readSlice(initOff, initSize);
+
+        call_result_t callResult = call.create(
+          providedGas,
+          address, 
+          uint256_t(endowment), 
+          contractCode, 
+          callType, 
+          true, 
+          env,
+          external,
+          accountState
+        );
+        
+        switch (callResult.first) {
+          case MESSAGE_CALL_SUCCESS:
+            {
+              printf("MESSAGE_CALL_SUCCESS");
+              MessageCallReturn callReturn = std::get<MessageCallReturn>(callResult.second);
+              uint256_t gasLeft = callReturn.gasLeft;
+
+              // TODO: Address should come from cal_result_t
+              stack.push(address);
+
+              return std::make_pair(
+                InstructionResult::UNUSED_GAS,
+                gasLeft
+              );
+            }
+          case MESSAGE_CALL_REVERTED:
+            {
+              printf("MESSAGE_CALL_REVERTED");
+              MessageCallReturn callReturn = std::get<MessageCallReturn>(callResult.second);
+              uint256_t gasLeft = callReturn.gasLeft;
+
+              stack.push(UINT256_ZERO);
+
+              this->returnData = callReturn.returnData.copy();
+
+              return std::make_pair(
+                InstructionResult::UNUSED_GAS,
+                gasLeft
+              );
+            }
+          case MESSAGE_CALL_FAILED:
+            printf("MESSAGE_CALL_FAILED");
+            stack.push(UINT256_ZERO);
+            break;
+        }
+
+        break;
+      }
     case Opcode::RETURN:
       {
         uint256_t initOff = stack.peek(0);
@@ -738,9 +847,6 @@ instruction_result_t VM::executeInstruction(
           result
         );
       }
-    case Opcode::CREATE2:
-      printf("(CREATE2 ");
-      break;
     case Opcode::CALL:
     case Opcode::CALLCODE:
     case Opcode::DELEGATECALL:
@@ -771,7 +877,7 @@ instruction_result_t VM::executeInstruction(
         uint256_t inOffset = stack.peek(1 + stackOffset);
         uint256_t inSize = stack.peek(2 + stackOffset);
         uint256_t outOffset = stack.peek(3 + stackOffset);
-        uint256_t outSize = stack.peek(4 + stackOffset);
+        size_t outSize = static_cast<size_t>(stack.peek(4 + stackOffset));
 
         stack.pop(5 + stackOffset);
 
@@ -813,13 +919,13 @@ instruction_result_t VM::executeInstruction(
             }
         }
 
-        returnData = ReturnData::empty();
+        this->returnData = ReturnData::empty();
         // TODO: if there is not enough balance, or the stack depth is reached, return 0
 
         bytes_t input = memory.readSlice(inOffset, inSize);
         // TODO: external call with result
 
-        call_result_t result = call.call(
+        call_result_t callResult = call.call(
           providedGas,
           senderAddress, 
           receiveAddress, 
@@ -833,7 +939,54 @@ instruction_result_t VM::executeInstruction(
           accountState
         );
 
-        // TODO: setup resume output range
+        switch (callResult.first) {
+          case MESSAGE_CALL_SUCCESS:
+            {
+              printf("MESSAGE_CALL_SUCCESS");
+              MessageCallReturn callReturn = std::get<MessageCallReturn>(callResult.second);
+              uint256_t gasLeft = callReturn.gasLeft;
+          
+              bytes_t outBytes(
+                callReturn.returnData.mem.begin(), 
+                callReturn.returnData.mem.begin() + outSize
+              );
+              memory.writeSlice(outOffset, outBytes);
+
+              this->returnData = callReturn.returnData.copy();
+
+              stack.push(UINT256_ONE);
+
+              return std::make_pair(
+                InstructionResult::UNUSED_GAS,
+                gasLeft
+              );
+            }
+          case MESSAGE_CALL_REVERTED:
+            {
+              printf("MESSAGE_CALL_REVERTED");
+              MessageCallReturn callReturn = std::get<MessageCallReturn>(callResult.second);
+              uint256_t gasLeft = callReturn.gasLeft;
+
+              bytes_t outBytes(
+                callReturn.returnData.mem.begin(), 
+                callReturn.returnData.mem.begin() + outSize
+              );
+              memory.writeSlice(outOffset, outBytes);
+
+              this->returnData = callReturn.returnData.copy();
+
+              stack.push(UINT256_ZERO);
+
+              return std::make_pair(
+                InstructionResult::UNUSED_GAS,
+                gasLeft
+              );
+            }
+          case MESSAGE_CALL_FAILED:
+            printf("MESSAGE_CALL_FAILED");
+            stack.push(UINT256_ZERO);
+            break;
+        }
 
         break;
       }
