@@ -5,9 +5,49 @@
 #include <evm/account_state.h>
 #include <evm/gasometer.h>
 #include <evm/execute.h>
+#include <evm/big_int.h>
 
 Call::Call(uint16_t stackDepthArg) {
   stackDepth = stackDepthArg;
+}
+
+call_result_t Call::execute(
+  transaction_t transaction,
+  bytes_t callerAddress,
+  env_t env,
+  External& external,
+  AccountState& accountState
+) {
+
+  switch (transaction.action) {
+    case TransactionActionType::TRANSACTION_CREATE:
+      return create(
+        static_cast<gas_t>(transaction.gas_limit),
+        BigInt::fromBytes(callerAddress),
+        transaction.value,
+        transaction.data,
+        ActionType::ACTION_CREATE,
+        true,
+        env,
+        external,
+        accountState
+      );
+    case TransactionActionType::TRANSACTION_CALL:
+      uint256_t address = BigInt::fromBytes(transaction.to);
+      return call(
+        static_cast<gas_t>(transaction.gas_limit),
+        BigInt::fromBytes(callerAddress),
+        address,
+        transaction.value,
+        transaction.data,
+        address,
+        ActionType::ACTION_CALL,
+        true,
+        env,
+        external,
+        accountState
+      );
+  }
 }
 
 call_result_t Call::call(

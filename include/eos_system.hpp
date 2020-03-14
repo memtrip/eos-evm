@@ -1,6 +1,7 @@
 #pragma once
 #include <eosio/system.hpp>
 #include <eosio/transaction.hpp>
+#include <evm/types.h>
 
 class eos_system {
   public:
@@ -10,5 +11,14 @@ class eos_system {
 
     static uint64_t block_num() {
       return eosio::tapos_block_num();
+    }
+
+    static env_t env() {
+      return {
+        block_num(), /* blockNumber */
+        timestamp(), /* timestamp */
+        21000, /* gasLimit */
+        1 /* chainId */
+      };
     }
 };

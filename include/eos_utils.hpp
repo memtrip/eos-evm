@@ -29,4 +29,15 @@ class eos_utils {
       }
       return string;
     }
+
+    static bytes_t fixedToBytes(eosio::fixed_bytes<32> checksum256) {
+      auto checksum256Bytes = checksum256.data();
+      bytes_t bytes;
+
+      for (int i = 0; i < 32; i++) {
+        bytes[i] = checksum256Bytes[i];
+      }
+
+      return bytes;
+    }
 };

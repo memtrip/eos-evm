@@ -27,9 +27,6 @@ finalization_result_t Execute::callWithStackDepth(
 
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
-  
-  printf("code: %s\n\n", Hex::bytesToHex(params.code).c_str());
-  printf("data: %s", Hex::bytesToHex(params.data).c_str());
 
   exec_result_t vm_result = vm.execute(
     mem, 
@@ -41,8 +38,6 @@ finalization_result_t Execute::callWithStackDepth(
     call, 
     env
   );
-
-  printf("cave x");
 
   delete memoryBytes;
   delete stackItems;

@@ -62,6 +62,13 @@ typedef std::pair<
 class Call {
   public:
     Call(uint16_t stackDepthArg);
+    call_result_t execute(
+      transaction_t transaction,
+      bytes_t callerAddress,
+      env_t env,
+      External& external,
+      AccountState& accountState
+    );
     call_result_t call(
       gas_t gas,
       uint256_t senderAddress,
