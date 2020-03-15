@@ -19,7 +19,7 @@ TEST_CASE("${test.name}______${test.fixture._info.sourceHash}", "[vm]") {
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState as(accountItems);
+  AccountState accountState(accountItems);
   Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -27,17 +27,13 @@ TEST_CASE("${test.name}______${test.fixture._info.sourceHash}", "[vm]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
 
   <#if test.fixture.post??>
-  <#list test.fixture.post.accountState.storage?keys as key>
-  store_item_t item${key?index} = Utils::accountStoreValue(${key?index}, accountItems);
-  </#list>
-
   // then
   <#list test.fixture.post.accountState.storage?keys as key>
   CHECK("${test.fixture.post.accountState.storage[key]}" ==
-    Utils::uint256_2str(item${key?index}.second)
+    Utils::uint256_2str(accountState.get(${key}))
   );
   </#list>
   </#if>

@@ -17,7 +17,7 @@ TEST_CASE("Blockhash (stub)", "[env]") {
   VM vm {};
     Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState as(accountItems);
+  AccountState accountState(accountItems);
   Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -25,7 +25,7 @@ TEST_CASE("Blockhash (stub)", "[env]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
 
   // then
   CHECK(StackMachine::STUB == sm.top());
@@ -40,7 +40,7 @@ TEST_CASE("Coinbase (stub)", "[env]") {
   VM vm {};
     Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState as(accountItems);
+  AccountState accountState(accountItems);
   Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -48,7 +48,7 @@ TEST_CASE("Coinbase (stub)", "[env]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
 
   // then
   CHECK(StackMachine::STUB == sm.top());
@@ -63,7 +63,7 @@ TEST_CASE("Difficulty (stub)", "[env]") {
   VM vm {};
     Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState as(accountItems);
+  AccountState accountState(accountItems);
   Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -71,7 +71,7 @@ TEST_CASE("Difficulty (stub)", "[env]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
 
   // then
   CHECK(StackMachine::STUB == sm.top());
@@ -86,7 +86,7 @@ TEST_CASE("Timestamp", "[env]") {
   VM vm {};
     Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState as(accountItems);
+  AccountState accountState(accountItems);
   Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -94,7 +94,7 @@ TEST_CASE("Timestamp", "[env]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
 
   // then
   CHECK(1581632422128 == sm.top());
@@ -109,7 +109,7 @@ TEST_CASE("Number", "[env]") {
   VM vm {};
     Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState as(accountItems);
+  AccountState accountState(accountItems);
   Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -117,7 +117,7 @@ TEST_CASE("Number", "[env]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
 
   // then
   CHECK(16339169 == sm.top());
@@ -132,7 +132,7 @@ TEST_CASE("Gas limit", "[env]") {
   VM vm {};
     Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState as(accountItems);
+  AccountState accountState(accountItems);
   Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -140,7 +140,7 @@ TEST_CASE("Gas limit", "[env]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
 
   // then
   CHECK(100000 == sm.top());
@@ -155,7 +155,7 @@ TEST_CASE("Chain id", "[env]") {
   VM vm {};
     Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState as(accountItems);
+  AccountState accountState(accountItems);
   Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -163,7 +163,7 @@ TEST_CASE("Chain id", "[env]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
 
   // then
   CHECK(1 == sm.top());
@@ -178,7 +178,7 @@ TEST_CASE("Call value", "[env]") {
   VM vm {};
     Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState as(accountItems);
+  AccountState accountState(accountItems);
   Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -186,7 +186,7 @@ TEST_CASE("Call value", "[env]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
 
   // then
   CHECK(34 == sm.top());

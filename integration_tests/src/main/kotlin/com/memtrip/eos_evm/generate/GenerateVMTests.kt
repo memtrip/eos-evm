@@ -10,11 +10,13 @@ class GenerateVMTests(
 ) {
 
     fun generate(testDirectory: String, generatePath: String) {
-        val vmTests = testCases.get(testDirectory)
-        val file = freeMarker.generate(
-            "vm.tests.cpp.template",
-            DataMap(vmTests.tests)
-        )
-        writeFile.writeFile(generatePath, file)
+        testCases.get(testDirectory).groupBy {
+            it.groupName
+        }.values.forEach {
+            val file = freeMarker.generate("vm.tests.cpp.template", DataMap(it.map { unit ->
+                unit.fixtureParent
+            }))
+            writeFile.writeFile(generatePath + "_" + it.first().groupName + ".test.cpp", file)
+        }
     }
 }

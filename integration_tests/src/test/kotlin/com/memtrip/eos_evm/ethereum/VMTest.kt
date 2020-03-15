@@ -9,7 +9,7 @@ class VMTest {
     fun generate() {
         GenerateVMTests().generate(
             "src/test/resources/tests/tests/VMTests",
-            "build/vm.test.cpp"
+            "build/"
         )
     }
 }

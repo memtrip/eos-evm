@@ -14,7 +14,7 @@ TEST_CASE("Call contract code", "[call]") {
   VM vm {};
     Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState as(accountItems);
+  AccountState accountState(accountItems);
   Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -22,7 +22,7 @@ TEST_CASE("Call contract code", "[call]") {
   StackMachine sm(stackItems);
 
   // when
-  exec_result_t vm_result = vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
+  exec_result_t vm_result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
 
   // then
   REQUIRE(ExecResult::DONE == vm_result.first);

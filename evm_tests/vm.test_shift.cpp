@@ -16,7 +16,7 @@ TEST_CASE("shift left ", "[shift]") {
   VM vm {};
     Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState as(accountItems);
+  AccountState accountState(accountItems);
   Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -24,7 +24,7 @@ TEST_CASE("shift left ", "[shift]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
 
   // then
   REQUIRE("8000000000000000000000000000000000000000000000000000000000000000" 
@@ -39,7 +39,7 @@ TEST_CASE("shift left (2)", "[shift]") {
   VM vm {};
     Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState as(accountItems);
+  AccountState accountState(accountItems);
   Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -47,7 +47,7 @@ TEST_CASE("shift left (2)", "[shift]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
 
   // then
   REQUIRE("fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe" 
@@ -62,7 +62,7 @@ TEST_CASE("shift left (3)", "[shift]") {
   VM vm {};
     Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState as(accountItems);
+  AccountState accountState(accountItems);
   Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -70,7 +70,7 @@ TEST_CASE("shift left (3)", "[shift]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
 
   // then
   REQUIRE("000000000000000000000000000000000000000000000000000000000000000a" 
@@ -85,7 +85,7 @@ TEST_CASE("shift right ", "[shift]") {
   VM vm {};
     Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState as(accountItems);
+  AccountState accountState(accountItems);
   Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -93,7 +93,7 @@ TEST_CASE("shift right ", "[shift]") {
   StackMachine sm(stackItems);
 
   // when
-  exec_result_t result = vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
+  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
 
   // then
   REQUIRE("4000000000000000000000000000000000000000000000000000000000000000" 
@@ -108,7 +108,7 @@ TEST_CASE("shift right (1)", "[shift]") {
   VM vm {};
     Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState as(accountItems);
+  AccountState accountState(accountItems);
   Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -116,7 +116,7 @@ TEST_CASE("shift right (1)", "[shift]") {
   StackMachine sm(stackItems);
 
   // when
-  exec_result_t result = vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
+  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
 
   // then
   REQUIRE("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" 
@@ -131,7 +131,7 @@ TEST_CASE("shift right (2)", "[shift]") {
   VM vm {};
     Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState as(accountItems);
+  AccountState accountState(accountItems);
   Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -139,7 +139,7 @@ TEST_CASE("shift right (2)", "[shift]") {
   StackMachine sm(stackItems);
 
   // when
-  exec_result_t result = vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
+  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
 
   // then
   REQUIRE("0000000000000000000000000000000000000000000000000000000000000002" == Utils::uint256_2str(sm.top()));
@@ -152,7 +152,7 @@ TEST_CASE("sar", "[shift]") {
   VM vm {};
     Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState as(accountItems);
+  AccountState accountState(accountItems);
   Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -161,7 +161,7 @@ TEST_CASE("sar", "[shift]") {
 
   // when
   mem.resize(32);
-  exec_result_t result = vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
+  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
 
   // then
   REQUIRE("c000000000000000000000000000000000000000000000000000000000000000" 
@@ -176,7 +176,7 @@ TEST_CASE("sar (1)", "[shift]") {
   VM vm {};
     Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState as(accountItems);
+  AccountState accountState(accountItems);
   Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -185,7 +185,7 @@ TEST_CASE("sar (1)", "[shift]") {
 
   // when
   mem.resize(32);
-  exec_result_t result = vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
+  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
 
   // then
   REQUIRE("0000000000000000000000000000000000000000000000000000000000000001" 
@@ -200,7 +200,7 @@ TEST_CASE("sar (2)", "[shift]") {
   VM vm {};
     Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState as(accountItems);
+  AccountState accountState(accountItems);
   Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -209,7 +209,7 @@ TEST_CASE("sar (2)", "[shift]") {
 
   // when
   mem.resize(32);
-  exec_result_t result = vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
+  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
 
   // then
   REQUIRE("000000000000000000000000000000000000000000000000000000000000007f" 
@@ -224,7 +224,7 @@ TEST_CASE("sar (3)", "[shift]") {
   VM vm {};
     Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState as(accountItems);
+  AccountState accountState(accountItems);
   Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -233,7 +233,7 @@ TEST_CASE("sar (3)", "[shift]") {
 
   // when
   mem.resize(32);
-  exec_result_t result = vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
+  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
 
   // then
   REQUIRE("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" == Utils::uint256_2str(sm.top())

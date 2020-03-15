@@ -206,7 +206,6 @@ instruction_result_t VM::executeInstruction(
   Call& call,
   env_t env
 ) {
-  Utils::printInstruction(instruction);
   switch (Instruction::opcode(instruction)) {
     case Opcode::STOP: {
       return std::make_pair(InstructionResult::STOP_EXEC, 0);

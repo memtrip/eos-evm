@@ -16,7 +16,7 @@ TEST_CASE("extcodesize and extcodecopy", "[code]") {
   VM vm {};
     Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState as(accountItems);
+  AccountState accountState(accountItems);
   Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -24,7 +24,7 @@ TEST_CASE("extcodesize and extcodecopy", "[code]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
 
   // then
   store_item_t item1 = Utils::accountStoreValue(0, accountItems);
@@ -46,7 +46,7 @@ TEST_CASE("codesize", "[code]") {
   VM vm {};
     Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState as(accountItems);
+  AccountState accountState(accountItems);
   Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -54,7 +54,7 @@ TEST_CASE("codesize", "[code]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000022" == 
@@ -71,7 +71,7 @@ TEST_CASE("calldataload", "[code]") {
   VM vm {};
     Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState as(accountItems);
+  AccountState accountState(accountItems);
   Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -79,7 +79,7 @@ TEST_CASE("calldataload", "[code]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
 
   // then
   store_item_t item1 = Utils::accountStoreValue(0, accountItems);

@@ -18,7 +18,7 @@ TEST_CASE("Save to memory", "[memory]") {
   VM vm {};
     Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState as(accountItems);
+  AccountState accountState(accountItems);
   Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -27,7 +27,7 @@ TEST_CASE("Save to memory", "[memory]") {
 
   // when
   mem.resize(32); // TODO: this should happen via requirements (memoryRequiredSize)
-  vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000006" == 
@@ -48,7 +48,7 @@ TEST_CASE("Save to memory, and retreive", "[memory]") {
   VM vm {};
     Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState as(accountItems);
+  AccountState accountState(accountItems);
   Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -57,7 +57,7 @@ TEST_CASE("Save to memory, and retreive", "[memory]") {
 
   // when
   mem.resize(32); // TODO: this should happen via requirements (memoryRequiredSize)
-  vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000006" == 
@@ -79,7 +79,7 @@ TEST_CASE("Save to memory, retreive, and apply addition", "[memory]") {
   VM vm {};
     Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState as(accountItems);
+  AccountState accountState(accountItems);
   Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -88,7 +88,7 @@ TEST_CASE("Save to memory, retreive, and apply addition", "[memory]") {
 
   // when
   mem.resize(32); // TODO: this should happen via requirements (memoryRequiredSize)
-  vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000018" == 
@@ -111,7 +111,7 @@ TEST_CASE("Save byte to memory, retreive, and apply addition", "[memory]") {
   VM vm {};
     Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState as(accountItems);
+  AccountState accountState(accountItems);
   Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -120,7 +120,7 @@ TEST_CASE("Save byte to memory, retreive, and apply addition", "[memory]") {
 
   // when
   mem.resize(32); // TODO: this should happen via requirements (memoryRequiredSize)
-  vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000018" == 
@@ -143,7 +143,7 @@ TEST_CASE("Save byte to memory (1)", "[memory]") {
   VM vm {};
     Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState as(accountItems);
+  AccountState accountState(accountItems);
   Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -152,7 +152,7 @@ TEST_CASE("Save byte to memory (1)", "[memory]") {
 
   // when
   mem.resize(32); // TODO: this should happen via requirements (memoryRequiredSize)
-  vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000018" == 
@@ -169,7 +169,7 @@ TEST_CASE("Memory size", "[memory]") {
   VM vm {};
     Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState as(accountItems);
+  AccountState accountState(accountItems);
   Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -178,7 +178,7 @@ TEST_CASE("Memory size", "[memory]") {
 
   // when
   mem.resize(32); // TODO: this should happen via requirements (memoryRequiredSize)
-  vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000020" /* 32 in hex */ == 

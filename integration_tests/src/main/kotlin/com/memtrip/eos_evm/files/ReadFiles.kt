@@ -4,12 +4,11 @@ import java.io.File
 
 class ReadFiles {
 
-    fun read(path: String): List<String> {
+    fun read(path: String): List<FileContext> {
         val files = ArrayList<File>()
         File(path).collect(files)
-        return files.map { it.readText() }
+        return files.map { FileContext(it.parentFile.name, it.readText()) }
     }
-
 
     private fun File.collect(collected: ArrayList<File>) {
         listFiles()?.forEach { file ->

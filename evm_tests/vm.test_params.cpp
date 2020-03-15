@@ -16,7 +16,7 @@ TEST_CASE("Address", "[params]") {
   VM vm {};
     Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState as(accountItems);
+  AccountState accountState(accountItems);
   Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -24,7 +24,7 @@ TEST_CASE("Address", "[params]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000ea0e9a" == Utils::uint256_2str(sm.top()));
@@ -39,7 +39,7 @@ TEST_CASE("Origin", "[params]") {
   VM vm {};
     Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState as(accountItems);
+  AccountState accountState(accountItems);
   Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -47,7 +47,7 @@ TEST_CASE("Origin", "[params]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
 
   // then
   CHECK("00000000000000000000000000000000000000000000000000000000001283fe" == Utils::uint256_2str(sm.top()));
@@ -62,7 +62,7 @@ TEST_CASE("Caller", "[params]") {
   VM vm {};
     Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState as(accountItems);
+  AccountState accountState(accountItems);
   Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -70,7 +70,7 @@ TEST_CASE("Caller", "[params]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000ea0e9e" == 
@@ -87,7 +87,7 @@ TEST_CASE("calldatasize", "[params]") {
   VM vm {};
     Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState as(accountItems);
+  AccountState accountState(accountItems);
   Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -95,7 +95,7 @@ TEST_CASE("calldatasize", "[params]") {
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000004" == 

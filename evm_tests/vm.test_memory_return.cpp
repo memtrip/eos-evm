@@ -16,7 +16,7 @@ TEST_CASE("shift left, write to memory, return", "[return_memory]") {
   VM vm {};
     Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState as(accountItems);
+  AccountState accountState(accountItems);
   Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -25,7 +25,7 @@ TEST_CASE("shift left, write to memory, return", "[return_memory]") {
 
   // when
   mem.resize(32);
-  exec_result_t result = vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
+  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
 
   // then
   REQUIRE(ExecResult::DONE == result.first);
@@ -45,7 +45,7 @@ TEST_CASE("shift right, write to memory, return", "[return_memory]") {
   VM vm {};
     Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState as(accountItems);
+  AccountState accountState(accountItems);
   Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -54,7 +54,7 @@ TEST_CASE("shift right, write to memory, return", "[return_memory]") {
 
   // when
   mem.resize(32);
-  exec_result_t result = vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
+  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
 
   // then
   REQUIRE(ExecResult::DONE == result.first);
@@ -74,7 +74,7 @@ TEST_CASE("sar, write to memory, revert", "[return_memory]") {
   VM vm {};
     Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState as(accountItems);
+  AccountState accountState(accountItems);
   Gasometer gasometer(0);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -83,7 +83,7 @@ TEST_CASE("sar, write to memory, revert", "[return_memory]") {
 
   // when
   mem.resize(32);
-  exec_result_t result = vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
+  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
 
   // then
   REQUIRE(ExecResult::DONE == result.first);
