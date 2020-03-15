@@ -69,6 +69,17 @@ class Call {
       External& external,
       AccountState& accountState
     );
+    call_result_t create(
+      gas_t gas,
+      uint256_t address,
+      uint256_t value,
+      bytes_t& code,
+      action_type_t callType,
+      bool trap,
+      env_t env,
+      External& external,
+      AccountState& accountState
+    );
     call_result_t call(
       gas_t gas,
       uint256_t senderAddress,
@@ -76,17 +87,6 @@ class Call {
       uint256_t value,
       bytes_t& data,
       uint256_t codeAddress,
-      action_type_t callType,
-      bool trap,
-      env_t env,
-      External& external,
-      AccountState& accountState
-    );
-    call_result_t create(
-      gas_t gas,
-      uint256_t address,
-      uint256_t value,
-      bytes_t& code,
       action_type_t callType,
       bool trap,
       env_t env,

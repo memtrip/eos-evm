@@ -12,7 +12,7 @@ TEST_CASE("Call contract code", "[call]") {
   params_t params =  Utils::createParams(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
-  Call call(0);
+    Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   Gasometer gasometer(0);

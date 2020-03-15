@@ -50,6 +50,41 @@ call_result_t Call::execute(
   }
 }
 
+call_result_t Call::create(
+  gas_t gas,
+  uint256_t address,
+  uint256_t value,
+  bytes_t& code,
+  action_type_t callType,
+  bool trap,
+  env_t env,
+  External& external,
+  AccountState& accountState
+) {
+
+  params_t params = {
+    address, /* codeAddress*/
+    uint256_t(0), /* codeHash */
+    uint256_t(1), /* codeVersion */
+    address, /* address */
+    address, /* sender */
+    uint256_t(0), /* origin */
+    gas, /* gas */
+    value, /* value */
+    code, /* code */
+    bytes_t() /* data */ // TODO: does CREATE ever uses a data arguments
+  };
+
+  return makeCall(
+    params,
+    callType,
+    trap,
+    env,
+    external,
+    accountState
+  );
+}
+
 call_result_t Call::call(
   gas_t gas,
   uint256_t senderAddress,
@@ -77,41 +112,6 @@ call_result_t Call::call(
     value, /* value */
     code, /* code */
     bytes_t(data.begin(), data.end()) /* data */
-  };
-
-  return makeCall(
-    params,
-    callType,
-    trap,
-    env,
-    external,
-    accountState
-  );
-}
-
-call_result_t Call::create(
-  gas_t gas,
-  uint256_t address,
-  uint256_t value,
-  bytes_t& code,
-  action_type_t callType,
-  bool trap,
-  env_t env,
-  External& external,
-  AccountState& accountState
-) {
-
-  params_t params = {
-    address, /* codeAddress*/
-    uint256_t(0), /* codeHash */
-    uint256_t(1), /* codeVersion */
-    address, /* address */
-    address, /* sender */
-    uint256_t(0), /* origin */
-    gas, /* gas */
-    value, /* value */
-    code, /* code */
-    bytes_t() /* data */ // TODO: does CREATE ever uses a data arguments
   };
 
   return makeCall(

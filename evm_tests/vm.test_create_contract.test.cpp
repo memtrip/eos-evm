@@ -13,7 +13,7 @@ TEST_CASE("Create the most basic contract", "[create]") {
   ExternalMock ext {};
   VM vm {};
   ReturnData returnData = ReturnData::empty();
-Call call(0);
+  Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   Gasometer gasometer(0);
@@ -47,7 +47,7 @@ TEST_CASE("Create contract using CODECOPY", "[create]") {
   ExternalMock ext {};
   VM vm {};
   ReturnData returnData = ReturnData::empty();
-Call call(0);
+  Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   Gasometer gasometer(0);
@@ -86,7 +86,7 @@ TEST_CASE("Create contract using CREATE", "[create]") {
   params_t params =  Utils::createParams(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
-  Call call(0);
+    Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   Gasometer gasometer(0);

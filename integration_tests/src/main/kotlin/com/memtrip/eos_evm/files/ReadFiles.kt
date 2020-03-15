@@ -1,8 +1,8 @@
-package com.memtrip.eos_evm.fixture
+package com.memtrip.eos_evm.files
 
 import java.io.File
 
-object ReadFiles {
+class ReadFiles {
 
     fun read(path: String): List<String> {
         val files = ArrayList<File>()
