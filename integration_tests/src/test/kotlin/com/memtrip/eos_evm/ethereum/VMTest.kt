@@ -8,7 +8,7 @@ class VMTest {
     @Test
     fun generate() {
         GenerateVMTests().generate(
-            "src/test/resources/tests/VMTests",
+            "src/test/resources/tests/tests/VMTests",
             "build/vm.test.cpp"
         )
     }

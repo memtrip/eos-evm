@@ -22,8 +22,19 @@ class AccountAdapter {
                 accountState.balance,
                 accountState.code,
                 accountState.nonce,
-                accountState.storage
+                padAccountStateValue(accountState.storage)
             )
         )
+    }
+
+    private fun padAccountStateValue(storage: Map<String, String>): Map<String, String> {
+        return storage.entries.map {
+            it.key to padAccountStateValue(it.value.substring(2))
+        }.toMap()
+    }
+
+    private fun padAccountStateValue(accountStateValue: String): String {
+        if (accountStateValue.isEmpty()) return accountStateValue
+        return "0".repeat(64 - accountStateValue.length) + accountStateValue
     }
 }

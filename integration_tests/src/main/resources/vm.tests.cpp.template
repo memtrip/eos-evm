@@ -1,3 +1,7 @@
+//
+// Auto generated based off the Ethereum tests found here:
+// https://github.com/ethereum/tests/blob/develop/VMTests/
+//
 #include "catch.hpp"
 #include <evm/utils.h>
 #include <evm/vm.h>
@@ -8,12 +12,12 @@
 #include "external_mock.h"
 
 <#list tests as test>
-TEST_CASE("${test.name}", "[vm]") {
-  std::string bytecode_str = "60ff610ff08181818116600055176001551860025560008015600355198015600455600555";
+TEST_CASE("${test.name}______${test.fixture._info.sourceHash}", "[vm]") {
+  std::string bytecode_str = "${test.fixture.exec.code[2..]}";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
-    Call call(0);
+  Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState as(accountItems);
   Gasometer gasometer(0);
@@ -25,19 +29,18 @@ TEST_CASE("${test.name}", "[vm]") {
   // when
   vm.execute(mem, sm, as, gasometer, params, ext, call, Utils::env());
 
-  store_item_t item1 = Utils::accountStoreValue(0, accountItems);
-  store_item_t item2 = Utils::accountStoreValue(1, accountItems);
-  store_item_t item3 = Utils::accountStoreValue(2, accountItems);
-  store_item_t item4 = Utils::accountStoreValue(3, accountItems);
-  store_item_t item5 = Utils::accountStoreValue(4, accountItems);
-  store_item_t item6 = Utils::accountStoreValue(5, accountItems);
+  <#if test.fixture.post??>
+  <#list test.fixture.post.accountState.storage?keys as key>
+  store_item_t item${key?index} = Utils::accountStoreValue(${key?index}, accountItems);
+  </#list>
 
   // then
-  CHECK("00000000000000000000000000000000000000000000000000000000000000f0" == Utils::uint256_2str(item1.second));
-  CHECK("0000000000000000000000000000000000000000000000000000000000000fff" == Utils::uint256_2str(item2.second));
-  CHECK("0000000000000000000000000000000000000000000000000000000000000f0f" == Utils::uint256_2str(item3.second));
-  CHECK("0000000000000000000000000000000000000000000000000000000000000001" == Utils::uint256_2str(item4.second));
-  CHECK("0000000000000000000000000000000000000000000000000000000000000000" == Utils::uint256_2str(item5.second));
-  CHECK("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" == Utils::uint256_2str(item6.second));
+  <#list test.fixture.post.accountState.storage?keys as key>
+  CHECK("${test.fixture.post.accountState.storage[key]}" ==
+    Utils::uint256_2str(item${key?index}.second)
+  );
+  </#list>
+  </#if>
 }
+
 </#list>

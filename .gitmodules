@@ -1,0 +1,3 @@
+[submodule "integration_tests/src/test/resources/tests/tests"]
+	path = integration_tests/src/test/resources/tests/tests
+	url = https://github.com/ethereum/tests.git

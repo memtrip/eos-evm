@@ -16,9 +16,9 @@ class ParseFixture(
         .adapter(FixtureParent::class.java)
 ) {
 
-    fun parse(fixtures: List<String>): VmTests {
-        return VmTests(fixtures.map { fixtureJson ->
-            jsonAdapter.fromJson(fixtureJson) ?: throw IllegalStateException("Failed to parse fixture.")
+    fun parse(files: List<String>): VmTests {
+        return VmTests(files.map { fileBody ->
+            jsonAdapter.fromJson(fileBody) ?: throw IllegalStateException("Failed to parse fixture.")
         })
     }
 }

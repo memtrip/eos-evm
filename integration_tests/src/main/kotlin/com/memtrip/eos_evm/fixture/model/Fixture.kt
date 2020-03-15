@@ -1,6 +1,7 @@
 package com.memtrip.eos_evm.fixture.model
 
 data class Fixture(
+    val _info: Info,
     val exec: Exec,
     val gas: String,
     val logs: String,
