@@ -318,3 +318,15 @@ uint8_t Instruction::logTopics(instruct_t instruction) {
   }
   return 0;
 }
+
+instruction_verify_t Instruction::verify(instruct_t instruction, StackMachine& stack) {
+  uint8_t argsLen = args(instruction);
+  uint8_t retLen = ret(instruction);
+  if (stack.size() < argsLen) {
+    return InstructionVerifyResult::INSTRUCTION_ERROR_UNDER_FLOW;
+  } else if (stack.size() - argsLen + retLen > STACK_LIMIT) {
+    return InstructionVerifyResult::INSTRUCTION_ERROR_OUT_OF_STACK;
+  } else {
+    return InstructionVerifyResult::INSTRUCTION_VALID;
+  }
+}

@@ -512,10 +512,13 @@ store_item_t Utils::accountStoreValue(size_t index, account_store_t* store) {
 
 env_t Utils::env() {
   return {
-    16339169, /* blockNumber */
-    1581632422128, /* timestamp */
-    100000, /* gasLimit */
-    1 /* chainId */
+    uint256_t(1), /* chainId */
+    uint256_t(16339169), /* blockNumber */
+    uint256_t(1581632422128), /* timestamp */
+    uint256_t(100000), /* gasLimit */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
+    uint256_t(256), /* difficulty */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("f1250fd89a1c3e517ae92cc1f73865c594bfad34db20f3b3396af4efe19d3bfb")) /* blockHash */
   };
 };
 
@@ -527,7 +530,8 @@ params_t Utils::params(bytes_t code, bytes_t data) {
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xea0e9e), /* sender */
     uint256_t(0x1283fe), /* origin */
-    0, /* gas */
+    100000, /* gas */
+    uint256_t(0), /* gasPrice */
     uint256_t(34), /* value */
     code, /* code */
     data /* data */
@@ -542,7 +546,8 @@ params_t Utils::createParams(bytes_t code, bytes_t data) {
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xea0e9e), /* sender */
     uint256_t(0x1283fe), /* origin */
-    0, /* gas */
+    100000, /* gas */
+    uint256_t(0), /* gasPrice */
     uint256_t(0), /* value */
     code, /* code */
     data /* data */
@@ -557,4 +562,24 @@ bytes_t Utils::returnDataSlice(ReturnData returnData) {
     returnData.mem.begin() + offset + size
   );
   return returnDataSlice;
+}
+
+gas_t Utils::gasLeft(exec_result_t vm_result) {
+  if (vm_result.first == ExecResult::DONE) {
+    gas_left_t gasLeft = std::get<gas_left_t>(vm_result.second);
+    switch (gasLeft.first) {
+      case GasType::NEEDS_RETURN:
+        {
+          NeedsReturn needsReturn = std::get<NeedsReturn>(gasLeft.second);
+          return gas_t(needsReturn.gasLeft);
+        }
+      case GasType::KNOWN:
+        {
+          uint256_t gas = std::get<uint256_t>(gasLeft.second);
+          return gas_t(gas);
+        }
+    }
+  }
+
+  return 0xFFFF;
 }

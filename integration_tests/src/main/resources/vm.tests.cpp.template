@@ -9,28 +9,58 @@
 #include <evm/return_data.h>
 #include <evm/call.h>
 #include <evm/gasometer.h>
+#include <evm/big_int.h>
 #include "external_mock.h"
 
 <#list tests as test>
 TEST_CASE("${test.name}______${test.fixture._info.sourceHash}", "[vm]") {
+  env_t env = {
+    uint256_t(1), /* chainId */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("${test.fixture.env.currentNumber[2..]}")), /* blockNumber */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("${test.fixture.env.currentTimestamp[2..]}")), /* timestamp */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("${test.fixture.env.currentGasLimit[2..]}")), /* gasLimit */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("${test.fixture.env.currentCoinbase[2..]}")), /* coinbase */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("${test.fixture.env.currentDifficulty[2..]}")), /* difficulty */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("${(test.fixture.env.previousHash[2..])!""}")) /* blockHash */
+  };
+
   std::string bytecode_str = "${test.fixture.exec.code[2..]}";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
+  <#if test.fixture.exec.data[2..]?has_content>
+  bytes_t data_bytes = Hex::hexToBytes("${test.fixture.exec.data[2..]}");
+  <#else>
+  bytes_t data_bytes = bytes_t();
+  </#if>
+
+  params_t params = {
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("${test.fixture.exec.address[2..]}")), /* codeAddress*/
+    uint256_t(0xf9313a), /* codeHash */
+    uint256_t(0x193821), /* codeVersion */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("${test.fixture.exec.address[2..]}")), /* address */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("${test.fixture.exec.caller[2..]}")), /* sender */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("${test.fixture.exec.origin[2..]}")), /* origin */
+    gas_t(${test.fixture.exec.gas}), /* gas */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("${test.fixture.exec.gasPrice[2..]}")), /* gasPrice */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("${test.fixture.exec.value[2..]}")), /* value */
+    Hex::hexToBytes(bytecode_str), /* code */
+    data_bytes /* data */
+  };
+
   ExternalMock ext {};
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState accountState(accountItems);
-  Gasometer gasometer(0);
+  Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
 
-  <#if test.fixture.post??>
   // then
+  <#if test.fixture.post??>
   <#list test.fixture.post.accountState.storage?keys as key>
   CHECK("${test.fixture.post.accountState.storage[key]}" ==
     Utils::uint256_2str(accountState.get(${key}))

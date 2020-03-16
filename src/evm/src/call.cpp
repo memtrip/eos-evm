@@ -70,6 +70,7 @@ call_result_t Call::create(
     address, /* sender */
     uint256_t(0), /* origin */
     gas, /* gas */
+    uint256_t(0), /* gasPrice */
     value, /* value */
     code, /* code */
     bytes_t() /* data */ // TODO: does CREATE ever uses a data arguments
@@ -109,6 +110,7 @@ call_result_t Call::call(
     senderAddress, /* sender */
     uint256_t(0), /* origin */
     gas, /* gas */
+    uint256_t(0), /* gasPrice */
     value, /* value */
     code, /* code */
     bytes_t(data.begin(), data.end()) /* data */

@@ -21,7 +21,7 @@ finalization_result_t Execute::callWithStackDepth(
 
   VM vm {};
 
-  Gasometer gasometer(0);
+  Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
 

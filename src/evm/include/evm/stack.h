@@ -14,6 +14,7 @@ class StackMachine {
     void swapWithTop(unsigned int n);
     uint256_t top();
     void printSize();
+    size_t size();
     static uint256_t TRUE;
     static uint256_t FALSE;
     static uint256_t STUB;

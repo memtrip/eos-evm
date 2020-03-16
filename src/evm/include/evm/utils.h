@@ -2,6 +2,7 @@
 #include <evm/types.h>
 #include <evm/return_data.h>
 #include <evm/call.h>
+#include <evm/vm_result.h>
 
 class Utils {
   public:
@@ -17,4 +18,5 @@ class Utils {
     static params_t params(bytes_t code, bytes_t data);
     static params_t createParams(bytes_t code, bytes_t data);
     static bytes_t returnDataSlice(ReturnData returnData);
+    static gas_t gasLeft(exec_result_t vm_result);
 };

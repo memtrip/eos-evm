@@ -12,7 +12,7 @@ class eos_execute {
       eos_external external {};
       account_store_t* accountItems = new account_store_t();
       AccountState accountState(accountItems);
-        Call call(0);
+      Call call(0);
       call_result_t result = call.execute(
         transaction,
         callerAddress,

@@ -22,10 +22,13 @@ typedef std::vector<uint8_t> bytes_t;
 typedef std::array<char, 33> compressed_key_t;
 
 struct EnvInfo {
+  uint256_t chainId;
   uint256_t blockNumber;
-  uint64_t timestamp;
-  uint32_t gasLimit;
-  uint32_t chainId;
+  uint256_t timestamp;
+  uint256_t gasLimit;
+  uint256_t coinbase;
+  uint256_t difficulty;
+  uint256_t blockHash; 
 };
 
 typedef EnvInfo env_t;
@@ -51,6 +54,7 @@ struct Params {
   uint256_t sender;
   uint256_t origin;
   gas_t gas;
+  uint256_t gasPrice;
   uint256_t value;
   bytes_t code;
   bytes_t data;
@@ -104,5 +108,7 @@ constexpr char HEX_VALUES[] = "0123456789abcdef";
 
 constexpr uint256_t UINT256_ZERO = uint256_t(0);
 constexpr uint256_t UINT256_ONE = uint256_t(1);
+
+const size_t STACK_LIMIT = 1024;
 
 #endif

@@ -1,5 +1,7 @@
 #include <evm/gasometer.h>
 #include <evm/overflow.h>
+#include <evm/utils.h>
+#include <evm/big_int.h>
 
 Gasometer::Gasometer(gas_t currentGasArg) {
   currentGas = currentGasArg;
@@ -116,7 +118,8 @@ gas_result_t Gasometer::calculate(
   size_t currentMemorySize
 ) {
   uint8_t tier = Instruction::tier(instruction);
-  uint256_t defaultGas = TIER_STEP_GAS[tier];
+  uint8_t tierGas = TIER_STEP_GAS[tier];
+  uint256_t defaultGas = uint256_t(tierGas);
 
   switch (Instruction::opcode(instruction)) {
     case Opcode::JUMPDEST:
@@ -127,9 +130,18 @@ gas_result_t Gasometer::calculate(
           return outOfGas();
         }
 
-        // TODO: calculate gas for SSTORE
+        uint256_t address = stack.peek(0);
+        uint256_t newVal = stack.peek(1);
+        uint256_t current = BigInt::fromBigEndianBytes(external.storageAt(address));
 
-        return gas(uint256_t(0));
+        uint256_t storeGasCost;
+        if (current == 0 && newVal != 0) {
+          storeGasCost = uint256_t(SSTORE_SET_GAS);
+        } else {
+          storeGasCost = uint256_t(SSTORE_RESET_GAS);
+        }
+
+        return gas(uint256_t(storeGasCost));
       }
     case Opcode::SLOAD:
       return gas(uint256_t(SLOAD_GAS));
@@ -153,7 +165,7 @@ gas_result_t Gasometer::calculate(
     case Opcode::SHA3:
       {
         gas_t words = Overflow::toWordSize(stack.peek(1)).first;
-        uint256_t gas = (SHA3_GAS + SHA3_WORD_GAS) * words;
+        uint256_t gas = uint256_t(SHA3_GAS + SHA3_WORD_GAS * words);
         return gasMem(gas, memNeeded(stack.peek(0), stack.peek(1)));
       }
     case Opcode::CALLDATACOPY:
@@ -177,7 +189,7 @@ gas_result_t Gasometer::calculate(
     case Opcode::LOG4:
       {
         uint256_t noOfTopics = Instruction::logTopics(instruction);
-        uint256_t logGas = LOG_GAS + LOG_TOPIC_GAS + noOfTopics;
+        uint256_t logGas = uint256_t(LOG_GAS + LOG_TOPIC_GAS * noOfTopics);
         uint256_t dataGas = stack.peek(1) * uint256_t(LOG_DATA_GAS);
         uint256_t gas = dataGas + logGas;
         return gasMem(gas, memNeeded(stack.peek(0), stack.peek(1)));
@@ -245,7 +257,6 @@ gas_result_t Gasometer::calculate(
       return gas(uint256_t(BLOCK_HASH_GAS));
   }
 
-  // TODO: should be default gas
   return gas(defaultGas);
 }
 
@@ -308,20 +319,27 @@ uint256_t Gasometer::memNeeded(uint256_t mem, uint256_t add) {
   return mem + add;
 }
 
-mem_gas_t Gasometer::memGasCost(gas_t currentMemSize, gas_t newSize) {
+mem_gas_t Gasometer::memGasCost(gas_t currentMemSize, gas_t memSize) {
 
-  gas_t newWords = Overflow::numWords(newSize);
-  gas_t currentWords = static_cast<int>(currentMemSize / WORD_SIZE);
-  gas_t newMemGas = 3 * newWords + newWords * newWords / 512;
-  gas_t currentCost = 3 * currentWords + currentWords * currentWords / 512;
-  gas_t memGasCost = newMemGas - currentCost;
-  gas_t newMemSize = newWords * WORD_SIZE;
+  gas_t requiredMemSizeRounded = Overflow::toWordSize(memSize).first << 5;
 
-  mem_gas_t memGas {
-    memGasCost,
-    newMemGas,
-    newMemSize
-  };
-
-  return memGas;
+  if (requiredMemSizeRounded > currentMemSize) {
+    gas_t s = memSize >> 5;
+    uint256_t a = uint256_t(Overflow::mul(s, MEMORY_GAS).first);
+    uint256_t b = uint256_t((s * s) >> 9);
+    gas_t newMemGas = gas_t(a + b);
+    mem_gas_t memGas {
+      newMemGas - this->currentMemGas,
+      newMemGas,
+      requiredMemSizeRounded
+    };
+    return memGas;
+  } else {
+    mem_gas_t memGas {
+      0,
+      this->currentMemGas,
+      requiredMemSizeRounded
+    };
+    return memGas;
+  }
 }

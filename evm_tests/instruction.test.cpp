@@ -169,6 +169,18 @@ TEST_CASE("Instruction logBytes(LOG4)", "[instruction]" ) {
   REQUIRE(4 == Instruction::logTopics(Instruction::values[Opcode::LOG4]));
 }
 
+TEST_CASE("Instruction logBytes(LOG3)", "[instruction]" ) {
+  REQUIRE(3 == Instruction::logTopics(Instruction::values[Opcode::LOG3]));
+}
+
+TEST_CASE("Instruction logBytes(LOG2)", "[instruction]" ) {
+  REQUIRE(2 == Instruction::logTopics(Instruction::values[Opcode::LOG2]));
+}
+
+TEST_CASE("Instruction logBytes(LOG1)", "[instruction]" ) {
+  REQUIRE(1 == Instruction::logTopics(Instruction::values[Opcode::LOG1]));
+}
+
 TEST_CASE("Instruction logBytes(LOG0)", "[instruction]" ) {
   REQUIRE(0 == Instruction::logTopics(Instruction::values[Opcode::LOG0]));
 }

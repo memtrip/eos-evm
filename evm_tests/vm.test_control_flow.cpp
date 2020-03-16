@@ -26,10 +26,10 @@ TEST_CASE("Conditional jump to destination truthy", "[jumps]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
-    Call call(0);
+  Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState accountState(accountItems);
-  Gasometer gasometer(0);
+  Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
@@ -63,10 +63,10 @@ TEST_CASE("Conditional jump to destination not true", "[jumps]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
-    Call call(0);
+  Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState accountState(accountItems);
-  Gasometer gasometer(0);
+  Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
@@ -94,10 +94,10 @@ TEST_CASE("Unconditional jump to destination", "[jumps]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
-    Call call(0);
+  Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState accountState(accountItems);
-  Gasometer gasometer(0);
+  Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
@@ -112,32 +112,32 @@ TEST_CASE("Unconditional jump to destination", "[jumps]") {
   );
 }
 
-// TEST_CASE("Jumps", "[jumps]") {
-//   std::string bytecode_str = "600160015560066000555b60016000540380806000551560245760015402600155600a565b";
-//   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
-//   ExternalMock ext {};
+TEST_CASE("Jumps", "[jumps]") {
+  std::string bytecode_str = "600160015560066000555b60016000540380806000551560245760015402600155600a565b";
+  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
+  ExternalMock ext {};
   VM vm {};
-    Call call(0);
-//   account_store_t* accountItems = new account_store_t();
-//   AccountState accountState(accountItems);
-//   Gasometer gasometer(0);
+  Call call(0);
+  account_store_t* accountItems = new account_store_t();
+  AccountState accountState(accountItems);
+  Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
-//   Memory mem(memoryBytes);
-//   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-//   StackMachine sm(stackItems);
+  Memory mem(memoryBytes);
+  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
+  StackMachine sm(stackItems);
 
-//   // when
-//   vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
+  // when
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
 
-//   // then
-//   // store_item_t item1 = Utils::accountStoreValue(0, accountItems);
-//   // store_item_t item2 = Utils::accountStoreValue(1, accountItems);
+  // then
+  store_item_t item1 = Utils::accountStoreValue(0, accountItems);
+  store_item_t item2 = Utils::accountStoreValue(1, accountItems);
 
-//   // CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
-//   //   Utils::uint256_2str(item1.second)
-//   // );
+  CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
+    Utils::uint256_2str(item1.second)
+  );
 
-//   // CHECK("0000000000000000000000000000000000000000000000000000000000000078" == 
-//   //   Utils::uint256_2str(item2.second)
-//   // );
-// }
+  CHECK("0000000000000000000000000000000000000000000000000000000000000078" == 
+    Utils::uint256_2str(item2.second)
+  );
+}

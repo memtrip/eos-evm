@@ -88,12 +88,18 @@ exec_result_t VM::stepInner(
   unsigned int instruction = Instruction::values[opcode];
   reader.position += 1;
 
-  // TODO: handle this properly with an invalid instruction error 
-  if (instruction == 0x000000FF) return std::make_pair(ExecResult::DONE, 0);
+  if (instruction == 0x000000FF) return std::make_pair(ExecResult::STOPPED, 0); // TODO: handle error
 
   last_stack_ret_len = Instruction::ret(instruction);
 
-  // TODO: verify instruction
+  instruction_verify_t verifyResult = Instruction::verify(instruction, stack);
+  switch (verifyResult) {
+    case InstructionVerifyResult::INSTRUCTION_ERROR_UNDER_FLOW:
+    case InstructionVerifyResult::INSTRUCTION_ERROR_OUT_OF_STACK:
+      return std::make_pair(ExecResult::STOPPED, 0); // TODO: handle error
+    case InstructionVerifyResult::INSTRUCTION_VALID:
+      break;
+  }
 
   // Calculate gas cost requirements
   instruction_requirements_t calculateRequirements = gasometer.requirements(external, instruction, stack, memory.length());
@@ -165,7 +171,7 @@ exec_result_t VM::stepInner(
         ReturnData intoReturnData = memory.intoReturnData(stop.initOff, stop.initSize);
 
         NeedsReturn needsReturn {
-          uint256_t(0),
+          uint256_t(stop.gas),
           intoReturnData,
           stop.apply
         };
@@ -186,7 +192,7 @@ exec_result_t VM::stepInner(
     // TODO: return value from gasometer
     return std::make_pair(
       ExecResult::DONE, 
-      std::make_pair(GasType::KNOWN, uint256_t(0))
+      std::make_pair(GasType::KNOWN, uint256_t(gasometer.currentGas))
     );
   }
 
@@ -212,7 +218,6 @@ instruction_result_t VM::executeInstruction(
     }
     case Opcode::ADD:
       {
-        // TODO: handle arthemetic overflows
         uint256_t result = stack.peek(0) + stack.peek(1);
         stack.pop(2);
         stack.push(result);
@@ -220,7 +225,6 @@ instruction_result_t VM::executeInstruction(
       }
     case Opcode::MUL:
       {
-        // TODO: handle arthemetic overflows
         uint256_t result = stack.peek(0) * stack.peek(1);
         stack.pop(2);
         stack.push(result);
@@ -228,7 +232,6 @@ instruction_result_t VM::executeInstruction(
       }
     case Opcode::SUB:
       {
-        // TODO: handle arthemetic overflows
         uint256_t result = stack.peek(0) - stack.peek(1);
         stack.pop(2);
         stack.push(result);
@@ -236,7 +239,6 @@ instruction_result_t VM::executeInstruction(
       }
     case Opcode::DIV:
       {
-        // TODO: handle arthemetic overflows
         uint256_t a = stack.peek(0);
         uint256_t b = stack.peek(1);
 
@@ -259,7 +261,6 @@ instruction_result_t VM::executeInstruction(
       }
     case Opcode::MOD:
       {
-        // TODO: handle arthemetic overflows
         uint256_t a = stack.peek(0);
         uint256_t b = stack.peek(1);
         if (b == 0) {
@@ -488,8 +489,22 @@ instruction_result_t VM::executeInstruction(
       stack.push(uint256_t(params.data.size()));
       break;
     case Opcode::CALLDATACOPY:
-      printf("(CALLDATACOPY ");
-      break;
+      {
+        uint256_t destOffset = stack.peek(0);
+        uint256_t sourceOffset = stack.peek(1);
+        uint256_t sizeItem = stack.peek(2);
+        stack.pop(3);
+
+        bytes_t dataBytes = params.data;
+
+        memory.copyData(
+          destOffset, 
+          sourceOffset, 
+          sizeItem, 
+          dataBytes
+        );
+        break;
+      }
     case Opcode::CODESIZE:
       stack.push(uint256_t(reader.bytes.size()));
       break;
@@ -511,7 +526,7 @@ instruction_result_t VM::executeInstruction(
         break;
       }
     case Opcode::GASPRICE:
-      printf("(GASPRICE ");
+      stack.push(uint256_t(params.gasPrice));
       break;
     case Opcode::EXTCODESIZE:
       {
@@ -553,11 +568,11 @@ instruction_result_t VM::executeInstruction(
     case Opcode::BLOCKHASH:
       {
         stack.pop(1);
-        stack.push(StackMachine::STUB);
+        stack.push(env.blockHash);
       }
       break;
     case Opcode::COINBASE:
-      stack.push(StackMachine::STUB);
+      stack.push(env.coinbase);
       break;
     case Opcode::TIMESTAMP:
       stack.push(env.timestamp);
@@ -566,7 +581,7 @@ instruction_result_t VM::executeInstruction(
       stack.push(env.blockNumber);
       break;
     case Opcode::DIFFICULTY:
-      stack.push(StackMachine::STUB);
+      stack.push(env.difficulty);
       break;
     case Opcode::GASLIMIT:
       stack.push(env.gasLimit);
@@ -575,9 +590,8 @@ instruction_result_t VM::executeInstruction(
       stack.push(env.chainId);
       break;
     case Opcode::SELFBALANCE:
-      printf("(SELFBALANCE ");
+      stack.push(external.balance(params.address));
       break;
-
     case Opcode::POP:
       stack.pop(1);
       break;
@@ -647,10 +661,13 @@ instruction_result_t VM::executeInstruction(
       stack.push(uint256_t(reader.position - 1));
       break;
     case Opcode::MSIZE:
-      stack.push(uint256_t(memory.length()));
-      break;
+      {
+        size_t length = memory.length();
+        stack.push(uint256_t(length));
+        break;
+      }
     case Opcode::GAS:
-      printf("(GAS ");
+      stack.push(uint256_t(params.gas));
       break;
     case Opcode::JUMPDEST:
       // resolved in Jumps::findDestinations
@@ -836,6 +853,7 @@ instruction_result_t VM::executeInstruction(
         stack.pop(2);
 
         StopExecutionResult result {
+          gas,
           initOff,
           initSize,
           true
@@ -996,6 +1014,7 @@ instruction_result_t VM::executeInstruction(
         stack.pop(2);
 
         StopExecutionResult result {
+          gas,
           initOff,
           initSize,
           false

@@ -15,10 +15,10 @@ TEST_CASE("Blockhash (stub)", "[env]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
-    Call call(0);
+  Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState accountState(accountItems);
-  Gasometer gasometer(0);
+  Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
@@ -28,7 +28,9 @@ TEST_CASE("Blockhash (stub)", "[env]") {
   vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
 
   // then
-  CHECK(StackMachine::STUB == sm.top());
+  CHECK("f1250fd89a1c3e517ae92cc1f73865c594bfad34db20f3b3396af4efe19d3bfb" == 
+    Utils::uint256_2str(sm.top())
+  );
 }
 
 TEST_CASE("Coinbase (stub)", "[env]") {
@@ -38,10 +40,10 @@ TEST_CASE("Coinbase (stub)", "[env]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
-    Call call(0);
+  Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState accountState(accountItems);
-  Gasometer gasometer(0);
+  Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
@@ -51,7 +53,9 @@ TEST_CASE("Coinbase (stub)", "[env]") {
   vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
 
   // then
-  CHECK(StackMachine::STUB == sm.top());
+  CHECK("0000000000000000000000002adc25665018aa1fe0e6bc666dac8fc2697ff9ba" == 
+    Utils::uint256_2str(sm.top())
+  );
 }
 
 TEST_CASE("Difficulty (stub)", "[env]") {
@@ -61,10 +65,10 @@ TEST_CASE("Difficulty (stub)", "[env]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
-    Call call(0);
+  Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState accountState(accountItems);
-  Gasometer gasometer(0);
+  Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
@@ -74,7 +78,9 @@ TEST_CASE("Difficulty (stub)", "[env]") {
   vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
 
   // then
-  CHECK(StackMachine::STUB == sm.top());
+  CHECK("0000000000000000000000000000000000000000000000000000000000000100" == 
+    Utils::uint256_2str(sm.top())
+  );
 }
 
 TEST_CASE("Timestamp", "[env]") {
@@ -84,10 +90,10 @@ TEST_CASE("Timestamp", "[env]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
-    Call call(0);
+  Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState accountState(accountItems);
-  Gasometer gasometer(0);
+  Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
@@ -97,7 +103,7 @@ TEST_CASE("Timestamp", "[env]") {
   vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
 
   // then
-  CHECK(1581632422128 == sm.top());
+  CHECK(1 == sm.top());
 }
 
 TEST_CASE("Number", "[env]") {
@@ -107,10 +113,10 @@ TEST_CASE("Number", "[env]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
-    Call call(0);
+  Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState accountState(accountItems);
-  Gasometer gasometer(0);
+  Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
@@ -130,10 +136,10 @@ TEST_CASE("Gas limit", "[env]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
-    Call call(0);
+  Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState accountState(accountItems);
-  Gasometer gasometer(0);
+  Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
@@ -153,10 +159,10 @@ TEST_CASE("Chain id", "[env]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
-    Call call(0);
+  Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState accountState(accountItems);
-  Gasometer gasometer(0);
+  Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
@@ -176,10 +182,10 @@ TEST_CASE("Call value", "[env]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
-    Call call(0);
+  Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState accountState(accountItems);
-  Gasometer gasometer(0);
+  Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();

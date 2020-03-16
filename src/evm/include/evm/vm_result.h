@@ -1,3 +1,4 @@
+#pragma once
 #include <variant>
 #include <evm/types.h>
 #include <evm/return_data.h>
@@ -44,6 +45,7 @@ enum InstructionResult {
 
 // stop execution
 struct StopExecutionResult {
+  gas_t gas;
   uint256_t initOff;
   uint256_t initSize;
   bool apply;

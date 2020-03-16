@@ -41,6 +41,10 @@ void StackMachine::printSize() {
   printf("size(%lu)", stack->size());
 }
 
+size_t StackMachine::size() {
+  return stack->size();
+}
+
 uint256_t StackMachine::TRUE = uint256_t(1);
 
 uint256_t StackMachine::FALSE = uint256_t(0);

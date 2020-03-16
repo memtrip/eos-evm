@@ -7,23 +7,26 @@
 #include <evm/gasometer.h>
 #include "external_mock.h"
 
-TEST_CASE("Log address (LOG0)", "[log]") {
+TEST_CASE("Log empty (LOG0)", "[log]") {
   // given
   std::string bytecode_str = "60006000a0";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
-    Call call(0);
+  Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState accountState(accountItems);
-  Gasometer gasometer(0);
+  Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
+  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
+
+  // then
+  CHECK(99619 == Utils::gasLeft(result));
 
   // then
   CHECK(1 == ext.logSpy.size());
@@ -37,17 +40,20 @@ TEST_CASE("Log sender (LOG1)", "[log]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
-    Call call(0);
+  Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState accountState(accountItems);
-  Gasometer gasometer(0);
+  Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
+  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
+
+  // then
+  CHECK(98974 == Utils::gasLeft(result));
 
   // then
   CHECK(1 == ext.logSpy.size());
@@ -66,17 +72,20 @@ TEST_CASE("Log origin and sender (LOG2)", "[log]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
-    Call call(0);
+  Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState accountState(accountItems);
-  Gasometer gasometer(0);
+  Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
+  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
+
+  // then
+  CHECK(98977 == Utils::gasLeft(result));
 
   // then
   CHECK(1 == ext.logSpy.size());
@@ -92,23 +101,26 @@ TEST_CASE("Log origin and sender (LOG2)", "[log]") {
   );
 }
 
-TEST_CASE("Log origin and sender (LOG3)", "[log]") {
+TEST_CASE("Log caller, origin, sender (LOG3)", "[log]") {
   // given
   std::string bytecode_str = "60ff60005333323060206000a3";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
-    Call call(0);
+  Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState accountState(accountItems);
-  Gasometer gasometer(0);
+  Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
+  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
+
+  // then
+  CHECK(98977 == Utils::gasLeft(result));
 
   // then
   CHECK(1 == ext.logSpy.size());
@@ -127,23 +139,26 @@ TEST_CASE("Log origin and sender (LOG3)", "[log]") {
   );
 }
 
-TEST_CASE("Log origin and sender (LOG4)", "[log]") {
+TEST_CASE("Log number, caller, origin and sender (LOG4)", "[log]") {
   // given
   std::string bytecode_str = "60ff6000534333323060206000a4";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
-    Call call(0);
+  Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState accountState(accountItems);
-  Gasometer gasometer(0);
+  Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
   StackMachine sm(stackItems);
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
+  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
+
+  // then
+  CHECK(79935 == Utils::gasLeft(result));
 
   // then
   CHECK(1 == ext.logSpy.size());

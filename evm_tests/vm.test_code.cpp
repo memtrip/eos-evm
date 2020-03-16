@@ -14,10 +14,10 @@ TEST_CASE("extcodesize and extcodecopy", "[code]") {
   ExternalMock ext {};
   ext.codeResponse = Hex::hexToBytes("6005600055");
   VM vm {};
-    Call call(0);
+  Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState accountState(accountItems);
-  Gasometer gasometer(0);
+  Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
@@ -44,10 +44,10 @@ TEST_CASE("codesize", "[code]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   VM vm {};
-    Call call(0);
+  Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState accountState(accountItems);
-  Gasometer gasometer(0);
+  Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
@@ -69,10 +69,10 @@ TEST_CASE("calldataload", "[code]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), Hex::hexToBytes(calldata_str));
   ExternalMock ext {};
   VM vm {};
-    Call call(0);
+  Call call(0);
   account_store_t* accountItems = new account_store_t();
   AccountState accountState(accountItems);
-  Gasometer gasometer(0);
+  Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
   std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();

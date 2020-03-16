@@ -1,5 +1,14 @@
 #pragma once
 #include <evm/types.h>
+#include <evm/stack.h>
+
+enum InstructionVerifyResult {
+  INSTRUCTION_ERROR_UNDER_FLOW,
+  INSTRUCTION_ERROR_OUT_OF_STACK,
+  INSTRUCTION_VALID
+};
+
+typedef InstructionVerifyResult instruction_verify_t;
 
 class Instruction
 { 
@@ -15,4 +24,5 @@ class Instruction
     static uint8_t dupPosition(instruct_t instruction);
     static uint8_t swapPosition(instruct_t instruction);
     static uint8_t logTopics(instruct_t instruction);
+    static instruction_verify_t verify(instruct_t instruction, StackMachine& stack); 
 };

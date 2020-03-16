@@ -100,19 +100,50 @@ ReturnData Memory::intoReturnData(uint256_t offsetArg, uint256_t sizeArg) {
 void Memory::copyData(
   uint256_t destOffset, 
   uint256_t sourceOffset,
-  uint256_t sizeItem,
+  uint256_t size,
   bytes_t data
 ) {
-  size_t sourceOffsetSize = static_cast<size_t>(sourceOffset);
 
-  size_t dest = static_cast<size_t>(destOffset);
-  size_t src = data.size() < sourceOffsetSize ? data.size() : sourceOffsetSize;
-  size_t size = static_cast<size_t>(sizeItem);
-  size_t copySize = std::min(size, data.size() - src);
+  uint256_t sourceSize = uint256_t(data.size());
 
-  if (copySize > 0)
-    writeSlice(dest, bytes_t(data.begin() + sourceOffsetSize, data.end()));
+  size_t outputEnd;
+  if (sourceOffset > sourceSize || size > sourceSize || sourceOffset + size > sourceSize) {
+    if (sourceOffset > sourceSize) {
+      std::fill(
+        memory->begin() + static_cast<size_t>(destOffset), 
+        memory->begin() + static_cast<size_t>(size), 
+        0
+      );
+    } else {
+      std::fill(
+        memory->begin() + static_cast<size_t>(destOffset + sourceSize - sourceOffset), 
+        memory->begin() + static_cast<size_t>(sourceOffset + size - sourceSize), 
+        0
+      );
+    }
+    outputEnd = data.size();
+  } else {
+    outputEnd = static_cast<size_t>(size + sourceOffset); 
+  }
 
-  if ((size - copySize) > 0)
-    std::fill(memory->begin() + dest + copySize, memory->end(), 0);
+  if (sourceOffset < sourceSize) {
+    size_t outputBegin = static_cast<size_t>(sourceOffset);
+    writeSlice(
+      static_cast<size_t>(destOffset),
+      bytes_t(data.begin() + outputBegin, data.begin() + outputEnd)
+    );
+  }
+
+  // size_t sourceOffsetSize = static_cast<size_t>(sourceOffset);
+
+  // size_t dest = static_cast<size_t>(destOffset);
+  // size_t src = data.size() < sourceOffsetSize ? data.size() : sourceOffsetSize;
+  // size_t size = static_cast<size_t>(sizeItem);
+  // size_t copySize = std::min(size, data.size() - src);
+
+  // if (copySize > 0)
+  //   writeSlice(dest, bytes_t(data.begin() + sourceOffsetSize, data.end()));
+
+  // if ((size - copySize) > 0) 
+  //   std::fill(memory->begin() + dest + copySize, memory->end(), 0);
 }
