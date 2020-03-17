@@ -8,9 +8,10 @@ class Memory {
   public:
     Memory(bytes_t* memoryArg);
     bytes_t* memory;
-    unsigned int length();
-    void resize(unsigned int newSize);
-    void expand(unsigned int size);
+    size_t memorySize;
+    size_t length();
+    void resize(size_t newSize);
+    void expand(size_t size);
     void writeByte(uint256_t offset, uint256_t value);
     void write(uint256_t offset, uint256_t value);
     uint256_t read(uint256_t offset);

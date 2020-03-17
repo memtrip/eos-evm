@@ -18,7 +18,7 @@ TEST_CASE("Store two values", "[store]") {
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);

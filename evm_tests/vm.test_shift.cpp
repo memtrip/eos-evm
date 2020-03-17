@@ -16,7 +16,7 @@ TEST_CASE("shift left ", "[shift]") {
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -39,7 +39,7 @@ TEST_CASE("shift left (2)", "[shift]") {
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -62,7 +62,7 @@ TEST_CASE("shift left (3)", "[shift]") {
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -85,7 +85,7 @@ TEST_CASE("shift right ", "[shift]") {
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -108,7 +108,7 @@ TEST_CASE("shift right (1)", "[shift]") {
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -131,7 +131,7 @@ TEST_CASE("shift right (2)", "[shift]") {
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -152,7 +152,7 @@ TEST_CASE("sar", "[shift]") {
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -176,7 +176,7 @@ TEST_CASE("sar (1)", "[shift]") {
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -200,7 +200,7 @@ TEST_CASE("sar (2)", "[shift]") {
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -224,7 +224,7 @@ TEST_CASE("sar (3)", "[shift]") {
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);

@@ -22,7 +22,8 @@ enum ExecResult {
   STOPPED,
   DONE,
   CONTINUE,
-  INTERPRETER_TRAP
+  VM_TRAP,
+  VM_OUT_OF_GAS
 };
 
 // exec result

@@ -41,10 +41,11 @@ TEST_CASE("calldataload_BigOffset______e118bc308ccdd052ea601f5cfa51d32fc907952cb
   };
 
   ExternalMock ext {};
+
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -86,10 +87,11 @@ TEST_CASE("calldatacopy2______3acb5771658d79d6ff4e17b69cfeea9bcc5e51ab11afb0c511
   };
 
   ExternalMock ext {};
+
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -131,10 +133,11 @@ TEST_CASE("address0______37a0fc3337fde7233f427195a290be689e01aa752a8394b0ae56306
   };
 
   ExternalMock ext {};
+
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -179,10 +182,11 @@ TEST_CASE("calldatacopy2_return______4268c07197871b5b5c14bcda3f746a2bb787c8dba2d
   };
 
   ExternalMock ext {};
+
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -224,10 +228,11 @@ TEST_CASE("calldataload2______0274681bf0559ab144aa2273cd566d1b32bcc58843ca142e8c
   };
 
   ExternalMock ext {};
+
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -272,10 +277,11 @@ TEST_CASE("origin______4d51cb9ee576e04b08a74a6a4ba3f10284ee1f735dd068abd7a0e5513
   };
 
   ExternalMock ext {};
+
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -320,10 +326,11 @@ TEST_CASE("calldatacopy_DataIndexTooHigh______72c5c7337895354e6d12b41ef4f144db87
   };
 
   ExternalMock ext {};
+
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -365,10 +372,11 @@ TEST_CASE("address1______2f317db88316ea284d36c3031d82818be81d6cf63d1bba9437dd227
   };
 
   ExternalMock ext {};
+
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -413,10 +421,11 @@ TEST_CASE("calldatacopyUnderFlow______55ea90b15f19bf8f4838c35234d202eab4473284e5
   };
 
   ExternalMock ext {};
+
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -458,10 +467,11 @@ TEST_CASE("calldatacopy_DataIndexTooHigh_return______640a52c64dfe9f43c6c5bb1aa4f
   };
 
   ExternalMock ext {};
+
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -503,10 +513,11 @@ TEST_CASE("caller______79214a9fde65ef8c878dbf8e03a06a75483536d289ad19e56b95fdef5
   };
 
   ExternalMock ext {};
+
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -551,10 +562,11 @@ TEST_CASE("gasprice______b94e3c994e54e24b85ef80fc16f53827cd26ef01fa4a96908a20e64
   };
 
   ExternalMock ext {};
+
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -599,10 +611,11 @@ TEST_CASE("codecopy0______9354634ed14a9667c8c883c3a4eceaae263bcd3d4fe47683aa0f38
   };
 
   ExternalMock ext {};
+
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -647,10 +660,11 @@ TEST_CASE("calldatacopyZeroMemExpansion_return______b00f6239c55457bfec8870ad2ffa
   };
 
   ExternalMock ext {};
+
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -692,10 +706,11 @@ TEST_CASE("calldatacopy1_return______671deccb615f7d6e58bc195d11ad4fde489a6a07581
   };
 
   ExternalMock ext {};
+
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -740,10 +755,11 @@ TEST_CASE("calldatasize2______cbd842b7c2ff77d176d3d7b5f200e908c22e47ee9a7d0f5294
   };
 
   ExternalMock ext {};
+
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -788,10 +804,11 @@ TEST_CASE("codecopyZeroMemExpansion______41a8841a95018c2d228db91d29d0b75992f9a16
   };
 
   ExternalMock ext {};
+
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -833,10 +850,11 @@ TEST_CASE("calldatacopy_sec______9c7568cda862ed10722f83b99c948af03cb38ae4042d45f
   };
 
   ExternalMock ext {};
+
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -881,10 +899,11 @@ TEST_CASE("calldatasize1______7db2dda9d80c7eac5ae82d3e2573e7f9b47ad6cb0c5545824e
   };
 
   ExternalMock ext {};
+
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -929,10 +948,11 @@ TEST_CASE("calldatacopyZeroMemExpansion______99d8509de4a25c88abd0647c68310552c67
   };
 
   ExternalMock ext {};
+
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -974,10 +994,11 @@ TEST_CASE("codecopy_DataIndexTooHigh______f6fac567f89aaca85c34c5a88b98870d1f7e25
   };
 
   ExternalMock ext {};
+
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -1019,10 +1040,11 @@ TEST_CASE("codesize______632259bbd9962abfa58ec3b9e7b80a8f3babcdb47592bbc511fa5e4
   };
 
   ExternalMock ext {};
+
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -1067,10 +1089,11 @@ TEST_CASE("calldataloadSizeTooHighPartial______8090196f324f686f77a7d362987f8697c
   };
 
   ExternalMock ext {};
+
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -1115,10 +1138,11 @@ TEST_CASE("calldatacopy_DataIndexTooHigh2______bf92d18c0d12f1e9d48a5cf116ece7559
   };
 
   ExternalMock ext {};
+
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -1160,10 +1184,11 @@ TEST_CASE("calldatasize0______e638e627686d20765a98fa8cfab03c642bdf33216a5869e742
   };
 
   ExternalMock ext {};
+
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -1208,10 +1233,11 @@ TEST_CASE("calldataloadSizeTooHigh______0a556d7e2b38d3ac82c12938237c816738680115
   };
 
   ExternalMock ext {};
+
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -1253,10 +1279,11 @@ TEST_CASE("calldatacopy0______761871556943693860bdddd26da931c7c3f5a6c8ab95f680aa
   };
 
   ExternalMock ext {};
+
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -1301,10 +1328,11 @@ TEST_CASE("calldatacopy0_return______4f9c0f3aff470ea35ad2fd5a81a593742f875409dbc
   };
 
   ExternalMock ext {};
+
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -1349,10 +1377,11 @@ TEST_CASE("calldataload0______3bfae7447ad076b4da51568b72acb70e9bd946fbf68a797050
   };
 
   ExternalMock ext {};
+
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -1397,10 +1426,11 @@ TEST_CASE("calldatacopy_DataIndexTooHigh2_return______990882750573f3f5938a3f2cd6
   };
 
   ExternalMock ext {};
+
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -1442,10 +1472,11 @@ TEST_CASE("calldataload1______3cda66b7abff563a2178c736c6ff9235784bbc4083083c1880
   };
 
   ExternalMock ext {};
+
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -1490,10 +1521,11 @@ TEST_CASE("callvalue______4eabc176dc48df11702d9ddf6e8501c62035436adb16aa7cd79769
   };
 
   ExternalMock ext {};
+
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -1538,10 +1570,11 @@ TEST_CASE("calldatacopy1______65659a844a3d4458eb82347f1ef56c3657abdb06f7166b0333
   };
 
   ExternalMock ext {};
+
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);

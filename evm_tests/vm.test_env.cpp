@@ -17,7 +17,7 @@ TEST_CASE("Blockhash (stub)", "[env]") {
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -42,7 +42,7 @@ TEST_CASE("Coinbase (stub)", "[env]") {
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -67,7 +67,7 @@ TEST_CASE("Difficulty (stub)", "[env]") {
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -92,7 +92,7 @@ TEST_CASE("Timestamp", "[env]") {
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -115,7 +115,7 @@ TEST_CASE("Number", "[env]") {
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -138,7 +138,7 @@ TEST_CASE("Gas limit", "[env]") {
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -161,7 +161,7 @@ TEST_CASE("Chain id", "[env]") {
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -184,7 +184,7 @@ TEST_CASE("Call value", "[env]") {
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);

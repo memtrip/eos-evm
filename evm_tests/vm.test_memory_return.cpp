@@ -16,7 +16,7 @@ TEST_CASE("shift left, write to memory, return", "[return_memory]") {
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -45,7 +45,7 @@ TEST_CASE("shift right, write to memory, return", "[return_memory]") {
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -74,7 +74,7 @@ TEST_CASE("sar, write to memory, revert", "[return_memory]") {
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);

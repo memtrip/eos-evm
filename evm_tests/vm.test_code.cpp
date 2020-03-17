@@ -12,11 +12,11 @@ TEST_CASE("extcodesize and extcodecopy", "[code]") {
   std::string bytecode_str = "333b60006000333c600051600055";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
-  ext.codeResponse = Hex::hexToBytes("6005600055");
+  ext.codeResponder.push_back(std::make_pair(uint256_t(0xea0e9e), Hex::hexToBytes("6005600055")));
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -46,7 +46,7 @@ TEST_CASE("codesize", "[code]") {
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -71,7 +71,7 @@ TEST_CASE("calldataload", "[code]") {
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);

@@ -3,8 +3,10 @@
 ExternalMock::ExternalMock() {
   logSpy = log_spy_t();
   codeSpy = code_spy_t();
+  suicideSpy = suicide_spy_t();
   codeResponder = code_responder_t();
   balanceResponder = balance_responder_t();
+  storageResponder = storage_responder_t();
 }
 
 void ExternalMock::log(std::vector<uint256_t> topics, bytes_t data) { 
@@ -29,5 +31,13 @@ double ExternalMock::balance(uint256_t address) {
 };
 
 bytes_t ExternalMock::storageAt(uint256_t address) { 
-  return bytes_t(); 
+  for (int i = 0; i < storageResponder.size(); i++) {
+    if (storageResponder[i].first == address)
+      return storageResponder[i].second;
+  }
+  return bytes_t();
 };
+
+void ExternalMock::suicide(uint256_t address) {
+  suicideSpy.push_back(address);
+}

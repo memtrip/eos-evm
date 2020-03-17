@@ -33,14 +33,15 @@ const size_t QUAD_COEFF_DIV = 512;
 
 enum InstructionRequirementsResult {
   INSTRUCTION_RESULT_OK,
+  INSTRUCTION_RESULT_OUT_OF_GAS,
   INSTRUCTION_RESULT_ERROR
 };
 
 struct InstructionRequirements {
-  size_t gasCost;
-  size_t provideGas;
-  size_t memoryTotalGas;
-  size_t memoryRequiredSize;
+  gas_t gasCost;
+  gas_t provideGas;
+  gas_t memoryTotalGas;
+  gas_t memoryRequiredSize;
 };
 
 typedef std::variant<
@@ -58,7 +59,7 @@ enum GasResult {
   GAS_MEM_RESULT,
   GAS_MEM_PROVIDE_RESULT,
   GAS_MEM_COPY_RESULT,
-  OUT_OF_GAS
+  GAS_OUT_OF_GAS
 };
 
 struct GasMem {
@@ -104,13 +105,13 @@ class Gasometer {
       External& external,
       instruct_t instruction,
       StackMachine& stack,
-      size_t currentMemorySize
+      gas_t currentMemorySize
     );
     gas_result_t calculate(
       External& external,
       instruct_t instruction,
       StackMachine& stack,
-      size_t currentMemorySize
+      gas_t currentMemorySize
     );
     mem_gas_t memGasCost(gas_t currentMemSize, gas_t memSize);
   private:

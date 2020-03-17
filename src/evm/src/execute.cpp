@@ -92,9 +92,14 @@ finalization_result_t Execute::callWithStackDepth(
             }
         }
       }
-    case INTERPRETER_TRAP:
+    case VM_TRAP:
       return std::make_pair(
         FinalizationResult::FINALIZATION_ERROR,
+        0
+      );
+    case VM_OUT_OF_GAS:
+      return std::make_pair(
+        FinalizationResult::FINALIZATION_OUT_OF_GAS,
         0
       );
     case CONTINUE:

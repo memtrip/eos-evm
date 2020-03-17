@@ -1,11 +1,14 @@
 #pragma once
 #include <vector>
 #include <evm/types.h>
+#include <evm/external.h>
 
 class AccountState {
   public:
-    AccountState(account_store_t* itemsArg);
-    account_store_t* items;
+    AccountState(account_store_t* itemsArg, External* externalArg);
+    account_store_t* cacheItems;
+    External* external;
     void putTopPair(std::vector<uint256_t>* stackItems);
     uint256_t get(uint256_t key);
+    int exists(uint256_t key);
 };

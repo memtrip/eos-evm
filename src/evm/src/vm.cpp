@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <evm/vm.h>
 #include <evm/opcode.h>
 #include <evm/instruction.h>
@@ -58,18 +59,29 @@ exec_result_t VM::step(
   Call& call,
   env_t env
 ) {
-  return VM::stepInner(
-    jumps, 
-    memory, 
-    stack, 
-    reader, 
-    accountState, 
-    gasometer, 
-    params, 
-    external, 
-    call, 
-    env
-  );
+  // TODO: done check required?
+
+  if (gasometer.currentGas <= 0) {
+    return std::make_pair(ExecResult::VM_OUT_OF_GAS, 0);
+  } else if (reader.len() == 0) {
+    return std::make_pair(
+      ExecResult::DONE, 
+      std::make_pair(GasType::KNOWN, uint256_t(gasometer.currentGas))
+    );
+  } else {
+    return VM::stepInner(
+      jumps, 
+      memory, 
+      stack, 
+      reader, 
+      accountState, 
+      gasometer, 
+      params, 
+      external, 
+      call, 
+      env
+    );
+  }
 }
 
 exec_result_t VM::stepInner(
@@ -109,6 +121,8 @@ exec_result_t VM::stepInner(
     case InstructionRequirementsResult::INSTRUCTION_RESULT_OK:
       requirements = std::get<InstructionRequirements>(calculateRequirements.second);
       break;
+    case InstructionRequirementsResult::INSTRUCTION_RESULT_OUT_OF_GAS:
+      return std::make_pair(ExecResult::VM_OUT_OF_GAS, 0);
     case InstructionRequirementsResult::INSTRUCTION_RESULT_ERROR:
       return std::make_pair(ExecResult::STOPPED, 0); // TODO: handle error
   }
@@ -117,7 +131,7 @@ exec_result_t VM::stepInner(
   gas_t memoryRequiredSize = requirements.memoryRequiredSize;
   memory.expand(memoryRequiredSize);
 
-  gas_t currentGas = gasometer.currentGas - requirements.gasCost;
+  gas_t currentGas = std::max((gasometer.currentGas - requirements.gasCost), 0);
   gasometer.currentGas = currentGas;
 
   gas_t memoryTotalGas = requirements.memoryTotalGas;
@@ -539,13 +553,13 @@ instruction_result_t VM::executeInstruction(
     case Opcode::EXTCODECOPY:
       {
         uint256_t address = stack.peek(0);
-        stack.pop(1);
         bytes_t code = external.code(address);
 
-        uint256_t destOffset = stack.peek(0);
-        uint256_t sourceOffset = stack.peek(1);
-        uint256_t sizeItem = stack.peek(2);
-        stack.pop(3);
+        uint256_t destOffset = stack.peek(1);
+        uint256_t sourceOffset = stack.peek(2);
+        uint256_t sizeItem = stack.peek(3);
+        
+        stack.pop(4);
 
         memory.copyData(
           destOffset, 
@@ -667,7 +681,7 @@ instruction_result_t VM::executeInstruction(
         break;
       }
     case Opcode::GAS:
-      stack.push(uint256_t(params.gas));
+      stack.push(uint256_t(gas));
       break;
     case Opcode::JUMPDEST:
       // resolved in Jumps::findDestinations
@@ -1026,8 +1040,12 @@ instruction_result_t VM::executeInstruction(
         );
       }
     case Opcode::SELFDESTRUCT:
-      printf("(SELFDESTRUCT ");
-      break;
+      {
+        uint256_t address = stack.peek(0);
+        stack.pop(1);
+        external.suicide(address);
+        return std::make_pair(InstructionResult::STOP_EXEC, 0);
+      }
   }
 
   return std::make_pair(InstructionResult::OK, 0);

@@ -24,7 +24,7 @@ const instruct_t Instruction::values[] = {
   0x10020102, // ((LT (0x10)), 2, 1, VERY_LOW)
   0x11020102, // ((GT (0x11)), 2, 1, VERY_LOW)
   0x12020102, // ((SLT (0x12)), 2, 1, VERY_LOW)
-  0x13020102, // ((SGT (0x13)), 2, 1, VERY_LOW)
+  0x13020102, // ((SGT (0x13)), 2, 1, VERY_LOW)G
   0x14020102, // ((EQ (0x14)), 2, 1, VERY_LOW)
   0x15010102, // ((ISZERO (0x15)), 1, 1, VERY_LOW)
   0x16020102, // ((AND (0x16)), 2, 1, VERY_LOW)
@@ -95,7 +95,7 @@ const instruct_t Instruction::values[] = {
   0x57020005, // ((JUMPI (0x57)), 2, 0, HIGH))
   0x58000101, // ((PC (0x58)), 0, 1, BASE)
   0x59000101, // ((MSIZE (0x59)), 0, 1, BASE)
-  0x5A000105, // ((GAS (0x5A)), 0, 1, BASE)
+  0x5A000101, // ((GAS (0x5A)), 0, 1, BASE)
   0x5B000007, // ((JUMPDEST (0x5B)), 0, 0, SPECIAL)
   0x000000FF, // Unassigned
   0x000000FF, // Unassigned

@@ -12,7 +12,7 @@ instruction_requirements_t Gasometer::requirements(
   External& external,
   instruct_t instruction,
   StackMachine& stack,
-  size_t currentMemorySize
+  gas_t currentMemorySize
 ) {
   gas_result_t result = calculate(
     external,
@@ -29,8 +29,8 @@ instruction_requirements_t Gasometer::requirements(
         InstructionRequirements instructionRequirements {
           gas,
           0,
-          0,
-          currentMemGas
+          currentMemGas,
+          0
         };
 
         return std::make_pair(
@@ -49,8 +49,8 @@ instruction_requirements_t Gasometer::requirements(
         InstructionRequirements instructionRequirements {
           gas,
           0,
-          memGas.newMemSize,
-          memGas.newMemGas
+          memGas.newMemGas,
+          memGas.newMemSize
         };
 
         return std::make_pair(
@@ -72,8 +72,8 @@ instruction_requirements_t Gasometer::requirements(
         InstructionRequirements instructionRequirements {
           totalGas,
           provided,
-          memGas.newMemSize,
-          memGas.newMemGas
+          memGas.newMemGas,
+          memGas.newMemSize
         };
 
         return std::make_pair(
@@ -94,8 +94,8 @@ instruction_requirements_t Gasometer::requirements(
         InstructionRequirements instructionRequirements {
           gas,
           0,
-          memGas.newMemSize,
-          memGas.newMemGas
+          memGas.newMemGas,
+          memGas.newMemSize
         };
 
         return std::make_pair(
@@ -103,9 +103,9 @@ instruction_requirements_t Gasometer::requirements(
           instructionRequirements
         );
       }
-    case GasResult::OUT_OF_GAS:
+    case GasResult::GAS_OUT_OF_GAS:
       return std::make_pair(
-        InstructionRequirementsResult::INSTRUCTION_RESULT_ERROR,
+        InstructionRequirementsResult::INSTRUCTION_RESULT_OUT_OF_GAS,
         0
       );
   }
@@ -115,7 +115,7 @@ gas_result_t Gasometer::calculate(
   External& external,
   instruct_t instruction,
   StackMachine& stack,
-  size_t currentMemorySize
+  gas_t currentMemorySize
 ) {
   uint8_t tier = Instruction::tier(instruction);
   uint8_t tierGas = TIER_STEP_GAS[tier];
@@ -249,8 +249,8 @@ gas_result_t Gasometer::calculate(
     case Opcode::EXP:
       {
         uint256_t exponent = stack.peek(1);
-        gas_t bytes = static_cast<gas_t>(intx::count_significant_words<uint8_t>(exponent));
-        gas_t cost = (EXP_GAS + EXP_BYTE_GAS) * bytes;
+        gas_t bytes = static_cast<gas_t>((intx::count_significant_words<uint8_t>(exponent) + 7) / 8);
+        gas_t cost = EXP_GAS + EXP_BYTE_GAS * bytes;
         return gas(uint256_t(cost));
       }
     case Opcode::BLOCKHASH:
@@ -309,7 +309,7 @@ gas_result_t Gasometer::gasMemCopy(uint256_t defaultGas, uint256_t memoryNeeded,
 
 gas_result_t Gasometer::outOfGas() {
   gas_result_t result {
-    GasResult::OUT_OF_GAS,
+    GasResult::GAS_OUT_OF_GAS,
     0
   };
   return result;
@@ -324,7 +324,7 @@ mem_gas_t Gasometer::memGasCost(gas_t currentMemSize, gas_t memSize) {
   gas_t requiredMemSizeRounded = Overflow::toWordSize(memSize).first << 5;
 
   if (requiredMemSizeRounded > currentMemSize) {
-    gas_t s = memSize >> 5;
+    gas_t s = requiredMemSizeRounded >> 5;
     uint256_t a = uint256_t(Overflow::mul(s, MEMORY_GAS).first);
     uint256_t b = uint256_t((s * s) >> 9);
     gas_t newMemGas = gas_t(a + b);

@@ -174,6 +174,12 @@ call_result_t Call::makeCall(
           );
         }
       } 
+    case FINALIZATION_OUT_OF_GAS:
+      // TODO: is this the correct handling of an out of gas message?
+      return std::make_pair(
+        MessageCallResult::MESSAGE_CALL_FAILED,
+        0 
+      );
     case FINALIZATION_ERROR:
       return std::make_pair(
         MessageCallResult::MESSAGE_CALL_FAILED,

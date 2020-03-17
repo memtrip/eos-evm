@@ -26,7 +26,8 @@ typedef std::variant<
 
 enum FinalizationResult {
   FINALIZATION_OK,
-  FINALIZATION_ERROR
+  FINALIZATION_OUT_OF_GAS,
+  FINALIZATION_ERROR,
 };
 
 typedef std::pair<

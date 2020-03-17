@@ -4,7 +4,7 @@
 TEST_CASE("Calculate total memory size", "[gasometer]") {
 
   // given
-  Gasometer gasometer(params.gas);
+  Gasometer gasometer(0);
 
   // when
   mem_gas_t result = gasometer.memGasCost(0, 5);

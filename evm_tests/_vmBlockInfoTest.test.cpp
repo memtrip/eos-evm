@@ -41,10 +41,11 @@ TEST_CASE("gaslimit______f1250fd89a1c3e517ae92cc1f73865c594bfad34db20f3b3396af4e
   };
 
   ExternalMock ext {};
+
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -89,10 +90,11 @@ TEST_CASE("number______404caf239c3e0ad4394c1417b728d10e1f68a8eee3963425d9e391f4f
   };
 
   ExternalMock ext {};
+
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -137,10 +139,11 @@ TEST_CASE("difficulty______30c06d1988994e3f4e738e60b1e0d6b8734fb576e3b2580151251
   };
 
   ExternalMock ext {};
+
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -185,10 +188,11 @@ TEST_CASE("coinbase______9f5df0c263c2b48fbf48db70ec64ddf3efa5f1651ced1fedf933ee2
   };
 
   ExternalMock ext {};
+
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -233,10 +237,11 @@ TEST_CASE("timestamp______44c8782a2b04af7092f76bfa83b1cb24e590722db220b32a52e4e2
   };
 
   ExternalMock ext {};
+
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);

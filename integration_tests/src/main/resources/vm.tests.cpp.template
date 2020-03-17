@@ -46,10 +46,19 @@ TEST_CASE("${test.name}______${test.fixture._info.sourceHash}", "[vm]") {
   };
 
   ExternalMock ext {};
+  <#if test.fixture.pre.accountState.storage?has_content>
+  <#list test.fixture.pre.accountState.storage?keys as key>
+  ext.storageResponder.push_back(std::make_pair(
+    uint256_t(${key}),
+    Hex::hexToBytes("${test.fixture.pre.accountState.storage[key]}")
+  ));
+  </#list>
+  </#if>
+
   VM vm {};
   Call call(0);
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
   Gasometer gasometer(params.gas);
   bytes_t* memoryBytes = new bytes_t();
   Memory mem(memoryBytes);
@@ -63,7 +72,15 @@ TEST_CASE("${test.name}______${test.fixture._info.sourceHash}", "[vm]") {
   <#if test.fixture.post??>
   <#list test.fixture.post.accountState.storage?keys as key>
   CHECK("${test.fixture.post.accountState.storage[key]}" ==
+    <#if key?length <= 8>
     Utils::uint256_2str(accountState.get(${key}))
+    <#else>
+    Utils::uint256_2str(
+      accountState.get(
+        BigInt::fromBytes(Hex::hexToBytes("${key[2..]}"))
+      )
+    )
+    </#if>
   );
   </#list>
   </#if>

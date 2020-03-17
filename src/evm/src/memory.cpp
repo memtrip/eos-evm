@@ -2,6 +2,7 @@
 #include <evm/memory.h>
 #include <evm/overflow.h>
 #include <evm/big_int.h>
+#include <evm/hex.h>
 
 static constexpr size_t capacity = 4 * 1024;
 
@@ -10,39 +11,43 @@ static const size_t MAX_RETURN_WASTE_BYTES = 16384;
 Memory::Memory(bytes_t* memoryArg) {
   memory = memoryArg;
   memory->reserve(capacity);
+  memorySize = 0;
 }
 
-unsigned int Memory::length() {
-  return memory->size();
+size_t Memory::length() {
+  return memorySize;
 }
 
-void Memory::resize(unsigned int newSize) {
+void Memory::resize(size_t newSize) {
+  memorySize = newSize;
   memory->resize(newSize);
 }
 
-void Memory::expand(unsigned int size) {
-  if (size > memory->size()) {
-    memory->resize(size);
+void Memory::expand(size_t size) {
+  if (size > memorySize) {
+    resize(size);
   }
 }
 
 void Memory::writeByte(uint256_t offset, uint256_t value) {
-  // TODO: check memory
   size_t index = static_cast<size_t>(offset);
-  uint8_t byte = static_cast<uint8_t>(value);
+  bytes_t bytes = BigInt::toBytes(value);
+  if (index >= length()) return;
+  uint8_t byte = bytes[bytes.size() - 1];
   memory->insert(memory->begin() + index, byte);
 }
 
 void Memory::write(uint256_t offset, uint256_t value) {
-  // TODO: check memory
   size_t index = static_cast<size_t>(offset);
   bytes_t bytes = BigInt::toBytes(value);
-  memory->insert(memory->begin() + index + (WORD_SIZE - bytes.size()), std::begin(bytes), std::end(bytes));
+  size_t position = index + (WORD_SIZE - bytes.size());
+  if (position >= length()) return;
+  memory->insert(memory->begin() + position, std::begin(bytes), std::end(bytes));
 }
 
 uint256_t Memory::read(uint256_t offset) {
-  // TODO: check memory
   size_t index = static_cast<size_t>(offset);
+  if (index >= length()) return uint256_t(0);
   return BigInt::fromBigEndianBytes(bytes_t(memory->begin() + index, memory->begin() + index + WORD_SIZE));
 }
 
@@ -56,11 +61,8 @@ void Memory::writeSlice(uint256_t offsetArg, bytes_t bytes) {
 bytes_t Memory::readSlice(uint256_t offsetArg, uint256_t sizeArg) {
   size_t offset = static_cast<size_t>(offsetArg);
   size_t size = static_cast<size_t>(sizeArg);
-  if (!isValidRange(offset, size)) {
-    return bytes_t();
-  } else {
-    return bytes_t(memory->begin() + offset, memory->begin() + offset + size);
-  }
+  if (!isValidRange(offset, size) || offset > size) return bytes_t();
+  return bytes_t(memory->begin() + offset, memory->begin() + offset + size);
 }
 
 void Memory::writeableSlice(uint256_t offsetArg, uint256_t sizeArg) {
@@ -133,17 +135,4 @@ void Memory::copyData(
       bytes_t(data.begin() + outputBegin, data.begin() + outputEnd)
     );
   }
-
-  // size_t sourceOffsetSize = static_cast<size_t>(sourceOffset);
-
-  // size_t dest = static_cast<size_t>(destOffset);
-  // size_t src = data.size() < sourceOffsetSize ? data.size() : sourceOffsetSize;
-  // size_t size = static_cast<size_t>(sizeItem);
-  // size_t copySize = std::min(size, data.size() - src);
-
-  // if (copySize > 0)
-  //   writeSlice(dest, bytes_t(data.begin() + sourceOffsetSize, data.end()));
-
-  // if ((size - copySize) > 0) 
-  //   std::fill(memory->begin() + dest + copySize, memory->end(), 0);
 }

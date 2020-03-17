@@ -20,3 +20,6 @@ bytes_t eos_external::code(uint256_t address) {
 double eos_external::balance(uint256_t address) {
   return 0.0;
 }
+
+void suicide(uint256_t address) {
+}

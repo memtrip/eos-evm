@@ -3,6 +3,7 @@
 #include <evm/account_state.h>
 #include <evm/stack.h>
 #include <evm/utils.h>
+#include "external_mock.h"
 
 TEST_CASE("Put pair", "[account_state]") {
   // given 
@@ -10,8 +11,9 @@ TEST_CASE("Put pair", "[account_state]") {
   stackItems->push_back(uint256_t(2));
   stackItems->push_back(uint256_t(1));
 
+  ExternalMock ext {};
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
 
   // when
   accountState.putTopPair(stackItems);
@@ -28,8 +30,9 @@ TEST_CASE("Get by index", "[account_state]") {
   stackItems->push_back(uint256_t(4));
   stackItems->push_back(uint256_t(3));
 
+  ExternalMock ext {};
   account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems);
+  AccountState accountState(accountItems, &ext);
 
   // when
   accountState.putTopPair(stackItems);

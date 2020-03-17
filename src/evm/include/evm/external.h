@@ -8,4 +8,5 @@ class External {
     virtual bytes_t code(uint256_t address) { return bytes_t(); };
     virtual double balance(uint256_t address) { return 0.0; };
     virtual bytes_t storageAt(uint256_t address) { return bytes_t(); };
+    virtual void suicide(uint256_t address) { };
 };

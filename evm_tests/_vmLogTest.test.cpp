@@ -12,7 +12,7 @@
 #include <evm/big_int.h>
 #include "external_mock.h"
 
-TEST_CASE("slt1______ed3559af4c3e3d1f16995417fd3ce8b2d5d289b2debd9d34e7d103af59a64f4a", "[vm]") {
+TEST_CASE("log2_logMemsizeTooHigh______9fb39d1608049d1d5455c7409514acc175724f2b1e43102d17b631862c3bc1a4", "[vm]") {
   env_t env = {
     uint256_t(1), /* chainId */
     BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
@@ -23,7 +23,7 @@ TEST_CASE("slt1______ed3559af4c3e3d1f16995417fd3ce8b2d5d289b2debd9d34e7d103af59a
     BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
   };
 
-  std::string bytecode_str = "6002600003600012600055";
+  std::string bytecode_str = "7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd600052600060007fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff6001a2";
   bytes_t data_bytes = bytes_t();
 
   params_t params = {
@@ -58,7 +58,7 @@ TEST_CASE("slt1______ed3559af4c3e3d1f16995417fd3ce8b2d5d289b2debd9d34e7d103af59a
   // then
 }
 
-TEST_CASE("or2______2c00a57a80d580130b60d9deda2890eccef876d65ea95b4c43bbb1a4dd0cecd5", "[vm]") {
+TEST_CASE("log1_nonEmptyMem______f3e28ff95bf5e800cd43ab50df02e0c38e9fa2b8205732a9ef4a9c7c4a881da6", "[vm]") {
   env_t env = {
     uint256_t(1), /* chainId */
     BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
@@ -69,301 +69,7 @@ TEST_CASE("or2______2c00a57a80d580130b60d9deda2890eccef876d65ea95b4c43bbb1a4dd0c
     BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
   };
 
-  std::string bytecode_str = "6001600317600055";
-  bytes_t data_bytes = bytes_t();
-
-  params_t params = {
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
-    uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
-    gas_t(0x0186a0), /* gas */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
-    Hex::hexToBytes(bytecode_str), /* code */
-    data_bytes /* data */
-  };
-
-  ExternalMock ext {};
-
-  VM vm {};
-  Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
-  Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
-
-  // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
-
-  // then
-  CHECK("0000000000000000000000000000000000000000000000000000000000000003" ==
-    Utils::uint256_2str(accountState.get(0x00))
-  );
-}
-
-TEST_CASE("sgt3______46e9db07c8df7ae98ca90780aeaf1b5a64a02cda8b54068c021dd897d8c56ab5", "[vm]") {
-  env_t env = {
-    uint256_t(1), /* chainId */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
-  };
-
-  std::string bytecode_str = "7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff600013600055";
-  bytes_t data_bytes = bytes_t();
-
-  params_t params = {
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
-    uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
-    gas_t(0x0186a0), /* gas */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
-    Hex::hexToBytes(bytecode_str), /* code */
-    data_bytes /* data */
-  };
-
-  ExternalMock ext {};
-
-  VM vm {};
-  Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
-  Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
-
-  // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
-
-  // then
-  CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
-    Utils::uint256_2str(accountState.get(0x00))
-  );
-}
-
-TEST_CASE("xor2______cbff7fbed032981ae1743bb8965aaf666a481933ad201acde2a755b4e24ee7d7", "[vm]") {
-  env_t env = {
-    uint256_t(1), /* chainId */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
-  };
-
-  std::string bytecode_str = "6001600318600055";
-  bytes_t data_bytes = bytes_t();
-
-  params_t params = {
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
-    uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
-    gas_t(0x0186a0), /* gas */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
-    Hex::hexToBytes(bytecode_str), /* code */
-    data_bytes /* data */
-  };
-
-  ExternalMock ext {};
-
-  VM vm {};
-  Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
-  Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
-
-  // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
-
-  // then
-  CHECK("0000000000000000000000000000000000000000000000000000000000000002" ==
-    Utils::uint256_2str(accountState.get(0x00))
-  );
-}
-
-TEST_CASE("byte4______2ada67be185a5b95ca62844c81c52e64b00614d02b64cbf9253baf2a7566e2ae", "[vm]") {
-  env_t env = {
-    uint256_t(1), /* chainId */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
-  };
-
-  std::string bytecode_str = "6780402010080402016004601f031a600055";
-  bytes_t data_bytes = bytes_t();
-
-  params_t params = {
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
-    uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
-    gas_t(0x0186a0), /* gas */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
-    Hex::hexToBytes(bytecode_str), /* code */
-    data_bytes /* data */
-  };
-
-  ExternalMock ext {};
-
-  VM vm {};
-  Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
-  Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
-
-  // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
-
-  // then
-  CHECK("0000000000000000000000000000000000000000000000000000000000000010" ==
-    Utils::uint256_2str(accountState.get(0x00))
-  );
-}
-
-TEST_CASE("not5______0748608e64f72417803be26086c812c31a590a1a95f26e9af0bedc573bddf7e7", "[vm]") {
-  env_t env = {
-    uint256_t(1), /* chainId */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
-  };
-
-  std::string bytecode_str = "600060000319600055";
-  bytes_t data_bytes = bytes_t();
-
-  params_t params = {
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
-    uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
-    gas_t(0x0186a0), /* gas */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
-    Hex::hexToBytes(bytecode_str), /* code */
-    data_bytes /* data */
-  };
-
-  ExternalMock ext {};
-
-  VM vm {};
-  Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
-  Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
-
-  // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
-
-  // then
-  CHECK("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" ==
-    Utils::uint256_2str(accountState.get(0x00))
-  );
-}
-
-TEST_CASE("eq2______ae4e87a6dad61b0aa93103ef5906eaeeb3733413e00cb1d2524ee7119383b375", "[vm]") {
-  env_t env = {
-    uint256_t(1), /* chainId */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
-  };
-
-  std::string bytecode_str = "7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff14600055";
-  bytes_t data_bytes = bytes_t();
-
-  params_t params = {
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
-    uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
-    gas_t(0x0186a0), /* gas */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
-    Hex::hexToBytes(bytecode_str), /* code */
-    data_bytes /* data */
-  };
-
-  ExternalMock ext {};
-
-  VM vm {};
-  Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
-  Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
-
-  // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
-
-  // then
-  CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
-    Utils::uint256_2str(accountState.get(0x00))
-  );
-}
-
-TEST_CASE("byte8______d8241a95a99ed5c0c39a8d26a9c809b0f62d56817af1fba2368cd2400f2e17a1", "[vm]") {
-  env_t env = {
-    uint256_t(1), /* chainId */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
-  };
-
-  std::string bytecode_str = "678040201008040201601f601f031a600055";
+  std::string bytecode_str = "7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff600052600060206000a1";
   bytes_t data_bytes = bytes_t();
 
   params_t params = {
@@ -398,7 +104,7 @@ TEST_CASE("byte8______d8241a95a99ed5c0c39a8d26a9c809b0f62d56817af1fba2368cd2400f
   // then
 }
 
-TEST_CASE("and0______53831e569b6ec2b12b840d539617bd382a07e3700db75ba43d88b45c488abeea", "[vm]") {
+TEST_CASE("log4_logMemsizeZero______c7e7169c36cc57a6425d03859449560d8d7f48c189f2af5d90710d24de096912", "[vm]") {
   env_t env = {
     uint256_t(1), /* chainId */
     BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
@@ -409,56 +115,7 @@ TEST_CASE("and0______53831e569b6ec2b12b840d539617bd382a07e3700db75ba43d88b45c488
     BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
   };
 
-  std::string bytecode_str = "6002600216600055";
-  bytes_t data_bytes = bytes_t();
-
-  params_t params = {
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
-    uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
-    gas_t(0x0186a0), /* gas */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
-    Hex::hexToBytes(bytecode_str), /* code */
-    data_bytes /* data */
-  };
-
-  ExternalMock ext {};
-
-  VM vm {};
-  Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
-  Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
-
-  // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
-
-  // then
-  CHECK("0000000000000000000000000000000000000000000000000000000000000002" ==
-    Utils::uint256_2str(accountState.get(0x00))
-  );
-}
-
-TEST_CASE("and1______d92d694f1df1088e777abdb7e6a441d9c71e4e634886410c4c65bff718a6f675", "[vm]") {
-  env_t env = {
-    uint256_t(1), /* chainId */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
-  };
-
-  std::string bytecode_str = "6001600216600055";
+  std::string bytecode_str = "7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd600052600060006000600060006001a4";
   bytes_t data_bytes = bytes_t();
 
   params_t params = {
@@ -493,7 +150,7 @@ TEST_CASE("and1______d92d694f1df1088e777abdb7e6a441d9c71e4e634886410c4c65bff718a
   // then
 }
 
-TEST_CASE("byte9______29129062d256e9717217835274e382615224df82e97c8567aa472d206a2e4111", "[vm]") {
+TEST_CASE("log1_emptyMem______3284dac984331ac8d612e2bb4994f34e19f76861ed5294388fe95c283bd500fc", "[vm]") {
   env_t env = {
     uint256_t(1), /* chainId */
     BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
@@ -504,7 +161,7 @@ TEST_CASE("byte9______29129062d256e9717217835274e382615224df82e97c8567aa472d206a
     BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
   };
 
-  std::string bytecode_str = "6780402010080402016020601f051a600055";
+  std::string bytecode_str = "600060006000a1";
   bytes_t data_bytes = bytes_t();
 
   params_t params = {
@@ -539,7 +196,7 @@ TEST_CASE("byte9______29129062d256e9717217835274e382615224df82e97c8567aa472d206a
   // then
 }
 
-TEST_CASE("not4______aee8ec9908daccb907c7076b988b58caffaa8ba68141534a0767d041fbfcb729", "[vm]") {
+TEST_CASE("log0_logMemsizeZero______e5b6bb2501704a5d2b73c86a3e02be967fdfc90fb58f2b4f5e6e3750406792ef", "[vm]") {
   env_t env = {
     uint256_t(1), /* chainId */
     BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
@@ -550,154 +207,7 @@ TEST_CASE("not4______aee8ec9908daccb907c7076b988b58caffaa8ba68141534a0767d041fbf
     BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
   };
 
-  std::string bytecode_str = "7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff60000319600055";
-  bytes_t data_bytes = bytes_t();
-
-  params_t params = {
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
-    uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
-    gas_t(0x0186a0), /* gas */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
-    Hex::hexToBytes(bytecode_str), /* code */
-    data_bytes /* data */
-  };
-
-  ExternalMock ext {};
-
-  VM vm {};
-  Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
-  Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
-
-  // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
-
-  // then
-  CHECK("fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe" ==
-    Utils::uint256_2str(accountState.get(0x00))
-  );
-}
-
-TEST_CASE("byte5______c2f04b6c8ad9f10c1c6302aaa1b1faa4bb90e700d062d6cf2ad06f7f8009d115", "[vm]") {
-  env_t env = {
-    uint256_t(1), /* chainId */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
-  };
-
-  std::string bytecode_str = "6780402010080402016005601f031a600055";
-  bytes_t data_bytes = bytes_t();
-
-  params_t params = {
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
-    uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
-    gas_t(0x0186a0), /* gas */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
-    Hex::hexToBytes(bytecode_str), /* code */
-    data_bytes /* data */
-  };
-
-  ExternalMock ext {};
-
-  VM vm {};
-  Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
-  Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
-
-  // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
-
-  // then
-  CHECK("0000000000000000000000000000000000000000000000000000000000000020" ==
-    Utils::uint256_2str(accountState.get(0x00))
-  );
-}
-
-TEST_CASE("xor3______2e67a0c6dbf54b8eaa761a710775d8f516fb5d4afff97ec05f2bf2b0ca89e9a7", "[vm]") {
-  env_t env = {
-    uint256_t(1), /* chainId */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
-  };
-
-  std::string bytecode_str = "7f0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff18600055";
-  bytes_t data_bytes = bytes_t();
-
-  params_t params = {
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
-    uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
-    gas_t(0x0186a0), /* gas */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
-    Hex::hexToBytes(bytecode_str), /* code */
-    data_bytes /* data */
-  };
-
-  ExternalMock ext {};
-
-  VM vm {};
-  Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
-  Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
-
-  // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
-
-  // then
-  CHECK("fedcba9876543210fedcba9876543210fedcba9876543210fedcba9876543210" ==
-    Utils::uint256_2str(accountState.get(0x00))
-  );
-}
-
-TEST_CASE("sgt2______b9b0e8560b1da602351ee89d9385bd7bd33d19a5e4bc4ae1dbddc76ebf87a0ad", "[vm]") {
-  env_t env = {
-    uint256_t(1), /* chainId */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
-  };
-
-  std::string bytecode_str = "60007fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff13600055";
+  std::string bytecode_str = "7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd60005260006001a0";
   bytes_t data_bytes = bytes_t();
 
   params_t params = {
@@ -732,7 +242,7 @@ TEST_CASE("sgt2______b9b0e8560b1da602351ee89d9385bd7bd33d19a5e4bc4ae1dbddc76ebf8
   // then
 }
 
-TEST_CASE("or3______e86a2ab7088faca5e880fab11b2cf61601e941f621330eceec13296405f02e2b", "[vm]") {
+TEST_CASE("log2_emptyMem______6cc6686c11bbd223248c591c4c90a38f469fdb2571b7b6279a116ee07147b4be", "[vm]") {
   env_t env = {
     uint256_t(1), /* chainId */
     BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
@@ -743,494 +253,7 @@ TEST_CASE("or3______e86a2ab7088faca5e880fab11b2cf61601e941f621330eceec13296405f0
     BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
   };
 
-  std::string bytecode_str = "7f0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff17600055";
-  bytes_t data_bytes = bytes_t();
-
-  params_t params = {
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
-    uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
-    gas_t(0x0186a0), /* gas */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
-    Hex::hexToBytes(bytecode_str), /* code */
-    data_bytes /* data */
-  };
-
-  ExternalMock ext {};
-
-  VM vm {};
-  Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
-  Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
-
-  // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
-
-  // then
-  CHECK("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" ==
-    Utils::uint256_2str(accountState.get(0x00))
-  );
-}
-
-TEST_CASE("slt0______2fa0aa23a17f6f906146df0f152b09727ed44e560ba9ca9b357285f2ec0b38c3", "[vm]") {
-  env_t env = {
-    uint256_t(1), /* chainId */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
-  };
-
-  std::string bytecode_str = "6000600260000312600055";
-  bytes_t data_bytes = bytes_t();
-
-  params_t params = {
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
-    uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
-    gas_t(0x0186a0), /* gas */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
-    Hex::hexToBytes(bytecode_str), /* code */
-    data_bytes /* data */
-  };
-
-  ExternalMock ext {};
-
-  VM vm {};
-  Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
-  Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
-
-  // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
-
-  // then
-  CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
-    Utils::uint256_2str(accountState.get(0x00))
-  );
-}
-
-TEST_CASE("not3______98f29555aca23bee7693ee4962daafe489d8c024dfc8db3da4252ee438d15d64", "[vm]") {
-  env_t env = {
-    uint256_t(1), /* chainId */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
-  };
-
-  std::string bytecode_str = "600260000319600055";
-  bytes_t data_bytes = bytes_t();
-
-  params_t params = {
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
-    uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
-    gas_t(0x0186a0), /* gas */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
-    Hex::hexToBytes(bytecode_str), /* code */
-    data_bytes /* data */
-  };
-
-  ExternalMock ext {};
-
-  VM vm {};
-  Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
-  Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
-
-  // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
-
-  // then
-  CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
-    Utils::uint256_2str(accountState.get(0x00))
-  );
-}
-
-TEST_CASE("lt0______3f82794b3ab7a1381f800f045fe2a52a2c742a5bf5a0c262cfb6be574d305879", "[vm]") {
-  env_t env = {
-    uint256_t(1), /* chainId */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
-  };
-
-  std::string bytecode_str = "6000600260000310600055";
-  bytes_t data_bytes = bytes_t();
-
-  params_t params = {
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
-    uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
-    gas_t(0x0186a0), /* gas */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("8ac7230489e80000")), /* value */
-    Hex::hexToBytes(bytecode_str), /* code */
-    data_bytes /* data */
-  };
-
-  ExternalMock ext {};
-
-  VM vm {};
-  Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
-  Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
-
-  // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
-
-  // then
-}
-
-TEST_CASE("gt2______4b0191dbc7944ec9b47ede8560ad03500238397635dc897707fd45937b0d762b", "[vm]") {
-  env_t env = {
-    uint256_t(1), /* chainId */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
-  };
-
-  std::string bytecode_str = "60007fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff11600055";
-  bytes_t data_bytes = bytes_t();
-
-  params_t params = {
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
-    uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
-    gas_t(0x0186a0), /* gas */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
-    Hex::hexToBytes(bytecode_str), /* code */
-    data_bytes /* data */
-  };
-
-  ExternalMock ext {};
-
-  VM vm {};
-  Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
-  Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
-
-  // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
-
-  // then
-  CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
-    Utils::uint256_2str(accountState.get(0x00))
-  );
-}
-
-TEST_CASE("or4______0529771970ae1453127c9560e68b8274a9662ddf5684bdc7c6a5bd925fedbd27", "[vm]") {
-  env_t env = {
-    uint256_t(1), /* chainId */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
-  };
-
-  std::string bytecode_str = "7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7feeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee17600055";
-  bytes_t data_bytes = bytes_t();
-
-  params_t params = {
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
-    uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
-    gas_t(0x0186a0), /* gas */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
-    Hex::hexToBytes(bytecode_str), /* code */
-    data_bytes /* data */
-  };
-
-  ExternalMock ext {};
-
-  VM vm {};
-  Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
-  Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
-
-  // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
-
-  // then
-  CHECK("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" ==
-    Utils::uint256_2str(accountState.get(0x00))
-  );
-}
-
-TEST_CASE("xor4______c3087ab19e23a572ebb996067c96ae4e3a83fbfe7a3253e347130c9767afb7be", "[vm]") {
-  env_t env = {
-    uint256_t(1), /* chainId */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
-  };
-
-  std::string bytecode_str = "7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7feeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee18600055";
-  bytes_t data_bytes = bytes_t();
-
-  params_t params = {
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
-    uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
-    gas_t(0x0186a0), /* gas */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
-    Hex::hexToBytes(bytecode_str), /* code */
-    data_bytes /* data */
-  };
-
-  ExternalMock ext {};
-
-  VM vm {};
-  Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
-  Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
-
-  // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
-
-  // then
-  CHECK("1111111111111111111111111111111111111111111111111111111111111111" ==
-    Utils::uint256_2str(accountState.get(0x00))
-  );
-}
-
-TEST_CASE("byte2______88e635fca6798de38b2831eaf5aa1d7ccc10a703006fc531c431a07a6f0ad9b7", "[vm]") {
-  env_t env = {
-    uint256_t(1), /* chainId */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
-  };
-
-  std::string bytecode_str = "6780402010080402016002601f031a600055";
-  bytes_t data_bytes = bytes_t();
-
-  params_t params = {
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
-    uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
-    gas_t(0x0186a0), /* gas */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
-    Hex::hexToBytes(bytecode_str), /* code */
-    data_bytes /* data */
-  };
-
-  ExternalMock ext {};
-
-  VM vm {};
-  Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
-  Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
-
-  // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
-
-  // then
-  CHECK("0000000000000000000000000000000000000000000000000000000000000004" ==
-    Utils::uint256_2str(accountState.get(0x00))
-  );
-}
-
-TEST_CASE("byte3______f182ba9431c0afa8951345caab69362ef0d08befe7af3ba46c0150f194528281", "[vm]") {
-  env_t env = {
-    uint256_t(1), /* chainId */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
-  };
-
-  std::string bytecode_str = "6780402010080402016003601f031a600055";
-  bytes_t data_bytes = bytes_t();
-
-  params_t params = {
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
-    uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
-    gas_t(0x0186a0), /* gas */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
-    Hex::hexToBytes(bytecode_str), /* code */
-    data_bytes /* data */
-  };
-
-  ExternalMock ext {};
-
-  VM vm {};
-  Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
-  Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
-
-  // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
-
-  // then
-  CHECK("0000000000000000000000000000000000000000000000000000000000000008" ==
-    Utils::uint256_2str(accountState.get(0x00))
-  );
-}
-
-TEST_CASE("xor5______208791127a38c44787ac9739f8e2d42eafcc94924b718326bb2f41c0641fe68e", "[vm]") {
-  env_t env = {
-    uint256_t(1), /* chainId */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
-  };
-
-  std::string bytecode_str = "7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7feeeeeeeeeeeeeeeeeeeeeeeeeeeeefeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee18600055";
-  bytes_t data_bytes = bytes_t();
-
-  params_t params = {
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
-    uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
-    gas_t(0x0186a0), /* gas */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
-    Hex::hexToBytes(bytecode_str), /* code */
-    data_bytes /* data */
-  };
-
-  ExternalMock ext {};
-
-  VM vm {};
-  Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
-  Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
-
-  // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
-
-  // then
-  CHECK("1111111111111111111111111111101111111111111111111111111111111111" ==
-    Utils::uint256_2str(accountState.get(0x00))
-  );
-}
-
-TEST_CASE("sgt4______952942a91ed7040913a6bb27488e09877b1c0eff4b14fcc9e515f8ffde6a2016", "[vm]") {
-  env_t env = {
-    uint256_t(1), /* chainId */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
-  };
-
-  std::string bytecode_str = "6003600003600560000313600055";
+  std::string bytecode_str = "6000600060006000a2";
   bytes_t data_bytes = bytes_t();
 
   params_t params = {
@@ -1265,7 +288,7 @@ TEST_CASE("sgt4______952942a91ed7040913a6bb27488e09877b1c0eff4b14fcc9e515f8ffde6
   // then
 }
 
-TEST_CASE("or5______4c9eb19946147a54071f850e4812bd9b75e200b344b9bd27cb1d8af2c4674933", "[vm]") {
+TEST_CASE("log4_nonEmptyMem_logMemSize1_logMemStart31______4f7869f982d0f61e794df14e64040914832b8e4f7d643c94bb9d2694ce228450", "[vm]") {
   env_t env = {
     uint256_t(1), /* chainId */
     BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
@@ -1276,56 +299,7 @@ TEST_CASE("or5______4c9eb19946147a54071f850e4812bd9b75e200b344b9bd27cb1d8af2c467
     BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
   };
 
-  std::string bytecode_str = "7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7feeeeeeeeeeeeeeeeeeeeeeeeeeeeefeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee17600055";
-  bytes_t data_bytes = bytes_t();
-
-  params_t params = {
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
-    uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
-    gas_t(0x0186a0), /* gas */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
-    Hex::hexToBytes(bytecode_str), /* code */
-    data_bytes /* data */
-  };
-
-  ExternalMock ext {};
-
-  VM vm {};
-  Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
-  Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
-
-  // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
-
-  // then
-  CHECK("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" ==
-    Utils::uint256_2str(accountState.get(0x00))
-  );
-}
-
-TEST_CASE("gt3______2c4b8f3a0bd648007898638b2bf6ab5f170741704abc751161d5f90f0494d666", "[vm]") {
-  env_t env = {
-    uint256_t(1), /* chainId */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
-  };
-
-  std::string bytecode_str = "7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff600011600055";
+  std::string bytecode_str = "7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd60005260006000600060006001601fa4";
   bytes_t data_bytes = bytes_t();
 
   params_t params = {
@@ -1360,7 +334,7 @@ TEST_CASE("gt3______2c4b8f3a0bd648007898638b2bf6ab5f170741704abc751161d5f90f0494
   // then
 }
 
-TEST_CASE("lt1______63a727c86d3f482ccf6a02dbded8c26b306938192e9a6008f4ad74c7a5efd8fd", "[vm]") {
+TEST_CASE("log1_logMemsizeZero______583cfb6cec3eb602dc034886dfc2e2171da94941d0bbb8c36156bcf50d2b6827", "[vm]") {
   env_t env = {
     uint256_t(1), /* chainId */
     BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
@@ -1371,56 +345,7 @@ TEST_CASE("lt1______63a727c86d3f482ccf6a02dbded8c26b306938192e9a6008f4ad74c7a5ef
     BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
   };
 
-  std::string bytecode_str = "6002600003600010600055";
-  bytes_t data_bytes = bytes_t();
-
-  params_t params = {
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
-    uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
-    gas_t(0x0186a0), /* gas */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("8ac7230489e80000")), /* value */
-    Hex::hexToBytes(bytecode_str), /* code */
-    data_bytes /* data */
-  };
-
-  ExternalMock ext {};
-
-  VM vm {};
-  Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
-  Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
-
-  // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
-
-  // then
-  CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
-    Utils::uint256_2str(accountState.get(0x00))
-  );
-}
-
-TEST_CASE("not2______324eba656aca54db2f9828012cc52c412e67ea3976e1e806698486b3f755b5eb", "[vm]") {
-  env_t env = {
-    uint256_t(1), /* chainId */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
-  };
-
-  std::string bytecode_str = "7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff19600055";
+  std::string bytecode_str = "7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd600052600060006001a1";
   bytes_t data_bytes = bytes_t();
 
   params_t params = {
@@ -1455,7 +380,7 @@ TEST_CASE("not2______324eba656aca54db2f9828012cc52c412e67ea3976e1e806698486b3f75
   // then
 }
 
-TEST_CASE("and4______e21e8e11b9513679c36fd3f2877d5ef73d302169e669d42569e9b28e07ee85f5", "[vm]") {
+TEST_CASE("log2_Caller______bf2bb94ebe5938744184e8a6f7b2a5eaa274b40d3a92b6802153133a1f8d64ef", "[vm]") {
   env_t env = {
     uint256_t(1), /* chainId */
     BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
@@ -1466,105 +391,7 @@ TEST_CASE("and4______e21e8e11b9513679c36fd3f2877d5ef73d302169e669d42569e9b28e07e
     BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
   };
 
-  std::string bytecode_str = "7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7feeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee16600055";
-  bytes_t data_bytes = bytes_t();
-
-  params_t params = {
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
-    uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
-    gas_t(0x0186a0), /* gas */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
-    Hex::hexToBytes(bytecode_str), /* code */
-    data_bytes /* data */
-  };
-
-  ExternalMock ext {};
-
-  VM vm {};
-  Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
-  Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
-
-  // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
-
-  // then
-  CHECK("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee" ==
-    Utils::uint256_2str(accountState.get(0x00))
-  );
-}
-
-TEST_CASE("gt0______c17427d3c9acd0c27322e9bb49e967e2240aa803764c4ccf202d94ef4cb9939c", "[vm]") {
-  env_t env = {
-    uint256_t(1), /* chainId */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
-  };
-
-  std::string bytecode_str = "6000600260000311600055";
-  bytes_t data_bytes = bytes_t();
-
-  params_t params = {
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
-    uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
-    gas_t(0x0186a0), /* gas */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
-    Hex::hexToBytes(bytecode_str), /* code */
-    data_bytes /* data */
-  };
-
-  ExternalMock ext {};
-
-  VM vm {};
-  Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
-  Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
-
-  // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
-
-  // then
-  CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
-    Utils::uint256_2str(accountState.get(0x00))
-  );
-}
-
-TEST_CASE("iszero0______c7730a4eae5d80429b5e6a822a0c8c4dc6bece946d3d6902a5fddb2fc120fa04", "[vm]") {
-  env_t env = {
-    uint256_t(1), /* chainId */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
-  };
-
-  std::string bytecode_str = "7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff15600055";
+  std::string bytecode_str = "60ff60005333600060206000a2";
   bytes_t data_bytes = bytes_t();
 
   params_t params = {
@@ -1599,7 +426,7 @@ TEST_CASE("iszero0______c7730a4eae5d80429b5e6a822a0c8c4dc6bece946d3d6902a5fddb2f
   // then
 }
 
-TEST_CASE("lt2______2e2c7923db8f0fc63497824b409ae8c0eba04c0e352fe50ae0a5cc00469d9498", "[vm]") {
+TEST_CASE("log1_logMemsizeTooHigh______17e5a63a7a389f823678de07caa666ff5148749e4697b54e304dd9407312c672", "[vm]") {
   env_t env = {
     uint256_t(1), /* chainId */
     BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
@@ -1610,396 +437,7 @@ TEST_CASE("lt2______2e2c7923db8f0fc63497824b409ae8c0eba04c0e352fe50ae0a5cc00469d
     BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
   };
 
-  std::string bytecode_str = "60007fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff10600055";
-  bytes_t data_bytes = bytes_t();
-
-  params_t params = {
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
-    uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
-    gas_t(0x0186a0), /* gas */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("8ac7230489e80000")), /* value */
-    Hex::hexToBytes(bytecode_str), /* code */
-    data_bytes /* data */
-  };
-
-  ExternalMock ext {};
-
-  VM vm {};
-  Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
-  Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
-
-  // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
-
-  // then
-}
-
-TEST_CASE("not1______986682dadca33278653a19f30a97e9db367c671a612d67a4535d20510e2d625e", "[vm]") {
-  env_t env = {
-    uint256_t(1), /* chainId */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
-  };
-
-  std::string bytecode_str = "600219600055";
-  bytes_t data_bytes = bytes_t();
-
-  params_t params = {
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
-    uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
-    gas_t(0x0186a0), /* gas */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
-    Hex::hexToBytes(bytecode_str), /* code */
-    data_bytes /* data */
-  };
-
-  ExternalMock ext {};
-
-  VM vm {};
-  Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
-  Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
-
-  // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
-
-  // then
-  CHECK("fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffd" ==
-    Utils::uint256_2str(accountState.get(0x00))
-  );
-}
-
-TEST_CASE("byte0______ca8eddefff06f7e6cb91dd60e11a7dd107ced29e7c88ef06da7952e8cfd38d45", "[vm]") {
-  env_t env = {
-    uint256_t(1), /* chainId */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
-  };
-
-  std::string bytecode_str = "6780402010080402016000601f031a600055";
-  bytes_t data_bytes = bytes_t();
-
-  params_t params = {
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
-    uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
-    gas_t(0x0186a0), /* gas */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
-    Hex::hexToBytes(bytecode_str), /* code */
-    data_bytes /* data */
-  };
-
-  ExternalMock ext {};
-
-  VM vm {};
-  Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
-  Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
-
-  // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
-
-  // then
-  CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
-    Utils::uint256_2str(accountState.get(0x00))
-  );
-}
-
-TEST_CASE("slt4______ed936fea46872027bbe365872786c5ab0e1356dfae7bc9c81150fdaa86cb443f", "[vm]") {
-  env_t env = {
-    uint256_t(1), /* chainId */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
-  };
-
-  std::string bytecode_str = "6003600003600560000312600055";
-  bytes_t data_bytes = bytes_t();
-
-  params_t params = {
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
-    uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
-    gas_t(0x0186a0), /* gas */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
-    Hex::hexToBytes(bytecode_str), /* code */
-    data_bytes /* data */
-  };
-
-  ExternalMock ext {};
-
-  VM vm {};
-  Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
-  Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
-
-  // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
-
-  // then
-  CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
-    Utils::uint256_2str(accountState.get(0x00))
-  );
-}
-
-TEST_CASE("byte1______bb1c4e33835be3cbddbd232873e7ee350b4f971f725bf3b1c56c7e4f456d690a", "[vm]") {
-  env_t env = {
-    uint256_t(1), /* chainId */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
-  };
-
-  std::string bytecode_str = "6780402010080402016001601f031a600055";
-  bytes_t data_bytes = bytes_t();
-
-  params_t params = {
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
-    uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
-    gas_t(0x0186a0), /* gas */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
-    Hex::hexToBytes(bytecode_str), /* code */
-    data_bytes /* data */
-  };
-
-  ExternalMock ext {};
-
-  VM vm {};
-  Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
-  Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
-
-  // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
-
-  // then
-  CHECK("0000000000000000000000000000000000000000000000000000000000000002" ==
-    Utils::uint256_2str(accountState.get(0x00))
-  );
-}
-
-TEST_CASE("not0______3235e2a1af7340deea07b964fc3532b19092832b2c9592d3c777a659e97a01ba", "[vm]") {
-  env_t env = {
-    uint256_t(1), /* chainId */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
-  };
-
-  std::string bytecode_str = "600019600055";
-  bytes_t data_bytes = bytes_t();
-
-  params_t params = {
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
-    uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
-    gas_t(0x0186a0), /* gas */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
-    Hex::hexToBytes(bytecode_str), /* code */
-    data_bytes /* data */
-  };
-
-  ExternalMock ext {};
-
-  VM vm {};
-  Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
-  Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
-
-  // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
-
-  // then
-  CHECK("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" ==
-    Utils::uint256_2str(accountState.get(0x00))
-  );
-}
-
-TEST_CASE("lt3______ba2bc4205d1ca31e29315edfc5708f300f44cb02936b9da05a9097b26f97d71a", "[vm]") {
-  env_t env = {
-    uint256_t(1), /* chainId */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
-  };
-
-  std::string bytecode_str = "7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff600010600055";
-  bytes_t data_bytes = bytes_t();
-
-  params_t params = {
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
-    uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
-    gas_t(0x0186a0), /* gas */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
-    Hex::hexToBytes(bytecode_str), /* code */
-    data_bytes /* data */
-  };
-
-  ExternalMock ext {};
-
-  VM vm {};
-  Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
-  Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
-
-  // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
-
-  // then
-  CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
-    Utils::uint256_2str(accountState.get(0x00))
-  );
-}
-
-TEST_CASE("iszero1______1fc0ad71c14401598db2286ee499a76e21de97cbb63ee987afd5f603d34ef903", "[vm]") {
-  env_t env = {
-    uint256_t(1), /* chainId */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
-  };
-
-  std::string bytecode_str = "600015600055";
-  bytes_t data_bytes = bytes_t();
-
-  params_t params = {
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
-    uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
-    gas_t(0x0186a0), /* gas */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
-    Hex::hexToBytes(bytecode_str), /* code */
-    data_bytes /* data */
-  };
-
-  ExternalMock ext {};
-
-  VM vm {};
-  Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
-  Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
-
-  // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
-
-  // then
-  CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
-    Utils::uint256_2str(accountState.get(0x00))
-  );
-}
-
-TEST_CASE("gt1______98d2099f8676c20a4806282a1fbe0968231046a99e137070724adbc117447290", "[vm]") {
-  env_t env = {
-    uint256_t(1), /* chainId */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
-  };
-
-  std::string bytecode_str = "6002600003600011600055";
+  std::string bytecode_str = "7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd60005260007fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff6001a1";
   bytes_t data_bytes = bytes_t();
 
   params_t params = {
@@ -2034,7 +472,7 @@ TEST_CASE("gt1______98d2099f8676c20a4806282a1fbe0968231046a99e137070724adbc11744
   // then
 }
 
-TEST_CASE("byteBN______43da3e8490c4e2724415c26642284184fbbcb7e128d59d7693386f3da3c2d08e", "[vm]") {
+TEST_CASE("log2_logMemsizeZero______686ccc981e9622bcfeb6161ad1d9f71a70d91b3d828ee46bffb105be3394dbab", "[vm]") {
   env_t env = {
     uint256_t(1), /* chainId */
     BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
@@ -2045,154 +483,7 @@ TEST_CASE("byteBN______43da3e8490c4e2724415c26642284184fbbcb7e128d59d7693386f3da
     BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
   };
 
-  std::string bytecode_str = "641234523456601f1a8001600155";
-  bytes_t data_bytes = bytes_t();
-
-  params_t params = {
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
-    uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
-    gas_t(0x0186a0), /* gas */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
-    Hex::hexToBytes(bytecode_str), /* code */
-    data_bytes /* data */
-  };
-
-  ExternalMock ext {};
-
-  VM vm {};
-  Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
-  Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
-
-  // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
-
-  // then
-  CHECK("00000000000000000000000000000000000000000000000000000000000000ac" ==
-    Utils::uint256_2str(accountState.get(0x01))
-  );
-}
-
-TEST_CASE("and5______1bbd8a8b90a8f84cb52e9514c9a02cd594e6e731065b54087cfa7afc9ccd2fc2", "[vm]") {
-  env_t env = {
-    uint256_t(1), /* chainId */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
-  };
-
-  std::string bytecode_str = "7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7feeeeeeeeeeeeeeeeeeeeeeeeeeeeefeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee16600055";
-  bytes_t data_bytes = bytes_t();
-
-  params_t params = {
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
-    uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
-    gas_t(0x0186a0), /* gas */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
-    Hex::hexToBytes(bytecode_str), /* code */
-    data_bytes /* data */
-  };
-
-  ExternalMock ext {};
-
-  VM vm {};
-  Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
-  Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
-
-  // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
-
-  // then
-  CHECK("eeeeeeeeeeeeeeeeeeeeeeeeeeeeefeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee" ==
-    Utils::uint256_2str(accountState.get(0x00))
-  );
-}
-
-TEST_CASE("byte6______2f99689c10d739d33cec8c8062c608a1b01c61686ca12f01d2e9fe2b73d1ee0f", "[vm]") {
-  env_t env = {
-    uint256_t(1), /* chainId */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
-  };
-
-  std::string bytecode_str = "6780402010080402016006601f031a600055";
-  bytes_t data_bytes = bytes_t();
-
-  params_t params = {
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
-    uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
-    gas_t(0x0186a0), /* gas */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
-    Hex::hexToBytes(bytecode_str), /* code */
-    data_bytes /* data */
-  };
-
-  ExternalMock ext {};
-
-  VM vm {};
-  Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
-  Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
-
-  // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
-
-  // then
-  CHECK("0000000000000000000000000000000000000000000000000000000000000040" ==
-    Utils::uint256_2str(accountState.get(0x00))
-  );
-}
-
-TEST_CASE("xor0______e08c105ef68171d063c469dd9b2a23da11aac894df3ee20271da79681250fc9b", "[vm]") {
-  env_t env = {
-    uint256_t(1), /* chainId */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
-  };
-
-  std::string bytecode_str = "6002600218600055";
+  std::string bytecode_str = "7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd6000526000600060006001a2";
   bytes_t data_bytes = bytes_t();
 
   params_t params = {
@@ -2227,7 +518,7 @@ TEST_CASE("xor0______e08c105ef68171d063c469dd9b2a23da11aac894df3ee20271da7968125
   // then
 }
 
-TEST_CASE("sgt1______671a4ef36d8c59426ca6b9eeb8cc46cfb41716888e2f2df3852eb03e9c14dbb1", "[vm]") {
+TEST_CASE("log2_logMemStartTooHigh______d45766f7e33ecc09cc11f00e216474469c49933a5777d8599ad60fd51e1ab3e1", "[vm]") {
   env_t env = {
     uint256_t(1), /* chainId */
     BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
@@ -2238,105 +529,7 @@ TEST_CASE("sgt1______671a4ef36d8c59426ca6b9eeb8cc46cfb41716888e2f2df3852eb03e9c1
     BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
   };
 
-  std::string bytecode_str = "6002600003600013600055";
-  bytes_t data_bytes = bytes_t();
-
-  params_t params = {
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
-    uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
-    gas_t(0x0186a0), /* gas */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
-    Hex::hexToBytes(bytecode_str), /* code */
-    data_bytes /* data */
-  };
-
-  ExternalMock ext {};
-
-  VM vm {};
-  Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
-  Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
-
-  // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
-
-  // then
-  CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
-    Utils::uint256_2str(accountState.get(0x00))
-  );
-}
-
-TEST_CASE("or0______dcc4012a46120cba05d501bbffe31a249fd5445b29b3f7e8e2133e9098e735e4", "[vm]") {
-  env_t env = {
-    uint256_t(1), /* chainId */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
-  };
-
-  std::string bytecode_str = "6002600217600055";
-  bytes_t data_bytes = bytes_t();
-
-  params_t params = {
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
-    uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
-    gas_t(0x0186a0), /* gas */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
-    Hex::hexToBytes(bytecode_str), /* code */
-    data_bytes /* data */
-  };
-
-  ExternalMock ext {};
-
-  VM vm {};
-  Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
-  Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
-
-  // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
-
-  // then
-  CHECK("0000000000000000000000000000000000000000000000000000000000000002" ==
-    Utils::uint256_2str(accountState.get(0x00))
-  );
-}
-
-TEST_CASE("slt3______32f573a07264be5090d1b383aac1d8803ab95f9420e0d8a849de627095f954ee", "[vm]") {
-  env_t env = {
-    uint256_t(1), /* chainId */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
-  };
-
-  std::string bytecode_str = "7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff600012600055";
+  std::string bytecode_str = "7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd6000526000600060017fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffa2";
   bytes_t data_bytes = bytes_t();
 
   params_t params = {
@@ -2371,7 +564,7 @@ TEST_CASE("slt3______32f573a07264be5090d1b383aac1d8803ab95f9420e0d8a849de627095f
   // then
 }
 
-TEST_CASE("and2______b8c8c36bba987b4b5e5172ea00931076b8169ff8a8ff0d48244637c3dbe1eba1", "[vm]") {
+TEST_CASE("log3_logMemsizeZero______69bd3e5dcb7e699abcb3faa58aa9a80a6ff20e8287c8f4981f4973cbba96e192", "[vm]") {
   env_t env = {
     uint256_t(1), /* chainId */
     BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
@@ -2382,56 +575,7 @@ TEST_CASE("and2______b8c8c36bba987b4b5e5172ea00931076b8169ff8a8ff0d48244637c3dbe
     BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
   };
 
-  std::string bytecode_str = "6001600316600055";
-  bytes_t data_bytes = bytes_t();
-
-  params_t params = {
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
-    uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
-    gas_t(0x0186a0), /* gas */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
-    Hex::hexToBytes(bytecode_str), /* code */
-    data_bytes /* data */
-  };
-
-  ExternalMock ext {};
-
-  VM vm {};
-  Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
-  Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
-
-  // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
-
-  // then
-  CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
-    Utils::uint256_2str(accountState.get(0x00))
-  );
-}
-
-TEST_CASE("byte11______57be2a02bebea1ac84a6d1bbb3f15f0ab9d9339fa706131cd052c9275a0ec871", "[vm]") {
-  env_t env = {
-    uint256_t(1), /* chainId */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
-  };
-
-  std::string bytecode_str = "67804020100804020160001a600055";
+  std::string bytecode_str = "7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd60005260006000600060006001a3";
   bytes_t data_bytes = bytes_t();
 
   params_t params = {
@@ -2466,7 +610,7 @@ TEST_CASE("byte11______57be2a02bebea1ac84a6d1bbb3f15f0ab9d9339fa706131cd052c9275
   // then
 }
 
-TEST_CASE("iszeo2______4e5ea4236cff2cb1176ad44dba65cb26dec72438acaa1e35600292b1bee87a71", "[vm]") {
+TEST_CASE("log2_MaxTopic______d3c300433ba07e9e91cab5d9ad174a159012c1975b3b69c3ceedb895132265c6", "[vm]") {
   env_t env = {
     uint256_t(1), /* chainId */
     BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
@@ -2477,7 +621,7 @@ TEST_CASE("iszeo2______4e5ea4236cff2cb1176ad44dba65cb26dec72438acaa1e35600292b1b
     BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
   };
 
-  std::string bytecode_str = "600260000315600055";
+  std::string bytecode_str = "7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd6000527fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff60206000a2";
   bytes_t data_bytes = bytes_t();
 
   params_t params = {
@@ -2512,7 +656,7 @@ TEST_CASE("iszeo2______4e5ea4236cff2cb1176ad44dba65cb26dec72438acaa1e35600292b1b
   // then
 }
 
-TEST_CASE("eq0______e9cd05b4ad632b287637f3682cb5bd3d39957b0a859fcaf2740c3a84bff603f2", "[vm]") {
+TEST_CASE("log1_logMemStartTooHigh______b6a326587a3dbbd977d24a247338ade2c2feed85e53de7b8067809c00034cd6d", "[vm]") {
   env_t env = {
     uint256_t(1), /* chainId */
     BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
@@ -2523,7 +667,7 @@ TEST_CASE("eq0______e9cd05b4ad632b287637f3682cb5bd3d39957b0a859fcaf2740c3a84bff6
     BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
   };
 
-  std::string bytecode_str = "6003600003600560000314600055";
+  std::string bytecode_str = "7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd600052600060017fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffa1";
   bytes_t data_bytes = bytes_t();
 
   params_t params = {
@@ -2558,7 +702,7 @@ TEST_CASE("eq0______e9cd05b4ad632b287637f3682cb5bd3d39957b0a859fcaf2740c3a84bff6
   // then
 }
 
-TEST_CASE("eq1______71d72425d2c1777c6991d09b38aed473c3dc3b9b370b8397c0d48e68a29b3aac", "[vm]") {
+TEST_CASE("log0_nonEmptyMem______0cfc646681837311fb39e1273123794960fbb9ea4e424578f87a551a36df6fae", "[vm]") {
   env_t env = {
     uint256_t(1), /* chainId */
     BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
@@ -2569,56 +713,7 @@ TEST_CASE("eq1______71d72425d2c1777c6991d09b38aed473c3dc3b9b370b8397c0d48e68a29b
     BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
   };
 
-  std::string bytecode_str = "6000600014600055";
-  bytes_t data_bytes = bytes_t();
-
-  params_t params = {
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
-    uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
-    gas_t(0x0186a0), /* gas */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
-    Hex::hexToBytes(bytecode_str), /* code */
-    data_bytes /* data */
-  };
-
-  ExternalMock ext {};
-
-  VM vm {};
-  Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
-  Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
-
-  // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
-
-  // then
-  CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
-    Utils::uint256_2str(accountState.get(0x00))
-  );
-}
-
-TEST_CASE("byte10______866a8493a1363ce7e4595429147e8892ee6abb300fe15732d93c8d6b5c3c84f7", "[vm]") {
-  env_t env = {
-    uint256_t(1), /* chainId */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
-  };
-
-  std::string bytecode_str = "6780402010080402017fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff1a600055";
+  std::string bytecode_str = "7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff60005260206000a0";
   bytes_t data_bytes = bytes_t();
 
   params_t params = {
@@ -2653,7 +748,7 @@ TEST_CASE("byte10______866a8493a1363ce7e4595429147e8892ee6abb300fe15732d93c8d6b5
   // then
 }
 
-TEST_CASE("and3______d37be2fe655f6f4348e3ab48e7b0f832505ab4800835a50e516c726bc6f59cf1", "[vm]") {
+TEST_CASE("log0_logMemsizeTooHigh______04fe0fcd01a67dcc0bbc0ea972f7af4c8695a6b63170a53ac5d11ce437bc7904", "[vm]") {
   env_t env = {
     uint256_t(1), /* chainId */
     BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
@@ -2664,154 +759,7 @@ TEST_CASE("and3______d37be2fe655f6f4348e3ab48e7b0f832505ab4800835a50e516c726bc6f
     BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
   };
 
-  std::string bytecode_str = "7f0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff16600055";
-  bytes_t data_bytes = bytes_t();
-
-  params_t params = {
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
-    uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
-    gas_t(0x0186a0), /* gas */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
-    Hex::hexToBytes(bytecode_str), /* code */
-    data_bytes /* data */
-  };
-
-  ExternalMock ext {};
-
-  VM vm {};
-  Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
-  Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
-
-  // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
-
-  // then
-  CHECK("0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef" ==
-    Utils::uint256_2str(accountState.get(0x00))
-  );
-}
-
-TEST_CASE("slt2______92e953b3e18b0939fd97afb7875129e10860293931b9cb840b50f1559489ac16", "[vm]") {
-  env_t env = {
-    uint256_t(1), /* chainId */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
-  };
-
-  std::string bytecode_str = "60007fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff12600055";
-  bytes_t data_bytes = bytes_t();
-
-  params_t params = {
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
-    uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
-    gas_t(0x0186a0), /* gas */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
-    Hex::hexToBytes(bytecode_str), /* code */
-    data_bytes /* data */
-  };
-
-  ExternalMock ext {};
-
-  VM vm {};
-  Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
-  Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
-
-  // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
-
-  // then
-  CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
-    Utils::uint256_2str(accountState.get(0x00))
-  );
-}
-
-TEST_CASE("or1______791c257002ce8dd940a5391775fd4eac1836f7eb55304f658a32485f79d4993f", "[vm]") {
-  env_t env = {
-    uint256_t(1), /* chainId */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
-  };
-
-  std::string bytecode_str = "6001600217600055";
-  bytes_t data_bytes = bytes_t();
-
-  params_t params = {
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
-    uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
-    gas_t(0x0186a0), /* gas */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
-    Hex::hexToBytes(bytecode_str), /* code */
-    data_bytes /* data */
-  };
-
-  ExternalMock ext {};
-
-  VM vm {};
-  Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
-  Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
-
-  // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
-
-  // then
-  CHECK("0000000000000000000000000000000000000000000000000000000000000003" ==
-    Utils::uint256_2str(accountState.get(0x00))
-  );
-}
-
-TEST_CASE("sgt0______c5194500b062e2d1bf6dd6607185c661b6500d51c7146603f7f4ed31795b5d23", "[vm]") {
-  env_t env = {
-    uint256_t(1), /* chainId */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
-  };
-
-  std::string bytecode_str = "6000600260000313600055";
+  std::string bytecode_str = "7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd6000527fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff6001a0";
   bytes_t data_bytes = bytes_t();
 
   params_t params = {
@@ -2846,7 +794,7 @@ TEST_CASE("sgt0______c5194500b062e2d1bf6dd6607185c661b6500d51c7146603f7f4ed31795
   // then
 }
 
-TEST_CASE("xor1______417302c7876ef9a5209b50fcbd9ea4a70ca3d74748ed4f92f0c3164c0584c313", "[vm]") {
+TEST_CASE("log_2logs______59ad5528d89751649749405f4a5cd70d8a03875afb90fa0d4d6824d3d96a390f", "[vm]") {
   env_t env = {
     uint256_t(1), /* chainId */
     BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
@@ -2857,7 +805,7 @@ TEST_CASE("xor1______417302c7876ef9a5209b50fcbd9ea4a70ca3d74748ed4f92f0c3164c058
     BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
   };
 
-  std::string bytecode_str = "6001600218600055";
+  std::string bytecode_str = "7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff60005260206000a060106002a0";
   bytes_t data_bytes = bytes_t();
 
   params_t params = {
@@ -2890,12 +838,9 @@ TEST_CASE("xor1______417302c7876ef9a5209b50fcbd9ea4a70ca3d74748ed4f92f0c3164c058
   vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
 
   // then
-  CHECK("0000000000000000000000000000000000000000000000000000000000000003" ==
-    Utils::uint256_2str(accountState.get(0x00))
-  );
 }
 
-TEST_CASE("byte7______c4d404f87e398a368fb2b0cb2165358ecdd92a97a2bbffcd0f8e833fc942976b", "[vm]") {
+TEST_CASE("log1_Caller______33df8d2b8c92e29404110e09be9bd88bc1f685e12067c07e534f683ccebc5ac7", "[vm]") {
   env_t env = {
     uint256_t(1), /* chainId */
     BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
@@ -2906,7 +851,7 @@ TEST_CASE("byte7______c4d404f87e398a368fb2b0cb2165358ecdd92a97a2bbffcd0f8e833fc9
     BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
   };
 
-  std::string bytecode_str = "6780402010080402016007601f031a600055";
+  std::string bytecode_str = "60ff6000533360206000a1";
   bytes_t data_bytes = bytes_t();
 
   params_t params = {
@@ -2939,9 +884,1248 @@ TEST_CASE("byte7______c4d404f87e398a368fb2b0cb2165358ecdd92a97a2bbffcd0f8e833fc9
   vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
 
   // then
-  CHECK("0000000000000000000000000000000000000000000000000000000000000080" ==
-    Utils::uint256_2str(accountState.get(0x00))
-  );
+}
+
+TEST_CASE("log3_nonEmptyMem_logMemSize1______baeb20e8806b5cf814426f11178bd4d5ac34165b77a660713d5202e166784e72", "[vm]") {
+  env_t env = {
+    uint256_t(1), /* chainId */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
+  };
+
+  std::string bytecode_str = "7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd60005260006000600060016000a3";
+  bytes_t data_bytes = bytes_t();
+
+  params_t params = {
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
+    uint256_t(0xf9313a), /* codeHash */
+    uint256_t(0x193821), /* codeVersion */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
+    gas_t(0x0186a0), /* gas */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
+    Hex::hexToBytes(bytecode_str), /* code */
+    data_bytes /* data */
+  };
+
+  ExternalMock ext {};
+
+  VM vm {};
+  Call call(0);
+  account_store_t* accountItems = new account_store_t();
+  AccountState accountState(accountItems, &ext);
+  Gasometer gasometer(params.gas);
+  bytes_t* memoryBytes = new bytes_t();
+  Memory mem(memoryBytes);
+  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
+  StackMachine sm(stackItems);
+
+  // when
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+
+  // then
+}
+
+TEST_CASE("log0_nonEmptyMem_logMemSize1______a20cb10f863eb27a33608f41f9d3de3d25a37da55aadb03a2a794cc5dedcaa05", "[vm]") {
+  env_t env = {
+    uint256_t(1), /* chainId */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
+  };
+
+  std::string bytecode_str = "7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd60005260016000a0";
+  bytes_t data_bytes = bytes_t();
+
+  params_t params = {
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
+    uint256_t(0xf9313a), /* codeHash */
+    uint256_t(0x193821), /* codeVersion */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
+    gas_t(0x0186a0), /* gas */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
+    Hex::hexToBytes(bytecode_str), /* code */
+    data_bytes /* data */
+  };
+
+  ExternalMock ext {};
+
+  VM vm {};
+  Call call(0);
+  account_store_t* accountItems = new account_store_t();
+  AccountState accountState(accountItems, &ext);
+  Gasometer gasometer(params.gas);
+  bytes_t* memoryBytes = new bytes_t();
+  Memory mem(memoryBytes);
+  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
+  StackMachine sm(stackItems);
+
+  // when
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+
+  // then
+}
+
+TEST_CASE("log4_Caller______8ea00f94cec5a457cac5de1731aa75c588c13d2eab55297aa7a3b62c268add1f", "[vm]") {
+  env_t env = {
+    uint256_t(1), /* chainId */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
+  };
+
+  std::string bytecode_str = "60ff6000533360006000600060206000a4";
+  bytes_t data_bytes = bytes_t();
+
+  params_t params = {
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
+    uint256_t(0xf9313a), /* codeHash */
+    uint256_t(0x193821), /* codeVersion */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
+    gas_t(0x0186a0), /* gas */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
+    Hex::hexToBytes(bytecode_str), /* code */
+    data_bytes /* data */
+  };
+
+  ExternalMock ext {};
+
+  VM vm {};
+  Call call(0);
+  account_store_t* accountItems = new account_store_t();
+  AccountState accountState(accountItems, &ext);
+  Gasometer gasometer(params.gas);
+  bytes_t* memoryBytes = new bytes_t();
+  Memory mem(memoryBytes);
+  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
+  StackMachine sm(stackItems);
+
+  // when
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+
+  // then
+}
+
+TEST_CASE("log4_logMemsizeTooHigh______13b51aeb36d62dac84da56023d6406a59c83490d2640d4d6abdf89c2d55c9fed", "[vm]") {
+  env_t env = {
+    uint256_t(1), /* chainId */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
+  };
+
+  std::string bytecode_str = "7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd60005260006000600060007fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff6001a4";
+  bytes_t data_bytes = bytes_t();
+
+  params_t params = {
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
+    uint256_t(0xf9313a), /* codeHash */
+    uint256_t(0x193821), /* codeVersion */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
+    gas_t(0x0186a0), /* gas */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
+    Hex::hexToBytes(bytecode_str), /* code */
+    data_bytes /* data */
+  };
+
+  ExternalMock ext {};
+
+  VM vm {};
+  Call call(0);
+  account_store_t* accountItems = new account_store_t();
+  AccountState accountState(accountItems, &ext);
+  Gasometer gasometer(params.gas);
+  bytes_t* memoryBytes = new bytes_t();
+  Memory mem(memoryBytes);
+  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
+  StackMachine sm(stackItems);
+
+  // when
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+
+  // then
+}
+
+TEST_CASE("log4_nonEmptyMem______a3c64c86ba9a76871b7c3c281a0454708cdb5e91ca611b55df194bab9a1fafaf", "[vm]") {
+  env_t env = {
+    uint256_t(1), /* chainId */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
+  };
+
+  std::string bytecode_str = "7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff600052600060006000600060206000a4";
+  bytes_t data_bytes = bytes_t();
+
+  params_t params = {
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
+    uint256_t(0xf9313a), /* codeHash */
+    uint256_t(0x193821), /* codeVersion */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
+    gas_t(0x0186a0), /* gas */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
+    Hex::hexToBytes(bytecode_str), /* code */
+    data_bytes /* data */
+  };
+
+  ExternalMock ext {};
+
+  VM vm {};
+  Call call(0);
+  account_store_t* accountItems = new account_store_t();
+  AccountState accountState(accountItems, &ext);
+  Gasometer gasometer(params.gas);
+  bytes_t* memoryBytes = new bytes_t();
+  Memory mem(memoryBytes);
+  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
+  StackMachine sm(stackItems);
+
+  // when
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+
+  // then
+}
+
+TEST_CASE("log1_MaxTopic______0a4c414906a74571451b62d5cbccfd73c420f46831681365491d35d780a1c98a", "[vm]") {
+  env_t env = {
+    uint256_t(1), /* chainId */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
+  };
+
+  std::string bytecode_str = "7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd6000527fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff60206000a1";
+  bytes_t data_bytes = bytes_t();
+
+  params_t params = {
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
+    uint256_t(0xf9313a), /* codeHash */
+    uint256_t(0x193821), /* codeVersion */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
+    gas_t(0x0186a0), /* gas */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
+    Hex::hexToBytes(bytecode_str), /* code */
+    data_bytes /* data */
+  };
+
+  ExternalMock ext {};
+
+  VM vm {};
+  Call call(0);
+  account_store_t* accountItems = new account_store_t();
+  AccountState accountState(accountItems, &ext);
+  Gasometer gasometer(params.gas);
+  bytes_t* memoryBytes = new bytes_t();
+  Memory mem(memoryBytes);
+  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
+  StackMachine sm(stackItems);
+
+  // when
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+
+  // then
+}
+
+TEST_CASE("log3_logMemsizeTooHigh______f2c5e55c6680ac4b66054f399561cbe97badde7f2f3292132ab9d36b2b160464", "[vm]") {
+  env_t env = {
+    uint256_t(1), /* chainId */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
+  };
+
+  std::string bytecode_str = "7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd6000526000600060007fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff6001a3";
+  bytes_t data_bytes = bytes_t();
+
+  params_t params = {
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
+    uint256_t(0xf9313a), /* codeHash */
+    uint256_t(0x193821), /* codeVersion */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
+    gas_t(0x0186a0), /* gas */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
+    Hex::hexToBytes(bytecode_str), /* code */
+    data_bytes /* data */
+  };
+
+  ExternalMock ext {};
+
+  VM vm {};
+  Call call(0);
+  account_store_t* accountItems = new account_store_t();
+  AccountState accountState(accountItems, &ext);
+  Gasometer gasometer(params.gas);
+  bytes_t* memoryBytes = new bytes_t();
+  Memory mem(memoryBytes);
+  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
+  StackMachine sm(stackItems);
+
+  // when
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+
+  // then
+}
+
+TEST_CASE("log3_PC______8d7beb47cc14822075ce2fbac294728f8faba640e26a7ed370eafa8e590df2d0", "[vm]") {
+  env_t env = {
+    uint256_t(1), /* chainId */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
+  };
+
+  std::string bytecode_str = "60ff60005358585860206000a3";
+  bytes_t data_bytes = bytes_t();
+
+  params_t params = {
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
+    uint256_t(0xf9313a), /* codeHash */
+    uint256_t(0x193821), /* codeVersion */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
+    gas_t(0x0186a0), /* gas */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
+    Hex::hexToBytes(bytecode_str), /* code */
+    data_bytes /* data */
+  };
+
+  ExternalMock ext {};
+
+  VM vm {};
+  Call call(0);
+  account_store_t* accountItems = new account_store_t();
+  AccountState accountState(accountItems, &ext);
+  Gasometer gasometer(params.gas);
+  bytes_t* memoryBytes = new bytes_t();
+  Memory mem(memoryBytes);
+  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
+  StackMachine sm(stackItems);
+
+  // when
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+
+  // then
+}
+
+TEST_CASE("log3_nonEmptyMem_logMemSize1_logMemStart31______bda2d24ce0f250b08877fc4e9da8c2952804af9662c3af30db45995f0cd80ce4", "[vm]") {
+  env_t env = {
+    uint256_t(1), /* chainId */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
+  };
+
+  std::string bytecode_str = "7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd6000526000600060006001601fa3";
+  bytes_t data_bytes = bytes_t();
+
+  params_t params = {
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
+    uint256_t(0xf9313a), /* codeHash */
+    uint256_t(0x193821), /* codeVersion */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
+    gas_t(0x0186a0), /* gas */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
+    Hex::hexToBytes(bytecode_str), /* code */
+    data_bytes /* data */
+  };
+
+  ExternalMock ext {};
+
+  VM vm {};
+  Call call(0);
+  account_store_t* accountItems = new account_store_t();
+  AccountState accountState(accountItems, &ext);
+  Gasometer gasometer(params.gas);
+  bytes_t* memoryBytes = new bytes_t();
+  Memory mem(memoryBytes);
+  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
+  StackMachine sm(stackItems);
+
+  // when
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+
+  // then
+}
+
+TEST_CASE("log3_logMemStartTooHigh______9810608d983312d9f5ab12cd9358825f20f92ca174905c314a551082406dea1a", "[vm]") {
+  env_t env = {
+    uint256_t(1), /* chainId */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
+  };
+
+  std::string bytecode_str = "7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd60005260006000600060017fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffa3";
+  bytes_t data_bytes = bytes_t();
+
+  params_t params = {
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
+    uint256_t(0xf9313a), /* codeHash */
+    uint256_t(0x193821), /* codeVersion */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
+    gas_t(0x0186a0), /* gas */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
+    Hex::hexToBytes(bytecode_str), /* code */
+    data_bytes /* data */
+  };
+
+  ExternalMock ext {};
+
+  VM vm {};
+  Call call(0);
+  account_store_t* accountItems = new account_store_t();
+  AccountState accountState(accountItems, &ext);
+  Gasometer gasometer(params.gas);
+  bytes_t* memoryBytes = new bytes_t();
+  Memory mem(memoryBytes);
+  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
+  StackMachine sm(stackItems);
+
+  // when
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+
+  // then
+}
+
+TEST_CASE("log1_nonEmptyMem_logMemSize1______49ec0b89dab4beb39bb4dbc58191f465ef09c133df05d7444cc5dfc95274360f", "[vm]") {
+  env_t env = {
+    uint256_t(1), /* chainId */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
+  };
+
+  std::string bytecode_str = "7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd600052600060016000a1";
+  bytes_t data_bytes = bytes_t();
+
+  params_t params = {
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
+    uint256_t(0xf9313a), /* codeHash */
+    uint256_t(0x193821), /* codeVersion */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
+    gas_t(0x0186a0), /* gas */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
+    Hex::hexToBytes(bytecode_str), /* code */
+    data_bytes /* data */
+  };
+
+  ExternalMock ext {};
+
+  VM vm {};
+  Call call(0);
+  account_store_t* accountItems = new account_store_t();
+  AccountState accountState(accountItems, &ext);
+  Gasometer gasometer(params.gas);
+  bytes_t* memoryBytes = new bytes_t();
+  Memory mem(memoryBytes);
+  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
+  StackMachine sm(stackItems);
+
+  // when
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+
+  // then
+}
+
+TEST_CASE("log4_MaxTopic______1928e2558239ffc6fbb18068e3f1428cd7e60eb06e8dd308bce1938f5ee7144a", "[vm]") {
+  env_t env = {
+    uint256_t(1), /* chainId */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
+  };
+
+  std::string bytecode_str = "7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd6000527fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff60206000a4";
+  bytes_t data_bytes = bytes_t();
+
+  params_t params = {
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
+    uint256_t(0xf9313a), /* codeHash */
+    uint256_t(0x193821), /* codeVersion */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
+    gas_t(0x0186a0), /* gas */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
+    Hex::hexToBytes(bytecode_str), /* code */
+    data_bytes /* data */
+  };
+
+  ExternalMock ext {};
+
+  VM vm {};
+  Call call(0);
+  account_store_t* accountItems = new account_store_t();
+  AccountState accountState(accountItems, &ext);
+  Gasometer gasometer(params.gas);
+  bytes_t* memoryBytes = new bytes_t();
+  Memory mem(memoryBytes);
+  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
+  StackMachine sm(stackItems);
+
+  // when
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+
+  // then
+}
+
+TEST_CASE("log3_Caller______fae584b1f6d4f92ed0b072ce8f7842b2ca367ab838949e51830c9ca8f70713c5", "[vm]") {
+  env_t env = {
+    uint256_t(1), /* chainId */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
+  };
+
+  std::string bytecode_str = "60ff600053336000600060206000a3";
+  bytes_t data_bytes = bytes_t();
+
+  params_t params = {
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
+    uint256_t(0xf9313a), /* codeHash */
+    uint256_t(0x193821), /* codeVersion */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
+    gas_t(0x0186a0), /* gas */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
+    Hex::hexToBytes(bytecode_str), /* code */
+    data_bytes /* data */
+  };
+
+  ExternalMock ext {};
+
+  VM vm {};
+  Call call(0);
+  account_store_t* accountItems = new account_store_t();
+  AccountState accountState(accountItems, &ext);
+  Gasometer gasometer(params.gas);
+  bytes_t* memoryBytes = new bytes_t();
+  Memory mem(memoryBytes);
+  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
+  StackMachine sm(stackItems);
+
+  // when
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+
+  // then
+}
+
+TEST_CASE("log3_nonEmptyMem______1d2ad4f6f79e0161150ea4ae333a9df11e1099df23fff0eb0844c70f77dabe60", "[vm]") {
+  env_t env = {
+    uint256_t(1), /* chainId */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
+  };
+
+  std::string bytecode_str = "7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff60005260006000600060206000a3";
+  bytes_t data_bytes = bytes_t();
+
+  params_t params = {
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
+    uint256_t(0xf9313a), /* codeHash */
+    uint256_t(0x193821), /* codeVersion */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
+    gas_t(0x0186a0), /* gas */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
+    Hex::hexToBytes(bytecode_str), /* code */
+    data_bytes /* data */
+  };
+
+  ExternalMock ext {};
+
+  VM vm {};
+  Call call(0);
+  account_store_t* accountItems = new account_store_t();
+  AccountState accountState(accountItems, &ext);
+  Gasometer gasometer(params.gas);
+  bytes_t* memoryBytes = new bytes_t();
+  Memory mem(memoryBytes);
+  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
+  StackMachine sm(stackItems);
+
+  // when
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+
+  // then
+}
+
+TEST_CASE("log3_MaxTopic______b7120956567b5710f9dd49ac0db7e43d839a6a026598143cff9b58d02e61193a", "[vm]") {
+  env_t env = {
+    uint256_t(1), /* chainId */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
+  };
+
+  std::string bytecode_str = "7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd6000527fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff60206000a3";
+  bytes_t data_bytes = bytes_t();
+
+  params_t params = {
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
+    uint256_t(0xf9313a), /* codeHash */
+    uint256_t(0x193821), /* codeVersion */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
+    gas_t(0x0186a0), /* gas */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
+    Hex::hexToBytes(bytecode_str), /* code */
+    data_bytes /* data */
+  };
+
+  ExternalMock ext {};
+
+  VM vm {};
+  Call call(0);
+  account_store_t* accountItems = new account_store_t();
+  AccountState accountState(accountItems, &ext);
+  Gasometer gasometer(params.gas);
+  bytes_t* memoryBytes = new bytes_t();
+  Memory mem(memoryBytes);
+  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
+  StackMachine sm(stackItems);
+
+  // when
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+
+  // then
+}
+
+TEST_CASE("log1_nonEmptyMem_logMemSize1_logMemStart31______dfba77e757549bc564c542df0e94e48a135e817f9f53455000827eaafeffb307", "[vm]") {
+  env_t env = {
+    uint256_t(1), /* chainId */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
+  };
+
+  std::string bytecode_str = "7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd60005260006001601fa1";
+  bytes_t data_bytes = bytes_t();
+
+  params_t params = {
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
+    uint256_t(0xf9313a), /* codeHash */
+    uint256_t(0x193821), /* codeVersion */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
+    gas_t(0x0186a0), /* gas */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
+    Hex::hexToBytes(bytecode_str), /* code */
+    data_bytes /* data */
+  };
+
+  ExternalMock ext {};
+
+  VM vm {};
+  Call call(0);
+  account_store_t* accountItems = new account_store_t();
+  AccountState accountState(accountItems, &ext);
+  Gasometer gasometer(params.gas);
+  bytes_t* memoryBytes = new bytes_t();
+  Memory mem(memoryBytes);
+  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
+  StackMachine sm(stackItems);
+
+  // when
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+
+  // then
+}
+
+TEST_CASE("log2_nonEmptyMem_logMemSize1______0db120840474461ba7c4de523260af515ca7424bc998312fd5cbd21a955e627e", "[vm]") {
+  env_t env = {
+    uint256_t(1), /* chainId */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
+  };
+
+  std::string bytecode_str = "7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd6000526000600060016000a2";
+  bytes_t data_bytes = bytes_t();
+
+  params_t params = {
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
+    uint256_t(0xf9313a), /* codeHash */
+    uint256_t(0x193821), /* codeVersion */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
+    gas_t(0x0186a0), /* gas */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
+    Hex::hexToBytes(bytecode_str), /* code */
+    data_bytes /* data */
+  };
+
+  ExternalMock ext {};
+
+  VM vm {};
+  Call call(0);
+  account_store_t* accountItems = new account_store_t();
+  AccountState accountState(accountItems, &ext);
+  Gasometer gasometer(params.gas);
+  bytes_t* memoryBytes = new bytes_t();
+  Memory mem(memoryBytes);
+  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
+  StackMachine sm(stackItems);
+
+  // when
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+
+  // then
+}
+
+TEST_CASE("log2_nonEmptyMem_logMemSize1_logMemStart31______fad1ccc7b33b11ea24c70737aa879fd8172c7ba8b413bca9002e360f15cb0377", "[vm]") {
+  env_t env = {
+    uint256_t(1), /* chainId */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
+  };
+
+  std::string bytecode_str = "7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd600052600060006001601fa2";
+  bytes_t data_bytes = bytes_t();
+
+  params_t params = {
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
+    uint256_t(0xf9313a), /* codeHash */
+    uint256_t(0x193821), /* codeVersion */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
+    gas_t(0x0186a0), /* gas */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
+    Hex::hexToBytes(bytecode_str), /* code */
+    data_bytes /* data */
+  };
+
+  ExternalMock ext {};
+
+  VM vm {};
+  Call call(0);
+  account_store_t* accountItems = new account_store_t();
+  AccountState accountState(accountItems, &ext);
+  Gasometer gasometer(params.gas);
+  bytes_t* memoryBytes = new bytes_t();
+  Memory mem(memoryBytes);
+  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
+  StackMachine sm(stackItems);
+
+  // when
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+
+  // then
+}
+
+TEST_CASE("log3_emptyMem______f39ac12e960ba98b1d6d52dbe564caded52a338cb16b7924869a1b8c2a77188c", "[vm]") {
+  env_t env = {
+    uint256_t(1), /* chainId */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
+  };
+
+  std::string bytecode_str = "60006000600060006000a3";
+  bytes_t data_bytes = bytes_t();
+
+  params_t params = {
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
+    uint256_t(0xf9313a), /* codeHash */
+    uint256_t(0x193821), /* codeVersion */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
+    gas_t(0x0186a0), /* gas */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
+    Hex::hexToBytes(bytecode_str), /* code */
+    data_bytes /* data */
+  };
+
+  ExternalMock ext {};
+
+  VM vm {};
+  Call call(0);
+  account_store_t* accountItems = new account_store_t();
+  AccountState accountState(accountItems, &ext);
+  Gasometer gasometer(params.gas);
+  bytes_t* memoryBytes = new bytes_t();
+  Memory mem(memoryBytes);
+  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
+  StackMachine sm(stackItems);
+
+  // when
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+
+  // then
+}
+
+TEST_CASE("log4_logMemStartTooHigh______b231ee785a24fab97ccfb8dde384ecbb03ea86bd9c5b7a8e7c602b7f1b347ab7", "[vm]") {
+  env_t env = {
+    uint256_t(1), /* chainId */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
+  };
+
+  std::string bytecode_str = "7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd600052600060006000600060017fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffa4";
+  bytes_t data_bytes = bytes_t();
+
+  params_t params = {
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
+    uint256_t(0xf9313a), /* codeHash */
+    uint256_t(0x193821), /* codeVersion */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
+    gas_t(0x0186a0), /* gas */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
+    Hex::hexToBytes(bytecode_str), /* code */
+    data_bytes /* data */
+  };
+
+  ExternalMock ext {};
+
+  VM vm {};
+  Call call(0);
+  account_store_t* accountItems = new account_store_t();
+  AccountState accountState(accountItems, &ext);
+  Gasometer gasometer(params.gas);
+  bytes_t* memoryBytes = new bytes_t();
+  Memory mem(memoryBytes);
+  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
+  StackMachine sm(stackItems);
+
+  // when
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+
+  // then
+}
+
+TEST_CASE("log4_nonEmptyMem_logMemSize1______2e590a92288accca39422740f9b8c7d946723b636dcaf988e583438247ef8e75", "[vm]") {
+  env_t env = {
+    uint256_t(1), /* chainId */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
+  };
+
+  std::string bytecode_str = "7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd600052600060006000600060016000a4";
+  bytes_t data_bytes = bytes_t();
+
+  params_t params = {
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
+    uint256_t(0xf9313a), /* codeHash */
+    uint256_t(0x193821), /* codeVersion */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
+    gas_t(0x0186a0), /* gas */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
+    Hex::hexToBytes(bytecode_str), /* code */
+    data_bytes /* data */
+  };
+
+  ExternalMock ext {};
+
+  VM vm {};
+  Call call(0);
+  account_store_t* accountItems = new account_store_t();
+  AccountState accountState(accountItems, &ext);
+  Gasometer gasometer(params.gas);
+  bytes_t* memoryBytes = new bytes_t();
+  Memory mem(memoryBytes);
+  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
+  StackMachine sm(stackItems);
+
+  // when
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+
+  // then
+}
+
+TEST_CASE("log2_nonEmptyMem______a1c8ae74a72e0723f39e564ff0843ed03b579c9e7ae7b0c13d755c78a4589705", "[vm]") {
+  env_t env = {
+    uint256_t(1), /* chainId */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
+  };
+
+  std::string bytecode_str = "7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff6000526000600060206000a2";
+  bytes_t data_bytes = bytes_t();
+
+  params_t params = {
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
+    uint256_t(0xf9313a), /* codeHash */
+    uint256_t(0x193821), /* codeVersion */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
+    gas_t(0x0186a0), /* gas */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
+    Hex::hexToBytes(bytecode_str), /* code */
+    data_bytes /* data */
+  };
+
+  ExternalMock ext {};
+
+  VM vm {};
+  Call call(0);
+  account_store_t* accountItems = new account_store_t();
+  AccountState accountState(accountItems, &ext);
+  Gasometer gasometer(params.gas);
+  bytes_t* memoryBytes = new bytes_t();
+  Memory mem(memoryBytes);
+  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
+  StackMachine sm(stackItems);
+
+  // when
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+
+  // then
+}
+
+TEST_CASE("log4_PC______1c6a8d77e5986d32795ac6f8757849527822e91848f34f531cc5c81cfbcdebcd", "[vm]") {
+  env_t env = {
+    uint256_t(1), /* chainId */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
+  };
+
+  std::string bytecode_str = "60ff6000535858585860206000a4";
+  bytes_t data_bytes = bytes_t();
+
+  params_t params = {
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
+    uint256_t(0xf9313a), /* codeHash */
+    uint256_t(0x193821), /* codeVersion */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
+    gas_t(0x0186a0), /* gas */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
+    Hex::hexToBytes(bytecode_str), /* code */
+    data_bytes /* data */
+  };
+
+  ExternalMock ext {};
+
+  VM vm {};
+  Call call(0);
+  account_store_t* accountItems = new account_store_t();
+  AccountState accountState(accountItems, &ext);
+  Gasometer gasometer(params.gas);
+  bytes_t* memoryBytes = new bytes_t();
+  Memory mem(memoryBytes);
+  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
+  StackMachine sm(stackItems);
+
+  // when
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+
+  // then
+}
+
+TEST_CASE("log4_emptyMem______1d899abc32e13324725840e9b79042f03f389f1ab1a3fb013b9a2d49261d795b", "[vm]") {
+  env_t env = {
+    uint256_t(1), /* chainId */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
+  };
+
+  std::string bytecode_str = "600060006000600060006000a4";
+  bytes_t data_bytes = bytes_t();
+
+  params_t params = {
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
+    uint256_t(0xf9313a), /* codeHash */
+    uint256_t(0x193821), /* codeVersion */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
+    gas_t(0x0186a0), /* gas */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
+    Hex::hexToBytes(bytecode_str), /* code */
+    data_bytes /* data */
+  };
+
+  ExternalMock ext {};
+
+  VM vm {};
+  Call call(0);
+  account_store_t* accountItems = new account_store_t();
+  AccountState accountState(accountItems, &ext);
+  Gasometer gasometer(params.gas);
+  bytes_t* memoryBytes = new bytes_t();
+  Memory mem(memoryBytes);
+  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
+  StackMachine sm(stackItems);
+
+  // when
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+
+  // then
+}
+
+TEST_CASE("log0_nonEmptyMem_logMemSize1_logMemStart31______777ce021b26b0e4f62b98b595d6ee69ce21d83027c2975ef24f51af29416b9fa", "[vm]") {
+  env_t env = {
+    uint256_t(1), /* chainId */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
+  };
+
+  std::string bytecode_str = "7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd6000526001601fa0";
+  bytes_t data_bytes = bytes_t();
+
+  params_t params = {
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
+    uint256_t(0xf9313a), /* codeHash */
+    uint256_t(0x193821), /* codeVersion */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
+    gas_t(0x0186a0), /* gas */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
+    Hex::hexToBytes(bytecode_str), /* code */
+    data_bytes /* data */
+  };
+
+  ExternalMock ext {};
+
+  VM vm {};
+  Call call(0);
+  account_store_t* accountItems = new account_store_t();
+  AccountState accountState(accountItems, &ext);
+  Gasometer gasometer(params.gas);
+  bytes_t* memoryBytes = new bytes_t();
+  Memory mem(memoryBytes);
+  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
+  StackMachine sm(stackItems);
+
+  // when
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+
+  // then
+}
+
+TEST_CASE("log0_logMemStartTooHigh______7cc27fdfcb258a0528c94496e60e3b10907a4d241b9d9e685e72597c472aa1b1", "[vm]") {
+  env_t env = {
+    uint256_t(1), /* chainId */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
+  };
+
+  std::string bytecode_str = "7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd60005260017fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffa0";
+  bytes_t data_bytes = bytes_t();
+
+  params_t params = {
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
+    uint256_t(0xf9313a), /* codeHash */
+    uint256_t(0x193821), /* codeVersion */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
+    gas_t(0x0186a0), /* gas */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
+    Hex::hexToBytes(bytecode_str), /* code */
+    data_bytes /* data */
+  };
+
+  ExternalMock ext {};
+
+  VM vm {};
+  Call call(0);
+  account_store_t* accountItems = new account_store_t();
+  AccountState accountState(accountItems, &ext);
+  Gasometer gasometer(params.gas);
+  bytes_t* memoryBytes = new bytes_t();
+  Memory mem(memoryBytes);
+  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
+  StackMachine sm(stackItems);
+
+  // when
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+
+  // then
+}
+
+TEST_CASE("log0_emptyMem______dddfbdc5d0776cd04613d3515648fa20eb5dc10a86b4e393b1ef818a28c82095", "[vm]") {
+  env_t env = {
+    uint256_t(1), /* chainId */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("00")), /* blockNumber */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("01")), /* timestamp */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f4240")), /* gasLimit */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0100")), /* difficulty */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("")) /* blockHash */
+  };
+
+  std::string bytecode_str = "60006000a0";
+  bytes_t data_bytes = bytes_t();
+
+  params_t params = {
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* codeAddress*/
+    uint256_t(0xf9313a), /* codeHash */
+    uint256_t(0x193821), /* codeVersion */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* sender */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("cd1722f3947def4cf144679da39c4c32bdc35681")), /* origin */
+    gas_t(0x0186a0), /* gas */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("5af3107a4000")), /* gasPrice */
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0de0b6b3a7640000")), /* value */
+    Hex::hexToBytes(bytecode_str), /* code */
+    data_bytes /* data */
+  };
+
+  ExternalMock ext {};
+
+  VM vm {};
+  Call call(0);
+  account_store_t* accountItems = new account_store_t();
+  AccountState accountState(accountItems, &ext);
+  Gasometer gasometer(params.gas);
+  bytes_t* memoryBytes = new bytes_t();
+  Memory mem(memoryBytes);
+  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
+  StackMachine sm(stackItems);
+
+  // when
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+
+  // then
 }
 
 
