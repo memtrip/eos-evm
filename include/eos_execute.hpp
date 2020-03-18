@@ -11,7 +11,7 @@ class eos_execute {
     static call_result_t transaction(transaction_t transaction, bytes_t callerAddress) {
       eos_external external {};
       account_store_t* accountItems = new account_store_t();
-      AccountState accountState(accountItems, &ext);
+      AccountState accountState(accountItems, &external);
       Call call(0);
       call_result_t result = call.execute(
         transaction,

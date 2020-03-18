@@ -13,7 +13,7 @@ TEST_CASE("Memory write and read", "[memory]") {
   Memory memory(bytes);
   
   // when
-  memory.resize(0x80 + 32);
+  memory.expand(0x80 + 32);
 
   memory.write(uint256_t(0x80), Utils::bigIntFromBigEndianBytes("abcdef"));
 
@@ -26,7 +26,7 @@ TEST_CASE("Memory write and read (1)", "[memory]") {
   Memory memory(bytes);
   
   // when
-  memory.resize(0x80 + 32);
+  memory.expand(0x80 + 32);
 
   memory.write(uint256_t(0x80), uint256_t(0xabcdef));
 
@@ -39,7 +39,7 @@ TEST_CASE("Memory write and read (2)", "[memory]") {
   Memory memory(bytes);
   
   // when
-  memory.resize(32);
+  memory.expand(32);
   memory.write(uint256_t(0x00), Utils::bigIntFromBigEndianBytes("06"));
 
   REQUIRE("0000000000000000000000000000000000000000000000000000000000000006" == Utils::uint256_2str(memory.read(uint256_t(0x00)))); 
@@ -51,7 +51,7 @@ TEST_CASE("Memory write by byte and read", "[memory]") {
   Memory memory(bytes);
   
   // when
-  memory.resize(32);
+  memory.expand(32);
   memory.writeByte(uint256_t(0x1d), uint256_t(0xab));
   memory.writeByte(uint256_t(0x1e), uint256_t(0xcd));
   memory.writeByte(uint256_t(0x1f), uint256_t(0xef));
@@ -66,7 +66,7 @@ TEST_CASE("Memory write single byte and read", "[memory]") {
   Memory memory(bytes);
   
   // when
-  memory.resize(32);
+  memory.expand(32);
   memory.writeByte(uint256_t(0x1F), uint256_t(0x06));
 
   // then
@@ -79,7 +79,7 @@ TEST_CASE("Memory read slice and write slice", "[memory]") {
   Memory memory(bytes);
   
   // when
-  memory.resize(32);
+  memory.expand(32);
 
   bytes_t slice1 = Hex::hexToBytes("aabbccee112233445566778899");
   memory.writeSlice(uint256_t(0x00), slice1);
@@ -102,7 +102,7 @@ TEST_CASE("Memory write at index", "[memory]") {
   Memory memory(bytes);
   
   // when
-  memory.resize(32);
+  memory.expand(32);
   memory.write(
     Utils::bigIntFromBigEndianBytes("0000000000000000000000000000000000000000000000000000000000000000"),
     Utils::bigIntFromBigEndianBytes("0000000000000000000000000000000000000000000000000000000000000000")
@@ -118,7 +118,7 @@ TEST_CASE("Memory write at index (1)", "[memory]") {
   Memory memory(bytes);
   
   // when
-  memory.resize(32);
+  memory.expand(32);
   memory.write(
     Utils::bigIntFromBigEndianBytes("0000000000000000000000000000000000000000000000000000000000000000"),
     Utils::bigIntFromBigEndianBytes("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff")
@@ -134,7 +134,7 @@ TEST_CASE("Memory copy data", "[memory]") {
   Memory memory(bytes);
   
   // when
-  memory.resize(314);
+  memory.expand(314);
   memory.copyData(
     uint256_t(0x00),
     uint256_t(0x82),
@@ -155,7 +155,7 @@ TEST_CASE("Memory to return", "[memory]") {
   Memory memory(bytes);
   
   // when
-  memory.resize(64);
+  memory.expand(64);
   memory.write(
     Utils::bigIntFromBigEndianBytes("0000000000000000000000000000000000000000000000000000000000000000"),
     Utils::bigIntFromBigEndianBytes("000000000000000000000000000000000000000000000000000000000000000a")

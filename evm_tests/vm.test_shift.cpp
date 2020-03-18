@@ -160,7 +160,6 @@ TEST_CASE("sar", "[shift]") {
   StackMachine sm(stackItems);
 
   // when
-  mem.resize(32);
   exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
 
   // then
@@ -184,7 +183,6 @@ TEST_CASE("sar (1)", "[shift]") {
   StackMachine sm(stackItems);
 
   // when
-  mem.resize(32);
   exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
 
   // then
@@ -208,7 +206,6 @@ TEST_CASE("sar (2)", "[shift]") {
   StackMachine sm(stackItems);
 
   // when
-  mem.resize(32);
   exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
 
   // then
@@ -232,7 +229,6 @@ TEST_CASE("sar (3)", "[shift]") {
   StackMachine sm(stackItems);
 
   // when
-  mem.resize(32);
   exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
 
   // then

@@ -711,6 +711,7 @@ TEST_CASE("Bitops, store the result, verify gas", "[gasometer]") {
   // given
   std::string bytecode_str = "60ff610ff08181818116600055176001551860025560008015600355198015600455600555";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
+  params.gas = 150000;
   ExternalMock ext {};
   VM vm {};
   Call call(0);
@@ -733,6 +734,7 @@ TEST_CASE("Bitops, store the result, verify gas", "[gasometer]") {
   store_item_t item3 = Utils::accountStoreValue(2, accountItems);
   store_item_t item4 = Utils::accountStoreValue(3, accountItems);
   store_item_t item5 = Utils::accountStoreValue(4, accountItems);
+  store_item_t item6 = Utils::accountStoreValue(5, accountItems);
 
   CHECK("00000000000000000000000000000000000000000000000000000000000000f0" == 
     Utils::uint256_2str(item1.second)
@@ -747,10 +749,10 @@ TEST_CASE("Bitops, store the result, verify gas", "[gasometer]") {
     Utils::uint256_2str(item4.second)
   );
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
-    Utils::uint256_2str(item4.second)
+    Utils::uint256_2str(item5.second)
   );
   CHECK("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" == 
-    Utils::uint256_2str(item5.second)
+    Utils::uint256_2str(item6.second)
   );
 }
 
@@ -813,7 +815,7 @@ TEST_CASE("Byte, store the result, verify gas", "[gasometer]") {
   exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
 
   // then
-  CHECK(19914 == Utils::gasLeft(result));
+  CHECK(74976 == Utils::gasLeft(result));
 
   store_item_t item1 = Utils::accountStoreValue(0, accountItems);
   store_item_t item2 = Utils::accountStoreValue(1, accountItems);
@@ -949,16 +951,17 @@ TEST_CASE("Extops, store the result, verify gas", "[gasometer]") {
 TEST_CASE("Jumps, store the result, verify gas", "[gasometer]") {
   // given
   std::string bytecode_str = "600160015560066000555b60016000540380806000551560245760015402600155600a565b";
+
   params_t params = {
-    uint256_t(0xea0e9f), /* codeAddress*/
-    uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* address */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6")), /* sender */
-    uint256_t(0xea0e9e), /* origin */
+    uint256_t(), /* codeAddress*/
+    uint256_t(), /* codeHash */
+    uint256_t(0), /* codeVersion */
+    uint256_t(0), /* address */
+    uint256_t(0), /* sender */
+    uint256_t(0), /* origin */
     150000, /* gas */
     uint256_t(0x32), /* gasPrice */
-    uint256_t(0x99), /* value */
+    uint256_t(0), /* value */
     Hex::hexToBytes(bytecode_str), /* code */
     bytes_t() /* data */
   };

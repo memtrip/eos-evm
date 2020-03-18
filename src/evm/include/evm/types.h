@@ -44,7 +44,7 @@ enum ActionType {
 
 typedef ActionType action_type_t;
 
-typedef int gas_t;
+typedef uint64_t gas_t;
 
 struct Params {
   uint256_t codeAddress;

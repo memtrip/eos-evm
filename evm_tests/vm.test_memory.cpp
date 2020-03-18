@@ -26,7 +26,6 @@ TEST_CASE("Save to memory", "[memory]") {
   StackMachine sm(stackItems);
 
   // when
-  mem.resize(32); // TODO: this should happen via requirements (memoryRequiredSize)
   vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
 
   // then
@@ -56,7 +55,6 @@ TEST_CASE("Save to memory, and retreive", "[memory]") {
   StackMachine sm(stackItems);
 
   // when
-  mem.resize(32); // TODO: this should happen via requirements (memoryRequiredSize)
   vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
 
   // then
@@ -87,7 +85,6 @@ TEST_CASE("Save to memory, retreive, and apply addition", "[memory]") {
   StackMachine sm(stackItems);
 
   // when
-  mem.resize(32); // TODO: this should happen via requirements (memoryRequiredSize)
   vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
 
   // then
@@ -119,7 +116,6 @@ TEST_CASE("Save byte to memory, retreive, and apply addition", "[memory]") {
   StackMachine sm(stackItems);
 
   // when
-  mem.resize(32); // TODO: this should happen via requirements (memoryRequiredSize)
   vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
 
   // then
@@ -151,7 +147,6 @@ TEST_CASE("Save byte to memory (1)", "[memory]") {
   StackMachine sm(stackItems);
 
   // when
-  mem.resize(32); // TODO: this should happen via requirements (memoryRequiredSize)
   vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
 
   // then
@@ -177,7 +172,7 @@ TEST_CASE("Memory size", "[memory]") {
   StackMachine sm(stackItems);
 
   // when
-  mem.resize(32); // TODO: this should happen via requirements (memoryRequiredSize)
+  mem.expand(32);
   vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
 
   // then

@@ -497,6 +497,16 @@ void Utils::printInstructionList() {
   }
 }
 
+void Utils::printInstructionRequirements(InstructionRequirements instructionRequirements) {
+  printf("\n(");
+  printf("gasCost{%llu},", instructionRequirements.gasCost);
+  printf("provideGas{%llu},", instructionRequirements.provideGas);
+  printf("memoryTotalGas{%llu},", instructionRequirements.memoryTotalGas);
+  printf("memoryRequiredSize{%llu}", instructionRequirements.memoryRequiredSize);
+  printf(")");
+  printf("\n");
+}
+
 std::string Utils::uint256_2str(uint256_t value) {
   bytes_t bytes = BigInt::toBytes(value);
   return Hex::bytesToHex(bytes);

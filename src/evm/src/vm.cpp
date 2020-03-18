@@ -120,6 +120,7 @@ exec_result_t VM::stepInner(
   switch (calculateRequirements.first) {
     case InstructionRequirementsResult::INSTRUCTION_RESULT_OK:
       requirements = std::get<InstructionRequirements>(calculateRequirements.second);
+      //Utils::printInstructionRequirements(requirements);
       break;
     case InstructionRequirementsResult::INSTRUCTION_RESULT_OUT_OF_GAS:
       return std::make_pair(ExecResult::VM_OUT_OF_GAS, 0);
@@ -131,8 +132,10 @@ exec_result_t VM::stepInner(
   gas_t memoryRequiredSize = requirements.memoryRequiredSize;
   memory.expand(memoryRequiredSize);
 
-  gas_t currentGas = std::max((gasometer.currentGas - requirements.gasCost), 0);
+  gas_t currentGas = Overflow::sub(gasometer.currentGas, requirements.gasCost).first;
   gasometer.currentGas = currentGas;
+
+  //printf(">> currentGas{%llu}\n", currentGas);
 
   gas_t memoryTotalGas = requirements.memoryTotalGas;
   gasometer.currentMemGas = memoryTotalGas;
@@ -179,7 +182,6 @@ exec_result_t VM::stepInner(
     case InstructionResult::STOP_EXEC_RETURN:
       {
         // TODO: clear memory
-        // TODO: return actual GAS value
         StopExecutionResult stop = std::get<StopExecutionResult>(result.second);
 
         ReturnData intoReturnData = memory.intoReturnData(stop.initOff, stop.initSize);
@@ -196,14 +198,15 @@ exec_result_t VM::stepInner(
         );
       }
     case InstructionResult::STOP_EXEC:
-      // TODO: return the amount of gas left, before execution was stopped
-      return std::make_pair(ExecResult::DONE, 0);
+      return std::make_pair(
+        ExecResult::DONE, 
+        std::make_pair(GasType::KNOWN, uint256_t(gasometer.currentGas))
+      );
     case InstructionResult::INSTRUCTION_TRAP:
       break;
   }
   
   if (reader.position >= reader.len()) {
-    // TODO: return value from gasometer
     return std::make_pair(
       ExecResult::DONE, 
       std::make_pair(GasType::KNOWN, uint256_t(gasometer.currentGas))
@@ -226,6 +229,7 @@ instruction_result_t VM::executeInstruction(
   Call& call,
   env_t env
 ) {
+  //Utils::printInstruction(instruction);
   switch (Instruction::opcode(instruction)) {
     case Opcode::STOP: {
       return std::make_pair(InstructionResult::STOP_EXEC, 0);
@@ -491,11 +495,13 @@ instruction_result_t VM::executeInstruction(
     case Opcode::CALLDATALOAD:
       {
         uint256_t index = stack.peek(0);
+        stack.pop(1);
         if (params.data.size() < index) {
           stack.push(StackMachine::FALSE);
         } else {
           size_t begin = static_cast<size_t>(index);
-          stack.push(BigInt::load32(begin, params.data));
+          uint256_t value = BigInt::load32(begin, params.data);
+          stack.push(value);
         }
         break;
       }
@@ -756,7 +762,6 @@ instruction_result_t VM::executeInstruction(
     case Opcode::SWAP16:
       stack.swapWithTop(Instruction::swapPosition(instruction));
       break;
-
     case Opcode::LOG0:
     case Opcode::LOG1:
     case Opcode::LOG2:

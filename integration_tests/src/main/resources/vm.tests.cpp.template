@@ -77,7 +77,7 @@ TEST_CASE("${test.name}______${test.fixture._info.sourceHash}", "[vm]") {
     <#else>
     Utils::uint256_2str(
       accountState.get(
-        BigInt::fromBytes(Hex::hexToBytes("${key[2..]}"))
+        BigInt::fromBigEndianBytes(Hex::hexToBytes("${key[2..]}"))
       )
     )
     </#if>

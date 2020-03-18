@@ -24,7 +24,6 @@ TEST_CASE("shift left, write to memory, return", "[return_memory]") {
   StackMachine sm(stackItems);
 
   // when
-  mem.resize(32);
   exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
 
   // then
@@ -53,7 +52,6 @@ TEST_CASE("shift right, write to memory, return", "[return_memory]") {
   StackMachine sm(stackItems);
 
   // when
-  mem.resize(32);
   exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
 
   // then
@@ -82,7 +80,6 @@ TEST_CASE("sar, write to memory, revert", "[return_memory]") {
   StackMachine sm(stackItems);
 
   // when
-  mem.resize(32);
   exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
 
   // then
