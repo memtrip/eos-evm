@@ -24,7 +24,7 @@ class VM {
       params_t& params,
       External& external,
       Call& call,
-      env_t env
+      env_t& env
     );
 
     exec_result_t stepInner(
@@ -37,7 +37,7 @@ class VM {
       params_t& params,
       External& external,
       Call& call,
-      env_t env
+      env_t& env
     );
 
     instruction_result_t executeInstruction(
@@ -51,7 +51,7 @@ class VM {
       params_t& params,
       External& external,
       Call& call,
-      env_t env
+      env_t& env
     );
 
   public:
@@ -63,6 +63,6 @@ class VM {
       params_t& params,
       External& external,
       Call& call,
-      env_t env
+      env_t& env
     );
 };

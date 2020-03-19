@@ -15,7 +15,6 @@ class Utils {
     static void printInstructionRequirements(InstructionRequirements instructionRequirements);
     static std::string uint256_2str(uint256_t value);
     static uint256_t bigIntFromBigEndianBytes(std::string bytecode_str);
-    static store_item_t accountStoreValue(size_t index, account_store_t* store);
     static env_t env();
     static params_t params(bytes_t code, bytes_t data);
     static params_t createParams(bytes_t code, bytes_t data);

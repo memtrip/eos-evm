@@ -2,9 +2,9 @@
 #include <evm/decompress_key.h>
 #include <evm/hex.h>
 
-uint256_t DecompressKey::p = BigInt::fromBigEndianBytes(
-  Hex::hexToBytes("fffffffffffffffffffffffffffffffffffffffffffffffffffffffefffffc2f")
-);
+bytes_t pBytes = Hex::hexToBytes("fffffffffffffffffffffffffffffffffffffffffffffffffffffffefffffc2f");
+
+uint256_t DecompressKey::p = BigInt::fromBigEndianBytes(pBytes);
 
 bytes_t DecompressKey::decompress(compressed_key_t compressedKey) {
   uint8_t yParity = static_cast<uint8_t>(compressedKey[0]) - 2;

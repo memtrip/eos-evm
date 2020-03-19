@@ -2,7 +2,7 @@
 #include <evm/jumps.h>
 #include <evm/opcode.h>
 
-jump_set_t Jumps::findDestinations(bytes_t bytes) {
+jump_set_t Jumps::findDestinations(bytes_t& bytes) {
   jump_set_t jumps = jump_set_t();
 
   int position = 0;

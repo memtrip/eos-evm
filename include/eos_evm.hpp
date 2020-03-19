@@ -1,6 +1,8 @@
 #include <eosio/asset.hpp>
 #include <eosio/eosio.hpp>
 
+#include <evm/call.h>
+
 using namespace std;
 using namespace eosio;
 
@@ -14,6 +16,7 @@ CONTRACT eos_evm : public contract {
     ACTION clearlog();
 
   private:
+    void handleCallResult(call_result_t callResult);
     TABLE account {
       name user;
       uint64_t nonce;

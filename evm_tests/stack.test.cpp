@@ -5,21 +5,19 @@
 
 TEST_CASE("pop", "[stack]") {
   // given 
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
+  StackMachine sm {};
   sm.push(1);
 
   // when
   sm.pop(1);
 
   // then
-  REQUIRE(0 == stackItems->size()); 
+  REQUIRE(0 == sm.size()); 
 }
 
 TEST_CASE("peek", "[stack]") {
   // given 
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
+  StackMachine sm {};
 
   // when
   sm.push(uint256_t(1));
@@ -30,8 +28,7 @@ TEST_CASE("peek", "[stack]") {
 
 TEST_CASE("peekMany", "[stack]") {
   // given 
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
+  StackMachine sm {};
 
   // when
   sm.push(uint256_t(5));

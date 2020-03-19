@@ -16,7 +16,7 @@ typedef std::vector<std::pair<uint256_t, bytes_t>> storage_responder_t;
 class ExternalMock: public External {
   public:
     ExternalMock();
-    void log(std::vector<uint256_t> topics, bytes_t data);
+    void log(std::vector<uint256_t>& topics, bytes_t& data);
     bytes_t code(uint256_t address);
     double balance(uint256_t address);
     bytes_t storageAt(uint256_t address);

@@ -17,16 +17,14 @@ TEST_CASE("Hash zero", "[sha3]") {
   ExternalMock ext {};
   VM vm {};
   Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
+  AccountState accountState(&ext);
   Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
+  Memory mem {};
+  StackMachine sm {};
+  env_t env = Utils::env();
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
 
   // then
   REQUIRE("c5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470" == 

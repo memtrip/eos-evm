@@ -15,22 +15,18 @@ TEST_CASE("extcodesize and extcodecopy", "[code]") {
   ext.codeResponder.push_back(std::make_pair(uint256_t(0xea0e9e), Hex::hexToBytes("6005600055")));
   VM vm {};
   Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
+  AccountState accountState(&ext);
   Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
+  Memory mem {};
+  StackMachine sm {};
+  env_t env = Utils::env();
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
 
   // then
-  store_item_t item1 = Utils::accountStoreValue(0, accountItems);
-
   CHECK("6005600055000000000000000000000000000000000000000000000000000000" == 
-    Utils::uint256_2str(item1.second)
+    Utils::uint256_2str(accountState.get(0x00))
   );
 
   CHECK("0000000000000000000000000000000000000000000000000000000000ea0e9e" ==
@@ -45,16 +41,14 @@ TEST_CASE("codesize", "[code]") {
   ExternalMock ext {};
   VM vm {};
   Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
+  AccountState accountState(&ext);
   Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
+  Memory mem {};
+  StackMachine sm {};
+  env_t env = Utils::env();
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000022" == 
@@ -70,21 +64,17 @@ TEST_CASE("calldataload", "[code]") {
   ExternalMock ext {};
   VM vm {};
   Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
+  AccountState accountState(&ext);
   Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
+  Memory mem {};
+  StackMachine sm {};
+  env_t env = Utils::env();
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
 
   // then
-  store_item_t item1 = Utils::accountStoreValue(0, accountItems);
-
   CHECK("23ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff23" == 
-    Utils::uint256_2str(item1.second)
+    Utils::uint256_2str(accountState.get(0x00))
   );
 }

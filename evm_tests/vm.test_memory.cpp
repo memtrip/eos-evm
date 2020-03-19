@@ -17,16 +17,14 @@ TEST_CASE("Save to memory", "[memory]") {
   ExternalMock ext {};
   VM vm {};
   Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
+  AccountState accountState(&ext);
   Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
+  Memory mem {};
+  StackMachine sm {};
+  env_t env = Utils::env();
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000006" == 
@@ -46,16 +44,14 @@ TEST_CASE("Save to memory, and retreive", "[memory]") {
   ExternalMock ext {};
   VM vm {};
   Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
+  AccountState accountState(&ext);
   Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
+  Memory mem {};
+  StackMachine sm {};
+  env_t env = Utils::env();
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000006" == 
@@ -76,16 +72,14 @@ TEST_CASE("Save to memory, retreive, and apply addition", "[memory]") {
   ExternalMock ext {};
   VM vm {};
   Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
+  AccountState accountState(&ext);
   Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
+  Memory mem {};
+  StackMachine sm {};
+  env_t env = Utils::env();
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000018" == 
@@ -107,16 +101,14 @@ TEST_CASE("Save byte to memory, retreive, and apply addition", "[memory]") {
   ExternalMock ext {};
   VM vm {};
   Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
+  AccountState accountState(&ext);
   Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
+  Memory mem {};
+  StackMachine sm {};
+  env_t env = Utils::env();
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000018" == 
@@ -138,16 +130,14 @@ TEST_CASE("Save byte to memory (1)", "[memory]") {
   ExternalMock ext {};
   VM vm {};
   Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
+  AccountState accountState(&ext);
   Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
+  Memory mem {};
+  StackMachine sm {};
+  env_t env = Utils::env();
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000018" == 
@@ -163,17 +153,15 @@ TEST_CASE("Memory size", "[memory]") {
   ExternalMock ext {};
   VM vm {};
   Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
+  AccountState accountState(&ext);
   Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
+  Memory mem {};
+  StackMachine sm {};
+  env_t env = Utils::env();
 
   // when
   mem.expand(32);
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000020" /* 32 in hex */ == 

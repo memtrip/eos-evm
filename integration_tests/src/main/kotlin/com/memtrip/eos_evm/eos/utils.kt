@@ -1,7 +1,8 @@
 package com.memtrip.eos_evm.eos
 
 import com.memtrip.eos.chain.actions.ChainResponse
-import com.memtrip.eos_evm.ethereum.Transaction
+import com.memtrip.eos_evm.ethereum.EthereumTransaction
+import java.math.BigInteger
 import java.util.*
 import kotlin.streams.asSequence
 
@@ -24,12 +25,12 @@ fun transactionDefaultExpiry(): Date = with(Calendar.getInstance()) {
     this
 }.time
 
-fun stubTransaction(): Transaction {
-    return Transaction(
+fun stubTransaction(): EthereumTransaction {
+    return EthereumTransaction(
         1,
-        1000,
-        2000,
-        0,
+        BigInteger.valueOf(1000),
+        BigInteger.valueOf(2000),
+        BigInteger.valueOf(0),
         "0x000000000000000"
     )
 }

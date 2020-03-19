@@ -15,16 +15,14 @@ TEST_CASE("shift left, write to memory, return", "[return_memory]") {
   ExternalMock ext {};
   VM vm {};
   Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
+  AccountState accountState(&ext);
   Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
+  Memory mem {};
+  StackMachine sm {};
+  env_t env = Utils::env();
 
   // when
-  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
+  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
 
   // then
   REQUIRE(ExecResult::DONE == result.first);
@@ -43,16 +41,14 @@ TEST_CASE("shift right, write to memory, return", "[return_memory]") {
   ExternalMock ext {};
   VM vm {};
   Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
+  AccountState accountState(&ext);
   Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
+  Memory mem {};
+  StackMachine sm {};
+  env_t env = Utils::env();
 
   // when
-  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
+  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
 
   // then
   REQUIRE(ExecResult::DONE == result.first);
@@ -67,20 +63,20 @@ TEST_CASE("shift right, write to memory, return", "[return_memory]") {
 
 TEST_CASE("sar, write to memory, revert", "[return_memory]") {
   std::string bytecode_str = "600160000360021d60005260016000fd";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
+  bytes_t codeBytes = Hex::hexToBytes(bytecode_str);
+  bytes_t emptyBytes = bytes_t();
+  params_t params =  Utils::params(codeBytes, emptyBytes);
   ExternalMock ext {};
   VM vm {};
   Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
+  AccountState accountState(&ext);
   Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
+  Memory mem {};
+  StackMachine sm {};
+  env_t env = Utils::env();
 
   // when
-  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
+  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
 
   // then
   REQUIRE(ExecResult::DONE == result.first);

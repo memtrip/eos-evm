@@ -4,15 +4,6 @@
 #include <evm/account_state.h>
 #include <evm/call.h>
 
-struct Substate {
-  std::set<uint256_t> suicides;
-  std::set<uint256_t> touched;
-  uint64_t sstoreClearsRefund;
-  std::vector<uint256_t> contractsCreated;
-};
-
-typedef Substate substate_t;
-
 struct Finalization {
   uint256_t gasLeft;
   bool applyState;
@@ -38,12 +29,11 @@ typedef std::pair<
 class Execute {
   public:
     static finalization_result_t callWithStackDepth(
-      params_t params,
+      params_t& params,
       size_t stackDepth,
-      Substate& substate,
       External& external,
       AccountState& accountState,
-      env_t env,
+      env_t& env,
       Call& call
       /* tracer */
       /* vm_tracer */

@@ -15,20 +15,18 @@ TEST_CASE("shift left ", "[shift]") {
   ExternalMock ext {};
   VM vm {};
   Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
+  AccountState accountState(&ext);
   Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
+  Memory mem {};
+  StackMachine sm {};
+  env_t env = Utils::env();
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
 
   // then
-  REQUIRE("8000000000000000000000000000000000000000000000000000000000000000" 
-    == Utils::uint256_2str(sm.top())
+  REQUIRE("8000000000000000000000000000000000000000000000000000000000000000" == 
+    Utils::uint256_2str(sm.top())
   );
 }
 
@@ -38,16 +36,14 @@ TEST_CASE("shift left (2)", "[shift]") {
   ExternalMock ext {};
   VM vm {};
   Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
+  AccountState accountState(&ext);
   Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
+  Memory mem {};
+  StackMachine sm {};
+  env_t env = Utils::env();
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
 
   // then
   REQUIRE("fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe" 
@@ -61,20 +57,18 @@ TEST_CASE("shift left (3)", "[shift]") {
   ExternalMock ext {};
   VM vm {};
   Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
+  AccountState accountState(&ext);
   Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
+  Memory mem {};
+  StackMachine sm {};
+  env_t env = Utils::env();
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
 
   // then
-  REQUIRE("000000000000000000000000000000000000000000000000000000000000000a" 
-    == Utils::uint256_2str(sm.top())
+  REQUIRE("000000000000000000000000000000000000000000000000000000000000000a" ==
+    Utils::uint256_2str(sm.top())
   );
 }
 
@@ -84,20 +78,18 @@ TEST_CASE("shift right ", "[shift]") {
   ExternalMock ext {};
   VM vm {};
   Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
+  AccountState accountState(&ext);
   Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
+  Memory mem {};
+  StackMachine sm {};
+  env_t env = Utils::env();
 
   // when
-  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
+  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
 
   // then
-  REQUIRE("4000000000000000000000000000000000000000000000000000000000000000" 
-    == Utils::uint256_2str(sm.top())
+  REQUIRE("4000000000000000000000000000000000000000000000000000000000000000" == 
+    Utils::uint256_2str(sm.top())
   );
 }
 
@@ -107,20 +99,18 @@ TEST_CASE("shift right (1)", "[shift]") {
   ExternalMock ext {};
   VM vm {};
   Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
+  AccountState accountState(&ext);
   Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
+  Memory mem {};
+  StackMachine sm {};
+  env_t env = Utils::env();
 
   // when
-  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
+  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
 
   // then
-  REQUIRE("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" 
-    == Utils::uint256_2str(sm.top())
+  REQUIRE("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" == 
+    Utils::uint256_2str(sm.top())
   );
 }
 
@@ -130,19 +120,19 @@ TEST_CASE("shift right (2)", "[shift]") {
   ExternalMock ext {};
   VM vm {};
   Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
+  AccountState accountState(&ext);
   Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
+  Memory mem {};
+  StackMachine sm {};
+  env_t env = Utils::env();
 
   // when
-  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
+  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
 
   // then
-  REQUIRE("0000000000000000000000000000000000000000000000000000000000000002" == Utils::uint256_2str(sm.top()));
+  REQUIRE("0000000000000000000000000000000000000000000000000000000000000002" == 
+    Utils::uint256_2str(sm.top())
+  );
 }
 
 TEST_CASE("sar", "[shift]") {
@@ -151,16 +141,14 @@ TEST_CASE("sar", "[shift]") {
   ExternalMock ext {};
   VM vm {};
   Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
+  AccountState accountState(&ext);
   Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
+  Memory mem {};
+  StackMachine sm {};
+  env_t env = Utils::env();
 
   // when
-  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
+  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
 
   // then
   REQUIRE("c000000000000000000000000000000000000000000000000000000000000000" 
@@ -174,20 +162,18 @@ TEST_CASE("sar (1)", "[shift]") {
   ExternalMock ext {};
   VM vm {};
   Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
+  AccountState accountState(&ext);
   Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
+  Memory mem {};
+  StackMachine sm {};
+  env_t env = Utils::env();
 
   // when
-  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
+  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
 
   // then
-  REQUIRE("0000000000000000000000000000000000000000000000000000000000000001" 
-    == Utils::uint256_2str(sm.top())
+  REQUIRE("0000000000000000000000000000000000000000000000000000000000000001" == 
+    Utils::uint256_2str(sm.top())
   );
 }
 
@@ -197,20 +183,18 @@ TEST_CASE("sar (2)", "[shift]") {
   ExternalMock ext {};
   VM vm {};
   Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
+  AccountState accountState(&ext);
   Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
+  Memory mem {};
+  StackMachine sm {};
+  env_t env = Utils::env();
 
   // when
-  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
+  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
 
   // then
-  REQUIRE("000000000000000000000000000000000000000000000000000000000000007f" 
-    == Utils::uint256_2str(sm.top())
+  REQUIRE("000000000000000000000000000000000000000000000000000000000000007f" == 
+    Utils::uint256_2str(sm.top())
   );
 }
 
@@ -220,18 +204,17 @@ TEST_CASE("sar (3)", "[shift]") {
   ExternalMock ext {};
   VM vm {};
   Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
+  AccountState accountState(&ext);
   Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
+  Memory mem {};
+  StackMachine sm {};
+  env_t env = Utils::env();
 
   // when
-  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
+  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
 
   // then
-  REQUIRE("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" == Utils::uint256_2str(sm.top())
+  REQUIRE("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" == 
+    Utils::uint256_2str(sm.top())
   );
 }

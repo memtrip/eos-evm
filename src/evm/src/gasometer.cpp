@@ -132,7 +132,8 @@ gas_result_t Gasometer::calculate(
 
         uint256_t address = stack.peek(0);
         uint256_t newVal = stack.peek(1);
-        uint256_t current = BigInt::fromBigEndianBytes(external.storageAt(address));
+        bytes_t addressBytes = external.storageAt(address);
+        uint256_t current = BigInt::fromBigEndianBytes(addressBytes);
 
         uint256_t storeGasCost;
         if (current == 0 && newVal != 0) {

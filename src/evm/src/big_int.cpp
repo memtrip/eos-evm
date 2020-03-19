@@ -1,7 +1,8 @@
 #include <evm/big_int.h>
 #include <evm/types.h>
+#include <evm/hex.h>
 
-uint256_t BigInt::fromBigEndianBytes(bytes_t bytes) {
+uint256_t BigInt::fromBigEndianBytes(bytes_t& bytes) {
   uint8_t data[WORD_SIZE];
   uint8_t offset = WORD_SIZE - bytes.size();
   std::fill_n(data, WORD_SIZE, 0);
@@ -9,7 +10,12 @@ uint256_t BigInt::fromBigEndianBytes(bytes_t bytes) {
   return intx::be::load<uint256_t>(data);
 }
 
-uint256_t BigInt::fromBytes(bytes_t bytes) {
+uint256_t BigInt::fromHex(std::string hex) {
+  bytes_t hexBytes = Hex::hexToBytes(hex);
+  return BigInt::fromBigEndianBytes(hexBytes);
+}
+
+uint256_t BigInt::fromBytes(bytes_t& bytes) {
   uint8_t data[WORD_SIZE];
   uint8_t offset = WORD_SIZE - bytes.size();
   std::fill_n(data, WORD_SIZE, 0);
@@ -17,7 +23,7 @@ uint256_t BigInt::fromBytes(bytes_t bytes) {
   return intx::le::load<uint256_t>(data);
 }
 
-uint256_t BigInt::fromCompressedKey(compressed_key_t compressedKey) {
+uint256_t BigInt::fromCompressedKey(compressed_key_t& compressedKey) {
   uint8_t data[WORD_SIZE];
   uint8_t offset = WORD_SIZE;
   std::fill_n(data, WORD_SIZE, 0);
@@ -33,7 +39,7 @@ bytes_t BigInt::toBytes(uint256_t input) {
   return data;
 }
 
-uint256_t BigInt::load32(size_t begin, bytes_t bytes) {
+uint256_t BigInt::load32(size_t begin, bytes_t& bytes) {
   size_t end = std::min(begin + 32, bytes.size());
   uint8_t data[32] = {};
   for (size_t i = begin; i < end; i++)

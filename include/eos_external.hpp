@@ -10,6 +10,9 @@ class eos_external: public External {
     double balance(uint256_t address);
 };
 
+eos_external::eos_external() {
+}
+
 void eos_external::log(std::vector<uint256_t> topics, bytes_t data) {
 }
 

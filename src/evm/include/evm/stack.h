@@ -4,8 +4,8 @@
 
 class StackMachine {
   public:
-    StackMachine(std::vector<uint256_t>* stackArg);
-    std::vector<uint256_t>* stack;
+    StackMachine();
+    std::vector<uint256_t> stack;
     void pop(unsigned int n);
     uint256_t peek(unsigned int n);
     std::vector<uint256_t> peekMany(unsigned int offset, unsigned int n);

@@ -513,22 +513,21 @@ std::string Utils::uint256_2str(uint256_t value) {
 }
 
 uint256_t Utils::bigIntFromBigEndianBytes(std::string bytecode_str) {
-  return BigInt::fromBigEndianBytes(Hex::hexToBytes(bytecode_str));
-}
-
-store_item_t Utils::accountStoreValue(size_t index, account_store_t* store) {
-  return store->at(index);
+  bytes_t hexBytes = Hex::hexToBytes(bytecode_str);
+  return BigInt::fromBigEndianBytes(hexBytes);
 }
 
 env_t Utils::env() {
+  bytes_t coinbaseBytes = Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba");
+  bytes_t blockHashBytes = Hex::hexToBytes("f1250fd89a1c3e517ae92cc1f73865c594bfad34db20f3b3396af4efe19d3bfb");
   return {
     uint256_t(1), /* chainId */
     uint256_t(16339169), /* blockNumber */
     uint256_t(1581632422128), /* timestamp */
     uint256_t(100000), /* gasLimit */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba")), /* coinbase */
+    BigInt::fromBigEndianBytes(coinbaseBytes), /* coinbase */
     uint256_t(256), /* difficulty */
-    BigInt::fromBigEndianBytes(Hex::hexToBytes("f1250fd89a1c3e517ae92cc1f73865c594bfad34db20f3b3396af4efe19d3bfb")) /* blockHash */
+    BigInt::fromBigEndianBytes(blockHashBytes) /* blockHash */
   };
 };
 

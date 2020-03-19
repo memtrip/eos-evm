@@ -8,15 +8,15 @@
 
 class eos_execute {
   public:
-    static call_result_t transaction(transaction_t transaction, bytes_t callerAddress) {
+    static call_result_t transaction(transaction_t& transaction, bytes_t& callerAddress) {
       eos_external external {};
-      account_store_t* accountItems = new account_store_t();
-      AccountState accountState(accountItems, &external);
+      AccountState accountState(&external);
       Call call(0);
+      env_t env = eos_system::env();
       call_result_t result = call.execute(
         transaction,
         callerAddress,
-        eos_system::env(),
+        env,
         external,
         accountState
       );

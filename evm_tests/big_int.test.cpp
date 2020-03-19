@@ -11,56 +11,56 @@
 
 TEST_CASE("Instantiate uint256_t from big endian string", "[fromBigEndianBytes]") {
   CHECK("0100000000000000000000000000000000000000000000000000000000000000" == 
-    Utils::uint256_2str(BigInt::fromBigEndianBytes(Hex::hexToBytes("0100000000000000000000000000000000000000000000000000000000000000")))
+    Utils::uint256_2str(BigInt::fromHex("0100000000000000000000000000000000000000000000000000000000000000"))
   );
   CHECK("0000000000000000000000000000000000000000000000000100000000000000" == 
-    Utils::uint256_2str(BigInt::fromBigEndianBytes(Hex::hexToBytes("0100000000000000")))
+    Utils::uint256_2str(BigInt::fromHex("0100000000000000"))
   );
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
-    Utils::uint256_2str(BigInt::fromBigEndianBytes(Hex::hexToBytes("01")))
+    Utils::uint256_2str(BigInt::fromHex("01"))
   );
   CHECK("0000000000000000000000000000000000000000000000000000000000000015" == 
-    Utils::uint256_2str(BigInt::fromBigEndianBytes(Hex::hexToBytes("15")))
+    Utils::uint256_2str(BigInt::fromHex("15"))
   );
   CHECK("0000000000000000000000000000000000000000000000001700000000000000" == 
-    Utils::uint256_2str(BigInt::fromBigEndianBytes(Hex::hexToBytes("1700000000000000")))
+    Utils::uint256_2str(BigInt::fromHex("1700000000000000"))
   );
   CHECK("2400000000000000000000000000000000000000000000000000000000000000" == 
-    Utils::uint256_2str(BigInt::fromBigEndianBytes(Hex::hexToBytes("2400000000000000000000000000000000000000000000000000000000000000")))
+    Utils::uint256_2str(BigInt::fromHex("2400000000000000000000000000000000000000000000000000000000000000"))
   );
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
-    Utils::uint256_2str(BigInt::fromBigEndianBytes(Hex::hexToBytes("00000000000000000000000000000001")))
+    Utils::uint256_2str(BigInt::fromHex("00000000000000000000000000000001"))
   );
 
   CHECK("0a00000000000000000000000000000000000000000000000000000000000000" == 
-    Utils::uint256_2str(BigInt::fromBigEndianBytes(Hex::hexToBytes("0A00000000000000000000000000000000000000000000000000000000000000")))
+    Utils::uint256_2str(BigInt::fromHex("0A00000000000000000000000000000000000000000000000000000000000000"))
   );
   CHECK("0000000000000000000000000000000000000000000000000a00000000000000" == 
-    Utils::uint256_2str(BigInt::fromBigEndianBytes(Hex::hexToBytes("0A00000000000000")))
+    Utils::uint256_2str(BigInt::fromHex("0A00000000000000"))
   );
   CHECK("000000000000000000000000000000000000000000000000000000000000abcd" == 
-    Utils::uint256_2str(BigInt::fromBigEndianBytes(Hex::hexToBytes("abcd")))
+    Utils::uint256_2str(BigInt::fromHex("abcd"))
   );
   CHECK("0000000000000000000000000000000000000000000000000000000000abcdef" == 
-    Utils::uint256_2str(BigInt::fromBigEndianBytes(Hex::hexToBytes("abcdef")))
+    Utils::uint256_2str(BigInt::fromHex("abcdef"))
   );
   CHECK("00000000000000000000000000000000000000000000000000000000abcdef12" == 
-    Utils::uint256_2str(BigInt::fromBigEndianBytes(Hex::hexToBytes("abcdef12")))
+    Utils::uint256_2str(BigInt::fromHex("abcdef12"))
   );
   CHECK("1000000000000000000000000000000000000000000000000000000000000000" == 
-    Utils::uint256_2str(BigInt::fromBigEndianBytes(Hex::hexToBytes("1000000000000000000000000000000000000000000000000000000000000000")))
+    Utils::uint256_2str(BigInt::fromHex("1000000000000000000000000000000000000000000000000000000000000000"))
   );
   CHECK("0000000000000000000000000000000000000000000000000000000000000010" == 
-    Utils::uint256_2str(BigInt::fromBigEndianBytes(Hex::hexToBytes("10")))
+    Utils::uint256_2str(BigInt::fromHex("10"))
   );
   CHECK("00000000000000000000000000000000fffffffffffffffffffffffffffffffa" == 
-    Utils::uint256_2str(BigInt::fromBigEndianBytes(Hex::hexToBytes("fffffffffffffffffffffffffffffffA")))
+    Utils::uint256_2str(BigInt::fromHex("fffffffffffffffffffffffffffffffA"))
   );
   CHECK("00000000000000000000000000000000000000000000000000000000000000fa" == 
-    Utils::uint256_2str(BigInt::fromBigEndianBytes(Hex::hexToBytes("fA")))
+    Utils::uint256_2str(BigInt::fromHex("fA"))
   );
   CHECK("00000000000000000000000000000000000000000000000000000000000000ff" == 
-    Utils::uint256_2str(BigInt::fromBigEndianBytes(Hex::hexToBytes("ff")))
+    Utils::uint256_2str(BigInt::fromHex("ff"))
   );
 }
 

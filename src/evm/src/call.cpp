@@ -12,9 +12,9 @@ Call::Call(uint16_t stackDepthArg) {
 }
 
 call_result_t Call::execute(
-  transaction_t transaction,
-  bytes_t callerAddress,
-  env_t env,
+  transaction_t& transaction,
+  bytes_t& callerAddress,
+  env_t& env,
   External& external,
   AccountState& accountState
 ) {
@@ -57,7 +57,7 @@ call_result_t Call::create(
   bytes_t& code,
   action_type_t callType,
   bool trap,
-  env_t env,
+  env_t& env,
   External& external,
   AccountState& accountState
 ) {
@@ -95,7 +95,7 @@ call_result_t Call::call(
   uint256_t codeAddress,
   action_type_t callType,
   bool trap,
-  env_t env,
+  env_t& env,
   External& external,
   AccountState& accountState
 ) {
@@ -127,25 +127,17 @@ call_result_t Call::call(
 }
 
 call_result_t Call::makeCall(
-  params_t params,
+  params_t& params,
   action_type_t callType,
   bool trap,
-  env_t env,
+  env_t& env,
   External& external,
   AccountState& accountState
 ) {
 
-  substate_t substate = {
-    std::set<uint256_t>(), /* suicides */
-    std::set<uint256_t>(), /* touched */
-    0, /* sstoreClearsRefund */
-    std::vector<uint256_t>() /* contractsCreated */
-  };
-
   finalization_result_t finalizationResult = Execute::callWithStackDepth(
     params,
     stackDepth + 1,
-    substate,
     external,
     accountState,
     env,

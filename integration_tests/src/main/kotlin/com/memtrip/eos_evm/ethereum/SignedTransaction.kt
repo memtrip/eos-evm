@@ -4,7 +4,7 @@ import org.web3j.crypto.Sign
 
 @Suppress("ArrayInDataClass")
 data class SignedTransaction(
-    val transaction: Transaction,
+    val transaction: EthereumTransaction,
     val signature: Sign.SignatureData,
     val signedTransaction: ByteArray,
     val unsignedTransaction: ByteArray,

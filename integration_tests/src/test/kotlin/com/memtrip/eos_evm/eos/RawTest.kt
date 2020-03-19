@@ -119,6 +119,7 @@ class RawTest {
         )
     }
 
+
     @Test
     fun `The account identifier associated with a signed transaction must exist in the Account table`() {
 

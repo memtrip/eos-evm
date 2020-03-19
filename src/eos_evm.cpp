@@ -29,7 +29,10 @@ ACTION eos_evm::raw(name from, string code, string sender) {
 
     check(itr != idx.end(), "The account identifier associated with this transaction does not exist.");
     // itr-user is used in the transaction
-    eos_execute::transaction(transaction, eos_utils::fixedToBytes(accountIdentifier));
+    //bytes_t address = eos_utils::fixedToBytes(accountIdentifier);
+    bytes_t address = bytes_t();
+    call_result_t callResult = eos_execute::transaction(transaction, address);
+    handleCallResult(callResult);
     check(1 != 1, "TODO: Execute transaction signed transaction");
   } else {
     eosio::checksum256 accountIdentifier = eos_utils::hexToFixed(sender);
@@ -40,8 +43,33 @@ ACTION eos_evm::raw(name from, string code, string sender) {
     check(itr != idx.end(), "Could not find sender, did you provide the correct account identifier?");
     check(has_auth(itr->user), "You do not have permission to execute a transaction for the specified sender.");
     // itr->user is used in the transaction
-    eos_execute::transaction(transaction, eos_utils::fixedToBytes(accountIdentifier));
+    //bytes_t address = eos_utils::fixedToBytes(accountIdentifier);
+    bytes_t address = bytes_t();
+    call_result_t callResult = eos_execute::transaction(transaction, address);
+    handleCallResult(callResult);
     check(1 != 1, "TODO: Execute transaction for account identifier, resolved by eosio");
+  }
+}
+
+void eos_evm::handleCallResult(call_result_t callResult) {
+  switch (callResult.first) {
+    case MESSAGE_CALL_SUCCESS:
+      {
+        MessageCallReturn callReturn = std::get<MessageCallReturn>(callResult.second);
+        uint256_t gasLeft = callReturn.gasLeft;
+        check(false, "MESSAGE_CALL_SUCCESS");
+        break;
+      }
+    case MESSAGE_CALL_REVERTED:
+      {
+        MessageCallReturn callReturn = std::get<MessageCallReturn>(callResult.second);
+        uint256_t gasLeft = callReturn.gasLeft;
+        check(false, "MESSAGE_CALL_REVERTED");
+        break;
+      }
+    case MESSAGE_CALL_FAILED:
+      check(false, "MESSAGE_CALL_FAILED");
+      break;
   }
 }
 

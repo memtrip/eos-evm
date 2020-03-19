@@ -6,11 +6,11 @@ import org.web3j.rlp.RlpEncoder
 import org.web3j.rlp.RlpList
 import java.math.BigInteger
 
-data class Transaction(
+data class EthereumTransaction(
     val nonce: Long,
-    val gasPrice: Long,
-    val gasLimit: Long,
-    val value: Long,
+    val gasPrice: BigInteger,
+    val gasLimit: BigInteger,
+    val value: BigInteger,
     val data: String,
     val address: String? = null
 ) {
@@ -19,17 +19,17 @@ data class Transaction(
         if (address != null) {
             return RawTransaction.createTransaction(
                 BigInteger.valueOf(nonce),
-                BigInteger.valueOf(gasPrice),
-                BigInteger.valueOf(gasLimit),
+                gasPrice,
+                gasLimit,
                 address,
                 data
             )
         } else {
             return RawTransaction.createContractTransaction(
                 BigInteger.valueOf(nonce),
-                BigInteger.valueOf(gasPrice),
-                BigInteger.valueOf(gasLimit),
-                BigInteger.valueOf(value),
+                gasPrice,
+                gasLimit,
+                value,
                 data
             )
         }

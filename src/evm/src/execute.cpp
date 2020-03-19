@@ -6,12 +6,11 @@
 #include <evm/hex.h>
 
 finalization_result_t Execute::callWithStackDepth(
-  params_t params,
+  params_t& params,
   size_t stackDepth,
-  Substate& substate,
   External& external,
   AccountState& accountState,
-  env_t env,
+  env_t& env,
   Call& call
   /* tracer */
   /* vm_tracer */
@@ -22,11 +21,9 @@ finalization_result_t Execute::callWithStackDepth(
   VM vm {};
 
   Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
+  Memory mem {};
 
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
+  StackMachine sm {};
 
   exec_result_t vm_result = vm.execute(
     mem, 
@@ -38,9 +35,6 @@ finalization_result_t Execute::callWithStackDepth(
     call, 
     env
   );
-
-  delete memoryBytes;
-  delete stackItems;
 
   switch (vm_result.first) {
     case STOPPED:

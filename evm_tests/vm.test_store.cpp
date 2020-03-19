@@ -17,21 +17,17 @@ TEST_CASE("Store two values", "[store]") {
   ExternalMock ext {};
   VM vm {};
   Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
+  AccountState accountState(&ext);
   Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
+  Memory mem {};
+  StackMachine sm {};
+  env_t env = Utils::env();
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
 
   // then
-  store_item_t item = Utils::accountStoreValue(0, accountItems);
-
   CHECK("0000000000000000000000000000000000000000000000000000000000000002" == 
-    Utils::uint256_2str(item.second)
+    Utils::uint256_2str(accountState.get(0x01))
   );
 }

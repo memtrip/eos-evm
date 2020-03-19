@@ -16,16 +16,14 @@ TEST_CASE("Bitwise AND", "[bitwise]") {
   ExternalMock ext {};
   VM vm {};
   Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
+  AccountState accountState(&ext);
   Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
+  Memory mem {};
+  StackMachine sm {};
+  env_t env = Utils::env();
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
@@ -42,16 +40,14 @@ TEST_CASE("Bitwise OR", "[bitwise]") {
   ExternalMock ext {};
   VM vm {};
   Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
+  AccountState accountState(&ext);
   Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
+  Memory mem {};
+  StackMachine sm {};
+  env_t env = Utils::env();
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000006" == 
@@ -68,16 +64,14 @@ TEST_CASE("Bitwise XOR", "[bitwise]") {
   ExternalMock ext {};
   VM vm {};
   Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
+  AccountState accountState(&ext);
   Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
+  Memory mem {};
+  StackMachine sm {};
+  env_t env = Utils::env();
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000005" == 
@@ -91,29 +85,20 @@ TEST_CASE("Bitops", "[bitwise]") {
   ExternalMock ext {};
   VM vm {};
   Call call(0);
-  account_store_t* accountItems = new account_store_t();
-  AccountState accountState(accountItems, &ext);
+  AccountState accountState(&ext);
   Gasometer gasometer(params.gas);
-  bytes_t* memoryBytes = new bytes_t();
-  Memory mem(memoryBytes);
-  std::vector<uint256_t>* stackItems = new std::vector<uint256_t>();
-  StackMachine sm(stackItems);
+  Memory mem {};
+  StackMachine sm {};
+  env_t env = Utils::env();
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, Utils::env());
-
-  store_item_t item1 = Utils::accountStoreValue(0, accountItems);
-  store_item_t item2 = Utils::accountStoreValue(1, accountItems);
-  store_item_t item3 = Utils::accountStoreValue(2, accountItems);
-  store_item_t item4 = Utils::accountStoreValue(3, accountItems);
-  store_item_t item5 = Utils::accountStoreValue(4, accountItems);
-  store_item_t item6 = Utils::accountStoreValue(5, accountItems);
+  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
 
   // then
-  CHECK("00000000000000000000000000000000000000000000000000000000000000f0" == Utils::uint256_2str(item1.second));
-  CHECK("0000000000000000000000000000000000000000000000000000000000000fff" == Utils::uint256_2str(item2.second));
-  CHECK("0000000000000000000000000000000000000000000000000000000000000f0f" == Utils::uint256_2str(item3.second));
-  CHECK("0000000000000000000000000000000000000000000000000000000000000001" == Utils::uint256_2str(item4.second));
-  CHECK("0000000000000000000000000000000000000000000000000000000000000000" == Utils::uint256_2str(item5.second));
-  CHECK("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" == Utils::uint256_2str(item6.second));
+  CHECK("00000000000000000000000000000000000000000000000000000000000000f0" == Utils::uint256_2str(accountState.get(0x00)));
+  CHECK("0000000000000000000000000000000000000000000000000000000000000fff" == Utils::uint256_2str(accountState.get(0x01)));
+  CHECK("0000000000000000000000000000000000000000000000000000000000000f0f" == Utils::uint256_2str(accountState.get(0x02)));
+  CHECK("0000000000000000000000000000000000000000000000000000000000000001" == Utils::uint256_2str(accountState.get(0x03)));
+  CHECK("0000000000000000000000000000000000000000000000000000000000000000" == Utils::uint256_2str(accountState.get(0x04)));
+  CHECK("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" == Utils::uint256_2str(accountState.get(0x05)));
 }

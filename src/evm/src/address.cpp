@@ -8,7 +8,7 @@ bytes_t Address::accountIdentifierFromString(std::string accountName, std::strin
   return accountIdentifierFromBytes(accountName, address);
 };
 
-bytes_t Address::accountIdentifierFromBytes(std::string accountName, bytes_t address) {
+bytes_t Address::accountIdentifierFromBytes(std::string accountName, bytes_t& address) {
   
   bytes_t accountNameBytes(accountName.begin(), accountName.end());
 
@@ -39,7 +39,7 @@ bytes_t Address::accountIdentifierFromBytes(std::string accountName, bytes_t add
   return accountIdentifierBytes;
 }
 
-bytes_t Address::ethereumAddress(bytes_t uncompressedPubKey) {
+bytes_t Address::ethereumAddress(bytes_t& uncompressedPubKey) {
 
   bytes_t hash = Hash::keccak256(uncompressedPubKey);
 

@@ -9,8 +9,7 @@
 
 TEST_CASE("Memory write and read", "[memory]") {
   // given
-  bytes_t* bytes = new bytes_t();
-  Memory memory(bytes);
+  Memory memory {};
   
   // when
   memory.expand(0x80 + 32);
@@ -22,8 +21,7 @@ TEST_CASE("Memory write and read", "[memory]") {
 
 TEST_CASE("Memory write and read (1)", "[memory]") {
   // given
-  bytes_t* bytes = new bytes_t();
-  Memory memory(bytes);
+  Memory memory {};
   
   // when
   memory.expand(0x80 + 32);
@@ -35,8 +33,7 @@ TEST_CASE("Memory write and read (1)", "[memory]") {
 
 TEST_CASE("Memory write and read (2)", "[memory]") {
   // given
-  bytes_t* bytes = new bytes_t();
-  Memory memory(bytes);
+  Memory memory {};
   
   // when
   memory.expand(32);
@@ -47,8 +44,7 @@ TEST_CASE("Memory write and read (2)", "[memory]") {
 
 TEST_CASE("Memory write by byte and read", "[memory]") {
   // given
-  bytes_t* bytes = new bytes_t();
-  Memory memory(bytes);
+  Memory memory {};
   
   // when
   memory.expand(32);
@@ -62,8 +58,7 @@ TEST_CASE("Memory write by byte and read", "[memory]") {
 
 TEST_CASE("Memory write single byte and read", "[memory]") {
   // given
-  bytes_t* bytes = new bytes_t();
-  Memory memory(bytes);
+  Memory memory {};
   
   // when
   memory.expand(32);
@@ -75,8 +70,7 @@ TEST_CASE("Memory write single byte and read", "[memory]") {
 
 TEST_CASE("Memory read slice and write slice", "[memory]") {
   // given
-  bytes_t* bytes = new bytes_t();
-  Memory memory(bytes);
+  Memory memory {};
   
   // when
   memory.expand(32);
@@ -98,8 +92,7 @@ TEST_CASE("Memory read slice and write slice", "[memory]") {
 
 TEST_CASE("Memory write at index", "[memory]") {
   // given
-  bytes_t* bytes = new bytes_t();
-  Memory memory(bytes);
+  Memory memory {};
   
   // when
   memory.expand(32);
@@ -114,8 +107,7 @@ TEST_CASE("Memory write at index", "[memory]") {
 
 TEST_CASE("Memory write at index (1)", "[memory]") {
   // given
-  bytes_t* bytes = new bytes_t();
-  Memory memory(bytes);
+  Memory memory {};
   
   // when
   memory.expand(32);
@@ -130,16 +122,16 @@ TEST_CASE("Memory write at index (1)", "[memory]") {
 
 TEST_CASE("Memory copy data", "[memory]") {
   // given
-  bytes_t* bytes = new bytes_t();
-  Memory memory(bytes);
-  
+  Memory memory {};
+  bytes_t memoryBytes = Hex::hexToBytes("608060405234801561001057600080fd5b507fb8a00d6d8ca1be30bfec34d8f97e55f0f0fd9eeb7fb46e030516363d4cfe1ad630604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390a160b8806100826000396000f3fe6080604052348015600f57600080fd5b506004361060285760003560e01c8063771602f714602d575b600080fd5b606060048036036040811015604157600080fd5b8101908080359060200190929190803590602001909291905050506076565b6040518082815260200191505060405180910390f35b600081830190509291505056fea265627a7a723158209551755b4e59ca6cf78d79f5356d91565950805937074458700610f23c6ecf9b64736f6c63430005100032");
+
   // when
   memory.expand(314);
   memory.copyData(
     uint256_t(0x00),
     uint256_t(0x82),
     uint256_t(0xB8),
-    Hex::hexToBytes("608060405234801561001057600080fd5b507fb8a00d6d8ca1be30bfec34d8f97e55f0f0fd9eeb7fb46e030516363d4cfe1ad630604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390a160b8806100826000396000f3fe6080604052348015600f57600080fd5b506004361060285760003560e01c8063771602f714602d575b600080fd5b606060048036036040811015604157600080fd5b8101908080359060200190929190803590602001909291905050506076565b6040518082815260200191505060405180910390f35b600081830190509291505056fea265627a7a723158209551755b4e59ca6cf78d79f5356d91565950805937074458700610f23c6ecf9b64736f6c63430005100032")
+    memoryBytes  
   );
 
   bytes_t slice = memory.readSlice(uint256_t(0x00), uint256_t(0xB8));
@@ -151,8 +143,7 @@ TEST_CASE("Memory copy data", "[memory]") {
 
 TEST_CASE("Memory to return", "[memory]") {
   // given
-  bytes_t* bytes = new bytes_t();
-  Memory memory(bytes);
+  Memory memory {};
   
   // when
   memory.expand(64);

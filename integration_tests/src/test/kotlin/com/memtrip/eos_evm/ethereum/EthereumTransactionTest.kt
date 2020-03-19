@@ -1,18 +1,19 @@
 package com.memtrip.eos_evm.ethereum
 
 import org.junit.Test
+import java.math.BigInteger
 
-class EthTransactionTest {
+class EthereumTransactionTest {
 
     @Test
     fun signTransaction() {
 
         // given
-        val transaction = Transaction(
+        val transaction = EthereumTransaction(
             1,
-            1000,
-            2000,
-            0,
+            BigInteger.valueOf(1000),
+            BigInteger.valueOf(2000),
+            BigInteger.valueOf(0),
             "0x000000000000000"
         )
 

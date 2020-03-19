@@ -1,6 +1,6 @@
 #include <evm/rlp.h>
 
-RLPItem RLPDecode::createStr(bytes_t bytes) {
+RLPItem RLPDecode::createStr(bytes_t& bytes) {
   return {
     RLPType::STRING,
     bytes,
@@ -8,7 +8,7 @@ RLPItem RLPDecode::createStr(bytes_t bytes) {
   };
 }
 
-RLPItem RLPDecode::createList(std::vector<RLPItem> values) {
+RLPItem RLPDecode::createList(std::vector<RLPItem>& values) {
   return {
     RLPType::LIST,
     bytes_t(),
@@ -16,7 +16,7 @@ RLPItem RLPDecode::createList(std::vector<RLPItem> values) {
   };
 }
 
-void RLPDecode::decode(bytes_t encoded, std::vector<RLPItem>& list) {
+void RLPDecode::decode(bytes_t& encoded, std::vector<RLPItem>& list) {
   traverse(encoded, 0, encoded.size(), list);
 }
 
@@ -35,30 +35,25 @@ void RLPDecode::traverse(
       list.push_back(createStr(item));
       startPos += 1;
     } else if (prefix == OFFSET_SHORT_STRING) {
-      list.push_back(createStr(bytes_t()) );
+      bytes_t emptyBytes = bytes_t();
+      list.push_back(createStr(emptyBytes) );
       startPos += 1;
     } else if (prefix > OFFSET_SHORT_STRING && prefix <= OFFSET_LONG_STRING) {
       uint8_t strLen = prefix - OFFSET_SHORT_STRING;
-      list.push_back(
-        createStr(
-          bytes_t(
-            data.begin() + startPos + 1, 
-            data.begin() + startPos + strLen + 1
-          )
-        )
+      bytes_t strBytes = bytes_t(
+        data.begin() + startPos + 1, 
+        data.begin() + startPos + strLen + 1
       );
+      list.push_back(createStr(strBytes));
       startPos += (strLen + 1);
     } else if (prefix > OFFSET_LONG_STRING && prefix < OFFSET_SHORT_LIST) {
       uint8_t lenOfStrLen = prefix - OFFSET_LONG_STRING;
       uint16_t strLen = calculateLength(lenOfStrLen, data, startPos);
-      list.push_back(
-        createStr(
-          bytes_t(
-            data.begin() + startPos + lenOfStrLen + 1, 
-            data.begin() + startPos + lenOfStrLen + strLen + 1
-          )
-        )
+      bytes_t strBytes = bytes_t(
+        data.begin() + startPos + lenOfStrLen + 1, 
+        data.begin() + startPos + lenOfStrLen + strLen + 1
       );
+      list.push_back(createStr(strBytes));
       startPos += (lenOfStrLen + strLen + 1);
     } else if (prefix >= OFFSET_SHORT_LIST && prefix <= OFFSET_LONG_LIST) {
       uint8_t listLen = prefix - OFFSET_SHORT_LIST;
@@ -96,7 +91,7 @@ uint16_t RLPDecode::calculateLength(
   return length;
 }
 
-bytes_t RLPEncode::encode(RLPItem item) {
+bytes_t RLPEncode::encode(RLPItem& item) {
   if (item.type == RLPType::STRING) {
     return encodeString(item);
   } else {
@@ -104,24 +99,26 @@ bytes_t RLPEncode::encode(RLPItem item) {
   }
 }
 
-bytes_t RLPEncode::encodeString(RLPItem item) {
+bytes_t RLPEncode::encodeString(RLPItem& item) {
   return encode(item.bytes, OFFSET_SHORT_STRING);
 }
 
-bytes_t RLPEncode::encodeList(RLPItem item) {
+bytes_t RLPEncode::encodeList(RLPItem& item) {
   std::vector<RLPItem> values = item.values;
   if (values.size() == 0) {
-    return encode(bytes_t(), OFFSET_SHORT_LIST);
+    bytes_t emptyBytes = bytes_t();
+    return encode(emptyBytes, OFFSET_SHORT_LIST);
   } else {
     bytes_t result;
     for (int i = 0; i < values.size(); i++) {
-      result = concat(result, encode(values[i]));
+      bytes_t encodedBytes = encode(values[i]);
+      result = concat(result, encodedBytes);
     }
     return encode(result, OFFSET_SHORT_LIST);
   }
 }
 
-bytes_t RLPEncode::encode(bytes_t bytesValue, uint16_t offset) {
+bytes_t RLPEncode::encode(bytes_t& bytesValue, uint16_t offset) {
   if (bytesValue.size() == 1
     && offset == OFFSET_SHORT_STRING
     && bytesValue[0] >= 0x00
@@ -173,7 +170,7 @@ bytes_t RLPEncode::toByteArray(uint16_t value) {
   };
 };
 
-bytes_t RLPEncode::concat(bytes_t b1, bytes_t b2) {
+bytes_t RLPEncode::concat(bytes_t& b1, bytes_t& b2) {
   bytes_t result = b1;
   result.insert(result.end(), b2.begin(), b2.end());
   return result;

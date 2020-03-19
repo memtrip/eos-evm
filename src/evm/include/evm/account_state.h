@@ -5,10 +5,10 @@
 
 class AccountState {
   public:
-    AccountState(account_store_t* itemsArg, External* externalArg);
-    account_store_t* cacheItems;
+    AccountState(External* externalArg);
+    account_store_t cacheItems;
     External* external;
-    void putTopPair(std::vector<uint256_t>* stackItems);
+    void putTopPair(std::vector<uint256_t>& stackItems);
     uint256_t get(uint256_t key);
     int exists(uint256_t key);
 };

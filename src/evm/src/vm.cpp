@@ -21,7 +21,7 @@ exec_result_t VM::execute(
   params_t& params,
   External& external,
   Call& call,
-  env_t env
+  env_t& env
 ) {
 
   exec_result_t result;
@@ -57,7 +57,7 @@ exec_result_t VM::step(
   params_t& params,
   External& external,
   Call& call,
-  env_t env
+  env_t& env
 ) {
   // TODO: done check required?
 
@@ -94,7 +94,7 @@ exec_result_t VM::stepInner(
   params_t& params,
   External& external,
   Call& call,
-  env_t env
+  env_t& env
 ) {
   uint8_t opcode = reader.bytes[reader.position];
   unsigned int instruction = Instruction::values[opcode];
@@ -227,7 +227,7 @@ instruction_result_t VM::executeInstruction(
   params_t& params,
   External& external,
   Call& call,
-  env_t env
+  env_t& env
 ) {
   //Utils::printInstruction(instruction);
   switch (Instruction::opcode(instruction)) {
@@ -474,7 +474,8 @@ instruction_result_t VM::executeInstruction(
         uint256_t size = stack.peek(1);
         stack.pop(2);
         bytes_t bytes = memory.readSlice(offset, size);
-        stack.push(BigInt::fromBigEndianBytes(Hash::keccak256(bytes)));
+        bytes_t hashBytes = Hash::keccak256(bytes);
+        stack.push(BigInt::fromBigEndianBytes(hashBytes));
         break;
       }
     case Opcode::ADDRESS:

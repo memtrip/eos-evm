@@ -63,9 +63,9 @@ class Call {
   public:
     Call(uint16_t stackDepthArg);
     call_result_t execute(
-      transaction_t transaction,
-      bytes_t callerAddress,
-      env_t env,
+      transaction_t& transaction,
+      bytes_t& callerAddress,
+      env_t& env,
       External& external,
       AccountState& accountState
     );
@@ -76,7 +76,7 @@ class Call {
       bytes_t& code,
       action_type_t callType,
       bool trap,
-      env_t env,
+      env_t& env,
       External& external,
       AccountState& accountState
     );
@@ -89,17 +89,17 @@ class Call {
       uint256_t codeAddress,
       action_type_t callType,
       bool trap,
-      env_t env,
+      env_t& env,
       External& external,
       AccountState& accountState
     );
   private:
     uint16_t stackDepth;
     call_result_t makeCall(
-      params_t params,
+      params_t& params,
       action_type_t callType,
       bool trap,
-      env_t env,
+      env_t& env,
       External& external,
       AccountState& accountState
     );
