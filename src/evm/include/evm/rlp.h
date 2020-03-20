@@ -15,15 +15,15 @@ class RLPDecode {
   private:
     static void traverse(
       bytes_t& data, 
-      uint16_t start,
+      uint16_t startPos,
       uint16_t end, 
       std::vector<RLPItem>& list
     );
 
     static uint16_t calculateLength(
       uint8_t lengthOfLength, 
-      bytes_t& data,
-      uint16_t position
+      const bytes_t& data,
+      uint16_t pos
     );
 };
 
@@ -31,11 +31,11 @@ class RLPEncode {
   public:
     static bytes_t encode(RLPItem& item);
     static bytes_t encodeString(RLPItem& item);
-    static bytes_t encodeList(RLPItem& item);
+    static bytes_t encodeList(const RLPItem& item);
 
   private:
-    static bytes_t encode(bytes_t& bytes, uint16_t offset);
+    static bytes_t encode(bytes_t& bytesValue, uint16_t offset);
     static bytes_t toMinimalByteArray(uint16_t value);
     static bytes_t toByteArray(uint16_t value);
-    static bytes_t concat(bytes_t& b1, bytes_t& b2);
+    static bytes_t concat(const bytes_t& b1, const bytes_t& b2);
 };

@@ -16,21 +16,13 @@ finalization_result_t Execute::callWithStackDepth(
   /* vm_tracer */
 ) {
 
-  gas_t gas = params.gas;
+  VM vm(params);
 
-  VM vm {};
-
-  Gasometer gasometer(params.gas);
   Memory mem {};
-
-  StackMachine sm {};
 
   exec_result_t vm_result = vm.execute(
     mem, 
-    sm, 
     accountState, 
-    gasometer, 
-    params, 
     external, 
     call, 
     env
@@ -56,10 +48,10 @@ finalization_result_t Execute::callWithStackDepth(
         switch (gasLeft.first) {
           case KNOWN:
             {
-              uint256_t gas = std::get<uint256_t>(gasLeft.second); 
+              uint256_t gasLeftValue = std::get<uint256_t>(gasLeft.second); 
 
               Finalization finalization {
-                gas,
+                gasLeftValue,
                 true,
                 ReturnData::empty()
               };
@@ -96,6 +88,14 @@ finalization_result_t Execute::callWithStackDepth(
         FinalizationResult::FINALIZATION_OUT_OF_GAS,
         0
       );
+    case TRACE:
+      {
+        uint8_t position = std::get<uint8_t>(vm_result.second);
+        return std::make_pair(
+          FinalizationResult::FINALIZATION_TRACE,
+          position
+        );
+      }
     case CONTINUE:
       // In reality this option is never reached
       return std::make_pair(

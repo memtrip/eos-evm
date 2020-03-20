@@ -15,20 +15,18 @@ TEST_CASE("Less than comparison truthy", "[LT]") {
   std::string bytecode_str = "6003600110";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
-    Utils::uint256_2str(sm.top())
+    Utils::uint256_2str(vm.stack.top())
   );
 }
 
@@ -40,20 +38,18 @@ TEST_CASE("Less than comparison not true", "[LT]") {
   std::string bytecode_str = "6001600310";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
-    Utils::uint256_2str(sm.top())
+    Utils::uint256_2str(vm.stack.top())
   );
 }
 
@@ -65,20 +61,18 @@ TEST_CASE("Greater than comparison truthy", "[GT]") {
   std::string bytecode_str = "6001600311";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
-    Utils::uint256_2str(sm.top())
+    Utils::uint256_2str(vm.stack.top())
   );
 }
 
@@ -90,20 +84,18 @@ TEST_CASE("Greater than comparison not true", "[GT]") {
   std::string bytecode_str = "6003600111";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
-    Utils::uint256_2str(sm.top())
+    Utils::uint256_2str(vm.stack.top())
   );
 }
 
@@ -115,20 +107,18 @@ TEST_CASE("Equal comparison truthy", "[EQ]") {
   std::string bytecode_str = "6003600314";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
-    Utils::uint256_2str(sm.top())
+    Utils::uint256_2str(vm.stack.top())
   );
 }
 
@@ -140,20 +130,18 @@ TEST_CASE("Equal comparison not true", "[EQ]") {
   std::string bytecode_str = "6003600114";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
-    Utils::uint256_2str(sm.top())
+    Utils::uint256_2str(vm.stack.top())
   );
 }
 
@@ -164,20 +152,18 @@ TEST_CASE("Is zero comparison truthy", "[ISZERO]") {
   std::string bytecode_str = "600015";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
-    Utils::uint256_2str(sm.top())
+    Utils::uint256_2str(vm.stack.top())
   );
 }
 
@@ -188,20 +174,18 @@ TEST_CASE("Is zero comparison not true", "[ISZERO]") {
   std::string bytecode_str = "600115";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
-    Utils::uint256_2str(sm.top())
+    Utils::uint256_2str(vm.stack.top())
   );
 }
 
@@ -209,16 +193,14 @@ TEST_CASE("Comparison with many instructions", "[comparison]") {
   std::string bytecode_str = "601665012365124623818181811060005511600155146002556415235412358014600355";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 

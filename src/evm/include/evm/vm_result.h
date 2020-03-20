@@ -23,7 +23,8 @@ enum ExecResult {
   DONE,
   CONTINUE,
   VM_TRAP,
-  VM_OUT_OF_GAS
+  VM_OUT_OF_GAS,
+  TRACE
 };
 
 // exec result

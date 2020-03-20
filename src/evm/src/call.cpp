@@ -7,10 +7,6 @@
 #include <evm/execute.h>
 #include <evm/big_int.h>
 
-Call::Call(uint16_t stackDepthArg) {
-  stackDepth = stackDepthArg;
-}
-
 call_result_t Call::execute(
   transaction_t& transaction,
   bytes_t& callerAddress,
@@ -54,7 +50,7 @@ call_result_t Call::create(
   gas_t gas,
   uint256_t address,
   uint256_t value,
-  bytes_t& code,
+  const bytes_t& code,
   action_type_t callType,
   bool trap,
   env_t& env,
@@ -167,11 +163,18 @@ call_result_t Call::makeCall(
         }
       } 
     case FINALIZATION_OUT_OF_GAS:
-      // TODO: is this the correct handling of an out of gas message?
       return std::make_pair(
-        MessageCallResult::MESSAGE_CALL_FAILED,
+        MessageCallResult::MESSAGE_CALL_OUT_OF_GAS,
         0 
       );
+    case FINALIZATION_TRACE:
+      {
+        uint8_t position = std::get<uint8_t>(finalizationResult.second);
+        return std::make_pair(
+          MessageCallResult::MESSAGE_CALL_TRACE,
+          position 
+        );
+      }
     case FINALIZATION_ERROR:
       return std::make_pair(
         MessageCallResult::MESSAGE_CALL_FAILED,

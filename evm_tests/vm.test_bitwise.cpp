@@ -14,20 +14,18 @@ TEST_CASE("Bitwise AND", "[bitwise]") {
   std::string bytecode_str = "6003600916";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
-    Utils::uint256_2str(sm.top())
+    Utils::uint256_2str(vm.stack.top())
   );
 }
 
@@ -38,20 +36,18 @@ TEST_CASE("Bitwise OR", "[bitwise]") {
   std::string bytecode_str = "6002600417";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000006" == 
-    Utils::uint256_2str(sm.top())
+    Utils::uint256_2str(vm.stack.top())
   );
 }
 
@@ -62,20 +58,18 @@ TEST_CASE("Bitwise XOR", "[bitwise]") {
   std::string bytecode_str = "6002600718";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000005" == 
-    Utils::uint256_2str(sm.top())
+    Utils::uint256_2str(vm.stack.top())
   );
 }
 
@@ -83,16 +77,14 @@ TEST_CASE("Bitops", "[bitwise]") {
   std::string bytecode_str = "60ff610ff08181818116600055176001551860025560008015600355198015600455600555";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
   CHECK("00000000000000000000000000000000000000000000000000000000000000f0" == Utils::uint256_2str(accountState.get(0x00)));

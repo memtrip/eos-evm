@@ -15,16 +15,14 @@ TEST_CASE("Save to memory", "[memory]") {
   std::string bytecode_str = "6006600052";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000006" == 
@@ -42,20 +40,18 @@ TEST_CASE("Save to memory, and retreive", "[memory]") {
   std::string bytecode_str = "6006600052600051";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000006" == 
-    Utils::uint256_2str(sm.top())
+    Utils::uint256_2str(vm.stack.top())
   );
 }
 
@@ -70,20 +66,18 @@ TEST_CASE("Save to memory, retreive, and apply addition", "[memory]") {
   std::string bytecode_str = "6006600052601260005101";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000018" == 
-    Utils::uint256_2str(sm.top())
+    Utils::uint256_2str(vm.stack.top())
   );
 }
 
@@ -99,20 +93,18 @@ TEST_CASE("Save byte to memory, retreive, and apply addition", "[memory]") {
   std::string bytecode_str = "6006601F53601260005101";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000018" == 
-    Utils::uint256_2str(sm.top())
+    Utils::uint256_2str(vm.stack.top())
   );
 }
 
@@ -128,20 +120,18 @@ TEST_CASE("Save byte to memory (1)", "[memory]") {
   std::string bytecode_str = "6006601F53601260005101";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000018" == 
-    Utils::uint256_2str(sm.top())
+    Utils::uint256_2str(vm.stack.top())
   );
 }
 
@@ -151,21 +141,19 @@ TEST_CASE("Memory size", "[memory]") {
   std::string bytecode_str = "59";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
   mem.expand(32);
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000020" /* 32 in hex */ == 
-    Utils::uint256_2str(sm.top())
+    Utils::uint256_2str(vm.stack.top())
   );
 }
 

@@ -4,17 +4,17 @@
 
 class StackMachine {
   public:
-    StackMachine();
+    StackMachine(const std::vector<uint256_t>& s = std::vector<uint256_t>()): stack(s) { };
     std::vector<uint256_t> stack;
-    void pop(unsigned int n);
-    uint256_t peek(unsigned int n);
-    std::vector<uint256_t> peekMany(unsigned int offset, unsigned int n);
+    void pop(uint16_t n);
+    uint256_t peek(uint16_t n);
+    std::pair<uint256_t, uint256_t> topPair();
+    std::vector<uint256_t> peekMany(uint16_t offset, uint16_t n);
     void push(uint256_t item);
     void pushBool(bool value);
-    void swapWithTop(unsigned int n);
+    void swapWithTop(uint16_t n);
     uint256_t top();
-    void printSize();
-    size_t size();
+    size_t size() const;
     static uint256_t TRUE;
     static uint256_t FALSE;
     static uint256_t STUB;

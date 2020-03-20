@@ -13,19 +13,17 @@ TEST_CASE("Address", "[params]") {
   std::string bytecode_str = "30";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
-  CHECK("0000000000000000000000000000000000000000000000000000000000ea0e9a" == Utils::uint256_2str(sm.top()));
+  CHECK("0000000000000000000000000000000000000000000000000000000000ea0e9a" == Utils::uint256_2str(vm.stack.top()));
 }
 
 TEST_CASE("Origin", "[params]") {
@@ -34,19 +32,17 @@ TEST_CASE("Origin", "[params]") {
   std::string bytecode_str = "32";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
-  CHECK("00000000000000000000000000000000000000000000000000000000001283fe" == Utils::uint256_2str(sm.top()));
+  CHECK("00000000000000000000000000000000000000000000000000000000001283fe" == Utils::uint256_2str(vm.stack.top()));
 }
 
 TEST_CASE("Caller", "[params]") {
@@ -55,20 +51,18 @@ TEST_CASE("Caller", "[params]") {
   std::string bytecode_str = "33";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000ea0e9e" == 
-    Utils::uint256_2str(sm.top())
+    Utils::uint256_2str(vm.stack.top())
   );
 }
 
@@ -78,19 +72,17 @@ TEST_CASE("calldatasize", "[params]") {
   std::string calldata_str = "60006000";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), Hex::hexToBytes(calldata_str));
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000004" == 
-    Utils::uint256_2str(sm.top())
+    Utils::uint256_2str(vm.stack.top())
   );
 }

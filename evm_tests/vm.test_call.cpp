@@ -13,16 +13,14 @@ TEST_CASE("Call contract code", "[call]") {
   bytes_t emptyBytes = bytes_t();
   params_t params =  Utils::params(codeBytes, emptyBytes);
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  exec_result_t vm_result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  exec_result_t vm_result = vm.execute(mem, accountState, ext, call, env);
 
   // then
   REQUIRE(ExecResult::DONE == vm_result.first);

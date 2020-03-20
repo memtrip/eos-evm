@@ -3,9 +3,9 @@
 
 class ByteReader {
   public:
-    unsigned int position;
+    ByteReader(uint16_t p, const bytes_t& b): position(p), bytes(b) { };
+    uint16_t position;
     bytes_t bytes;
-    ByteReader(unsigned int positionArg, bytes_t& bytesArg);
-    uint256_t read(unsigned int size);
-    unsigned int len();
+    uint256_t read(uint16_t size);
+    uint16_t len() const;
 };

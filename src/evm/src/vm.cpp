@@ -9,16 +9,9 @@
 #include <evm/hex.h>
 #include <evm/utils.h>
 
-VM::VM() {
-  returnData = ReturnData::empty();
-}
-
 exec_result_t VM::execute(
   Memory& memory,
-  StackMachine& stack, 
   AccountState& accountState,
-  Gasometer& gasometer,
-  params_t& params,
   External& external,
   Call& call,
   env_t& env
@@ -33,11 +26,8 @@ exec_result_t VM::execute(
     result = VM::step(
       jumps, 
       memory, 
-      stack, 
       reader, 
       accountState, 
-      gasometer, 
-      params,
       external, 
       call, 
       env
@@ -50,18 +40,15 @@ exec_result_t VM::execute(
 exec_result_t VM::step(
   jump_set_t& jumps, 
   Memory& memory,
-  StackMachine& stack,
   ByteReader& reader, 
   AccountState& accountState,
-  Gasometer& gasometer,
-  params_t& params,
   External& external,
   Call& call,
   env_t& env
 ) {
   // TODO: done check required?
 
-  if (gasometer.currentGas <= 0) {
+  if (gasometer.currentGas == 0) {
     return std::make_pair(ExecResult::VM_OUT_OF_GAS, 0);
   } else if (reader.len() == 0) {
     return std::make_pair(
@@ -72,11 +59,8 @@ exec_result_t VM::step(
     return VM::stepInner(
       jumps, 
       memory, 
-      stack, 
       reader, 
       accountState, 
-      gasometer, 
-      params, 
       external, 
       call, 
       env
@@ -87,11 +71,8 @@ exec_result_t VM::step(
 exec_result_t VM::stepInner(
   jump_set_t& jumps,
   Memory& memory,
-  StackMachine& stack,
   ByteReader& reader, 
   AccountState& accountState,
-  Gasometer& gasometer,
-  params_t& params,
   External& external,
   Call& call,
   env_t& env
@@ -102,9 +83,7 @@ exec_result_t VM::stepInner(
 
   if (instruction == 0x000000FF) return std::make_pair(ExecResult::STOPPED, 0); // TODO: handle error
 
-  last_stack_ret_len = Instruction::ret(instruction);
-
-  instruction_verify_t verifyResult = Instruction::verify(instruction, stack);
+  instruction_verify_t verifyResult = Instruction::verify(instruction, stack.size());
   switch (verifyResult) {
     case InstructionVerifyResult::INSTRUCTION_ERROR_UNDER_FLOW:
     case InstructionVerifyResult::INSTRUCTION_ERROR_OUT_OF_STACK:
@@ -114,7 +93,14 @@ exec_result_t VM::stepInner(
   }
 
   // Calculate gas cost requirements
-  instruction_requirements_t calculateRequirements = gasometer.requirements(external, instruction, stack, memory.length());
+  std::vector<uint256_t> instructionArgs = stack.peekMany(0, Instruction::args(instruction));
+  uint64_t memoryLength = memory.length();
+  instruction_requirements_t calculateRequirements = gasometer.requirements(
+    external, 
+    instruction, 
+    instructionArgs, 
+    memoryLength
+  );
 
   InstructionRequirements requirements;
   switch (calculateRequirements.first) {
@@ -131,7 +117,7 @@ exec_result_t VM::stepInner(
   // expand memory
   gas_t memoryRequiredSize = requirements.memoryRequiredSize;
   memory.expand(memoryRequiredSize);
-
+  
   gas_t currentGas = Overflow::sub(gasometer.currentGas, requirements.gasCost).first;
   gasometer.currentGas = currentGas;
 
@@ -147,10 +133,8 @@ exec_result_t VM::stepInner(
     provideGas,
     instruction, 
     memory,
-    stack,
     reader, 
     accountState,
-    params,
     external,
     call,
     env
@@ -221,10 +205,8 @@ instruction_result_t VM::executeInstruction(
   gas_t providedGas,
   instruct_t instruction,
   Memory& memory,
-  StackMachine& stack,
   ByteReader& reader, 
   AccountState& accountState,
-  params_t& params,
   External& external,
   Call& call,
   env_t& env
@@ -650,10 +632,9 @@ instruction_result_t VM::executeInstruction(
       }
     case Opcode::SSTORE:
       {
-        // TODO: support clear by index
-        // TODO: gas calculations
-        accountState.putTopPair(stack.stack);
+        std::pair<uint256_t, uint256_t> topPair = stack.topPair();
         stack.pop(2);
+        accountState.put(topPair.first, topPair.second);
         break;
       }
     case Opcode::JUMP:
@@ -810,8 +791,6 @@ instruction_result_t VM::executeInstruction(
             }
         }
 
-        this->returnData = ReturnData::empty();
-
         // TODO: check there is a high enough balance to perform create
 
         bytes_t contractCode = memory.readSlice(initOff, initSize);
@@ -851,14 +830,14 @@ instruction_result_t VM::executeInstruction(
 
               stack.push(UINT256_ZERO);
 
-              this->returnData = callReturn.returnData.copy();
-
               return std::make_pair(
                 InstructionResult::UNUSED_GAS,
                 gasLeft
               );
             }
+          case MESSAGE_CALL_OUT_OF_GAS:
           case MESSAGE_CALL_FAILED:
+          case MESSAGE_CALL_TRACE:
             printf("MESSAGE_CALL_FAILED");
             stack.push(UINT256_ZERO);
             break;
@@ -956,7 +935,6 @@ instruction_result_t VM::executeInstruction(
             }
         }
 
-        this->returnData = ReturnData::empty();
         // TODO: if there is not enough balance, or the stack depth is reached, return 0
 
         bytes_t input = memory.readSlice(inOffset, inSize);
@@ -989,8 +967,6 @@ instruction_result_t VM::executeInstruction(
               );
               memory.writeSlice(outOffset, outBytes);
 
-              this->returnData = callReturn.returnData.copy();
-
               stack.push(UINT256_ONE);
 
               return std::make_pair(
@@ -1010,8 +986,6 @@ instruction_result_t VM::executeInstruction(
               );
               memory.writeSlice(outOffset, outBytes);
 
-              this->returnData = callReturn.returnData.copy();
-
               stack.push(UINT256_ZERO);
 
               return std::make_pair(
@@ -1019,7 +993,9 @@ instruction_result_t VM::executeInstruction(
                 gasLeft
               );
             }
+          case MESSAGE_CALL_OUT_OF_GAS:
           case MESSAGE_CALL_FAILED:
+          case MESSAGE_CALL_TRACE:
             printf("MESSAGE_CALL_FAILED");
             stack.push(UINT256_ZERO);
             break;

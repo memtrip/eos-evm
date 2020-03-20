@@ -2,14 +2,7 @@
 #include <evm/account_state.h>
 #include <evm/big_int.h>
 
-AccountState::AccountState(External* externalArg) {
-  cacheItems = account_store_t();
-  external = externalArg;
-}
-
-void AccountState::putTopPair(std::vector<uint256_t>& stackItems) {
-  uint256_t key = stackItems.at(stackItems.size() - 1);
-  uint256_t value = stackItems.at(stackItems.size() - 2);
+void AccountState::put(uint256_t key, uint256_t value) {
   int existingIndex = exists(key);
   if (existingIndex == -1) {
     cacheItems.push_back(std::make_pair(key, value));

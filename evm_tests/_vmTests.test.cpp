@@ -43,15 +43,13 @@ TEST_CASE("suicide______4622c577440f9db4b3954a1de60bf2fac55886dcb0ec4ecaf906c25b
 
   ExternalMock ext {};
 
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
 }

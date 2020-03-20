@@ -12,16 +12,14 @@ TEST_CASE("Log empty (LOG0)", "[log]") {
   std::string bytecode_str = "60006000a0";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  exec_result_t result = vm.execute(mem, accountState, ext, call, env);
 
   // then
   CHECK(99619 == Utils::gasLeft(result));
@@ -37,16 +35,14 @@ TEST_CASE("Log sender (LOG1)", "[log]") {
   std::string bytecode_str = "60ff6000533360206000a1";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  exec_result_t result = vm.execute(mem, accountState, ext, call, env);
 
   // then
   CHECK(98974 == Utils::gasLeft(result));
@@ -67,16 +63,14 @@ TEST_CASE("Log origin and sender (LOG2)", "[log]") {
   std::string bytecode_str = "60ff600053333260206000a2";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  exec_result_t result = vm.execute(mem, accountState, ext, call, env);
 
   // then
   CHECK(98977 == Utils::gasLeft(result));
@@ -100,16 +94,14 @@ TEST_CASE("Log caller, origin, sender (LOG3)", "[log]") {
   std::string bytecode_str = "60ff60005333323060206000a3";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  exec_result_t result = vm.execute(mem, accountState, ext, call, env);
 
   // then
   CHECK(98977 == Utils::gasLeft(result));
@@ -136,16 +128,14 @@ TEST_CASE("Log number, caller, origin and sender (LOG4)", "[log]") {
   std::string bytecode_str = "60ff6000534333323060206000a4";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  exec_result_t result = vm.execute(mem, accountState, ext, call, env);
 
   // then
   CHECK(79935 == Utils::gasLeft(result));

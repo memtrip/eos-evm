@@ -19,6 +19,7 @@ enum FinalizationResult {
   FINALIZATION_OK,
   FINALIZATION_OUT_OF_GAS,
   FINALIZATION_ERROR,
+  FINALIZATION_TRACE
 };
 
 typedef std::pair<

@@ -65,7 +65,7 @@ class ${groupName} {
         // then
         val response = rawAction.pushTransaction(
             newAccountName,
-            signedTransaction,
+            "0x$signedTransaction",
             AccountIdentifier.create(newAccountName, newEthAccount.address).toHex(),
             TransactionContext(
                 newAccountName,

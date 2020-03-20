@@ -7,15 +7,11 @@
 
 TEST_CASE("Put pair", "[account_state]") {
   // given 
-  std::vector<uint256_t> stackItems = std::vector<uint256_t>();
-  stackItems.push_back(uint256_t(2));
-  stackItems.push_back(uint256_t(1));
-
   ExternalMock ext {};
   AccountState accountState(&ext);
 
   // when
-  accountState.putTopPair(stackItems);
+  accountState.put(uint256_t(1), uint256_t(2));
 
   // then
   CHECK(uint256_t(2) == accountState.get(0x01));
@@ -23,15 +19,11 @@ TEST_CASE("Put pair", "[account_state]") {
 
 TEST_CASE("Get by index", "[account_state]") {
   // given 
-  std::vector<uint256_t> stackItems = std::vector<uint256_t>();
-  stackItems.push_back(uint256_t(4));
-  stackItems.push_back(uint256_t(3));
-
   ExternalMock ext {};
   AccountState accountState(&ext);
 
   // when
-  accountState.putTopPair(stackItems);
+  accountState.put(uint256_t(3), uint256_t(4));
 
   // then
   CHECK(uint256_t(4) == accountState.get(uint256_t(3)));

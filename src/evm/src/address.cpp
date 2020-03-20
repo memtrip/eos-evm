@@ -3,12 +3,12 @@
 #include <evm/rlp.h>
 #include <evm/hex.h>
 
-bytes_t Address::accountIdentifierFromString(std::string accountName, std::string addressString) {
+bytes_t Address::accountIdentifierFromString(const std::string& accountName, const std::string& addressString) {
   bytes_t address = Hex::hexToBytes(addressString.substr(2, addressString.size()));
   return accountIdentifierFromBytes(accountName, address);
 };
 
-bytes_t Address::accountIdentifierFromBytes(std::string accountName, bytes_t& address) {
+bytes_t Address::accountIdentifierFromBytes(const std::string& accountName, const bytes_t& address) {
   
   bytes_t accountNameBytes(accountName.begin(), accountName.end());
 

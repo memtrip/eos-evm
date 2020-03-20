@@ -9,7 +9,9 @@
 enum MessageCallResult {
   MESSAGE_CALL_SUCCESS,
   MESSAGE_CALL_FAILED,
-  MESSAGE_CALL_REVERTED
+  MESSAGE_CALL_REVERTED,
+  MESSAGE_CALL_OUT_OF_GAS,
+  MESSAGE_CALL_TRACE
 };
 
 struct MessageCallReturn {
@@ -61,7 +63,7 @@ typedef std::pair<
 
 class Call {
   public:
-    Call(uint16_t stackDepthArg);
+    explicit Call(uint16_t s): stackDepth(s) { };
     call_result_t execute(
       transaction_t& transaction,
       bytes_t& callerAddress,
@@ -73,7 +75,7 @@ class Call {
       gas_t gas,
       uint256_t address,
       uint256_t value,
-      bytes_t& code,
+      const bytes_t& code,
       action_type_t callType,
       bool trap,
       env_t& env,

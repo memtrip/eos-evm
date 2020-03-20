@@ -56,7 +56,7 @@ TEST_CASE("${test.name}______${test.fixture._info.sourceHash}", "[vm]") {
   </#list>
   </#if>
 
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
   Gasometer gasometer(params.gas);
@@ -64,7 +64,7 @@ TEST_CASE("${test.name}______${test.fixture._info.sourceHash}", "[vm]") {
   StackMachine sm {};
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
   <#if test.fixture.post??>

@@ -79,7 +79,7 @@ void RLPDecode::traverse(
 
 uint16_t RLPDecode::calculateLength(
   uint8_t lengthOfLength, 
-  bytes_t& data,
+  const bytes_t& data,
   uint16_t pos
 ) {
   uint8_t pow = lengthOfLength - 1;
@@ -103,7 +103,7 @@ bytes_t RLPEncode::encodeString(RLPItem& item) {
   return encode(item.bytes, OFFSET_SHORT_STRING);
 }
 
-bytes_t RLPEncode::encodeList(RLPItem& item) {
+bytes_t RLPEncode::encodeList(const RLPItem& item) {
   std::vector<RLPItem> values = item.values;
   if (values.size() == 0) {
     bytes_t emptyBytes = bytes_t();
@@ -121,7 +121,6 @@ bytes_t RLPEncode::encodeList(RLPItem& item) {
 bytes_t RLPEncode::encode(bytes_t& bytesValue, uint16_t offset) {
   if (bytesValue.size() == 1
     && offset == OFFSET_SHORT_STRING
-    && bytesValue[0] >= 0x00
     && bytesValue[0] <= 0x7f
   ) {
     return bytesValue;
@@ -170,7 +169,7 @@ bytes_t RLPEncode::toByteArray(uint16_t value) {
   };
 };
 
-bytes_t RLPEncode::concat(bytes_t& b1, bytes_t& b2) {
+bytes_t RLPEncode::concat(const bytes_t& b1, const bytes_t& b2) {
   bytes_t result = b1;
   result.insert(result.end(), b2.begin(), b2.end());
   return result;

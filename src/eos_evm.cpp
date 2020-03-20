@@ -67,6 +67,15 @@ void eos_evm::handleCallResult(call_result_t callResult) {
         check(false, "MESSAGE_CALL_REVERTED");
         break;
       }
+    case MESSAGE_CALL_TRACE:
+      {
+        uint8_t position = std::get<uint8_t>(callResult.second);
+        check(false, "MESSAGE_TRACE::" + std::to_string(position));
+        break;
+      }
+    case MESSAGE_CALL_OUT_OF_GAS:
+      check(false, "MESSAGE_CALL_OUT_OF_GAS");
+      break;
     case MESSAGE_CALL_FAILED:
       check(false, "MESSAGE_CALL_FAILED");
       break;

@@ -4,17 +4,7 @@
 #include <evm/big_int.h>
 #include <evm/hex.h>
 
-static constexpr uint64_t capacity = 4 * 1024;
-
-static const uint64_t MAX_RETURN_WASTE_BYTES = 16384;
-
-Memory::Memory() {
-  memory = bytes_t();
-  memory.reserve(capacity);
-  memorySize = 0;
-}
-
-uint64_t Memory::length() {
+uint64_t Memory::length() const {
   return memorySize;
 }
 

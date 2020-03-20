@@ -23,12 +23,8 @@ jump_set_t Jumps::findDestinations(bytes_t& bytes) {
   return jumps;
 }
 
-unsigned long Jumps::verifyJump(uint256_t position, jump_set_t& validDestinations) {
-  unsigned long jump = static_cast<unsigned long>(position);
-  bool exists = validDestinations.find(jump) != validDestinations.end();
-  if (validDestinations.find(jump) != validDestinations.end()) {
-    return jump;
-  } else {
-    return INVALID_ARGUMENT;
-  }
+uint64_t Jumps::verifyJump(uint256_t position, jump_set_t& validDestinations) {
+  uint64_t jump = static_cast<uint64_t>(position);
+  if (validDestinations.find(jump) != validDestinations.end()) return jump;
+  return INVALID_ARGUMENT;
 }

@@ -9,7 +9,7 @@ ReturnData ReturnData::empty() {
   };
 }
 
-ReturnData ReturnData::copy() {
+ReturnData ReturnData::copy() const {
   return {
     mem,
     offset,

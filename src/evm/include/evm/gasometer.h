@@ -98,27 +98,27 @@ typedef MemGas mem_gas_t;
 
 class Gasometer {
   public:
-    Gasometer(gas_t currentGasArg);
+    explicit Gasometer(gas_t g): currentGas(g), currentMemGas(0) { };
     gas_t currentGas;
     gas_t currentMemGas;
     instruction_requirements_t requirements(
       External& external,
       instruct_t instruction,
-      StackMachine& stack,
+      std::vector<uint256_t>& args,
       gas_t currentMemorySize
     );
     gas_result_t calculate(
       External& external,
       instruct_t instruction,
-      StackMachine& stack,
+      std::vector<uint256_t>& args,
       gas_t currentMemorySize
     );
-    mem_gas_t memGasCost(gas_t currentMemSize, gas_t memSize);
+    mem_gas_t memGasCost(gas_t currentMemSize, gas_t memSize) const;
   private:
-    gas_result_t gas(uint256_t value);
-    gas_result_t gasMem(uint256_t defaultGas, uint256_t memoryNeeded);
-    gas_result_t gasMemProvided(uint256_t defaultGas, uint256_t memoryNeeded, uint256_t requested);
-    gas_result_t gasMemCopy(uint256_t defaultGas, uint256_t memoryNeeded, uint256_t copy);
-    gas_result_t outOfGas();
-    uint256_t memNeeded(uint256_t mem, uint256_t add);
+    static gas_result_t gas(gas_t value);
+    static gas_result_t gasMem(gas_t defaultGas, gas_t memoryNeeded);
+    static gas_result_t gasMemProvided(gas_t defaultGas, gas_t memoryNeeded, gas_t requested);
+    static gas_result_t gasMemCopy(gas_t defaultGas, gas_t memoryNeeded, gas_t copy);
+    static gas_result_t outOfGas();
+    static gas_t memNeeded(gas_t mem, gas_t add);
 };

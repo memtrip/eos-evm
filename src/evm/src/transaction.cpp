@@ -28,11 +28,11 @@ transaction_t Transaction::parse(std::string hex, uint8_t chainId) {
   };
 }
 
-bool Transaction::signatureExists(transaction_t transaction) {
+bool Transaction::signatureExists(transaction_t& transaction) {
   return transaction.r.size() != 0 && transaction.s.size() != 0;
 }
 
-bytes_t Transaction::signatureBytes(transaction_t transaction) {
+bytes_t Transaction::signatureBytes(transaction_t& transaction) {
   bytes_t signatureBytes;
   signatureBytes.reserve(1 + transaction.r.size() + transaction.s.size());
 
@@ -45,7 +45,7 @@ bytes_t Transaction::signatureBytes(transaction_t transaction) {
   return signatureBytes;
 }
 
-bytes_t Transaction::digest(rlp_t rlp, uint8_t chainId) {
+bytes_t Transaction::digest(const rlp_t& rlp, uint8_t chainId) {
 
   RLPItem nonce {
     RLPType::STRING,
@@ -115,7 +115,7 @@ bytes_t Transaction::digest(rlp_t rlp, uint8_t chainId) {
   return Hash::keccak256(rlpBytes);
 }
 
-uint8_t Transaction::eip155Compat(bytes_t bytes) {
+uint8_t Transaction::eip155Compat(const bytes_t& bytes) {
   uint8_t v = static_cast<uint8_t>(bytes[0]);
   if (v == 27) return 0;
   if (v == 28) return 1;
@@ -123,7 +123,7 @@ uint8_t Transaction::eip155Compat(bytes_t bytes) {
   return 4;
 }
 
-bytes_t Transaction::prefixedBytes(bytes_t hash) {
+bytes_t Transaction::prefixedBytes(const bytes_t& hash) {
   std::string prefix = "\u0019Ethereum Signed Message:\n" + std::to_string(hash.size());
   std::vector<uint8_t> messagePrefix(prefix.begin(), prefix.end());
   messagePrefix.insert(messagePrefix.end(), hash.begin(), hash.end());

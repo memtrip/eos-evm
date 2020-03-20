@@ -13,16 +13,14 @@ TEST_CASE("extcodesize and extcodecopy", "[code]") {
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
   ext.codeResponder.push_back(std::make_pair(uint256_t(0xea0e9e), Hex::hexToBytes("6005600055")));
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
   CHECK("6005600055000000000000000000000000000000000000000000000000000000" == 
@@ -39,20 +37,18 @@ TEST_CASE("codesize", "[code]") {
   std::string bytecode_str = "7f000000000000000000000000000000000000000000000000000000000000000138";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000022" == 
-    Utils::uint256_2str(sm.top())
+    Utils::uint256_2str(vm.stack.top())
   );
 }
 
@@ -62,16 +58,14 @@ TEST_CASE("calldataload", "[code]") {
   std::string calldata_str = "0123ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff23";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), Hex::hexToBytes(calldata_str));
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
   CHECK("23ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff23" == 

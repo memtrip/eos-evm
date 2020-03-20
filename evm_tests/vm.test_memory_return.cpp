@@ -13,16 +13,14 @@ TEST_CASE("shift left, write to memory, return", "[return_memory]") {
   std::string bytecode_str = "600560011b6000526001601ff3";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  exec_result_t result = vm.execute(mem, accountState, ext, call, env);
 
   // then
   REQUIRE(ExecResult::DONE == result.first);
@@ -39,16 +37,14 @@ TEST_CASE("shift right, write to memory, return", "[return_memory]") {
   std::string bytecode_str = "600560011c6000526001601ff3";
   params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  exec_result_t result = vm.execute(mem, accountState, ext, call, env);
 
   // then
   REQUIRE(ExecResult::DONE == result.first);
@@ -67,16 +63,14 @@ TEST_CASE("sar, write to memory, revert", "[return_memory]") {
   bytes_t emptyBytes = bytes_t();
   params_t params =  Utils::params(codeBytes, emptyBytes);
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  exec_result_t result = vm.execute(mem, accountState, ext, call, env);
 
   // then
   REQUIRE(ExecResult::DONE == result.first);

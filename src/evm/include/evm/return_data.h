@@ -7,7 +7,7 @@ class ReturnData {
     bytes_t mem;
     uint256_t offset;
     uint256_t size;
-    ReturnData copy();
+    ReturnData copy() const;
     static ReturnData empty();
 };
 

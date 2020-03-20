@@ -43,15 +43,13 @@ TEST_CASE("log2_logMemsizeTooHigh______9fb39d1608049d1d5455c7409514acc175724f2b1
 
   ExternalMock ext {};
 
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
 }
@@ -86,15 +84,13 @@ TEST_CASE("log1_nonEmptyMem______f3e28ff95bf5e800cd43ab50df02e0c38e9fa2b8205732a
 
   ExternalMock ext {};
 
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
 }
@@ -129,15 +125,13 @@ TEST_CASE("log4_logMemsizeZero______c7e7169c36cc57a6425d03859449560d8d7f48c189f2
 
   ExternalMock ext {};
 
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
 }
@@ -172,15 +166,13 @@ TEST_CASE("log1_emptyMem______3284dac984331ac8d612e2bb4994f34e19f76861ed5294388f
 
   ExternalMock ext {};
 
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
 }
@@ -215,15 +207,13 @@ TEST_CASE("log0_logMemsizeZero______e5b6bb2501704a5d2b73c86a3e02be967fdfc90fb58f
 
   ExternalMock ext {};
 
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
 }
@@ -258,15 +248,13 @@ TEST_CASE("log2_emptyMem______6cc6686c11bbd223248c591c4c90a38f469fdb2571b7b6279a
 
   ExternalMock ext {};
 
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
 }
@@ -301,15 +289,13 @@ TEST_CASE("log4_nonEmptyMem_logMemSize1_logMemStart31______4f7869f982d0f61e794df
 
   ExternalMock ext {};
 
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
 }
@@ -344,15 +330,13 @@ TEST_CASE("log1_logMemsizeZero______583cfb6cec3eb602dc034886dfc2e2171da94941d0bb
 
   ExternalMock ext {};
 
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
 }
@@ -387,15 +371,13 @@ TEST_CASE("log2_Caller______bf2bb94ebe5938744184e8a6f7b2a5eaa274b40d3a92b6802153
 
   ExternalMock ext {};
 
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
 }
@@ -430,15 +412,13 @@ TEST_CASE("log1_logMemsizeTooHigh______17e5a63a7a389f823678de07caa666ff5148749e4
 
   ExternalMock ext {};
 
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
 }
@@ -473,15 +453,13 @@ TEST_CASE("log2_logMemsizeZero______686ccc981e9622bcfeb6161ad1d9f71a70d91b3d828e
 
   ExternalMock ext {};
 
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
 }
@@ -516,15 +494,13 @@ TEST_CASE("log2_logMemStartTooHigh______d45766f7e33ecc09cc11f00e216474469c49933a
 
   ExternalMock ext {};
 
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
 }
@@ -559,15 +535,13 @@ TEST_CASE("log3_logMemsizeZero______69bd3e5dcb7e699abcb3faa58aa9a80a6ff20e8287c8
 
   ExternalMock ext {};
 
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
 }
@@ -602,15 +576,13 @@ TEST_CASE("log2_MaxTopic______d3c300433ba07e9e91cab5d9ad174a159012c1975b3b69c3ce
 
   ExternalMock ext {};
 
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
 }
@@ -645,15 +617,13 @@ TEST_CASE("log1_logMemStartTooHigh______b6a326587a3dbbd977d24a247338ade2c2feed85
 
   ExternalMock ext {};
 
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
 }
@@ -688,15 +658,13 @@ TEST_CASE("log0_nonEmptyMem______0cfc646681837311fb39e1273123794960fbb9ea4e42457
 
   ExternalMock ext {};
 
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
 }
@@ -731,15 +699,13 @@ TEST_CASE("log0_logMemsizeTooHigh______04fe0fcd01a67dcc0bbc0ea972f7af4c8695a6b63
 
   ExternalMock ext {};
 
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
 }
@@ -774,15 +740,13 @@ TEST_CASE("log_2logs______59ad5528d89751649749405f4a5cd70d8a03875afb90fa0d4d6824
 
   ExternalMock ext {};
 
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
 }
@@ -817,15 +781,13 @@ TEST_CASE("log1_Caller______33df8d2b8c92e29404110e09be9bd88bc1f685e12067c07e534f
 
   ExternalMock ext {};
 
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
 }
@@ -860,15 +822,13 @@ TEST_CASE("log3_nonEmptyMem_logMemSize1______baeb20e8806b5cf814426f11178bd4d5ac3
 
   ExternalMock ext {};
 
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
 }
@@ -903,15 +863,13 @@ TEST_CASE("log0_nonEmptyMem_logMemSize1______a20cb10f863eb27a33608f41f9d3de3d25a
 
   ExternalMock ext {};
 
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
 }
@@ -946,15 +904,13 @@ TEST_CASE("log4_Caller______8ea00f94cec5a457cac5de1731aa75c588c13d2eab55297aa7a3
 
   ExternalMock ext {};
 
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
 }
@@ -989,15 +945,13 @@ TEST_CASE("log4_logMemsizeTooHigh______13b51aeb36d62dac84da56023d6406a59c83490d2
 
   ExternalMock ext {};
 
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
 }
@@ -1032,15 +986,13 @@ TEST_CASE("log4_nonEmptyMem______a3c64c86ba9a76871b7c3c281a0454708cdb5e91ca611b5
 
   ExternalMock ext {};
 
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
 }
@@ -1075,15 +1027,13 @@ TEST_CASE("log1_MaxTopic______0a4c414906a74571451b62d5cbccfd73c420f4683168136549
 
   ExternalMock ext {};
 
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
 }
@@ -1118,15 +1068,13 @@ TEST_CASE("log3_logMemsizeTooHigh______f2c5e55c6680ac4b66054f399561cbe97badde7f2
 
   ExternalMock ext {};
 
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
 }
@@ -1161,15 +1109,13 @@ TEST_CASE("log3_PC______8d7beb47cc14822075ce2fbac294728f8faba640e26a7ed370eafa8e
 
   ExternalMock ext {};
 
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
 }
@@ -1204,15 +1150,13 @@ TEST_CASE("log3_nonEmptyMem_logMemSize1_logMemStart31______bda2d24ce0f250b08877f
 
   ExternalMock ext {};
 
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
 }
@@ -1247,15 +1191,13 @@ TEST_CASE("log3_logMemStartTooHigh______9810608d983312d9f5ab12cd9358825f20f92ca1
 
   ExternalMock ext {};
 
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
 }
@@ -1290,15 +1232,13 @@ TEST_CASE("log1_nonEmptyMem_logMemSize1______49ec0b89dab4beb39bb4dbc58191f465ef0
 
   ExternalMock ext {};
 
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
 }
@@ -1333,15 +1273,13 @@ TEST_CASE("log4_MaxTopic______1928e2558239ffc6fbb18068e3f1428cd7e60eb06e8dd308bc
 
   ExternalMock ext {};
 
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
 }
@@ -1376,15 +1314,13 @@ TEST_CASE("log3_Caller______fae584b1f6d4f92ed0b072ce8f7842b2ca367ab838949e51830c
 
   ExternalMock ext {};
 
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
 }
@@ -1419,15 +1355,13 @@ TEST_CASE("log3_nonEmptyMem______1d2ad4f6f79e0161150ea4ae333a9df11e1099df23fff0e
 
   ExternalMock ext {};
 
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
 }
@@ -1462,15 +1396,13 @@ TEST_CASE("log3_MaxTopic______b7120956567b5710f9dd49ac0db7e43d839a6a026598143cff
 
   ExternalMock ext {};
 
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
 }
@@ -1505,15 +1437,13 @@ TEST_CASE("log1_nonEmptyMem_logMemSize1_logMemStart31______dfba77e757549bc564c54
 
   ExternalMock ext {};
 
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
 }
@@ -1548,15 +1478,13 @@ TEST_CASE("log2_nonEmptyMem_logMemSize1______0db120840474461ba7c4de523260af515ca
 
   ExternalMock ext {};
 
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
 }
@@ -1591,15 +1519,13 @@ TEST_CASE("log2_nonEmptyMem_logMemSize1_logMemStart31______fad1ccc7b33b11ea24c70
 
   ExternalMock ext {};
 
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
 }
@@ -1634,15 +1560,13 @@ TEST_CASE("log3_emptyMem______f39ac12e960ba98b1d6d52dbe564caded52a338cb16b792486
 
   ExternalMock ext {};
 
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
 }
@@ -1677,15 +1601,13 @@ TEST_CASE("log4_logMemStartTooHigh______b231ee785a24fab97ccfb8dde384ecbb03ea86bd
 
   ExternalMock ext {};
 
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
 }
@@ -1720,15 +1642,13 @@ TEST_CASE("log4_nonEmptyMem_logMemSize1______2e590a92288accca39422740f9b8c7d9467
 
   ExternalMock ext {};
 
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
 }
@@ -1763,15 +1683,13 @@ TEST_CASE("log2_nonEmptyMem______a1c8ae74a72e0723f39e564ff0843ed03b579c9e7ae7b0c
 
   ExternalMock ext {};
 
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
 }
@@ -1806,15 +1724,13 @@ TEST_CASE("log4_PC______1c6a8d77e5986d32795ac6f8757849527822e91848f34f531cc5c81c
 
   ExternalMock ext {};
 
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
 }
@@ -1849,15 +1765,13 @@ TEST_CASE("log4_emptyMem______1d899abc32e13324725840e9b79042f03f389f1ab1a3fb013b
 
   ExternalMock ext {};
 
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
 }
@@ -1892,15 +1806,13 @@ TEST_CASE("log0_nonEmptyMem_logMemSize1_logMemStart31______777ce021b26b0e4f62b98
 
   ExternalMock ext {};
 
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
 }
@@ -1935,15 +1847,13 @@ TEST_CASE("log0_logMemStartTooHigh______7cc27fdfcb258a0528c94496e60e3b10907a4d24
 
   ExternalMock ext {};
 
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
 }
@@ -1978,15 +1888,13 @@ TEST_CASE("log0_emptyMem______dddfbdc5d0776cd04613d3515648fa20eb5dc10a86b4e393b1
 
   ExternalMock ext {};
 
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
 
   // when
-  vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  vm.execute(mem, accountState, ext, call, env);
 
   // then
 }

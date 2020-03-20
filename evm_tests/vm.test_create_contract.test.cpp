@@ -13,17 +13,15 @@ TEST_CASE("Create the most basic contract", "[create]") {
   bytes_t emptyBytes = bytes_t();
   params_t params =  Utils::params(codeBytes, emptyBytes);
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   ReturnData returnData = ReturnData::empty();
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  exec_result_t vm_result = vm.execute(mem, sm, accountState, gasometer, params, ext,  call, env);
+  exec_result_t vm_result = vm.execute(mem, accountState, ext, call, env);
 
   // then
   REQUIRE(ExecResult::DONE == vm_result.first);
@@ -47,17 +45,15 @@ TEST_CASE("Create contract using CODECOPY", "[create]") {
   bytes_t emptyBytes = bytes_t();
   params_t params =  Utils::params(codeBytes, emptyBytes);
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   ReturnData returnData = ReturnData::empty();
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  exec_result_t vm_result = vm.execute(mem, sm, accountState, gasometer, params, ext,  call, env);
+  exec_result_t vm_result = vm.execute(mem, accountState, ext, call, env);
 
   // then
   REQUIRE(ExecResult::DONE == vm_result.first);
@@ -87,16 +83,14 @@ TEST_CASE("Create contract using CREATE", "[create]") {
   bytes_t emptyBytes = bytes_t();
   params_t params =  Utils::params(codeBytes, emptyBytes);
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  exec_result_t vm_result = vm.execute(mem, sm, accountState, gasometer, params, ext,  call, env);
+  exec_result_t vm_result = vm.execute(mem, accountState, ext, call, env);
 
   // then
   REQUIRE(ExecResult::DONE == vm_result.first);

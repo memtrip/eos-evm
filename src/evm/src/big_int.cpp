@@ -25,7 +25,6 @@ uint256_t BigInt::fromBytes(bytes_t& bytes) {
 
 uint256_t BigInt::fromCompressedKey(compressed_key_t& compressedKey) {
   uint8_t data[WORD_SIZE];
-  uint8_t offset = WORD_SIZE;
   std::fill_n(data, WORD_SIZE, 0);
   std::copy(compressedKey.begin() + 1, compressedKey.end(), data);
   return intx::be::load<uint256_t>(data);

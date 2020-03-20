@@ -1,20 +1,14 @@
 #include <evm/byte_reader.h>
 #include <evm/big_int.h>
 
-ByteReader::ByteReader(unsigned int positionArg, bytes_t& bytesArg) {
-  position = positionArg;
-  bytes = bytesArg;
-}
-
-uint256_t ByteReader::read(unsigned int size) {
-  unsigned int startPos = position;
+uint256_t ByteReader::read(uint16_t size) {
+  uint16_t startPos = position;
   position += size; // move the ByteReader position forward
   bytes_t code = bytes_t(bytes.begin() + startPos, bytes.begin() + startPos + size);
-  return uint256_t(
-    BigInt::fromBigEndianBytes(code)
-  );
+  uint256_t word = BigInt::fromBigEndianBytes(code);
+  return word;
 }
 
-unsigned int ByteReader::len() {
+uint16_t ByteReader::len() const {
   return bytes.size();
 }

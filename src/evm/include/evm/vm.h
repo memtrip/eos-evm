@@ -9,60 +9,52 @@
 
 class VM {
   public:
-    VM();
-  private:
-    uint8_t last_stack_ret_len;
-    ReturnData returnData;
+    explicit VM(
+      params_t& p,
+      const Gasometer& g = Gasometer(0),
+      const StackMachine& s = StackMachine()
+    ): params(p), gasometer(g), stack(s) {
+      gasometer.currentGas = params.gas;
+    };
 
     exec_result_t step(
       jump_set_t& jumps, 
       Memory& memory,
-      StackMachine& stack,
       ByteReader& reader, 
       AccountState& accountState,
-      Gasometer& gasometer,
-      params_t& params,
       External& external,
       Call& call,
       env_t& env
     );
-
     exec_result_t stepInner(
       jump_set_t& jumps, 
       Memory& memory,
-      StackMachine& stack,
       ByteReader& reader, 
       AccountState& accountState,
-      Gasometer& gasometer,
-      params_t& params,
       External& external,
       Call& call,
       env_t& env
     );
-
     instruction_result_t executeInstruction(
       gas_t gas,
       gas_t providedGas,
       instruct_t instruction, 
       Memory& memory,
-      StackMachine& stack,
       ByteReader& reader, 
       AccountState& accountState,
-      params_t& params,
       External& external,
       Call& call,
       env_t& env
     );
-
-  public:
     exec_result_t execute(
       Memory& memory,
-      StackMachine& stack, 
       AccountState& accountState,
-      Gasometer& gasometer,
-      params_t& params,
       External& external,
       Call& call,
       env_t& env
     );
+    StackMachine stack;
+  private:
+    params_t params;
+    Gasometer gasometer;
 };

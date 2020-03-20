@@ -15,16 +15,14 @@ TEST_CASE("Add two large numbers, store the result, verify gas", "[gasometer]") 
   bytes_t emptyBytes = bytes_t();
   params_t params =  Utils::params(codeBytes, emptyBytes);
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  exec_result_t result = vm.execute(mem, accountState, ext, call, env);
 
   // then
   CHECK(79988 == Utils::gasLeft(result));
@@ -41,16 +39,14 @@ TEST_CASE("Store the result of an SHA3 hash, verify gas", "[gasometer]") {
   bytes_t emptyBytes = bytes_t();
   params_t params =  Utils::params(codeBytes, emptyBytes);
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  exec_result_t result = vm.execute(mem, accountState, ext, call, env);
 
   // then
   CHECK(79961 == Utils::gasLeft(result));
@@ -78,16 +74,14 @@ TEST_CASE("Address, verify gas", "[gasometer]") {
     bytes_t() /* data */
   };
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  exec_result_t result = vm.execute(mem, accountState, ext, call, env);
 
   // then
   CHECK(79995 == Utils::gasLeft(result));
@@ -115,16 +109,14 @@ TEST_CASE("Origin, verify gas", "[gasometer]") {
     bytes_t() /* data */
   };
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  exec_result_t result = vm.execute(mem, accountState, ext, call, env);
 
   // then
   CHECK(79995 == Utils::gasLeft(result));
@@ -155,16 +147,14 @@ TEST_CASE("Self balance, verify gas", "[gasometer]") {
   ExternalMock ext {};
   ext.balanceResponder.push_back(std::make_pair(address, 1025.0));
 
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  exec_result_t result = vm.execute(mem, accountState, ext, call, env);
 
   // then
   CHECK(79992 == Utils::gasLeft(result));
@@ -192,16 +182,14 @@ TEST_CASE("Sender, verify gas", "[gasometer]") {
     bytes_t() /* data */
   };
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  exec_result_t result = vm.execute(mem, accountState, ext, call, env);
 
   // then
   CHECK(79995 == Utils::gasLeft(result));
@@ -218,16 +206,14 @@ TEST_CASE("Chain id, verify gas", "[gasometer]") {
   bytes_t emptyBytes = bytes_t();
   params_t params =  Utils::params(codeBytes, emptyBytes);
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  exec_result_t result = vm.execute(mem, accountState, ext, call, env);
 
   // then
   CHECK(79995 == Utils::gasLeft(result));
@@ -260,16 +246,14 @@ TEST_CASE("Extcodecopy verify gas", "[gasometer]") {
   ExternalMock ext {};
   ext.codeResponder.push_back(std::make_pair(sender, Hex::hexToBytes("6005600055")));
 
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  exec_result_t result = vm.execute(mem, accountState, ext, call, env);
 
   // then
   CHECK(79935 == Utils::gasLeft(result));
@@ -297,16 +281,14 @@ TEST_CASE("Blockhash, verify gas", "[gasometer]") {
     bytes_t() /* data */
   };
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  exec_result_t result = vm.execute(mem, accountState, ext, call, env);
 
   // then
   CHECK(79974 == Utils::gasLeft(result));
@@ -337,16 +319,14 @@ TEST_CASE("Calldataload verify gas", "[gasometer]") {
     Hex::hexToBytes(data_str) /* data */
   };
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  exec_result_t result = vm.execute(mem, accountState, ext, call, env);
 
   // then
   CHECK(79991 == Utils::gasLeft(result));
@@ -363,16 +343,14 @@ TEST_CASE("Multiply, store the result, verify gas", "[gasometer]") {
   bytes_t emptyBytes = bytes_t();
   params_t params =  Utils::params(codeBytes, emptyBytes);
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  exec_result_t result = vm.execute(mem, accountState, ext, call, env);
 
   // then
   CHECK(79983 == Utils::gasLeft(result));
@@ -389,16 +367,14 @@ TEST_CASE("Subtract, store the result, verify gas", "[gasometer]") {
   bytes_t emptyBytes = bytes_t();
   params_t params =  Utils::params(codeBytes, emptyBytes);
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  exec_result_t result = vm.execute(mem, accountState, ext, call, env);
 
   // then
   CHECK(79985 == Utils::gasLeft(result));
@@ -415,16 +391,14 @@ TEST_CASE("Division, store the result, verify gas", "[gasometer]") {
   bytes_t emptyBytes = bytes_t();
   params_t params =  Utils::params(codeBytes, emptyBytes);
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  exec_result_t result = vm.execute(mem, accountState, ext, call, env);
 
   // then
   CHECK(79983 == Utils::gasLeft(result));
@@ -441,16 +415,14 @@ TEST_CASE("Div zero, store the result, verify gas", "[gasometer]") {
   bytes_t emptyBytes = bytes_t();
   params_t params =  Utils::params(codeBytes, emptyBytes);
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  exec_result_t result = vm.execute(mem, accountState, ext, call, env);
 
   // then
   CHECK(94983 == Utils::gasLeft(result));
@@ -467,16 +439,14 @@ TEST_CASE("Mod, store the result, verify gas", "[gasometer]") {
   bytes_t emptyBytes = bytes_t();
   params_t params =  Utils::params(codeBytes, emptyBytes);
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  exec_result_t result = vm.execute(mem, accountState, ext, call, env);
 
   // then
   CHECK(74966 == Utils::gasLeft(result));
@@ -496,16 +466,14 @@ TEST_CASE("SMOD, store the result, verify gas", "[gasometer]") {
   bytes_t emptyBytes = bytes_t();
   params_t params =  Utils::params(codeBytes, emptyBytes);
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  exec_result_t result = vm.execute(mem, accountState, ext, call, env);
 
   // then
   CHECK(74966 == Utils::gasLeft(result));
@@ -525,16 +493,14 @@ TEST_CASE("SDIV, store the result, verify gas", "[gasometer]") {
   bytes_t emptyBytes = bytes_t();
   params_t params =  Utils::params(codeBytes, emptyBytes);
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  exec_result_t result = vm.execute(mem, accountState, ext, call, env);
 
   // then
   CHECK(74966 == Utils::gasLeft(result));
@@ -554,16 +520,14 @@ TEST_CASE("Exp, store the result, verify gas", "[gasometer]") {
   bytes_t emptyBytes = bytes_t();
   params_t params =  Utils::params(codeBytes, emptyBytes);
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  exec_result_t result = vm.execute(mem, accountState, ext, call, env);
 
   // then
   CHECK(39923 == Utils::gasLeft(result));
@@ -586,16 +550,14 @@ TEST_CASE("Comparison, store the result, verify gas", "[gasometer]") {
   bytes_t emptyBytes = bytes_t();
   params_t params =  Utils::params(codeBytes, emptyBytes);
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  exec_result_t result = vm.execute(mem, accountState, ext, call, env);
 
   // then
   CHECK(49952 == Utils::gasLeft(result));
@@ -621,16 +583,14 @@ TEST_CASE("Signed comparison, store the result, verify gas", "[gasometer]") {
   bytes_t emptyBytes = bytes_t();
   params_t params =  Utils::params(codeBytes, emptyBytes);
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  exec_result_t result = vm.execute(mem, accountState, ext, call, env);
 
   // then
   CHECK(49940 == Utils::gasLeft(result));
@@ -657,16 +617,14 @@ TEST_CASE("Bitops, store the result, verify gas", "[gasometer]") {
   params_t params =  Utils::params(codeBytes, emptyBytes);
   params.gas = 150000;
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  exec_result_t result = vm.execute(mem, accountState, ext, call, env);
 
   // then
   CHECK(44937 == Utils::gasLeft(result));
@@ -698,16 +656,14 @@ TEST_CASE("Add mod - mul mod, store the result, verify gas", "[gasometer]") {
   bytes_t emptyBytes = bytes_t();
   params_t params =  Utils::params(codeBytes, emptyBytes);
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  exec_result_t result = vm.execute(mem, accountState, ext, call, env);
 
   // then
   CHECK(19914 == Utils::gasLeft(result));
@@ -733,16 +689,14 @@ TEST_CASE("Byte, store the result, verify gas", "[gasometer]") {
   bytes_t emptyBytes = bytes_t();
   params_t params =  Utils::params(codeBytes, emptyBytes);
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  exec_result_t result = vm.execute(mem, accountState, ext, call, env);
 
   // then
   CHECK(74976 == Utils::gasLeft(result));
@@ -762,16 +716,14 @@ TEST_CASE("Signextend, store the result, verify gas", "[gasometer]") {
   bytes_t emptyBytes = bytes_t();
   params_t params =  Utils::params(codeBytes, emptyBytes);
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  exec_result_t result = vm.execute(mem, accountState, ext, call, env);
 
   // then
   CHECK(59972 == Utils::gasLeft(result));
@@ -791,16 +743,14 @@ TEST_CASE("Pop, store the result, verify gas", "[gasometer]") {
   bytes_t emptyBytes = bytes_t();
   params_t params =  Utils::params(codeBytes, emptyBytes);
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  exec_result_t result = vm.execute(mem, accountState, ext, call, env);
 
   // then
   CHECK(79989 == Utils::gasLeft(result));
@@ -828,16 +778,14 @@ TEST_CASE("Extops, store the result, verify gas", "[gasometer]") {
     bytes_t() /* data */
   };
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  exec_result_t result = vm.execute(mem, accountState, ext, call, env);
 
   // then
   CHECK(29898 == Utils::gasLeft(result));
@@ -881,16 +829,14 @@ TEST_CASE("Jumps, store the result, verify gas", "[gasometer]") {
     bytes_t() /* data */
   };
   ExternalMock ext {};
-  VM vm {};
+  VM vm(params);
   Call call(0);
   AccountState accountState(&ext);
-  Gasometer gasometer(params.gas);
   Memory mem {};
-  StackMachine sm {};
   env_t env = Utils::env();
 
   // when
-  exec_result_t result = vm.execute(mem, sm, accountState, gasometer, params, ext, call, env);
+  exec_result_t result = vm.execute(mem, accountState, ext, call, env);
 
   // then
   CHECK(54117 == Utils::gasLeft(result));

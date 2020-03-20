@@ -15,7 +15,7 @@ import java.math.BigInteger
 import java.util.concurrent.TimeUnit
 
 //
-// 19.03.2020
+// 20.03.2020
 // Auto generated based off the Ethereum tests found here:
 // https://github.com/ethereum/tests/blob/develop/VMTests/
 //
@@ -26,8 +26,6 @@ class vmRandomTest {
         .readTimeout(10, TimeUnit.SECONDS)
         .writeTimeout(10, TimeUnit.SECONDS)
         .build()
-
-    private val testCases: TestCases = TestCases()
 
     private val chainApi = Api(Config.CHAIN_API_BASE_URL, okHttpClient).chain
 
@@ -66,7 +64,7 @@ class vmRandomTest {
         // then
         val response = rawAction.pushTransaction(
             newAccountName,
-            signedTransaction,
+            "0x$signedTransaction",
             AccountIdentifier.create(newAccountName, newEthAccount.address).toHex(),
             TransactionContext(
                 newAccountName,
@@ -111,7 +109,7 @@ class vmRandomTest {
         // then
         val response = rawAction.pushTransaction(
             newAccountName,
-            signedTransaction,
+            "0x$signedTransaction",
             AccountIdentifier.create(newAccountName, newEthAccount.address).toHex(),
             TransactionContext(
                 newAccountName,
@@ -156,7 +154,7 @@ class vmRandomTest {
         // then
         val response = rawAction.pushTransaction(
             newAccountName,
-            signedTransaction,
+            "0x$signedTransaction",
             AccountIdentifier.create(newAccountName, newEthAccount.address).toHex(),
             TransactionContext(
                 newAccountName,
@@ -201,7 +199,7 @@ class vmRandomTest {
         // then
         val response = rawAction.pushTransaction(
             newAccountName,
-            signedTransaction,
+            "0x$signedTransaction",
             AccountIdentifier.create(newAccountName, newEthAccount.address).toHex(),
             TransactionContext(
                 newAccountName,
@@ -246,7 +244,7 @@ class vmRandomTest {
         // then
         val response = rawAction.pushTransaction(
             newAccountName,
-            signedTransaction,
+            "0x$signedTransaction",
             AccountIdentifier.create(newAccountName, newEthAccount.address).toHex(),
             TransactionContext(
                 newAccountName,
@@ -291,7 +289,7 @@ class vmRandomTest {
         // then
         val response = rawAction.pushTransaction(
             newAccountName,
-            signedTransaction,
+            "0x$signedTransaction",
             AccountIdentifier.create(newAccountName, newEthAccount.address).toHex(),
             TransactionContext(
                 newAccountName,
