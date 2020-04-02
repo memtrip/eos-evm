@@ -1,4 +1,5 @@
 #include "catch.hpp"
+#include <memory>
 #include <evm/jumps.h>
 #include <evm/types.h>
 #include <evm/hex.h>
@@ -6,7 +7,7 @@
 
 jump_set_t jump_destinations(std::string bytecode_str) {
   bytes_t bytes = Hex::hexToBytes(bytecode_str);
-  return Jumps::findDestinations(bytes);
+  return Jumps::findDestinations(std::make_shared<bytes_t>(bytes));
 }
 
 TEST_CASE("Find jump distinations", "[jumps]") {

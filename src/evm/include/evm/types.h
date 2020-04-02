@@ -67,10 +67,8 @@ enum TransactionActionType {
   TRANSACTION_CALL,
 };
 
-typedef TransactionActionType transaction_action_t;
-
 struct TransactionData {
-  transaction_action_t action; /* ? */
+  TransactionActionType action; /* ? */
   uint256_t nonce;
   uint256_t gas_price;
   uint256_t gas_limit;
@@ -81,6 +79,7 @@ struct TransactionData {
   bytes_t r;
   bytes_t s;
   bytes_t digest;
+  bytes_t signatureBytes;
 };
 
 typedef TransactionData transaction_t;

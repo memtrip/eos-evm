@@ -1,9 +1,10 @@
 //
-// 19.03.2020
+// 27.03.2020
 // Auto generated based off the Ethereum tests found here:
 // https://github.com/ethereum/tests/blob/develop/VMTests/
 //
 #include "catch.hpp"
+#include <memory>
 #include <evm/utils.h>
 #include <evm/vm.h>
 #include <evm/hex.h>
@@ -41,19 +42,43 @@ TEST_CASE("return0______1cd2b9480f1f5bdd82e8026b6342008ef84d318c3f9f173eae7d09e5
     data_bytes /* data */
   };
 
-  ExternalMock ext {};
+  std::shared_ptr<Context> context = std::make_shared<Context>(
+    env.chainId,
+    env.blockNumber,
+    env.timestamp,
+    env.gasLimit,
+    env.coinbase,
+    env.difficulty,
+    env.blockHash,
+    params.address,
+    params.codeHash,
+    params.codeVersion,
+    params.address,
+    params.sender,
+    params.origin,
+    params.gas,
+    params.gasPrice,
+    params.value,
+    std::make_shared<bytes_t>(params.code),
+    std::make_shared<bytes_t>(params.data)
+  );
 
-  VM vm(params);
-  Call call(0);
-  AccountState accountState(&ext);
-  Memory mem {};
+  std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
+
+  std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
+  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
+  VM vm(context, stack);
+  std::shared_ptr<Call> call = std::make_shared<Call>(0);
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
+  Gasometer gasometer(params.gas);
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
 
   // when
-  vm.execute(mem, accountState, ext, call, env);
+  vm.execute(mem, accountState, external, call);
 
   // then
   CHECK("3700000000000000000000000000000000000000000000000000000000000000" ==
-    Utils::uint256_2str(accountState.get(0x00))
+    Utils::uint256_2str(accountState->get(0x00))
   );
 }
 
@@ -85,19 +110,43 @@ TEST_CASE("return1______5cd716a8e8d460b10e0dc1b3d5b6394f0c388e0e36246bf124478b0c
     data_bytes /* data */
   };
 
-  ExternalMock ext {};
+  std::shared_ptr<Context> context = std::make_shared<Context>(
+    env.chainId,
+    env.blockNumber,
+    env.timestamp,
+    env.gasLimit,
+    env.coinbase,
+    env.difficulty,
+    env.blockHash,
+    params.address,
+    params.codeHash,
+    params.codeVersion,
+    params.address,
+    params.sender,
+    params.origin,
+    params.gas,
+    params.gasPrice,
+    params.value,
+    std::make_shared<bytes_t>(params.code),
+    std::make_shared<bytes_t>(params.data)
+  );
 
-  VM vm(params);
-  Call call(0);
-  AccountState accountState(&ext);
-  Memory mem {};
+  std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
+
+  std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
+  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
+  VM vm(context, stack);
+  std::shared_ptr<Call> call = std::make_shared<Call>(0);
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
+  Gasometer gasometer(params.gas);
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
 
   // when
-  vm.execute(mem, accountState, ext, call, env);
+  vm.execute(mem, accountState, external, call);
 
   // then
   CHECK("3700000000000000000000000000000000000000000000000000000000000000" ==
-    Utils::uint256_2str(accountState.get(0x00))
+    Utils::uint256_2str(accountState->get(0x00))
   );
 }
 
@@ -129,15 +178,39 @@ TEST_CASE("suicideSendEtherToMe______0cf005812e9c99dc87bdd8463a9849a0164a9e02b3d
     data_bytes /* data */
   };
 
-  ExternalMock ext {};
+  std::shared_ptr<Context> context = std::make_shared<Context>(
+    env.chainId,
+    env.blockNumber,
+    env.timestamp,
+    env.gasLimit,
+    env.coinbase,
+    env.difficulty,
+    env.blockHash,
+    params.address,
+    params.codeHash,
+    params.codeVersion,
+    params.address,
+    params.sender,
+    params.origin,
+    params.gas,
+    params.gasPrice,
+    params.value,
+    std::make_shared<bytes_t>(params.code),
+    std::make_shared<bytes_t>(params.data)
+  );
 
-  VM vm(params);
-  Call call(0);
-  AccountState accountState(&ext);
-  Memory mem {};
+  std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
+
+  std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
+  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
+  VM vm(context, stack);
+  std::shared_ptr<Call> call = std::make_shared<Call>(0);
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
+  Gasometer gasometer(params.gas);
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
 
   // when
-  vm.execute(mem, accountState, ext, call, env);
+  vm.execute(mem, accountState, external, call);
 
   // then
 }
@@ -170,20 +243,44 @@ TEST_CASE("TestNameRegistrator______7e0e4bcbcbe8bcaf9a8535e65d4c6665db752910953b
     data_bytes /* data */
   };
 
-  ExternalMock ext {};
+  std::shared_ptr<Context> context = std::make_shared<Context>(
+    env.chainId,
+    env.blockNumber,
+    env.timestamp,
+    env.gasLimit,
+    env.coinbase,
+    env.difficulty,
+    env.blockHash,
+    params.address,
+    params.codeHash,
+    params.codeVersion,
+    params.address,
+    params.sender,
+    params.origin,
+    params.gas,
+    params.gasPrice,
+    params.value,
+    std::make_shared<bytes_t>(params.code),
+    std::make_shared<bytes_t>(params.data)
+  );
 
-  VM vm(params);
-  Call call(0);
-  AccountState accountState(&ext);
-  Memory mem {};
+  std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
+
+  std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
+  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
+  VM vm(context, stack);
+  std::shared_ptr<Call> call = std::make_shared<Call>(0);
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
+  Gasometer gasometer(params.gas);
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
 
   // when
-  vm.execute(mem, accountState, ext, call, env);
+  vm.execute(mem, accountState, external, call);
 
   // then
   CHECK("fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffa" ==
     Utils::uint256_2str(
-      accountState.get(
+      accountState->get(
         BigInt::fromHex("fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffa")
       )
     )
@@ -218,15 +315,39 @@ TEST_CASE("suicideNotExistingAccount______ba450a40efb62a9fb6e16e3bced0afde8d0b08
     data_bytes /* data */
   };
 
-  ExternalMock ext {};
+  std::shared_ptr<Context> context = std::make_shared<Context>(
+    env.chainId,
+    env.blockNumber,
+    env.timestamp,
+    env.gasLimit,
+    env.coinbase,
+    env.difficulty,
+    env.blockHash,
+    params.address,
+    params.codeHash,
+    params.codeVersion,
+    params.address,
+    params.sender,
+    params.origin,
+    params.gas,
+    params.gasPrice,
+    params.value,
+    std::make_shared<bytes_t>(params.code),
+    std::make_shared<bytes_t>(params.data)
+  );
 
-  VM vm(params);
-  Call call(0);
-  AccountState accountState(&ext);
-  Memory mem {};
+  std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
+
+  std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
+  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
+  VM vm(context, stack);
+  std::shared_ptr<Call> call = std::make_shared<Call>(0);
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
+  Gasometer gasometer(params.gas);
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
 
   // when
-  vm.execute(mem, accountState, ext, call, env);
+  vm.execute(mem, accountState, external, call);
 
   // then
 }
@@ -259,19 +380,43 @@ TEST_CASE("return2______4181cbf262c1dc2cdc186e007ec6c13466bd031b190b07874b1177a0
     data_bytes /* data */
   };
 
-  ExternalMock ext {};
+  std::shared_ptr<Context> context = std::make_shared<Context>(
+    env.chainId,
+    env.blockNumber,
+    env.timestamp,
+    env.gasLimit,
+    env.coinbase,
+    env.difficulty,
+    env.blockHash,
+    params.address,
+    params.codeHash,
+    params.codeVersion,
+    params.address,
+    params.sender,
+    params.origin,
+    params.gas,
+    params.gasPrice,
+    params.value,
+    std::make_shared<bytes_t>(params.code),
+    std::make_shared<bytes_t>(params.data)
+  );
 
-  VM vm(params);
-  Call call(0);
-  AccountState accountState(&ext);
-  Memory mem {};
+  std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
+
+  std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
+  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
+  VM vm(context, stack);
+  std::shared_ptr<Call> call = std::make_shared<Call>(0);
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
+  Gasometer gasometer(params.gas);
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
 
   // when
-  vm.execute(mem, accountState, ext, call, env);
+  vm.execute(mem, accountState, external, call);
 
   // then
   CHECK("3700000000000000000000000000000000000000000000000000000000000000" ==
-    Utils::uint256_2str(accountState.get(0x00))
+    Utils::uint256_2str(accountState->get(0x00))
   );
 }
 
@@ -303,15 +448,39 @@ TEST_CASE("suicide0______56c8766e8a1687dfe807b1e8f2d0454267f432c7e3035ff5fa9c27a
     data_bytes /* data */
   };
 
-  ExternalMock ext {};
+  std::shared_ptr<Context> context = std::make_shared<Context>(
+    env.chainId,
+    env.blockNumber,
+    env.timestamp,
+    env.gasLimit,
+    env.coinbase,
+    env.difficulty,
+    env.blockHash,
+    params.address,
+    params.codeHash,
+    params.codeVersion,
+    params.address,
+    params.sender,
+    params.origin,
+    params.gas,
+    params.gasPrice,
+    params.value,
+    std::make_shared<bytes_t>(params.code),
+    std::make_shared<bytes_t>(params.data)
+  );
 
-  VM vm(params);
-  Call call(0);
-  AccountState accountState(&ext);
-  Memory mem {};
+  std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
+
+  std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
+  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
+  VM vm(context, stack);
+  std::shared_ptr<Call> call = std::make_shared<Call>(0);
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
+  Gasometer gasometer(params.gas);
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
 
   // when
-  vm.execute(mem, accountState, ext, call, env);
+  vm.execute(mem, accountState, external, call);
 
   // then
 }

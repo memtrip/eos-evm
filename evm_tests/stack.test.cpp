@@ -1,11 +1,15 @@
 #include "catch.hpp"
+#include <memory>
 #include <evm/types.h>
 #include <evm/stack.h>
 #include <evm/utils.h>
 
 TEST_CASE("pop", "[stack]") {
+
   // given 
-  StackMachine sm {};
+  std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
+  StackMachine sm(stackItems);
+
   sm.push(1);
 
   // when
@@ -16,8 +20,10 @@ TEST_CASE("pop", "[stack]") {
 }
 
 TEST_CASE("peek", "[stack]") {
+
   // given 
-  StackMachine sm {};
+  std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
+  StackMachine sm(stackItems);
 
   // when
   sm.push(uint256_t(1));
@@ -27,8 +33,10 @@ TEST_CASE("peek", "[stack]") {
 }
 
 TEST_CASE("peekMany", "[stack]") {
+  
   // given 
-  StackMachine sm {};
+  std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
+  StackMachine sm(stackItems);
 
   // when
   sm.push(uint256_t(5));

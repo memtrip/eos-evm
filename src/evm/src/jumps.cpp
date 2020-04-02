@@ -2,13 +2,13 @@
 #include <evm/jumps.h>
 #include <evm/opcode.h>
 
-jump_set_t Jumps::findDestinations(bytes_t& bytes) {
+jump_set_t Jumps::findDestinations(std::shared_ptr<bytes_t> bytes) {
   jump_set_t jumps = jump_set_t();
 
   int position = 0;
 
-  while (position < bytes.size()) {
-    char index = bytes[position];
+  while (position < bytes->size()) {
+    char index = bytes->at(position);
     int instruction = Instruction::values[index];
 
     if (Instruction::opcode(instruction) == Opcode::JUMPDEST) {

@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <vector>
 #include "catch.hpp"
+#include <memory>
 #include <evm/instruction.h>
 #include <evm/utils.h>
 #include <evm/types.h>

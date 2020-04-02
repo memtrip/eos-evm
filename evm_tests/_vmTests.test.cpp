@@ -1,9 +1,10 @@
 //
-// 19.03.2020
+// 27.03.2020
 // Auto generated based off the Ethereum tests found here:
 // https://github.com/ethereum/tests/blob/develop/VMTests/
 //
 #include "catch.hpp"
+#include <memory>
 #include <evm/utils.h>
 #include <evm/vm.h>
 #include <evm/hex.h>
@@ -41,15 +42,39 @@ TEST_CASE("suicide______4622c577440f9db4b3954a1de60bf2fac55886dcb0ec4ecaf906c25b
     data_bytes /* data */
   };
 
-  ExternalMock ext {};
+  std::shared_ptr<Context> context = std::make_shared<Context>(
+    env.chainId,
+    env.blockNumber,
+    env.timestamp,
+    env.gasLimit,
+    env.coinbase,
+    env.difficulty,
+    env.blockHash,
+    params.address,
+    params.codeHash,
+    params.codeVersion,
+    params.address,
+    params.sender,
+    params.origin,
+    params.gas,
+    params.gasPrice,
+    params.value,
+    std::make_shared<bytes_t>(params.code),
+    std::make_shared<bytes_t>(params.data)
+  );
 
-  VM vm(params);
-  Call call(0);
-  AccountState accountState(&ext);
-  Memory mem {};
+  std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
+
+  std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
+  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
+  VM vm(context, stack);
+  std::shared_ptr<Call> call = std::make_shared<Call>(0);
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
+  Gasometer gasometer(params.gas);
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
 
   // when
-  vm.execute(mem, accountState, ext, call, env);
+  vm.execute(mem, accountState, external, call);
 
   // then
 }

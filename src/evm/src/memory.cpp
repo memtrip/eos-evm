@@ -97,10 +97,10 @@ void Memory::copyData(
   uint256_t destOffset, 
   uint256_t sourceOffset,
   uint256_t size,
-  bytes_t& data
+  std::shared_ptr<bytes_t> data
 ) {
 
-  uint256_t sourceSize = uint256_t(data.size());
+  uint256_t sourceSize = uint256_t(data->size());
 
   uint64_t outputEnd;
   if (sourceOffset > sourceSize || size > sourceSize || sourceOffset + size > sourceSize) {
@@ -117,14 +117,14 @@ void Memory::copyData(
         0
       );
     }
-    outputEnd = data.size();
+    outputEnd = data->size();
   } else {
     outputEnd = Overflow::uint256Cast(size + sourceOffset).first; 
   }
 
   if (sourceOffset < sourceSize) {
     uint64_t outputBegin = Overflow::uint256Cast(sourceOffset).first;
-    bytes_t sliceBytes = bytes_t(data.begin() + outputBegin, data.begin() + outputEnd);
+    bytes_t sliceBytes = bytes_t(data->begin() + outputBegin, data->begin() + outputEnd);
     writeSlice(
       Overflow::uint256Cast(destOffset).first,
       sliceBytes

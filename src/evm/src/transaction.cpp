@@ -1,85 +1,113 @@
+#include <memory>
 #include <evm/rlp.h>
 #include <evm/big_int.h>
 #include <evm/hex.h>
 #include <evm/hash.h>
 #include <evm/transaction.h>
+#include <evm/overflow.h>
 
-transaction_t Transaction::parse(std::string hex, uint8_t chainId) {
-  bytes_t bytes = Hex::hexToBytes(hex.substr(2, hex.size()));
-  std::vector<RLPItem> items = std::vector<RLPItem>();
-  RLPDecode::decode(bytes, items);
+const size_t RLP_ADDRESS = 3;
+const size_t RLP_DATA = 5;
+const size_t RLP_V = 6;
+const size_t RLP_R = 7;
+const size_t RLP_S = 8;
 
-  address_t address = items[0].values[3].bytes;
-
-  return {
-    address.size() == 0 ? 
-      transaction_action_t::TRANSACTION_CREATE :
-      transaction_action_t::TRANSACTION_CALL,
-    BigInt::fromBigEndianBytes(items[0].values[0].bytes), /* nonce */
-    BigInt::fromBigEndianBytes(items[0].values[1].bytes), /* gas_price */
-    BigInt::fromBigEndianBytes(items[0].values[2].bytes), /* gas_limit */
-    address, /* to */
-    BigInt::fromBigEndianBytes(items[0].values[4].bytes), /* value */
-    items[0].values[5].bytes, /* data */
-    items[0].values[6].bytes, /* v */
-    items[0].values[7].bytes, /* r */
-    items[0].values[8].bytes, /* s */
-    Transaction::digest(items, chainId)
-  };
+std::shared_ptr<bytes_t> Transaction::data(std::shared_ptr<std::vector<RLPItem>> rlp) {
+  return std::make_shared<bytes_t>(bytes_t(rlp->at(0).values[RLP_DATA].bytes.begin(), rlp->at(0).values[RLP_DATA].bytes.end()));
 }
 
-bool Transaction::signatureExists(transaction_t& transaction) {
-  return transaction.r.size() != 0 && transaction.s.size() != 0;
+bool Transaction::hasSignature(std::shared_ptr<std::vector<RLPItem>> rlp) {
+  return rlp->at(0).values[RLP_R].bytes.size() > 0 && rlp->at(0).values[RLP_S].bytes.size() > 0;
 }
 
-bytes_t Transaction::signatureBytes(transaction_t& transaction) {
+bytes_t Transaction::signature(std::shared_ptr<std::vector<RLPItem>> rlp) {
   bytes_t signatureBytes;
-  signatureBytes.reserve(1 + transaction.r.size() + transaction.s.size());
+  if (rlp->at(0).values[RLP_R].bytes.size() != 0 && rlp->at(0).values[RLP_S].bytes.size() != 0) {
+    signatureBytes.reserve(1 + rlp->at(0).values[RLP_R].bytes.size() + rlp->at(0).values[RLP_S].bytes.size());
 
-  uint8_t v = eip155Compat(transaction.v);
-  v += 27;
+    uint8_t v = eip155Compat(rlp->at(0).values[RLP_V].bytes);
+    v += 27;
 
-  signatureBytes.push_back(v);
-  signatureBytes.insert(signatureBytes.end(), transaction.r.begin(), transaction.r.end());
-  signatureBytes.insert(signatureBytes.end(), transaction.s.begin(), transaction.s.end());
+    signatureBytes.push_back(v);
+    signatureBytes.insert(signatureBytes.end(), rlp->at(0).values[RLP_R].bytes.begin(), rlp->at(0).values[RLP_R].bytes.end());
+    signatureBytes.insert(signatureBytes.end(), rlp->at(0).values[RLP_S].bytes.begin(), rlp->at(0).values[RLP_S].bytes.end());
+  }
   return signatureBytes;
 }
 
-bytes_t Transaction::digest(const rlp_t& rlp, uint8_t chainId) {
+TransactionActionType Transaction::type(std::shared_ptr<std::vector<RLPItem>> rlp) {
+  return rlp->at(0).values[RLP_ADDRESS].bytes.size() == 0 ? 
+    TransactionActionType::TRANSACTION_CREATE :
+    TransactionActionType::TRANSACTION_CALL;
+}
+
+uint256_t Transaction::nonce(std::shared_ptr<std::vector<RLPItem>> rlp) {
+  return BigInt::fromBigEndianBytes(rlp->at(0).values[0].bytes);
+}
+
+uint256_t Transaction::gasPrice(std::shared_ptr<std::vector<RLPItem>> rlp) {
+  return BigInt::fromBigEndianBytes(rlp->at(0).values[1].bytes);
+}
+
+uint64_t Transaction::gasLimit(std::shared_ptr<std::vector<RLPItem>> rlp) {
+  return Overflow::uint256Cast(BigInt::fromBigEndianBytes(rlp->at(0).values[2].bytes)).first;
+}
+
+uint256_t Transaction::value(std::shared_ptr<std::vector<RLPItem>> rlp) {
+  return BigInt::fromBigEndianBytes(rlp->at(0).values[4].bytes);
+}
+
+bytes_t Transaction::v(std::shared_ptr<std::vector<RLPItem>> rlp) {
+  return rlp->at(0).values[RLP_V].bytes;
+}
+
+bytes_t Transaction::r(std::shared_ptr<std::vector<RLPItem>> rlp) {
+  return rlp->at(0).values[RLP_R].bytes;
+}
+
+bytes_t Transaction::s(std::shared_ptr<std::vector<RLPItem>> rlp) {
+  return rlp->at(0).values[RLP_S].bytes;
+}
+
+bytes_t Transaction::address(std::shared_ptr<std::vector<RLPItem>> rlp) {
+  return rlp->at(0).values[RLP_ADDRESS].bytes;
+}
+
+bytes_t Transaction::digest(std::shared_ptr<std::vector<RLPItem>> rlp, uint8_t chainId) {
 
   RLPItem nonce {
     RLPType::STRING,
-    rlp[0].values[0].bytes,
+    rlp->at(0).values[0].bytes,
     std::vector<RLPItem> {}
   };
 
   RLPItem gasPrice {
     RLPType::STRING,
-    rlp[0].values[1].bytes,
+    rlp->at(0).values[1].bytes,
     std::vector<RLPItem> {}
   };
 
   RLPItem gasLimit {
     RLPType::STRING,
-    rlp[0].values[2].bytes,
+    rlp->at(0).values[2].bytes,
     std::vector<RLPItem> {}
   };
 
   RLPItem address {
     RLPType::STRING,
-    rlp[0].values[3].bytes,
+    rlp->at(0).values[3].bytes,
     std::vector<RLPItem> {}
   };
 
   RLPItem value {
     RLPType::STRING,
-    rlp[0].values[4].bytes,
+    rlp->at(0).values[4].bytes,
     std::vector<RLPItem> {}
   };
 
   RLPItem data {
     RLPType::STRING,
-    rlp[0].values[5].bytes,
+    rlp->at(0).values[5].bytes,
     std::vector<RLPItem> {}
   };
 

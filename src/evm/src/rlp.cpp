@@ -1,22 +1,6 @@
 #include <evm/rlp.h>
 
-RLPItem RLPDecode::createStr(bytes_t& bytes) {
-  return {
-    RLPType::STRING,
-    bytes,
-    std::vector<RLPItem>()
-  };
-}
-
-RLPItem RLPDecode::createList(std::vector<RLPItem>& values) {
-  return {
-    RLPType::LIST,
-    bytes_t(),
-    values
-  };
-}
-
-void RLPDecode::decode(bytes_t& encoded, std::vector<RLPItem>& list) {
+void RLPDecode::decode(bytes_t& encoded, std::shared_ptr<std::vector<RLPItem>> list) {
   traverse(encoded, 0, encoded.size(), list);
 }
 
@@ -24,54 +8,74 @@ void RLPDecode::traverse(
   bytes_t& data, 
   uint16_t startPos,
   uint16_t end, 
-  std::vector<RLPItem>& list
+  std::shared_ptr<std::vector<RLPItem>> list
 ) {
   if (data.size() == 0) return;
 
   while (startPos < end) {
     uint8_t prefix = data[startPos] & 0xff;
     if (prefix < OFFSET_SHORT_STRING) {
-      bytes_t item = { prefix };
-      list.push_back(createStr(item));
+      list->push_back({
+        RLPType::STRING,
+        bytes_t { prefix },
+        std::vector<RLPItem>()
+      });
       startPos += 1;
     } else if (prefix == OFFSET_SHORT_STRING) {
-      bytes_t emptyBytes = bytes_t();
-      list.push_back(createStr(emptyBytes) );
+      list->push_back({
+        RLPType::STRING,
+        bytes_t(),
+        std::vector<RLPItem>()
+      });
       startPos += 1;
     } else if (prefix > OFFSET_SHORT_STRING && prefix <= OFFSET_LONG_STRING) {
       uint8_t strLen = prefix - OFFSET_SHORT_STRING;
-      bytes_t strBytes = bytes_t(
-        data.begin() + startPos + 1, 
-        data.begin() + startPos + strLen + 1
-      );
-      list.push_back(createStr(strBytes));
+      list->push_back({
+        RLPType::STRING,
+        bytes_t(
+          data.begin() + startPos + 1, 
+          data.begin() + startPos + strLen + 1
+        ),
+        std::vector<RLPItem>()
+      });
       startPos += (strLen + 1);
     } else if (prefix > OFFSET_LONG_STRING && prefix < OFFSET_SHORT_LIST) {
       uint8_t lenOfStrLen = prefix - OFFSET_LONG_STRING;
       uint16_t strLen = calculateLength(lenOfStrLen, data, startPos);
-      bytes_t strBytes = bytes_t(
-        data.begin() + startPos + lenOfStrLen + 1, 
-        data.begin() + startPos + lenOfStrLen + strLen + 1
-      );
-      list.push_back(createStr(strBytes));
+      list->push_back({
+        RLPType::STRING,
+        bytes_t(
+          data.begin() + startPos + lenOfStrLen + 1, 
+          data.begin() + startPos + lenOfStrLen + strLen + 1
+        ),
+        std::vector<RLPItem>()
+      });
       startPos += (lenOfStrLen + strLen + 1);
     } else if (prefix >= OFFSET_SHORT_LIST && prefix <= OFFSET_LONG_LIST) {
       uint8_t listLen = prefix - OFFSET_SHORT_LIST;
-      std::vector<RLPItem> newLevelList = std::vector<RLPItem>();
+      std::shared_ptr<std::vector<RLPItem>> newLevelList = std::make_shared<std::vector<RLPItem>>();
       traverse(data, startPos + 1, startPos + listLen + 1, newLevelList);
-      list.push_back(createList(newLevelList));
+      list->push_back({
+        RLPType::LIST,
+        bytes_t(),
+        std::vector<RLPItem>(newLevelList->begin(), newLevelList->end())
+      });
       startPos += (listLen + 1);
     } else if (prefix > OFFSET_LONG_LIST) {
       uint8_t lenOfListLen = (prefix - OFFSET_LONG_LIST);
       uint16_t listLen = calculateLength(lenOfListLen, data, startPos);
-      std::vector<RLPItem> newLevelList = std::vector<RLPItem>();
+      std::shared_ptr<std::vector<RLPItem>> newLevelList = std::make_shared<std::vector<RLPItem>>();
       traverse(
         data, 
         startPos + lenOfListLen + 1, 
         startPos + lenOfListLen + listLen + 1, 
         newLevelList
       );
-      list.push_back(createList(newLevelList));
+      list->push_back({
+        RLPType::LIST,
+        bytes_t(),
+        std::vector<RLPItem>(newLevelList->begin(), newLevelList->end())
+      });
       startPos += (lenOfListLen + listLen + 1);
     }
   }

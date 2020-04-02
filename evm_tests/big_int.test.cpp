@@ -1,5 +1,6 @@
 #include <iostream>
 #include "catch.hpp"
+#include <memory>
 #include <evm/big_int.h>
 #include <evm/types.h>
 #include <evm/hex.h>

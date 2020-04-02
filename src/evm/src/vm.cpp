@@ -10,17 +10,16 @@
 #include <evm/utils.h>
 
 exec_result_t VM::execute(
-  Memory& memory,
-  AccountState& accountState,
-  External& external,
-  Call& call,
-  env_t& env
+  std::shared_ptr<Memory> memory,
+  std::shared_ptr<AccountState> accountState,
+  std::shared_ptr<External> external,
+  std::shared_ptr<Call> call
 ) {
 
   exec_result_t result;
 
-  jump_set_t jumps = Jumps::findDestinations(params.code);
-  ByteReader reader(0, params.code);
+  jump_set_t jumps = Jumps::findDestinations(context->code);
+  ByteReader reader(0, context->code);
 
   do {
     result = VM::step(
@@ -29,8 +28,7 @@ exec_result_t VM::execute(
       reader, 
       accountState, 
       external, 
-      call, 
-      env
+      call
     );
   } while(result.first == ExecResult::CONTINUE);
 
@@ -39,12 +37,11 @@ exec_result_t VM::execute(
 
 exec_result_t VM::step(
   jump_set_t& jumps, 
-  Memory& memory,
+  std::shared_ptr<Memory> memory,
   ByteReader& reader, 
-  AccountState& accountState,
-  External& external,
-  Call& call,
-  env_t& env
+  std::shared_ptr<AccountState> accountState,
+  std::shared_ptr<External> external,
+  std::shared_ptr<Call> call
 ) {
   // TODO: done check required?
 
@@ -62,28 +59,26 @@ exec_result_t VM::step(
       reader, 
       accountState, 
       external, 
-      call, 
-      env
+      call
     );
   }
 }
 
 exec_result_t VM::stepInner(
   jump_set_t& jumps,
-  Memory& memory,
+  std::shared_ptr<Memory> memory,
   ByteReader& reader, 
-  AccountState& accountState,
-  External& external,
-  Call& call,
-  env_t& env
+  std::shared_ptr<AccountState> accountState,
+  std::shared_ptr<External> external,
+  std::shared_ptr<Call> call
 ) {
-  uint8_t opcode = reader.bytes[reader.position];
+  uint8_t opcode = reader.bytes->at(reader.position);
   unsigned int instruction = Instruction::values[opcode];
   reader.position += 1;
 
   if (instruction == 0x000000FF) return std::make_pair(ExecResult::STOPPED, 0); // TODO: handle error
 
-  instruction_verify_t verifyResult = Instruction::verify(instruction, stack.size());
+  instruction_verify_t verifyResult = Instruction::verify(instruction, stack->size());
   switch (verifyResult) {
     case InstructionVerifyResult::INSTRUCTION_ERROR_UNDER_FLOW:
     case InstructionVerifyResult::INSTRUCTION_ERROR_OUT_OF_STACK:
@@ -93,8 +88,8 @@ exec_result_t VM::stepInner(
   }
 
   // Calculate gas cost requirements
-  std::vector<uint256_t> instructionArgs = stack.peekMany(0, Instruction::args(instruction));
-  uint64_t memoryLength = memory.length();
+  std::vector<uint256_t> instructionArgs = stack->peekMany(0, Instruction::args(instruction));
+  uint64_t memoryLength = memory->length();
   instruction_requirements_t calculateRequirements = gasometer.requirements(
     external, 
     instruction, 
@@ -116,7 +111,7 @@ exec_result_t VM::stepInner(
 
   // expand memory
   gas_t memoryRequiredSize = requirements.memoryRequiredSize;
-  memory.expand(memoryRequiredSize);
+  memory->expand(memoryRequiredSize);
   
   gas_t currentGas = Overflow::sub(gasometer.currentGas, requirements.gasCost).first;
   gasometer.currentGas = currentGas;
@@ -136,8 +131,7 @@ exec_result_t VM::stepInner(
     reader, 
     accountState,
     external,
-    call,
-    env
+    call
   );
 
   switch (result.first) {
@@ -168,7 +162,7 @@ exec_result_t VM::stepInner(
         // TODO: clear memory
         StopExecutionResult stop = std::get<StopExecutionResult>(result.second);
 
-        ReturnData intoReturnData = memory.intoReturnData(stop.initOff, stop.initSize);
+        ReturnData intoReturnData = memory->intoReturnData(stop.initOff, stop.initSize);
 
         NeedsReturn needsReturn {
           uint256_t(stop.gas),
@@ -204,12 +198,11 @@ instruction_result_t VM::executeInstruction(
   gas_t gas,
   gas_t providedGas,
   instruct_t instruction,
-  Memory& memory,
+  std::shared_ptr<Memory> memory,
   ByteReader& reader, 
-  AccountState& accountState,
-  External& external,
-  Call& call,
-  env_t& env
+  std::shared_ptr<AccountState> accountState,
+  std::shared_ptr<External> external,
+  std::shared_ptr<Call> call
 ) {
   //Utils::printInstruction(instruction);
   switch (Instruction::opcode(instruction)) {
@@ -218,233 +211,233 @@ instruction_result_t VM::executeInstruction(
     }
     case Opcode::ADD:
       {
-        uint256_t result = stack.peek(0) + stack.peek(1);
-        stack.pop(2);
-        stack.push(result);
+        uint256_t result = stack->peek(0) + stack->peek(1);
+        stack->pop(2);
+        stack->push(result);
         break;
       }
     case Opcode::MUL:
       {
-        uint256_t result = stack.peek(0) * stack.peek(1);
-        stack.pop(2);
-        stack.push(result);
+        uint256_t result = stack->peek(0) * stack->peek(1);
+        stack->pop(2);
+        stack->push(result);
         break;
       }
     case Opcode::SUB:
       {
-        uint256_t result = stack.peek(0) - stack.peek(1);
-        stack.pop(2);
-        stack.push(result);
+        uint256_t result = stack->peek(0) - stack->peek(1);
+        stack->pop(2);
+        stack->push(result);
         break;
       }
     case Opcode::DIV:
       {
-        uint256_t a = stack.peek(0);
-        uint256_t b = stack.peek(1);
+        uint256_t a = stack->peek(0);
+        uint256_t b = stack->peek(1);
 
         if (b == 0) {
-          stack.pop(2);
-          stack.push(uint256_t(0));
+          stack->pop(2);
+          stack->push(uint256_t(0));
         } else {
-          stack.pop(2);
-          stack.push(a / b);
+          stack->pop(2);
+          stack->push(a / b);
         }
         break;
       }
     case Opcode::SDIV:
       {
-        uint256_t a = stack.peek(0);
-        uint256_t b = stack.peek(1);
-        stack.pop(2);
-        stack.push(b != 0 ? intx::sdivrem(a, b).quot : 0);
+        uint256_t a = stack->peek(0);
+        uint256_t b = stack->peek(1);
+        stack->pop(2);
+        stack->push(b != 0 ? intx::sdivrem(a, b).quot : 0);
         break;
       }
     case Opcode::MOD:
       {
-        uint256_t a = stack.peek(0);
-        uint256_t b = stack.peek(1);
+        uint256_t a = stack->peek(0);
+        uint256_t b = stack->peek(1);
         if (b == 0) {
-          stack.pop(2);
-          stack.push(uint256_t(0));
+          stack->pop(2);
+          stack->push(uint256_t(0));
         } else {
-          stack.pop(2);
-          stack.push(a % b);
+          stack->pop(2);
+          stack->push(a % b);
         }
         break;
       }
     case Opcode::SMOD:
       {
-        uint256_t a = stack.peek(0);
-        uint256_t b = stack.peek(1);
-        stack.pop(2);
-        stack.push(b != 0 ? intx::sdivrem(a, b).rem : 0);
+        uint256_t a = stack->peek(0);
+        uint256_t b = stack->peek(1);
+        stack->pop(2);
+        stack->push(b != 0 ? intx::sdivrem(a, b).rem : 0);
         break;
       }
     case Opcode::ADDMOD:
       {
-        uint256_t a = stack.peek(0);
-        uint256_t b = stack.peek(1);
-        uint256_t c = stack.peek(2);
-        stack.pop(3);
-        stack.push(c != 0 ? intx::addmod(a, b, c) : 0);
+        uint256_t a = stack->peek(0);
+        uint256_t b = stack->peek(1);
+        uint256_t c = stack->peek(2);
+        stack->pop(3);
+        stack->push(c != 0 ? intx::addmod(a, b, c) : 0);
         break;
       }
     case Opcode::MULMOD:
       {
-        uint256_t a = stack.peek(0);
-        uint256_t b = stack.peek(1);
-        uint256_t c = stack.peek(2);
-        stack.pop(3);
-        stack.push(c != 0 ? intx::mulmod(a, b, c) : 0);
+        uint256_t a = stack->peek(0);
+        uint256_t b = stack->peek(1);
+        uint256_t c = stack->peek(2);
+        stack->pop(3);
+        stack->push(c != 0 ? intx::mulmod(a, b, c) : 0);
         break;
       }
     case Opcode::EXP:
       {
-        uint256_t a = stack.peek(0);
-        uint256_t b = stack.peek(1);
-        stack.pop(2);
+        uint256_t a = stack->peek(0);
+        uint256_t b = stack->peek(1);
+        stack->pop(2);
 
-        stack.push(intx::exp(a, b));
+        stack->push(intx::exp(a, b));
         break;
       }
     case Opcode::SIGNEXTEND:
       {
-        uint256_t ext = stack.peek(0);
-        uint256_t x = stack.peek(1);
-        stack.pop(1);
+        uint256_t ext = stack->peek(0);
+        uint256_t x = stack->peek(1);
+        stack->pop(1);
         if (ext < 31) {
-          stack.pop(1);
+          stack->pop(1);
           auto sign_bit = static_cast<int>(ext) * 8 + 7;
           auto sign_mask = uint256_t{1} << sign_bit;
           auto value_mask = sign_mask - 1;
           auto is_neg = (x & sign_mask) != 0;
-          stack.push(is_neg ? x | ~value_mask : x & value_mask);
+          stack->push(is_neg ? x | ~value_mask : x & value_mask);
         }
         break;
       }
     case Opcode::LT:
       {
-        bool result = stack.peek(0) < stack.peek(1);
-        stack.pop(2);
-        stack.pushBool(result);
+        bool result = stack->peek(0) < stack->peek(1);
+        stack->pop(2);
+        stack->pushBool(result);
         break;
       }
     case Opcode::GT:
       {
-        bool result = stack.peek(0) > stack.peek(1);
-        stack.pop(2);
-        stack.pushBool(result);
+        bool result = stack->peek(0) > stack->peek(1);
+        stack->pop(2);
+        stack->pushBool(result);
         break;
       }
     case Opcode::SLT:
       {
-        uint256_t a = stack.peek(0);
-        uint256_t b = stack.peek(1);
-        stack.pop(2);
+        uint256_t a = stack->peek(0);
+        uint256_t b = stack->peek(1);
+        stack->pop(2);
 
         bool x_neg = static_cast<bool>(a >> 255);
         bool y_neg = static_cast<bool>(b >> 255);
 
-        stack.pushBool((x_neg ^ y_neg) ? x_neg : a < b);
+        stack->pushBool((x_neg ^ y_neg) ? x_neg : a < b);
         break;
       }
     case Opcode::SGT:
       {
-        uint256_t a = stack.peek(0);
-        uint256_t b = stack.peek(1);
-        stack.pop(2);
+        uint256_t a = stack->peek(0);
+        uint256_t b = stack->peek(1);
+        stack->pop(2);
 
         bool x_neg = static_cast<bool>(a >> 255);
         bool y_neg = static_cast<bool>(b >> 255);
 
-        stack.pushBool((x_neg ^ y_neg) ? y_neg : a < b);
+        stack->pushBool((x_neg ^ y_neg) ? y_neg : a < b);
         break;
       }
     case Opcode::EQ:
       {
-        bool result = stack.peek(0) == stack.peek(1);
-        stack.pop(2);
-        stack.pushBool(result);
+        bool result = stack->peek(0) == stack->peek(1);
+        stack->pop(2);
+        stack->pushBool(result);
         break;
       }
     case Opcode::ISZERO:
       {
-        bool result = stack.peek(0) == 0;
-        stack.pop(1);
-        stack.pushBool(result);
+        bool result = stack->peek(0) == 0;
+        stack->pop(1);
+        stack->pushBool(result);
         break;
       }
     case Opcode::AND:
       {
-        uint256_t result = stack.peek(0) & stack.peek(1);
-        stack.pop(2);
-        stack.push(result);
+        uint256_t result = stack->peek(0) & stack->peek(1);
+        stack->pop(2);
+        stack->push(result);
         break;
       }
     case Opcode::OR:
       {
-        uint256_t result = stack.peek(0) | stack.peek(1);
-        stack.pop(2);
-        stack.push(result);
+        uint256_t result = stack->peek(0) | stack->peek(1);
+        stack->pop(2);
+        stack->push(result);
         break;
       }
     case Opcode::XOR:
       {
-        uint256_t result = stack.peek(0) ^ stack.peek(1);
-        stack.pop(2);
-        stack.push(result);
+        uint256_t result = stack->peek(0) ^ stack->peek(1);
+        stack->pop(2);
+        stack->push(result);
         break;
       }
     case Opcode::NOT:
       {
-        uint256_t item = stack.peek(0);
-        stack.pop(1);
-        stack.push(~item);
+        uint256_t item = stack->peek(0);
+        stack->pop(1);
+        stack->push(~item);
         break;
       }
     case Opcode::BYTE:
       {
-        uint256_t word = stack.peek(0);
-        uint256_t val = stack.peek(1);
-        stack.pop(2);
+        uint256_t word = stack->peek(0);
+        uint256_t val = stack->peek(1);
+        stack->pop(2);
         if (word < uint256_t(32)) {
           uint64_t word64 = static_cast<uint64_t>(word);
-          stack.push(val >> (8 * (31 - word64)) & uint256_t(0xff));
+          stack->push(val >> (8 * (31 - word64)) & uint256_t(0xff));
         } else {
-          stack.push(uint256_t(0));
+          stack->push(uint256_t(0));
         }
         break;
       }
     case Opcode::SHL:
       {
-        uint256_t a = stack.peek(0);
-        uint256_t b = stack.peek(1);
-        stack.pop(2);
-        stack.push(b <<= a);
+        uint256_t a = stack->peek(0);
+        uint256_t b = stack->peek(1);
+        stack->pop(2);
+        stack->push(b <<= a);
         break;
       }
     case Opcode::SHR:
       {
-        uint256_t a = stack.peek(0);
-        uint256_t b = stack.peek(1);
-        stack.pop(2);
-        stack.push(b >>= a);
+        uint256_t a = stack->peek(0);
+        uint256_t b = stack->peek(1);
+        stack->pop(2);
+        stack->push(b >>= a);
         break;
       }
     case Opcode::SAR:
       {
-        uint256_t a = stack.peek(0);
-        uint256_t b = stack.peek(1);
+        uint256_t a = stack->peek(0);
+        uint256_t b = stack->peek(1);
         
         if ((b & (uint256_t{1} << 255)) == 0) {
-          stack.push(b >>= a);
+          stack->push(b >>= a);
         } else {
           constexpr auto allones = ~uint256_t{};
           if (a >= 256) {
-            stack.push(allones);
+            stack->push(allones);
           } else {
             const auto shift = static_cast<unsigned>(a);
-            stack.push((b >> shift) | (allones << (256 - shift)));
+            stack->push((b >> shift) | (allones << (256 - shift)));
           }
         }
 
@@ -452,109 +445,103 @@ instruction_result_t VM::executeInstruction(
       }
     case Opcode::SHA3:
       {
-        uint256_t offset = stack.peek(0);
-        uint256_t size = stack.peek(1);
-        stack.pop(2);
-        bytes_t bytes = memory.readSlice(offset, size);
+        uint256_t offset = stack->peek(0);
+        uint256_t size = stack->peek(1);
+        stack->pop(2);
+        bytes_t bytes = memory->readSlice(offset, size);
         bytes_t hashBytes = Hash::keccak256(bytes);
-        stack.push(BigInt::fromBigEndianBytes(hashBytes));
+        stack->push(BigInt::fromBigEndianBytes(hashBytes));
         break;
       }
     case Opcode::ADDRESS:
-      stack.push(params.address);
+      stack->push(context->address);
       break;
     case Opcode::BALANCE:
       printf("(BALANCE ");
       break;
     case Opcode::ORIGIN:
-      stack.push(params.origin);
+      stack->push(context->origin);
       break;
     case Opcode::CALLER:
-      stack.push(params.sender);
+      stack->push(context->sender);
       break;
     case Opcode::CALLVALUE:
-      stack.push(params.value);
+      stack->push(context->value);
       break;
     case Opcode::CALLDATALOAD:
       {
-        uint256_t index = stack.peek(0);
-        stack.pop(1);
-        if (params.data.size() < index) {
-          stack.push(StackMachine::FALSE);
+        uint256_t index = stack->peek(0);
+        stack->pop(1);
+        if (context->data->size() < index) {
+          stack->push(StackMachine::FALSE);
         } else {
           size_t begin = static_cast<size_t>(index);
-          uint256_t value = BigInt::load32(begin, params.data);
-          stack.push(value);
+          uint256_t value = BigInt::load32(begin, context->data);
+          stack->push(value);
         }
         break;
       }
     case Opcode::CALLDATASIZE:
-      stack.push(uint256_t(params.data.size()));
+      stack->push(uint256_t(context->data->size()));
       break;
     case Opcode::CALLDATACOPY:
       {
-        uint256_t destOffset = stack.peek(0);
-        uint256_t sourceOffset = stack.peek(1);
-        uint256_t sizeItem = stack.peek(2);
-        stack.pop(3);
+        uint256_t destOffset = stack->peek(0);
+        uint256_t sourceOffset = stack->peek(1);
+        uint256_t sizeItem = stack->peek(2);
+        stack->pop(3);
 
-        bytes_t dataBytes = params.data;
-
-        memory.copyData(
+        memory->copyData(
           destOffset, 
           sourceOffset, 
           sizeItem, 
-          dataBytes
+          context->data
         );
         break;
       }
     case Opcode::CODESIZE:
-      stack.push(uint256_t(reader.bytes.size()));
+      stack->push(uint256_t(reader.bytes->size()));
       break;
     case Opcode::CODECOPY:
       {
-        uint256_t destOffset = stack.peek(0);
-        uint256_t sourceOffset = stack.peek(1);
-        uint256_t sizeItem = stack.peek(2);
-        stack.pop(3);
+        uint256_t destOffset = stack->peek(0);
+        uint256_t sourceOffset = stack->peek(1);
+        uint256_t sizeItem = stack->peek(2);
+        stack->pop(3);
 
-        bytes_t codeBytes = reader.bytes;
-
-        memory.copyData(
+        memory->copyData(
           destOffset, 
           sourceOffset, 
           sizeItem, 
-          codeBytes
+          reader.bytes
         );
         break;
       }
     case Opcode::GASPRICE:
-      stack.push(uint256_t(params.gasPrice));
+      stack->push(uint256_t(context->gasPrice));
       break;
     case Opcode::EXTCODESIZE:
       {
-        uint256_t address = stack.peek(0);
-        stack.pop(1);
-        size_t codeSize = external.code(address).size();
-        stack.push(uint256_t(codeSize));
+        uint256_t address = stack->peek(0);
+        stack->pop(1);
+        size_t codeSize = external->code(address)->size();
+        stack->push(uint256_t(codeSize));
         break;
       }
     case Opcode::EXTCODECOPY:
       {
-        uint256_t address = stack.peek(0);
-        bytes_t code = external.code(address);
-
-        uint256_t destOffset = stack.peek(1);
-        uint256_t sourceOffset = stack.peek(2);
-        uint256_t sizeItem = stack.peek(3);
+        uint256_t address = stack->peek(0);
+        uint256_t destOffset = stack->peek(1);
+        uint256_t sourceOffset = stack->peek(2);
+        uint256_t sizeItem = stack->peek(3);
         
-        stack.pop(4);
+        stack->pop(4);
 
-        memory.copyData(
+        memory->copyData(
           destOffset, 
           sourceOffset, 
           sizeItem, 
-          code
+          external->code(address)
         );
         break;
       }
@@ -570,77 +557,77 @@ instruction_result_t VM::executeInstruction(
 
     case Opcode::BLOCKHASH:
       {
-        stack.pop(1);
-        stack.push(env.blockHash);
+        stack->pop(1);
+        stack->push(context->blockHash);
       }
       break;
     case Opcode::COINBASE:
-      stack.push(env.coinbase);
+      stack->push(context->coinbase);
       break;
     case Opcode::TIMESTAMP:
-      stack.push(env.timestamp);
+      stack->push(context->timestamp);
       break;
     case Opcode::NUMBER:
-      stack.push(env.blockNumber);
+      stack->push(context->blockNumber);
       break;
     case Opcode::DIFFICULTY:
-      stack.push(env.difficulty);
+      stack->push(context->difficulty);
       break;
     case Opcode::GASLIMIT:
-      stack.push(env.gasLimit);
+      stack->push(context->gasLimit);
       break;
     case Opcode::CHAINID:
-      stack.push(env.chainId);
+      stack->push(context->chainId);
       break;
     case Opcode::SELFBALANCE:
-      stack.push(external.balance(params.address));
+      stack->push(external->balance(context->address));
       break;
     case Opcode::POP:
-      stack.pop(1);
+      stack->pop(1);
       break;
     case Opcode::MLOAD:
       {
-        uint256_t offset = stack.peek(0);
-        stack.pop(1);
-        uint256_t word = memory.read(offset);
-        stack.push(word);
+        uint256_t offset = stack->peek(0);
+        stack->pop(1);
+        uint256_t word = memory->read(offset);
+        stack->push(word);
         break;
       }
     case Opcode::MSTORE:
       {
-        uint256_t offset = stack.peek(0);
-        uint256_t word = stack.peek(1);
-        stack.pop(2);
-        memory.write(offset, word);
+        uint256_t offset = stack->peek(0);
+        uint256_t word = stack->peek(1);
+        stack->pop(2);
+        memory->write(offset, word);
         break;
       }
     case Opcode::MSTORE8:
       {
-        uint256_t offset = stack.peek(0);
-        uint256_t byte = stack.peek(1);
-        stack.pop(2);
-        memory.writeByte(offset, byte);
+        uint256_t offset = stack->peek(0);
+        uint256_t byte = stack->peek(1);
+        stack->pop(2);
+        memory->writeByte(offset, byte);
         break;
       }
     case Opcode::SLOAD:
       {
-        uint256_t key = stack.peek(0);
-        uint256_t word = accountState.get(key);
-        stack.pop(1);
-        stack.push(word);
+        uint256_t key = stack->peek(0);
+        uint256_t word = accountState->get(key);
+        stack->pop(1);
+        stack->push(word);
         break;
       }
     case Opcode::SSTORE:
       {
-        std::pair<uint256_t, uint256_t> topPair = stack.topPair();
-        stack.pop(2);
-        accountState.put(topPair.first, topPair.second);
+        std::pair<uint256_t, uint256_t> topPair = stack->topPair();
+        stack->pop(2);
+        accountState->put(topPair.first, topPair.second);
         break;
       }
     case Opcode::JUMP:
       {
-        uint256_t position = stack.peek(0);
-        stack.pop(1);
+        uint256_t position = stack->peek(0);
+        stack->pop(1);
         return std::make_pair(
           InstructionResult::JUMP_POSITION, 
           position
@@ -648,10 +635,10 @@ instruction_result_t VM::executeInstruction(
       }
     case Opcode::JUMPI:
       {
-        uint256_t condition = stack.peek(1);
+        uint256_t condition = stack->peek(1);
         if (condition == StackMachine::TRUE) {
-          uint256_t position = stack.peek(0);
-          stack.pop(2);
+          uint256_t position = stack->peek(0);
+          stack->pop(2);
           return std::make_pair(
             InstructionResult::JUMP_POSITION, 
             position
@@ -660,16 +647,16 @@ instruction_result_t VM::executeInstruction(
         break;
       }
     case Opcode::PC:
-      stack.push(uint256_t(reader.position - 1));
+      stack->push(uint256_t(reader.position - 1));
       break;
     case Opcode::MSIZE:
       {
-        size_t length = memory.length();
-        stack.push(uint256_t(length));
+        size_t length = memory->length();
+        stack->push(uint256_t(length));
         break;
       }
     case Opcode::GAS:
-      stack.push(uint256_t(gas));
+      stack->push(uint256_t(gas));
       break;
     case Opcode::JUMPDEST:
       // resolved in Jumps::findDestinations
@@ -706,7 +693,7 @@ instruction_result_t VM::executeInstruction(
     case Opcode::PUSH30:
     case Opcode::PUSH31:
     case Opcode::PUSH32:
-      stack.push(reader.read(Instruction::pushBytes(instruction)));
+      stack->push(reader.read(Instruction::pushBytes(instruction)));
       break;
     case Opcode::DUP1:
     case Opcode::DUP2:
@@ -724,7 +711,7 @@ instruction_result_t VM::executeInstruction(
     case Opcode::DUP14:
     case Opcode::DUP15:
     case Opcode::DUP16:
-      stack.push(stack.peek(Instruction::dupPosition(instruction)));
+      stack->push(stack->peek(Instruction::dupPosition(instruction)));
       break;
     case Opcode::SWAP1:
     case Opcode::SWAP2:
@@ -742,7 +729,7 @@ instruction_result_t VM::executeInstruction(
     case Opcode::SWAP14:
     case Opcode::SWAP15:
     case Opcode::SWAP16:
-      stack.swapWithTop(Instruction::swapPosition(instruction));
+      stack->swapWithTop(Instruction::swapPosition(instruction));
       break;
     case Opcode::LOG0:
     case Opcode::LOG1:
@@ -751,27 +738,27 @@ instruction_result_t VM::executeInstruction(
     case Opcode::LOG4:
     {
       uint8_t numberOfTopics = Instruction::logTopics(instruction);
-      uint256_t offset = stack.peek(0);
-      uint256_t size = stack.peek(1);
+      uint256_t offset = stack->peek(0);
+      uint256_t size = stack->peek(1);
 
-      std::vector<uint256_t> topics = stack.peekMany(2, numberOfTopics); 
+      std::vector<uint256_t> topics = stack->peekMany(2, numberOfTopics); 
 
-      stack.pop(2 + numberOfTopics);
+      stack->pop(2 + numberOfTopics);
 
-      bytes_t bytes = memory.readSlice(offset, size);
+      bytes_t bytes = memory->readSlice(offset, size);
 
-      external.log(topics, bytes);
+      external->log(topics, bytes);
       
       break;
     }
     case Opcode::CREATE:
     case Opcode::CREATE2:
       {
-        uint256_t endowment = stack.peek(0);
-        uint256_t initOff = stack.peek(1);
-        uint256_t initSize = stack.peek(2);
+        uint256_t endowment = stack->peek(0);
+        uint256_t initOff = stack->peek(1);
+        uint256_t initSize = stack->peek(2);
         size_t outSize = static_cast<size_t>(initSize);
-        stack.pop(3);
+        stack->pop(3);
 
         uint8_t createOpcode = Instruction::opcode(instruction);
         uint256_t address;
@@ -779,30 +766,38 @@ instruction_result_t VM::executeInstruction(
 
         switch (createOpcode) {
           case Opcode::CREATE:
-            address = params.address;
+            address = context->address;
             callType = ActionType::ACTION_CREATE;
             break;
           case Opcode::CREATE2:
             {
-              address = stack.peek(0);
+              address = stack->peek(0);
               callType = ActionType::ACTION_CREATE2;
-              stack.pop(1);
+              stack->pop(1);
               break;
             }
         }
 
         // TODO: check there is a high enough balance to perform create
 
-        bytes_t contractCode = memory.readSlice(initOff, initSize);
+        bytes_t contractCode = memory->readSlice(initOff, initSize);
 
-        call_result_t callResult = call.create(
-          providedGas,
-          address, 
-          uint256_t(endowment), 
-          contractCode, 
-          callType, 
+        // TODO: create a new context for this child call
+        // call_result_t callResult = call->create(
+        //   providedGas,
+        //   address, 
+        //   uint256_t(endowment), 
+        //   contractCode, 
+        //   callType, 
+        //   true, 
+        //   context,
+        //   external,
+        //   accountState
+        // );
+
+        call_result_t callResult = call->create(
           true, 
-          env,
+          context,
           external,
           accountState
         );
@@ -815,7 +810,7 @@ instruction_result_t VM::executeInstruction(
               uint256_t gasLeft = callReturn.gasLeft;
 
               // TODO: Address should come from cal_result_t
-              stack.push(address);
+              stack->push(address);
 
               return std::make_pair(
                 InstructionResult::UNUSED_GAS,
@@ -828,7 +823,7 @@ instruction_result_t VM::executeInstruction(
               MessageCallReturn callReturn = std::get<MessageCallReturn>(callResult.second);
               uint256_t gasLeft = callReturn.gasLeft;
 
-              stack.push(UINT256_ZERO);
+              stack->push(UINT256_ZERO);
 
               return std::make_pair(
                 InstructionResult::UNUSED_GAS,
@@ -839,7 +834,7 @@ instruction_result_t VM::executeInstruction(
           case MESSAGE_CALL_FAILED:
           case MESSAGE_CALL_TRACE:
             printf("MESSAGE_CALL_FAILED");
-            stack.push(UINT256_ZERO);
+            stack->push(UINT256_ZERO);
             break;
         }
 
@@ -847,9 +842,9 @@ instruction_result_t VM::executeInstruction(
       }
     case Opcode::RETURN:
       {
-        uint256_t initOff = stack.peek(0);
-        uint256_t initSize = stack.peek(1);
-        stack.pop(2);
+        uint256_t initOff = stack->peek(0);
+        uint256_t initSize = stack->peek(1);
+        stack->pop(2);
 
         StopExecutionResult result {
           gas,
@@ -868,7 +863,7 @@ instruction_result_t VM::executeInstruction(
     case Opcode::DELEGATECALL:
     case Opcode::STATICCALL:
       {
-        uint256_t codeAddress = stack.peek(0);
+        uint256_t codeAddress = stack->peek(0);
 
         size_t stackOffset = 0;
         uint64_t value;
@@ -884,18 +879,18 @@ instruction_result_t VM::executeInstruction(
             break;
           default:
             {
-              value = static_cast<uint64_t>(stack.peek(1));
+              value = static_cast<uint64_t>(stack->peek(1));
               stackOffset += 1;
               break;
             }
         }
 
-        uint256_t inOffset = stack.peek(1 + stackOffset);
-        uint256_t inSize = stack.peek(2 + stackOffset);
-        uint256_t outOffset = stack.peek(3 + stackOffset);
-        size_t outSize = static_cast<size_t>(stack.peek(4 + stackOffset));
+        uint256_t inOffset = stack->peek(1 + stackOffset);
+        uint256_t inSize = stack->peek(2 + stackOffset);
+        uint256_t outOffset = stack->peek(3 + stackOffset);
+        size_t outSize = static_cast<size_t>(stack->peek(4 + stackOffset));
 
-        stack.pop(5 + stackOffset);
+        stack->pop(5 + stackOffset);
 
         // TODO: stipend
 
@@ -906,29 +901,29 @@ instruction_result_t VM::executeInstruction(
 
         switch (callOpcode) {
           case Opcode::CALL:
-            senderAddress = params.address;
+            senderAddress = context->address;
             receiveAddress = codeAddress;
-            hasBalance = external.balance(params.address) >= value;
+            hasBalance = external->balance(context->address) >= value;
             callType = ActionType::ACTION_CALL_CODE;
             break;
           case Opcode::CALLCODE:
-            senderAddress = params.address;
-            receiveAddress = params.address;
-            hasBalance = external.balance(params.address) >= value;
+            senderAddress = context->address;
+            receiveAddress = context->address;
+            hasBalance = external->balance(context->address) >= value;
             callType = ActionType::ACTION_CALL_CODE;
             break;
           case Opcode::DELEGATECALL:
             {
-              senderAddress = params.sender;
-              receiveAddress = params.address;
+              senderAddress = context->sender;
+              receiveAddress = context->address;
               hasBalance = true;
               callType = ActionType::ACTION_DELEGATE_CALL;
               break;
             }
           case Opcode::STATICCALL:
             {
-              senderAddress = params.address;
-              receiveAddress = params.address;
+              senderAddress = context->address;
+              receiveAddress = context->address;
               hasBalance = true;
               callType = ActionType::ACTION_STATIC_CALL;
               break;
@@ -937,19 +932,27 @@ instruction_result_t VM::executeInstruction(
 
         // TODO: if there is not enough balance, or the stack depth is reached, return 0
 
-        bytes_t input = memory.readSlice(inOffset, inSize);
+        bytes_t input = memory->readSlice(inOffset, inSize);
         // TODO: external call with result
 
-        call_result_t callResult = call.call(
-          providedGas,
-          senderAddress, 
-          receiveAddress, 
-          uint256_t(value), 
-          input, 
-          codeAddress, 
-          callType, 
+        // TODO: create a new context for this child call
+        // call_result_t callResult = call->call(
+        //   providedGas,
+        //   senderAddress, 
+        //   receiveAddress, 
+        //   uint256_t(value), 
+        //   input, 
+        //   codeAddress, 
+        //   callType, 
+        //   true, 
+        //   env,
+        //   external,
+        //   accountState
+        // );
+
+        call_result_t callResult = call->call(
           true, 
-          env,
+          context,
           external,
           accountState
         );
@@ -965,9 +968,9 @@ instruction_result_t VM::executeInstruction(
                 callReturn.returnData.mem.begin(), 
                 callReturn.returnData.mem.begin() + outSize
               );
-              memory.writeSlice(outOffset, outBytes);
+              memory->writeSlice(outOffset, outBytes);
 
-              stack.push(UINT256_ONE);
+              stack->push(UINT256_ONE);
 
               return std::make_pair(
                 InstructionResult::UNUSED_GAS,
@@ -984,9 +987,9 @@ instruction_result_t VM::executeInstruction(
                 callReturn.returnData.mem.begin(), 
                 callReturn.returnData.mem.begin() + outSize
               );
-              memory.writeSlice(outOffset, outBytes);
+              memory->writeSlice(outOffset, outBytes);
 
-              stack.push(UINT256_ZERO);
+              stack->push(UINT256_ZERO);
 
               return std::make_pair(
                 InstructionResult::UNUSED_GAS,
@@ -997,7 +1000,7 @@ instruction_result_t VM::executeInstruction(
           case MESSAGE_CALL_FAILED:
           case MESSAGE_CALL_TRACE:
             printf("MESSAGE_CALL_FAILED");
-            stack.push(UINT256_ZERO);
+            stack->push(UINT256_ZERO);
             break;
         }
 
@@ -1005,9 +1008,9 @@ instruction_result_t VM::executeInstruction(
       }
     case Opcode::REVERT:
       {
-        uint256_t initOff = stack.peek(0);
-        uint256_t initSize = stack.peek(1);
-        stack.pop(2);
+        uint256_t initOff = stack->peek(0);
+        uint256_t initSize = stack->peek(1);
+        stack->pop(2);
 
         StopExecutionResult result {
           gas,
@@ -1023,9 +1026,9 @@ instruction_result_t VM::executeInstruction(
       }
     case Opcode::SELFDESTRUCT:
       {
-        uint256_t address = stack.peek(0);
-        stack.pop(1);
-        external.suicide(address);
+        uint256_t address = stack->peek(0);
+        stack->pop(1);
+        external->suicide(address);
         return std::make_pair(InstructionResult::STOP_EXEC, 0);
       }
   }

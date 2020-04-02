@@ -1,8 +1,6 @@
 package com.memtrip.eos_evm.eos.raw.abi
 
-import com.memtrip.eos.abi.writer.Abi
-import com.memtrip.eos.abi.writer.AccountNameCompress
-import com.memtrip.eos.abi.writer.StringCompress
+import com.memtrip.eos.abi.writer.*
 
 @Abi
 data class RawArgs(

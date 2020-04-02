@@ -1,3 +1,4 @@
+#include <vector>
 #include <set>
 #include <tuple>
 #include <evm/execute.h>
@@ -6,26 +7,26 @@
 #include <evm/hex.h>
 
 finalization_result_t Execute::callWithStackDepth(
-  params_t& params,
   size_t stackDepth,
-  External& external,
-  AccountState& accountState,
-  env_t& env,
-  Call& call
+  std::shared_ptr<External> external,
+  std::shared_ptr<AccountState> accountState,
+  std::shared_ptr<Context> context,
+  std::shared_ptr<Call> call
   /* tracer */
   /* vm_tracer */
 ) {
+  std::shared_ptr<std::vector<uint256_t>> stackVector = std::make_shared<std::vector<uint256_t>>();
+  std::shared_ptr<StackMachine> stack =  std::make_shared<StackMachine>(stackVector);
 
-  VM vm(params);
+  VM vm(context, stack);
 
-  Memory mem {};
+  std::shared_ptr<Memory> memory = std::make_shared<Memory>();
 
   exec_result_t vm_result = vm.execute(
-    mem, 
+    memory, 
     accountState, 
     external, 
-    call, 
-    env
+    call
   );
 
   switch (vm_result.first) {

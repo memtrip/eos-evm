@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 #include <evm/types.h>
 #include <evm/return_data.h>
 #include <evm/account_state.h>
@@ -30,12 +31,11 @@ typedef std::pair<
 class Execute {
   public:
     static finalization_result_t callWithStackDepth(
-      params_t& params,
       size_t stackDepth,
-      External& external,
-      AccountState& accountState,
-      env_t& env,
-      Call& call
+      std::shared_ptr<External> external,
+      std::shared_ptr<AccountState> accountState,
+      std::shared_ptr<Context> context,
+      std::shared_ptr<Call> call
       /* tracer */
       /* vm_tracer */
     );

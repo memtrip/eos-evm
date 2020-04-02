@@ -1,5 +1,6 @@
 #include <climits>
 #include "catch.hpp"
+#include <memory>
 #include <evm/overflow.h>
 
 TEST_CASE("Overflow add", "[overflow]") {

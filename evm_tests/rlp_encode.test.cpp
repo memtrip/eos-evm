@@ -1,4 +1,5 @@
 #include "catch.hpp"
+#include <memory>
 #include <evm/rlp.h>
 #include <evm/types.h>
 #include <evm/big_int.h>

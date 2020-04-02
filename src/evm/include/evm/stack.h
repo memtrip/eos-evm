@@ -1,11 +1,14 @@
 #pragma once
+#include <memory>
 #include <vector>
 #include <evm/types.h>
 
 class StackMachine {
   public:
-    StackMachine(const std::vector<uint256_t>& s = std::vector<uint256_t>()): stack(s) { };
-    std::vector<uint256_t> stack;
+    StackMachine(std::shared_ptr<std::vector<uint256_t>> stackArg) { 
+      stack = stackArg;
+    };
+    std::shared_ptr<std::vector<uint256_t>> stack;
     void pop(uint16_t n);
     uint256_t peek(uint16_t n);
     std::pair<uint256_t, uint256_t> topPair();

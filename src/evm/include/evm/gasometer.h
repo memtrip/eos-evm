@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 #include <variant>
 #include <evm/opcode.h>
 #include <evm/instruction.h>
@@ -102,13 +103,13 @@ class Gasometer {
     gas_t currentGas;
     gas_t currentMemGas;
     instruction_requirements_t requirements(
-      External& external,
+      std::shared_ptr<External> external,
       instruct_t instruction,
       std::vector<uint256_t>& args,
       gas_t currentMemorySize
     );
     gas_result_t calculate(
-      External& external,
+      std::shared_ptr<External> external,
       instruct_t instruction,
       std::vector<uint256_t>& args,
       gas_t currentMemorySize

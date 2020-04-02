@@ -5,7 +5,6 @@ import com.memtrip.eos.core.crypto.EosPrivateKey
 import com.memtrip.eos.http.rpc.Api
 import com.memtrip.eos_evm.eos.raw.RawAction
 import com.memtrip.eos_evm.ethereum.EthAccount
-import com.memtrip.eos_evm.ethereum._0x
 import com.memtrip.eos_evm.ethereum.toHex
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -34,7 +33,7 @@ class RawTest {
         // given
         val newAccountName = generateUniqueAccountName()
         val newAccountPrivateKey = EosPrivateKey()
-        val unsignedTransaction = stubTransaction().sign(EthAccount.create()).unsignedTransaction
+        val unsignedTransaction = stubTransaction().sign(EthAccount.create()).unsignedTransaction.toHex()
 
         setupTransactions.createAccount(
             newAccountName,
@@ -44,7 +43,7 @@ class RawTest {
         // when
         val response = rawAction.pushTransaction(
             newAccountName,
-            unsignedTransaction.toHex(),
+            unsignedTransaction,
             "invalid_sender",
             TransactionContext(
                 newAccountName,
@@ -97,12 +96,12 @@ class RawTest {
         ).blockingGet()
 
         // given (unsigned transaction)
-        val unsignedTransaction = stubTransaction().sign(EthAccount.create()).unsignedTransaction
+        val unsignedTransaction = stubTransaction().sign(EthAccount.create()).unsignedTransaction.toHex()
 
         // when
         val response = rawAction.pushTransaction(
             actionAccountName,
-            unsignedTransaction.toHex()._0x(),
+            unsignedTransaction,
             AccountIdentifier.create(senderAccountName, senderEthAccount.address).toHex(),
             TransactionContext(
                 actionAccountName,
@@ -140,12 +139,12 @@ class RawTest {
         ).blockingGet()
 
         // given (signed transaction)
-        val signedTransaction = stubTransaction().sign(EthAccount.create()).signedTransaction
+        val signedTransaction = stubTransaction().sign(EthAccount.create()).signedTransaction.toHex()
 
         // when
         val response = rawAction.pushTransaction(
             actionAccountName,
-            signedTransaction.toHex()._0x(),
+            signedTransaction,
             "",
             TransactionContext(
                 actionAccountName,

@@ -3,7 +3,7 @@
 #include <evm/big_int.h>
 
 instruction_requirements_t Gasometer::requirements(
-  External& external,
+  std::shared_ptr<External> external,
   instruct_t instruction,
   std::vector<uint256_t>& args,
   gas_t currentMemorySize
@@ -106,7 +106,7 @@ instruction_requirements_t Gasometer::requirements(
 }
 
 gas_result_t Gasometer::calculate(
-  External& external,
+  std::shared_ptr<External> external,
   instruct_t instruction,
   std::vector<uint256_t>& args,
   gas_t currentMemorySize
@@ -126,7 +126,7 @@ gas_result_t Gasometer::calculate(
 
         uint256_t address = args.at(0);
         uint256_t newVal = args.at(1);
-        bytes_t addressBytes = external.storageAt(address);
+        bytes_t addressBytes = external->storageAt(address);
         uint256_t current = BigInt::fromBigEndianBytes(addressBytes);
 
         gas_t storeGasCost;

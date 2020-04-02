@@ -1,9 +1,11 @@
 #pragma once
+#include <memory>
 #include <evm/types.h>
 #include <evm/return_data.h>
 #include <evm/call.h>
 #include <evm/external.h>
 #include <evm/account_state.h>
+#include <evm/context.h>
 
 // message call result
 enum MessageCallResult {
@@ -64,45 +66,25 @@ typedef std::pair<
 class Call {
   public:
     explicit Call(uint16_t s): stackDepth(s) { };
-    call_result_t execute(
-      transaction_t& transaction,
-      bytes_t& callerAddress,
-      env_t& env,
-      External& external,
-      AccountState& accountState
-    );
     call_result_t create(
-      gas_t gas,
-      uint256_t address,
-      uint256_t value,
-      const bytes_t& code,
-      action_type_t callType,
       bool trap,
-      env_t& env,
-      External& external,
-      AccountState& accountState
+      std::shared_ptr<Context> context,
+      std::shared_ptr<External> external,
+      std::shared_ptr<AccountState> accountState
     );
     call_result_t call(
-      gas_t gas,
-      uint256_t senderAddress,
-      uint256_t receiveAddress,
-      uint256_t value,
-      bytes_t& data,
-      uint256_t codeAddress,
-      action_type_t callType,
       bool trap,
-      env_t& env,
-      External& external,
-      AccountState& accountState
+      std::shared_ptr<Context> context,
+      std::shared_ptr<External> external,
+      std::shared_ptr<AccountState> accountState
     );
   private:
     uint16_t stackDepth;
     call_result_t makeCall(
-      params_t& params,
       action_type_t callType,
       bool trap,
-      env_t& env,
-      External& external,
-      AccountState& accountState
+      std::shared_ptr<Context> context,
+      std::shared_ptr<External> external,
+      std::shared_ptr<AccountState> accountState
     );
 };

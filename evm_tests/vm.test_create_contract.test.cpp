@@ -1,4 +1,5 @@
 #include "catch.hpp"
+#include <memory>
 #include <evm/utils.h>
 #include <evm/vm.h>
 #include <evm/hex.h>
@@ -12,16 +13,40 @@ TEST_CASE("Create the most basic contract", "[create]") {
   bytes_t codeBytes = Hex::hexToBytes(bytecode_str);
   bytes_t emptyBytes = bytes_t();
   params_t params =  Utils::params(codeBytes, emptyBytes);
-  ExternalMock ext {};
-  VM vm(params);
-  ReturnData returnData = ReturnData::empty();
-  Call call(0);
-  AccountState accountState(&ext);
-  Memory mem {};
   env_t env = Utils::env();
+  std::shared_ptr<Context> context = std::make_shared<Context>(
+    env.chainId,
+    env.blockNumber,
+    env.timestamp,
+    env.gasLimit,
+    env.coinbase,
+    env.difficulty,
+    env.blockHash,
+    params.address,
+    params.codeHash,
+    params.codeVersion,
+    params.address,
+    params.sender,
+    params.origin,
+    params.gas,
+    params.gasPrice,
+    params.value,
+    std::make_shared<bytes_t>(params.code),
+    std::make_shared<bytes_t>(params.data)
+  );
+
+  std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
+  std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
+  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
+  VM vm(context, stack);
+
+  ReturnData returnData = ReturnData::empty();
+  std::shared_ptr<Call> call = std::make_shared<Call>(0);
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
 
   // when
-  exec_result_t vm_result = vm.execute(mem, accountState, ext, call, env);
+  exec_result_t vm_result = vm.execute(mem, accountState, external, call);
 
   // then
   REQUIRE(ExecResult::DONE == vm_result.first);
@@ -44,16 +69,40 @@ TEST_CASE("Create contract using CODECOPY", "[create]") {
   bytes_t codeBytes = Hex::hexToBytes(bytecode_str);
   bytes_t emptyBytes = bytes_t();
   params_t params =  Utils::params(codeBytes, emptyBytes);
-  ExternalMock ext {};
-  VM vm(params);
-  ReturnData returnData = ReturnData::empty();
-  Call call(0);
-  AccountState accountState(&ext);
-  Memory mem {};
   env_t env = Utils::env();
+  std::shared_ptr<Context> context = std::make_shared<Context>(
+    env.chainId,
+    env.blockNumber,
+    env.timestamp,
+    env.gasLimit,
+    env.coinbase,
+    env.difficulty,
+    env.blockHash,
+    params.address,
+    params.codeHash,
+    params.codeVersion,
+    params.address,
+    params.sender,
+    params.origin,
+    params.gas,
+    params.gasPrice,
+    params.value,
+    std::make_shared<bytes_t>(params.code),
+    std::make_shared<bytes_t>(params.data)
+  );
+
+  std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
+  std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
+  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
+  VM vm(context, stack);
+
+  ReturnData returnData = ReturnData::empty();
+  std::shared_ptr<Call> call = std::make_shared<Call>(0);
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
 
   // when
-  exec_result_t vm_result = vm.execute(mem, accountState, ext, call, env);
+  exec_result_t vm_result = vm.execute(mem, accountState, external, call);
 
   // then
   REQUIRE(ExecResult::DONE == vm_result.first);
@@ -70,10 +119,10 @@ TEST_CASE("Create contract using CODECOPY", "[create]") {
     Hex::bytesToHex(needsReturn.data.mem)
   );
 
-  REQUIRE(1 == ext.logSpy.size());
-  CHECK(1 == ext.logSpy[0].first.size());
+  REQUIRE(1 == external->logSpy.size());
+  CHECK(1 == external->logSpy[0].first.size());
   CHECK("b8a00d6d8ca1be30bfec34d8f97e55f0f0fd9eeb7fb46e030516363d4cfe1ad6" == 
-    Utils::uint256_2str(ext.logSpy[0].first[0])
+    Utils::uint256_2str(external->logSpy[0].first[0])
   );
 }
 
@@ -82,15 +131,39 @@ TEST_CASE("Create contract using CREATE", "[create]") {
   bytes_t codeBytes = Hex::hexToBytes(bytecode_str);
   bytes_t emptyBytes = bytes_t();
   params_t params =  Utils::params(codeBytes, emptyBytes);
-  ExternalMock ext {};
-  VM vm(params);
-  Call call(0);
-  AccountState accountState(&ext);
-  Memory mem {};
   env_t env = Utils::env();
+  std::shared_ptr<Context> context = std::make_shared<Context>(
+    env.chainId,
+    env.blockNumber,
+    env.timestamp,
+    env.gasLimit,
+    env.coinbase,
+    env.difficulty,
+    env.blockHash,
+    params.address,
+    params.codeHash,
+    params.codeVersion,
+    params.address,
+    params.sender,
+    params.origin,
+    params.gas,
+    params.gasPrice,
+    params.value,
+    std::make_shared<bytes_t>(params.code),
+    std::make_shared<bytes_t>(params.data)
+  );
+
+  std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
+  std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
+  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
+  VM vm(context, stack);
+
+  std::shared_ptr<Call> call = std::make_shared<Call>(0);
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
 
   // when
-  exec_result_t vm_result = vm.execute(mem, accountState, ext, call, env);
+  exec_result_t vm_result = vm.execute(mem, accountState, external, call);
 
   // then
   REQUIRE(ExecResult::DONE == vm_result.first);

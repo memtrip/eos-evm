@@ -9,17 +9,24 @@
 #include <evm/address.h>
 #include <evm/transaction.h>
 #include <evm/hex.h>
+#include <evm/rlp.h>
 
 ACTION eos_evm::raw(name from, string code, string sender) {
   require_auth(from);
 
-  transaction_t transaction = Transaction::parse(code, 0x01);
+  bytes_t bytes = Hex::hexToBytes(code);
 
-  if (Transaction::signatureExists(transaction)) {
+  std::shared_ptr<std::vector<RLPItem>> rlp = std::make_shared<std::vector<RLPItem>>();
+  RLPDecode::decode(bytes, rlp);
+
+  std::shared_ptr<External> external = std::make_shared<eos_external>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
+  std::shared_ptr<Call> call = std::make_unique<Call>(0);
+
+  if (Transaction::hasSignature(rlp)) {
     bytes_t accountIdentifierBytes = eos_ecrecover::recover(
       from.to_string(),
-      transaction.digest,
-      Transaction::signatureBytes(transaction)
+      rlp
     );
 
     eosio::checksum256 accountIdentifier = eos_utils::hexToFixed(accountIdentifierBytes);
@@ -31,7 +38,8 @@ ACTION eos_evm::raw(name from, string code, string sender) {
     // itr-user is used in the transaction
     //bytes_t address = eos_utils::fixedToBytes(accountIdentifier);
     bytes_t address = bytes_t();
-    call_result_t callResult = eos_execute::transaction(transaction, address);
+    std::shared_ptr<bytes_t> data = Transaction::data(rlp);
+    call_result_t callResult = eos_execute::transaction(rlp, data, external, accountState, call);
     handleCallResult(callResult);
     check(1 != 1, "TODO: Execute transaction signed transaction");
   } else {
@@ -45,7 +53,8 @@ ACTION eos_evm::raw(name from, string code, string sender) {
     // itr->user is used in the transaction
     //bytes_t address = eos_utils::fixedToBytes(accountIdentifier);
     bytes_t address = bytes_t();
-    call_result_t callResult = eos_execute::transaction(transaction, address);
+    std::shared_ptr<bytes_t> data = Transaction::data(rlp);
+    call_result_t callResult = eos_execute::transaction(rlp, data, external, accountState, call);
     handleCallResult(callResult);
     check(1 != 1, "TODO: Execute transaction for account identifier, resolved by eosio");
   }

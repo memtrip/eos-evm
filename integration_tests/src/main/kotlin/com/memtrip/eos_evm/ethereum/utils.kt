@@ -8,7 +8,3 @@ val HEX_WRITER: HexWriter = DefaultHexWriter()
 fun ByteArray.toHex(): String = HEX_WRITER.bytesToHex(this)
 
 fun String.toHex(): ByteArray = HEX_WRITER.hexToBytes(this)
-
-fun String._0x(): String {
-    return "0x$this"
-}

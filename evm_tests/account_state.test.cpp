@@ -1,4 +1,5 @@
 #include "catch.hpp"
+#include <memory>
 #include <evm/types.h>
 #include <evm/account_state.h>
 #include <evm/stack.h>
@@ -7,25 +8,25 @@
 
 TEST_CASE("Put pair", "[account_state]") {
   // given 
-  ExternalMock ext {};
-  AccountState accountState(&ext);
+  std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
 
   // when
-  accountState.put(uint256_t(1), uint256_t(2));
+  accountState->put(uint256_t(1), uint256_t(2));
 
   // then
-  CHECK(uint256_t(2) == accountState.get(0x01));
+  CHECK(uint256_t(2) == accountState->get(0x01));
 }
 
 TEST_CASE("Get by index", "[account_state]") {
   // given 
-  ExternalMock ext {};
-  AccountState accountState(&ext);
+  std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
 
   // when
-  accountState.put(uint256_t(3), uint256_t(4));
+  accountState->put(uint256_t(3), uint256_t(4));
 
   // then
-  CHECK(uint256_t(4) == accountState.get(uint256_t(3)));
-  CHECK(uint256_t() == accountState.get(uint256_t(8)));
+  CHECK(uint256_t(4) == accountState->get(uint256_t(3)));
+  CHECK(uint256_t() == accountState->get(uint256_t(8)));
 }

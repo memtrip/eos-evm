@@ -1,4 +1,5 @@
 #include "catch.hpp"
+#include <memory>
 #include <evm/decompress_key.h>
 #include <evm/hex.h>
 

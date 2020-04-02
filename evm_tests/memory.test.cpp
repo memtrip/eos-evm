@@ -1,5 +1,6 @@
 #include <vector>
 #include "catch.hpp"
+#include <memory>
 #include <evm/memory.h>
 #include <evm/types.h>
 #include <evm/utils.h>
@@ -131,7 +132,7 @@ TEST_CASE("Memory copy data", "[memory]") {
     uint256_t(0x00),
     uint256_t(0x82),
     uint256_t(0xB8),
-    memoryBytes  
+    std::make_shared<bytes_t>(memoryBytes)  
   );
 
   bytes_t slice = memory.readSlice(uint256_t(0x00), uint256_t(0xB8));

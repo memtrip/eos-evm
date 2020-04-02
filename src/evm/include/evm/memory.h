@@ -1,4 +1,5 @@
 #include <vector>
+#include <memory>
 #include <evm/types.h>
 #include <evm/return_data.h>
 #include <evm/call.h>
@@ -24,7 +25,7 @@ class Memory {
       uint256_t destOffset, 
       uint256_t sourceOffset,
       uint256_t size,
-      bytes_t& data
+      std::shared_ptr<bytes_t> data
     );
   private: 
     bytes_t memory;

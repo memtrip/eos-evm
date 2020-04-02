@@ -1,3 +1,4 @@
+#include <memory>
 #include <evm/types.h>
 #include <evm/external.h>
 
@@ -17,7 +18,7 @@ class ExternalMock: public External {
   public:
     ExternalMock();
     void log(std::vector<uint256_t>& topics, bytes_t& data);
-    bytes_t code(uint256_t address);
+    std::shared_ptr<bytes_t> code(uint256_t address);
     double balance(uint256_t address);
     bytes_t storageAt(uint256_t address);
     void suicide(uint256_t address);

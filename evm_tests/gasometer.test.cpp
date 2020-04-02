@@ -1,4 +1,5 @@
 #include "catch.hpp"
+#include <memory>
 #include <evm/gasometer.h>
 
 TEST_CASE("Calculate total memory size", "[gasometer]") {
