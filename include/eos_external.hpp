@@ -8,6 +8,8 @@ class eos_external: public External {
     void log(std::vector<uint256_t> topics, bytes_t data);
     std::shared_ptr<bytes_t> code(uint256_t address);
     double balance(uint256_t address);
+    bytes_t storageAt(uint256_t address);
+    void suicide(uint256_t address);
 };
 
 eos_external::eos_external() {
@@ -24,5 +26,9 @@ double eos_external::balance(uint256_t address) {
   return 0.0;
 }
 
-void suicide(uint256_t address) {
+bytes_t eos_external::storageAt(uint256_t address) { 
+  return bytes_t();
+}
+
+void eos_external::suicide(uint256_t address) {
 }

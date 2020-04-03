@@ -7,6 +7,7 @@
 #include <evm/hex.h>
 #include <evm/return_data.h>
 #include <evm/call.h>
+#include <evm/big_int.h>
 
 TEST_CASE("Memory write and read", "[memory]") {
   // given
@@ -15,9 +16,12 @@ TEST_CASE("Memory write and read", "[memory]") {
   // when
   memory.expand(0x80 + 32);
 
-  memory.write(uint256_t(0x80), Utils::bigIntFromBigEndianBytes("abcdef"));
+  bytes_t writeBytes1 = Hex::hexToBytes("abcdef");
+  memory.write(uint256_t(0x80), writeBytes1);
 
-  REQUIRE("0000000000000000000000000000000000000000000000000000000000abcdef" == Utils::uint256_2str(memory.read(uint256_t(0x80)))); 
+  // then
+  bytes_t slice1 = memory.read(uint256_t(0x80));
+  REQUIRE("0000000000000000000000000000000000000000000000000000000000abcdef" == Utils::uint256_2str(BigInt::fromBigEndianBytes(slice1))); 
 }
 
 TEST_CASE("Memory write and read (1)", "[memory]") {
@@ -27,9 +31,12 @@ TEST_CASE("Memory write and read (1)", "[memory]") {
   // when
   memory.expand(0x80 + 32);
 
-  memory.write(uint256_t(0x80), uint256_t(0xabcdef));
+  bytes_t writeBytes1 = Hex::hexToBytes("abcdef");
+  memory.write(uint256_t(0x80), writeBytes1);
 
-  REQUIRE("0000000000000000000000000000000000000000000000000000000000abcdef" == Utils::uint256_2str(memory.read(uint256_t(0x80)))); 
+  // then
+  bytes_t slice1 = memory.read(uint256_t(0x80));
+  REQUIRE("0000000000000000000000000000000000000000000000000000000000abcdef" == Utils::uint256_2str(BigInt::fromBigEndianBytes(slice1))); 
 }
 
 TEST_CASE("Memory write and read (2)", "[memory]") {
@@ -38,9 +45,13 @@ TEST_CASE("Memory write and read (2)", "[memory]") {
   
   // when
   memory.expand(32);
-  memory.write(uint256_t(0x00), Utils::bigIntFromBigEndianBytes("06"));
 
-  REQUIRE("0000000000000000000000000000000000000000000000000000000000000006" == Utils::uint256_2str(memory.read(uint256_t(0x00)))); 
+  bytes_t writeBytes1 = Hex::hexToBytes("06");
+  memory.write(uint256_t(0x00), writeBytes1);
+
+  // then
+  bytes_t slice1 = memory.read(uint256_t(0x00));
+  REQUIRE("0000000000000000000000000000000000000000000000000000000000000006" == Utils::uint256_2str(BigInt::fromBigEndianBytes(slice1))); 
 }
 
 TEST_CASE("Memory write by byte and read", "[memory]") {
@@ -54,7 +65,8 @@ TEST_CASE("Memory write by byte and read", "[memory]") {
   memory.writeByte(uint256_t(0x1f), uint256_t(0xef));
 
   // then
-  REQUIRE("0000000000000000000000000000000000000000000000000000000000abcdef" == Utils::uint256_2str(memory.read(uint256_t(0x00)))); 
+  bytes_t slice1 = memory.read(uint256_t(0x00));
+  REQUIRE("0000000000000000000000000000000000000000000000000000000000abcdef" == Utils::uint256_2str(BigInt::fromBigEndianBytes(slice1))); 
 }
 
 TEST_CASE("Memory write single byte and read", "[memory]") {
@@ -66,7 +78,8 @@ TEST_CASE("Memory write single byte and read", "[memory]") {
   memory.writeByte(uint256_t(0x1F), uint256_t(0x06));
 
   // then
-  REQUIRE("0000000000000000000000000000000000000000000000000000000000000006" == Utils::uint256_2str(memory.read(uint256_t(0x00)))); 
+  bytes_t slice1 = memory.read(uint256_t(0x00));
+  REQUIRE("0000000000000000000000000000000000000000000000000000000000000006" == Utils::uint256_2str(BigInt::fromBigEndianBytes(slice1))); 
 }
 
 TEST_CASE("Memory read slice and write slice", "[memory]") {
@@ -97,13 +110,17 @@ TEST_CASE("Memory write at index", "[memory]") {
   
   // when
   memory.expand(32);
+
+  bytes_t writeBytes1 = Hex::hexToBytes("0000000000000000000000000000000000000000000000000000000000000000");
   memory.write(
     Utils::bigIntFromBigEndianBytes("0000000000000000000000000000000000000000000000000000000000000000"),
-    Utils::bigIntFromBigEndianBytes("0000000000000000000000000000000000000000000000000000000000000000")
+    writeBytes1
   );
 
+  // then
+  bytes_t slice1 = memory.read(uint256_t(0x00));
   REQUIRE("0000000000000000000000000000000000000000000000000000000000000000" == 
-    Utils::uint256_2str(memory.read(uint256_t(0x00)))); 
+    Utils::uint256_2str(BigInt::fromBigEndianBytes(slice1))); 
 }
 
 TEST_CASE("Memory write at index (1)", "[memory]") {
@@ -112,19 +129,23 @@ TEST_CASE("Memory write at index (1)", "[memory]") {
   
   // when
   memory.expand(32);
+
+  bytes_t writeBytes1 = Hex::hexToBytes("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
   memory.write(
     Utils::bigIntFromBigEndianBytes("0000000000000000000000000000000000000000000000000000000000000000"),
-    Utils::bigIntFromBigEndianBytes("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff")
+    writeBytes1
   );
 
+  // then
+  bytes_t slice1 = memory.read(uint256_t(0x00));
   REQUIRE("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" == 
-    Utils::uint256_2str(memory.read(uint256_t(0x00)))); 
+    Utils::uint256_2str(BigInt::fromBigEndianBytes(slice1))); 
 }
 
 TEST_CASE("Memory copy data", "[memory]") {
   // given
   Memory memory {};
-  bytes_t memoryBytes = Hex::hexToBytes("608060405234801561001057600080fd5b507fb8a00d6d8ca1be30bfec34d8f97e55f0f0fd9eeb7fb46e030516363d4cfe1ad630604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390a160b8806100826000396000f3fe6080604052348015600f57600080fd5b506004361060285760003560e01c8063771602f714602d575b600080fd5b606060048036036040811015604157600080fd5b8101908080359060200190929190803590602001909291905050506076565b6040518082815260200191505060405180910390f35b600081830190509291505056fea265627a7a723158209551755b4e59ca6cf78d79f5356d91565950805937074458700610f23c6ecf9b64736f6c63430005100032");
+  bytes_t copyBytes = Hex::hexToBytes("608060405234801561001057600080fd5b507fb8a00d6d8ca1be30bfec34d8f97e55f0f0fd9eeb7fb46e030516363d4cfe1ad630604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390a160b8806100826000396000f3fe6080604052348015600f57600080fd5b506004361060285760003560e01c8063771602f714602d575b600080fd5b606060048036036040811015604157600080fd5b8101908080359060200190929190803590602001909291905050506076565b6040518082815260200191505060405180910390f35b600081830190509291505056fea265627a7a723158209551755b4e59ca6cf78d79f5356d91565950805937074458700610f23c6ecf9b64736f6c63430005100032");
 
   // when
   memory.expand(314);
@@ -132,7 +153,7 @@ TEST_CASE("Memory copy data", "[memory]") {
     uint256_t(0x00),
     uint256_t(0x82),
     uint256_t(0xB8),
-    std::make_shared<bytes_t>(memoryBytes)  
+    std::make_shared<bytes_t>(copyBytes)  
   );
 
   bytes_t slice = memory.readSlice(uint256_t(0x00), uint256_t(0xB8));
@@ -148,23 +169,30 @@ TEST_CASE("Memory to return", "[memory]") {
   
   // when
   memory.expand(64);
+
+  bytes_t writeBytes1 = Hex::hexToBytes("000000000000000000000000000000000000000000000000000000000000000a");
   memory.write(
     Utils::bigIntFromBigEndianBytes("0000000000000000000000000000000000000000000000000000000000000000"),
-    Utils::bigIntFromBigEndianBytes("000000000000000000000000000000000000000000000000000000000000000a")
+    writeBytes1
   );
+
+  bytes_t writeBytes2 = Hex::hexToBytes("0000000000000000000000000000000000000000000000000000000000000000");
   memory.write(
     Utils::bigIntFromBigEndianBytes("0000000000000000000000000000000000000000000000000000000000000020"),
-    Utils::bigIntFromBigEndianBytes("0000000000000000000000000000000000000000000000000000000000000000")
+    writeBytes2
   );
 
+  bytes_t slice1 = memory.read(uint256_t(0x00));
   CHECK("000000000000000000000000000000000000000000000000000000000000000a" == 
-    Utils::uint256_2str(memory.read(uint256_t(0x00)))); 
-  CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
-    Utils::uint256_2str(memory.read(uint256_t(0x20)))); 
+    Utils::uint256_2str(BigInt::fromBigEndianBytes(slice1))); 
 
-  ReturnData returnData = memory.intoReturnData(uint256_t(0x1f), uint256_t(0x20));
+  bytes_t slice2 = memory.read(uint256_t(0x20));
+  CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
+    Utils::uint256_2str(BigInt::fromBigEndianBytes(slice2))); 
+
+  bytes_t returnDataBytes = memory.readSliceForReturn(uint256_t(0x1f), uint256_t(0x20));
 
   CHECK("0a00000000000000000000000000000000000000000000000000000000000000" ==
-    Hex::bytesToHex(returnData.mem)
+    Hex::bytesToHex(returnDataBytes)
   );
 }

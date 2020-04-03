@@ -10,8 +10,7 @@ enum InstructionVerifyResult {
 
 typedef InstructionVerifyResult instruction_verify_t;
 
-class Instruction
-{ 
+class Instruction { 
   public: 
     const static unsigned int values[];
     static uint8_t byteAt(instruct_t instruction, int pos);

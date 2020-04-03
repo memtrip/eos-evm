@@ -6,6 +6,7 @@
 #include <evm/return_data.h>
 #include <evm/call.h>
 #include <evm/gasometer.h>
+#include <evm/big_int.h>
 #include "external_mock.h"
 
 TEST_CASE("Save to memory", "[memory]") {
@@ -50,8 +51,9 @@ TEST_CASE("Save to memory", "[memory]") {
   vm.execute(mem, accountState, external, call);
 
   // then
+  bytes_t wordBytes = mem->read(uint256_t(0x00));
   CHECK("0000000000000000000000000000000000000000000000000000000000000006" == 
-    Utils::uint256_2str(mem->read(uint256_t(0x00)))
+    Utils::uint256_2str(BigInt::fromBigEndianBytes(wordBytes))
   );
 }
 

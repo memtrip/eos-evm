@@ -7,6 +7,12 @@ bytes_t Hash::keccak256(bytes_t& bytes) {
   return hashBytes;
 }
 
+bytes_t Hash::keccak256(std::shared_ptr<bytes_t> bytes) {
+  ethash::hash256 result = ethash::keccak256(bytes->data(), bytes->size());
+  bytes_t hashBytes(&result.bytes[0], &result.bytes[32]);
+  return hashBytes;
+}
+
 bytes_t Hash::keccak256(std::array<uint8_t, 33>& bytes) {
   ethash::hash256 result = ethash::keccak256(bytes.data(), bytes.size());
   bytes_t hashBytes(&result.bytes[0], &result.bytes[32]);

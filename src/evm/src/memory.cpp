@@ -29,20 +29,18 @@ void Memory::writeByte(uint256_t offset, uint256_t value) {
   memory.insert(memory.begin() + index.first, byte);
 }
 
-void Memory::write(uint256_t offset, uint256_t value) {
+void Memory::write(uint256_t offset, bytes_t& bytes) {
   overflow_t index = Overflow::uint256Cast(offset);
-  bytes_t bytes = BigInt::toBytes(value);
   if (index.second) return;
   uint64_t position = index.first + (WORD_SIZE - bytes.size());
   if (position >= length()) return;
-  memory.insert(memory.begin() + position, std::begin(bytes), std::end(bytes));
+  memory.insert(memory.begin() + position, bytes.begin(), bytes.end());
 }
 
-uint256_t Memory::read(uint256_t offset) {
+bytes_t Memory::read(uint256_t offset) {
   overflow_t index = Overflow::uint256Cast(offset);
-  if (index.second || index.first >= length()) return uint256_t(0);
-  bytes_t wordBytes = bytes_t(memory.begin() + index.first, memory.begin() + index.first + WORD_SIZE);
-  return BigInt::fromBigEndianBytes(wordBytes);
+  if (index.second || index.first >= length()) return bytes_t();
+  return bytes_t(memory.begin() + index.first, memory.begin() + index.first + WORD_SIZE);
 }
 
 void Memory::writeSlice(uint256_t offsetArg, bytes_t& bytes) {
@@ -69,28 +67,12 @@ bool Memory::isValidRange(uint64_t offset, uint64_t size) {
   return size > 0 && !overflow.second;
 }
 
-ReturnData Memory::intoReturnData(uint256_t offsetArg, uint256_t sizeArg) {
+bytes_t Memory::readSliceForReturn(uint256_t offsetArg, uint256_t sizeArg) {
   overflow_t offset = Overflow::uint256Cast(offsetArg);
   overflow_t size = Overflow::uint256Cast(sizeArg);
-
-  if (offset.second || size.second || !isValidRange(offset.first, size.first)) { 
-    ReturnData returnData {
-      bytes_t(),
-      uint256_t(0),
-      uint256_t(0)
-    };
-    return returnData;
-  }
-
+  if (!isValidRange(offset.first, size.first)) return bytes_t();
   if (offset.first == 0) resize(size.first);
-
-  bytes_t data = bytes_t(memory.begin() + offset.first, memory.begin() + offset.first + size.first);
-  ReturnData returnData {
-    data,
-    uint256_t(0),
-    uint256_t(size.first)
-  };
-  return returnData;
+  return bytes_t(memory.begin() + offset.first, memory.begin() + offset.first + size.first);
 }
 
 void Memory::copyData(

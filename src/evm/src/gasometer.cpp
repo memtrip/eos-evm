@@ -3,17 +3,64 @@
 #include <evm/big_int.h>
 
 instruction_requirements_t Gasometer::requirements(
-  std::shared_ptr<External> external,
+  uint8_t opcode,
   instruct_t instruction,
-  std::vector<uint256_t>& args,
-  gas_t currentMemorySize
+  gas_t currentMemorySize,
+  std::shared_ptr<GasCalculation> gasCalculation,
+  std::shared_ptr<StackMachine> stack,
+  std::shared_ptr<External> external
 ) {
-  gas_result_t result = calculate(
-    external,
-    instruction,
-    args,
-    currentMemorySize
-  );
+  uint8_t tier = Instruction::tier(instruction);
+  uint8_t tierGas = TIER_STEP_GAS[tier];
+  gas_t defaultGas = tierGas;
+
+  gas_result_t result;
+  switch (opcode) {
+    case Opcode::JUMPDEST:
+    case Opcode::SSTORE:
+    case Opcode::SLOAD:
+    case Opcode::BALANCE:
+    case Opcode::EXTCODESIZE:
+    case Opcode::EXTCODEHASH:
+    case Opcode::SELFDESTRUCT:
+    case Opcode::MSTORE:
+    case Opcode::MLOAD:
+    case Opcode::MSTORE8:
+    case Opcode::REVERT:
+    case Opcode::RETURN:
+    case Opcode::SHA3:
+    case Opcode::CALLDATACOPY:
+    case Opcode::CODECOPY:
+    case Opcode::RETURNDATACOPY:
+    case Opcode::EXTCODECOPY:
+    case Opcode::LOG0:
+    case Opcode::LOG1:
+    case Opcode::LOG2:
+    case Opcode::LOG3:
+    case Opcode::LOG4:
+    case Opcode::CALL:
+    case Opcode::CALLCODE:
+    case Opcode::DELEGATECALL:
+    case Opcode::STATICCALL:
+    case Opcode::CREATE:
+    case Opcode::CREATE2:
+    case Opcode::EXP:
+    case Opcode::BLOCKHASH:
+      result = std::invoke(
+        gasCalculation->values[opcode], 
+        gasCalculation, 
+        instruction,
+        defaultGas,
+        currentGas,
+        currentMemorySize,
+        stack,
+        external
+      );
+      break;
+    default:
+      result = std::make_pair(GasResult::GAS_RESULT, defaultGas);
+      break;
+  }
 
   switch (result.first) {
     case GasResult::GAS_RESULT:
@@ -103,223 +150,6 @@ instruction_requirements_t Gasometer::requirements(
         0
       );
   }
-}
-
-gas_result_t Gasometer::calculate(
-  std::shared_ptr<External> external,
-  instruct_t instruction,
-  std::vector<uint256_t>& args,
-  gas_t currentMemorySize
-) {
-  uint8_t tier = Instruction::tier(instruction);
-  uint8_t tierGas = TIER_STEP_GAS[tier];
-  gas_t defaultGas = tierGas;
-
-  switch (Instruction::opcode(instruction)) {
-    case Opcode::JUMPDEST:
-      return gas(1);
-    case Opcode::SSTORE:
-      {
-        if (currentGas <= CALL_STIPEND) {
-          return outOfGas();
-        }
-
-        uint256_t address = args.at(0);
-        uint256_t newVal = args.at(1);
-        bytes_t addressBytes = external->storageAt(address);
-        uint256_t current = BigInt::fromBigEndianBytes(addressBytes);
-
-        gas_t storeGasCost;
-        if (current == 0 && newVal != 0) {
-          storeGasCost = SSTORE_SET_GAS;
-        } else {
-          storeGasCost = SSTORE_RESET_GAS;
-        }
-
-        return gas(storeGasCost);
-      }
-    case Opcode::SLOAD:
-      return gas(SLOAD_GAS);
-    case Opcode::BALANCE:
-      return gas(BALANCE_GAS);;
-    case Opcode::EXTCODESIZE:
-      return gas(EXTCODESIZE_GAS);
-    case Opcode::EXTCODEHASH:
-      return gas(EXTCODEHASH_GAS);
-    case Opcode::SELFDESTRUCT:
-      // No empty, new account gas calculation is not included
-      return gas(0);
-    case Opcode::MSTORE:
-    case Opcode::MLOAD:
-      {
-        gas_t instructionGas = Overflow::uint256Cast(args.at(0)).first;
-        return gasMem(defaultGas, memNeeded(instructionGas, 32));
-      }
-    case Opcode::MSTORE8:
-      {
-        gas_t instructionGas = Overflow::uint256Cast(args.at(0)).first;
-        return gasMem(defaultGas, memNeeded(instructionGas, 1));
-      }
-    case Opcode::RETURN:
-    case Opcode::REVERT:
-      {
-        gas_t instructionGas = Overflow::uint256Cast(args.at(0)).first;
-        gas_t memoryNeeded = Overflow::uint256Cast(args.at(1)).first;
-        return gasMem(defaultGas, memNeeded(instructionGas, memoryNeeded));
-      }
-    case Opcode::SHA3:
-      {
-        gas_t instructionGas = Overflow::uint256Cast(args.at(0)).first;
-        gas_t memoryNeeded = Overflow::uint256Cast(args.at(1)).first;
-        gas_t words = Overflow::toWordSize(args.at(1)).first;
-        gas_t gas = SHA3_GAS + SHA3_WORD_GAS * words;
-        return gasMem(gas, memNeeded(instructionGas, memoryNeeded));
-      }
-    case Opcode::CALLDATACOPY:
-    case Opcode::CODECOPY:
-    case Opcode::RETURNDATACOPY:
-      {
-        gas_t instructionGas = Overflow::uint256Cast(args.at(0)).first;
-        gas_t copySize = Overflow::uint256Cast(args.at(2)).first;
-        return gasMemCopy(
-          defaultGas, 
-          memNeeded(instructionGas, copySize), 
-          copySize
-        );
-      }
-    case Opcode::EXTCODECOPY:
-      {
-        gas_t instructionGas = Overflow::uint256Cast(args.at(1)).first;
-        gas_t copySize = Overflow::uint256Cast(args.at(3)).first;
-        return gasMemCopy(
-          EXTCODECOPY_BASE_GAS, 
-          memNeeded(instructionGas, copySize), 
-          copySize
-        );
-      }
-    case Opcode::LOG0:
-    case Opcode::LOG1:
-    case Opcode::LOG2:
-    case Opcode::LOG3:
-    case Opcode::LOG4:
-      {
-        gas_t instructionGas = Overflow::uint256Cast(args.at(0)).first;
-        gas_t memoryNeeded = Overflow::uint256Cast(args.at(1)).first;
-        gas_t noOfTopics = Overflow::uint256Cast(Instruction::logTopics(instruction)).first;
-        gas_t logGas = LOG_GAS + LOG_TOPIC_GAS * noOfTopics;
-        gas_t dataGas = memoryNeeded * LOG_DATA_GAS;
-        gas_t gas = dataGas + logGas;
-        return gasMem(gas, memNeeded(instructionGas, memoryNeeded));
-      }
-    case Opcode::CALL:
-    case Opcode::CALLCODE:
-      {
-        gas_t gas = CALL_GAS;
-        gas_t value = Overflow::uint256Cast(args.at(2)).first;
-        gas_t argOffset = Overflow::uint256Cast(args.at(3)).first;
-        gas_t argLength = Overflow::uint256Cast(args.at(4)).first;
-        gas_t retOffset = Overflow::uint256Cast(args.at(5)).first;
-        gas_t retLength = Overflow::uint256Cast(args.at(6)).first;
-
-        gas_t mem = std::max(
-          memNeeded(argOffset, argLength),
-          memNeeded(retOffset, retLength)
-        );
-
-        bool isValueTransfer = (value != 0); 
-        if (isValueTransfer) {
-          gas = gas + CALL_VALUE_TRANSFER_GAS;
-        }
-
-        gas_t instructionGas = Overflow::uint256Cast(args.at(0)).first;
-
-        return gasMemProvided(gas, mem, instructionGas);
-      }
-    case Opcode::DELEGATECALL:
-    case Opcode::STATICCALL:
-      {
-        gas_t argOffset = Overflow::uint256Cast(args.at(2)).first;
-        gas_t argLength = Overflow::uint256Cast(args.at(3)).first;
-        gas_t retOffset = Overflow::uint256Cast(args.at(4)).first;
-        gas_t retLength = Overflow::uint256Cast(args.at(5)).first;
-
-        gas_t mem = std::max(
-          memNeeded(argOffset, argLength),
-          memNeeded(retOffset, retLength)
-        );
-        gas_t requested = Overflow::uint256Cast(args.at(0)).first;
-        return gasMemProvided(CALL_GAS, mem, requested);
-      }
-    case Opcode::CREATE:
-      {
-        gas_t start = Overflow::uint256Cast(args.at(1)).first;
-        gas_t len = Overflow::uint256Cast(args.at(2)).first;
-        gas_t gas = CREATE_GAS;
-        gas_t mem = memNeeded(start, len);
-        return gasMemProvided(gas, mem, 0);
-      }
-    case Opcode::CREATE2:
-      {
-        gas_t start = Overflow::uint256Cast(args.at(1)).first;
-        gas_t len = Overflow::uint256Cast(args.at(2)).first;
-
-        gas_t word = Overflow::toWordSize(len).first;
-        gas_t wordGas = SHA3_WORD_GAS * word;
-        gas_t gas = Overflow::add(CREATE_GAS, wordGas).first;
-        gas_t mem = memNeeded(start, len);
-
-        return gasMemProvided(gas, mem, 0);
-      }
-    case Opcode::EXP:
-      {
-        gas_t exponent = Overflow::uint256Cast(args.at(1)).first;
-        gas_t bytes = Overflow::uint256Cast((intx::count_significant_words<uint8_t>(exponent) + 7) / 8).first;
-        gas_t cost = EXP_GAS + EXP_BYTE_GAS * bytes;
-        return gas(cost);
-      }
-    case Opcode::BLOCKHASH:
-      return gas(BLOCK_HASH_GAS);
-  }
-
-  return gas(defaultGas);
-}
-
-gas_result_t Gasometer::gas(gas_t value) {
-  return std::make_pair(GasResult::GAS_RESULT, value);
-}
-
-gas_result_t Gasometer::gasMem(gas_t defaultGas, gas_t memoryNeeded) {
-  GasMem gasMem {
-    defaultGas,
-    memoryNeeded
-  };
-  return std::make_pair(GasResult::GAS_MEM_RESULT, gasMem);
-}
-
-gas_result_t Gasometer::gasMemProvided(gas_t defaultGas, gas_t memoryNeeded, gas_t requested) {
-  GasMemProvided gasMemProvided {
-    defaultGas,
-    memoryNeeded,
-    requested
-  };
-  return std::make_pair(GasResult::GAS_MEM_PROVIDE_RESULT, gasMemProvided);
-}
-
-gas_result_t Gasometer::gasMemCopy(gas_t defaultGas, gas_t memoryNeeded, gas_t copy) {
-  GasMemCopy gasMemCopy {
-    defaultGas,
-    memoryNeeded,
-    copy
-  };
-  return std::make_pair(GasResult::GAS_MEM_COPY_RESULT, gasMemCopy);
-}
-
-gas_result_t Gasometer::outOfGas() {
-  return std::make_pair(GasResult::GAS_OUT_OF_GAS, 0);
-}
-
-gas_t Gasometer::memNeeded(gas_t mem, gas_t add) {
-  return Overflow::add(mem, add).first;
 }
 
 mem_gas_t Gasometer::memGasCost(gas_t currentMemSize, gas_t memSize) const {

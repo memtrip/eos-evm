@@ -8,46 +8,55 @@
 #include <evm/external.h>
 #include <evm/gasometer.h>
 #include <evm/context.h>
+#include <evm/operation.h>
 
 class VM {
   public:
     explicit VM(
       std::shared_ptr<Context> contextArg,
       std::shared_ptr<StackMachine> stackArg,
-      const Gasometer& g = Gasometer(0)
-    ): gasometer(g) {
+      const Gasometer& g = Gasometer(0),
+      const Operation& o = Operation()
+    ): gasometer(g), operation(o) {
       context = contextArg;
       stack = stackArg;
       gasometer.currentGas = context->gas;
     };
-
+    exec_result_t execute(
+      std::shared_ptr<Memory> memory,
+      std::shared_ptr<AccountState> accountState,
+      std::shared_ptr<External> external,
+      std::shared_ptr<Call> call
+    );
     exec_result_t step(
       jump_set_t& jumps, 
+      std::shared_ptr<GasCalculation> gasCalculation,
       std::shared_ptr<Memory> memory,
-      ByteReader& reader, 
+      std::shared_ptr<ByteReader> reader,
       std::shared_ptr<AccountState> accountState,
       std::shared_ptr<External> external,
       std::shared_ptr<Call> call
     );
     exec_result_t stepInner(
       jump_set_t& jumps, 
+      std::shared_ptr<GasCalculation> gasCalculation,
       std::shared_ptr<Memory> memory,
-      ByteReader& reader, 
+      std::shared_ptr<ByteReader> reader,
       std::shared_ptr<AccountState> accountState,
       std::shared_ptr<External> external,
       std::shared_ptr<Call> call
     );
-    instruction_result_t executeInstruction(
-      gas_t gas,
+    instruction_result_t executeCreateInstruction(
+      uint8_t opcode,
       gas_t providedGas,
-      instruct_t instruction, 
       std::shared_ptr<Memory> memory,
-      ByteReader& reader, 
       std::shared_ptr<AccountState> accountState,
       std::shared_ptr<External> external,
       std::shared_ptr<Call> call
     );
-    exec_result_t execute(
+    instruction_result_t executeCallInstruction(
+      uint8_t opcode,
+      gas_t providedGas,
       std::shared_ptr<Memory> memory,
       std::shared_ptr<AccountState> accountState,
       std::shared_ptr<External> external,
@@ -57,4 +66,5 @@ class VM {
   private:
     std::shared_ptr<Context> context;
     Gasometer gasometer;
+    Operation operation;
 };
