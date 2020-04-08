@@ -37,8 +37,8 @@ enum InstructionRequirementsResult {
 struct InstructionRequirements {
   gas_t gasCost;
   gas_t provideGas;
-  gas_t memoryTotalGas;
   gas_t memoryRequiredSize;
+  gas_t memoryTotalGas;
 };
 
 typedef std::variant<

@@ -36,6 +36,7 @@ gas_result_t GasCalculation::outOfGas() {
 }
 
 gas_t GasCalculation::memNeeded(gas_t mem, gas_t add) {
+  if (add == 0) return 0;
   return Overflow::add(mem, add).first;
 }
 

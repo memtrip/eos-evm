@@ -29,18 +29,20 @@ void Memory::writeByte(uint256_t offset, uint256_t value) {
   memory.insert(memory.begin() + index.first, byte);
 }
 
-void Memory::write(uint256_t offset, bytes_t& bytes) {
+void Memory::write(uint256_t offset, uint256_t& word) {
   overflow_t index = Overflow::uint256Cast(offset);
   if (index.second) return;
+  bytes_t bytes = BigInt::toBytes(word);
   uint64_t position = index.first + (WORD_SIZE - bytes.size());
   if (position >= length()) return;
   memory.insert(memory.begin() + position, bytes.begin(), bytes.end());
 }
 
-bytes_t Memory::read(uint256_t offset) {
+uint256_t Memory::read(uint256_t offset) {
   overflow_t index = Overflow::uint256Cast(offset);
-  if (index.second || index.first >= length()) return bytes_t();
-  return bytes_t(memory.begin() + index.first, memory.begin() + index.first + WORD_SIZE);
+  if (index.second || index.first >= length()) return UINT256_ZERO;
+  bytes_t bytes = bytes_t(memory.begin() + index.first, memory.begin() + index.first + WORD_SIZE);
+  return BigInt::fromBigEndianBytes(bytes);
 }
 
 void Memory::writeSlice(uint256_t offsetArg, bytes_t& bytes) {
@@ -65,14 +67,6 @@ bytes_t Memory::readSlice(uint256_t offsetArg, uint256_t sizeArg) {
 bool Memory::isValidRange(uint64_t offset, uint64_t size) {
   overflow_t overflow = Overflow::add(offset, size);
   return size > 0 && !overflow.second;
-}
-
-bytes_t Memory::readSliceForReturn(uint256_t offsetArg, uint256_t sizeArg) {
-  overflow_t offset = Overflow::uint256Cast(offsetArg);
-  overflow_t size = Overflow::uint256Cast(sizeArg);
-  if (!isValidRange(offset.first, size.first)) return bytes_t();
-  if (offset.first == 0) resize(size.first);
-  return bytes_t(memory.begin() + offset.first, memory.begin() + offset.first + size.first);
 }
 
 void Memory::copyData(

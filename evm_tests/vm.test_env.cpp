@@ -153,7 +153,7 @@ TEST_CASE("Timestamp", "[env]") {
   std::shared_ptr<Context> context = std::make_shared<Context>(
     env.chainId,
     env.blockNumber,
-    env.timestamp,
+    12345,
     env.gasLimit,
     env.coinbase,
     env.difficulty,
@@ -184,7 +184,7 @@ TEST_CASE("Timestamp", "[env]") {
   vm.execute(mem, accountState, external, call);
 
   // then
-  CHECK(1 == vm.stack->top());
+  CHECK(12345 == vm.stack->top());
 }
 
 TEST_CASE("Number", "[env]") {

@@ -70,8 +70,8 @@ instruction_requirements_t Gasometer::requirements(
         InstructionRequirements instructionRequirements {
           gas,
           0,
-          currentMemGas,
-          0
+          0,
+          currentMemGas
         };
 
         return std::make_pair(
@@ -90,8 +90,8 @@ instruction_requirements_t Gasometer::requirements(
         InstructionRequirements instructionRequirements {
           gas,
           0,
-          memGas.newMemGas,
-          memGas.newMemSize
+          memGas.newMemSize,
+          memGas.newMemGas
         };
 
         return std::make_pair(
@@ -113,8 +113,8 @@ instruction_requirements_t Gasometer::requirements(
         InstructionRequirements instructionRequirements {
           totalGas,
           provided,
-          memGas.newMemGas,
-          memGas.newMemSize
+          memGas.newMemSize,
+          memGas.newMemGas
         };
 
         return std::make_pair(
@@ -130,13 +130,14 @@ instruction_requirements_t Gasometer::requirements(
 
         gas_t copy = Overflow::numWords(gasMemCopy.copy);
         gas_t copy_gas = COPY_GAS * copy;
-        gas_t gas = gasMemCopy.gas + copy_gas + memGas.memGasCost;
+        gas_t gas = gasMemCopy.gas + copy_gas;
+        gas = gas + memGas.memGasCost;
 
         InstructionRequirements instructionRequirements {
           gas,
           0,
-          memGas.newMemGas,
-          memGas.newMemSize
+          memGas.newMemSize,
+          memGas.newMemGas
         };
 
         return std::make_pair(

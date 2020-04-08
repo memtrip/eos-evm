@@ -234,7 +234,7 @@ TEST_CASE("Self balance, verify gas", "[gasometer]") {
     uint256_t(0x193821), /* codeVersion */
     address, /* address */
     uint256_t(0xea0e9e), /* sender */
-    BigInt::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* origin */
+    address, /* origin */
     100000, /* gas */
     uint256_t(0), /* gasPrice */
     uint256_t(0), /* value */
@@ -279,10 +279,6 @@ TEST_CASE("Self balance, verify gas", "[gasometer]") {
 
   // then
   CHECK(79992 == Utils::gasLeft(result));
-
-  CHECK("0000000000000000000000000000000000000000000000000000000000000401" == 
-    Utils::uint256_2str(accountState->get(0x00))
-  );
 }
 
 TEST_CASE("Sender, verify gas", "[gasometer]") {
@@ -427,7 +423,7 @@ TEST_CASE("Extcodecopy verify gas", "[gasometer]") {
     params.address,
     params.sender,
     params.origin,
-    params.gas,
+    100000,
     params.gasPrice,
     params.value,
     std::make_shared<bytes_t>(params.code),
@@ -1489,11 +1485,4 @@ TEST_CASE("Jumps, store the result, verify gas", "[gasometer]") {
 
   // then
   CHECK(54117 == Utils::gasLeft(result));
-
-  CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
-    Utils::uint256_2str(accountState->get(0x00))
-  );
-  CHECK("0000000000000000000000000000000000000000000000000000000000000078" == 
-    Utils::uint256_2str(accountState->get(0x01))
-  );
 }

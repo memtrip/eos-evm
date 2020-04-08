@@ -51,9 +51,9 @@ TEST_CASE("Save to memory", "[memory]") {
   vm.execute(mem, accountState, external, call);
 
   // then
-  bytes_t wordBytes = mem->read(uint256_t(0x00));
+  uint256_t word = mem->read(uint256_t(0x00));
   CHECK("0000000000000000000000000000000000000000000000000000000000000006" == 
-    Utils::uint256_2str(BigInt::fromBigEndianBytes(wordBytes))
+    Utils::uint256_2str(word)
   );
 }
 

@@ -10,6 +10,7 @@
 #include <evm/transaction.h>
 #include <evm/hex.h>
 #include <evm/rlp.h>
+#include <evm/big_int.h>
 
 ACTION eos_evm::raw(name from, string code, string sender) {
   require_auth(from);
@@ -19,7 +20,7 @@ ACTION eos_evm::raw(name from, string code, string sender) {
   std::shared_ptr<std::vector<RLPItem>> rlp = std::make_shared<std::vector<RLPItem>>();
   RLPDecode::decode(bytes, rlp);
 
-  std::shared_ptr<External> external = std::make_shared<eos_external>();
+  std::shared_ptr<External> external = std::make_shared<eos_external>(this);
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
   std::shared_ptr<Call> call = std::make_unique<Call>(0);
 
@@ -29,7 +30,7 @@ ACTION eos_evm::raw(name from, string code, string sender) {
       rlp
     );
 
-    eosio::checksum256 accountIdentifier = eos_utils::hexToFixed(accountIdentifierBytes);
+    eosio::checksum256 accountIdentifier = eos_utils::hexToChecksum256(accountIdentifierBytes);
     account_table _account(get_self(), get_self().value);
     auto idx = _account.get_index<name("accountid")>();
     auto itr = idx.find(accountIdentifier);
@@ -40,10 +41,12 @@ ACTION eos_evm::raw(name from, string code, string sender) {
     bytes_t address = bytes_t();
     std::shared_ptr<bytes_t> data = Transaction::data(rlp);
     call_result_t callResult = eos_execute::transaction(rlp, data, external, accountState, call);
-    handleCallResult(callResult);
-    check(1 != 1, "TODO: Execute transaction signed transaction");
+    handleCallResult(from, callResult, accountState);
+    idx.modify(itr, get_self(), [&](auto& account) {
+      account.nonce += 1;
+    });
   } else {
-    eosio::checksum256 accountIdentifier = eos_utils::hexToFixed(sender);
+    eosio::checksum256 accountIdentifier = eos_utils::hexToChecksum256(sender);
     account_table _account(get_self(), get_self().value);
     auto idx = _account.get_index<name("accountid")>();
     auto itr = idx.find(accountIdentifier);
@@ -55,18 +58,20 @@ ACTION eos_evm::raw(name from, string code, string sender) {
     bytes_t address = bytes_t();
     std::shared_ptr<bytes_t> data = Transaction::data(rlp);
     call_result_t callResult = eos_execute::transaction(rlp, data, external, accountState, call);
-    handleCallResult(callResult);
-    check(1 != 1, "TODO: Execute transaction for account identifier, resolved by eosio");
+    handleCallResult(from, callResult, accountState);
+    idx.modify(itr, get_self(), [&](auto& account) {
+      account.nonce += 1;
+    });
   }
 }
 
-void eos_evm::handleCallResult(call_result_t callResult) {
+void eos_evm::handleCallResult(name from, call_result_t callResult, std::shared_ptr<AccountState> accountState) {
   switch (callResult.first) {
     case MESSAGE_CALL_SUCCESS:
       {
         MessageCallReturn callReturn = std::get<MessageCallReturn>(callResult.second);
         uint256_t gasLeft = callReturn.gasLeft;
-        check(false, "MESSAGE_CALL_SUCCESS");
+        commitState(from, accountState);
         break;
       }
     case MESSAGE_CALL_REVERTED:
@@ -91,6 +96,18 @@ void eos_evm::handleCallResult(call_result_t callResult) {
   }
 }
 
+void eos_evm::commitState(name from, std::shared_ptr<AccountState> accountState) {
+  if (accountState->cacheItems.size() > 0) {
+    account_state_table _account_state(get_self(), get_self().value);
+    for (int i = 0; i < accountState->cacheItems.size(); i++) {
+      _account_state.emplace(from, [&](auto& account_state) {
+        account_state.key = BigInt::toFixed32(accountState->cacheItems[i].first);
+        account_state.value = BigInt::toFixed32(accountState->cacheItems[i].second);
+      });
+    }
+  }
+}
+
 ACTION eos_evm::create(name from, string message) {
   require_auth(from);
 
@@ -99,15 +116,15 @@ ACTION eos_evm::create(name from, string message) {
   auto iterator = _account.find(from.value);
   check(iterator == _account.end(), "An Ethereum account already exists for this user.");
 
+  bytes_t accountIdentifier = Address::accountIdentifierFromString(
+    from.to_string(), 
+    message
+  );
+
   _account.emplace(from, [&](auto& account) {
     account.user = from;
     account.nonce = 1;
-    account.accountIdentifier = eos_utils::hexToFixed(
-      Address::accountIdentifierFromString(
-        from.to_string(), 
-        message
-      )
-    );
+    account.accountIdentifier = eos_utils::hexToChecksum256(accountIdentifier);
   });
 }
 

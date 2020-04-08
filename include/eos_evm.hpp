@@ -1,4 +1,6 @@
+#pragma once
 #include <vector>
+#include <memory>
 #include <eosio/asset.hpp>
 #include <eosio/eosio.hpp>
 
@@ -17,7 +19,8 @@ CONTRACT eos_evm : public contract {
     ACTION clearlog();
 
   private:
-    void handleCallResult(call_result_t callResult);
+    void handleCallResult(name from, call_result_t callResult, std::shared_ptr<AccountState> accountState);
+    void commitState(name from, std::shared_ptr<AccountState> accountState);
     TABLE account {
       name user;
       uint64_t nonce;

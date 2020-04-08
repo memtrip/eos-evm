@@ -218,20 +218,22 @@ exec_result_t VM::stepInner(
         StopExecutionResult stop = std::get<StopExecutionResult>(result.second);
 
         ReturnData returnData;
-        bytes_t returnDataBytes = memory->readSliceForReturn(stop.initOff, stop.initSize);
+        bytes_t returnDataBytes = memory->readSlice(stop.initOff, stop.initSize);
         if (returnDataBytes.size() > 0) {
           returnData = {
             returnDataBytes,
-            uint256_t(0),
+            UINT256_ZERO,
             stop.initSize
           };
         } else {
+          bytes_t empty = bytes_t();
           returnData = {
-            bytes_t(),
-            uint256_t(0),
-            uint256_t(0)
+            empty,
+            UINT256_ZERO,
+            UINT256_ZERO
           };
         }
+        
         NeedsReturn needsReturn {
           uint256_t(stop.gas),
           returnData,

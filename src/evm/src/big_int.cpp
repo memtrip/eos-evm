@@ -38,6 +38,14 @@ bytes_t BigInt::toBytes(uint256_t input) {
   return data;
 }
 
+std::array<uint8_t, 32> BigInt::toFixed32(uint256_t input) {
+  std::array<uint8_t, 32> data {}; 
+  uint8_t bytes[32]; 
+  intx::be::store(bytes, input);
+  std::move(std::begin(bytes), std::end(bytes), data.begin());
+  return data;
+}
+
 uint256_t BigInt::load32(size_t begin, std::shared_ptr<bytes_t> bytes) {
   size_t end = std::min(begin + 32, bytes->size());
   uint8_t data[32] = {};

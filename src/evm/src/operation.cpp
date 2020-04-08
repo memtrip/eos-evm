@@ -747,8 +747,8 @@ instruction_result_t Operation::mload(
 ) {
   uint256_t offset = stack->peek(0);
   stack->pop(1);
-  bytes_t word = memory->read(offset);
-  stack->push(BigInt::fromBigEndianBytes(word));
+  uint256_t word = memory->read(offset);
+  stack->push(word);
   return std::make_pair(InstructionResult::OK, 0);
 }
 
@@ -765,8 +765,7 @@ instruction_result_t Operation::mstore(
   uint256_t offset = stack->peek(0);
   uint256_t word = stack->peek(1);
   stack->pop(2);
-  bytes_t bytes = BigInt::toBytes(word);
-  memory->write(offset, bytes);
+  memory->write(offset, word);
   return std::make_pair(InstructionResult::OK, 0);
 }
 
