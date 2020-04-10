@@ -29,8 +29,8 @@ class SetupTransactions(
                 accountName,
                 CreateAccountChain.Args.Quantity(
                 3048,
-                "0.0100 EOS",
-                "0.0100 EOS"),
+                "0.0100 ${Config.SYMBOL}",
+                "0.0100 ${Config.SYMBOL}"),
                 privateKey.publicKey,
                 privateKey.publicKey,
                 true

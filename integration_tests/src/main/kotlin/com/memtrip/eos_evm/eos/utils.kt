@@ -15,9 +15,10 @@ fun generateUniqueAccountName(): String {
 }
 
 object Config {
-    const val CHAIN_API_BASE_URL = "https://api.jungle.alohaeos.com:443/"
-    const val ISSUE_PRIVATE_KEY = "5HvDsbgjH574GALj5gRcnscMfAGBQD9JSWn3sHFsD7bNrkqXqpr"
-    const val CONTRACT_ACCOUNT_NAME = "memtripissue"
+    const val CHAIN_API_BASE_URL = "http://localhost:8888/"
+    const val ISSUE_PRIVATE_KEY = "5J8TXbmovr4mttQoZd6o7qAfJnvCcwumDJrPtVxbNZLY94UAq6B"
+    const val CONTRACT_ACCOUNT_NAME = "eos.evm"
+    const val SYMBOL = "EVM"
 }
 
 fun transactionDefaultExpiry(): Date = with(Calendar.getInstance()) {

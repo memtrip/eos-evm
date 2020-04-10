@@ -1,0 +1,45 @@
+version: "3.7"
+services:
+  nodeos:
+    environment:
+      - PUBLIC_KEY=EOS5s2adA1n4f9rR4UFQUQrgxKE452eYyf4p5DYCUuWX687qhK8fR
+      - PRIVATE_KEY=5J8TXbmovr4mttQoZd6o7qAfJnvCcwumDJrPtVxbNZLY94UAq6B
+    image: eos_evm_2_0_4:1.0
+    ports: 
+      - "8888:8888"
+      - "9011:9011"
+    expose:
+      - "8888"
+    volumes: 
+      - $PWD/mnt_nodeos:/eosio
+    command: "bash /eosio/initial_producer.sh /eosio eosio"
+  step1:
+    environment:
+      - PUBLIC_KEY=EOS5s2adA1n4f9rR4UFQUQrgxKE452eYyf4p5DYCUuWX687qhK8fR
+      - PRIVATE_KEY=5J8TXbmovr4mttQoZd6o7qAfJnvCcwumDJrPtVxbNZLY94UAq6B
+    image: eos_evm_2_0_4:1.0
+    depends_on:
+      - nodeos
+    volumes: 
+      - $PWD/mnt_cleos:/init
+    command: "bash /init/step1.sh"
+  step2:
+    environment:
+      - PUBLIC_KEY=EOS5s2adA1n4f9rR4UFQUQrgxKE452eYyf4p5DYCUuWX687qhK8fR
+      - PRIVATE_KEY=5J8TXbmovr4mttQoZd6o7qAfJnvCcwumDJrPtVxbNZLY94UAq6B
+    image: eos_cdt_1_6_3:1.0
+    depends_on:
+      - step1
+    volumes: 
+      - $PWD/mnt_cleos:/init
+    command: "bash /init/step2.sh"
+  step3:
+    environment:
+      - PUBLIC_KEY=EOS5s2adA1n4f9rR4UFQUQrgxKE452eYyf4p5DYCUuWX687qhK8fR
+      - PRIVATE_KEY=5J8TXbmovr4mttQoZd6o7qAfJnvCcwumDJrPtVxbNZLY94UAq6B
+    image: eos_evm_2_0_4:1.0
+    depends_on:
+      - step2
+    volumes: 
+      - $PWD/mnt_cleos:/init
+    command: "bash /init/step3.sh"

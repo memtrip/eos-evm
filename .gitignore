@@ -14,3 +14,4 @@ out/
 build/
 integration_tests/.gradle/
 integration_tests/.idea/
+env/mnt_nodeos/blockchain
