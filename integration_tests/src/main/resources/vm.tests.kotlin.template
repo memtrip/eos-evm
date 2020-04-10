@@ -6,7 +6,6 @@ import com.memtrip.eos_evm.eos.raw.RawAction
 import com.memtrip.eos_evm.ethereum.EthAccount
 import com.memtrip.eos_evm.ethereum.EthereumTransaction
 import com.memtrip.eos_evm.ethereum.toHex
-import com.memtrip.eos_evm.fixture.TestCases
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.junit.Assert.assertEquals

@@ -6,6 +6,7 @@
 #include <evm/return_data.h>
 #include <evm/call.h>
 #include <evm/gasometer.h>
+#include <evm/hash.h>
 #include "external_mock.h"
 
 TEST_CASE("signed division", "[signed]") {
@@ -39,19 +40,21 @@ TEST_CASE("signed division", "[signed]") {
   VM vm(context, stack);
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   vm.execute(mem, accountState, external, call);
 
   // then
   CHECK("000000000000000000000000000000000000000000000000000000000002e0ac" == 
-    Utils::uint256_2str(accountState->get(0x00))
+    Utils::uint256_2str(accountState->get(uint256_t(0x00), context->codeAddress))
   );
 
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
-    Utils::uint256_2str(accountState->get(0x01))
+    Utils::uint256_2str(accountState->get(uint256_t(0x01), context->codeAddress))
   );
 }
 
@@ -86,19 +89,21 @@ TEST_CASE("signed mod", "[signed]") {
   VM vm(context, stack);
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   vm.execute(mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000076b4b" == 
-    Utils::uint256_2str(accountState->get(0x00))
+    Utils::uint256_2str(accountState->get(uint256_t(0x00), context->codeAddress))
   );
 
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
-    Utils::uint256_2str(accountState->get(0x01))
+    Utils::uint256_2str(accountState->get(uint256_t(0x01), context->codeAddress))
   );
 }
 
@@ -133,27 +138,29 @@ TEST_CASE("add mod, mul mod", "[signed]") {
   VM vm(context, stack);
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   vm.execute(mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
-    Utils::uint256_2str(accountState->get(0x00))
+    Utils::uint256_2str(accountState->get(uint256_t(0x00), context->codeAddress))
   );
 
   CHECK("000000000000000000000000000000000000000000000000000000000000000f" == 
-    Utils::uint256_2str(accountState->get(0x01))
+    Utils::uint256_2str(accountState->get(uint256_t(0x01), context->codeAddress))
   );
 
   CHECK("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" == 
-    Utils::uint256_2str(accountState->get(0x02))
+    Utils::uint256_2str(accountState->get(uint256_t(0x02), context->codeAddress))
   );
 
   CHECK("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" == 
-    Utils::uint256_2str(accountState->get(0x03))
+    Utils::uint256_2str(accountState->get(uint256_t(0x03), context->codeAddress))
   );
 }
 
@@ -188,23 +195,25 @@ TEST_CASE("exponent", "[signed]") {
   VM vm(context, stack);
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   vm.execute(mem, accountState, external, call);
 
   // then
   CHECK("90fd23767b60204c3d6fc8aec9e70a42a3f127140879c133a20129a597ed0c59" == 
-    Utils::uint256_2str(accountState->get(0x00))
+    Utils::uint256_2str(accountState->get(uint256_t(0x00), context->codeAddress))
   );
 
   CHECK("0000000000000000000000000000000000000000000000000000012365124623" == 
-    Utils::uint256_2str(accountState->get(0x01))
+    Utils::uint256_2str(accountState->get(uint256_t(0x01), context->codeAddress))
   );
 
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
-    Utils::uint256_2str(accountState->get(0x02))
+    Utils::uint256_2str(accountState->get(uint256_t(0x02), context->codeAddress))
   );
 }
 
@@ -239,19 +248,21 @@ TEST_CASE("signextend", "[signed]") {
   VM vm(context, stack);
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   vm.execute(mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000fff" == 
-    Utils::uint256_2str(accountState->get(0x00))
+    Utils::uint256_2str(accountState->get(uint256_t(0x00), context->codeAddress))
   );
 
   CHECK("00000000000000000000000000000000000000000000000000000000000000ff" == 
-    Utils::uint256_2str(accountState->get(0x01))
+    Utils::uint256_2str(accountState->get(uint256_t(0x01), context->codeAddress))
   );
 }
 
@@ -286,26 +297,28 @@ TEST_CASE("signed comparison", "[signed]") {
   VM vm(context, stack);
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   vm.execute(mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
-    Utils::uint256_2str(accountState->get(0x00))
+    Utils::uint256_2str(accountState->get(uint256_t(0x00), context->codeAddress))
   );
 
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
-    Utils::uint256_2str(accountState->get(0x01))
+    Utils::uint256_2str(accountState->get(uint256_t(0x01), context->codeAddress))
   );
 
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
-    Utils::uint256_2str(accountState->get(0x02))
+    Utils::uint256_2str(accountState->get(uint256_t(0x02), context->codeAddress))
   );
 
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
-    Utils::uint256_2str(accountState->get(0x03))
+    Utils::uint256_2str(accountState->get(uint256_t(0x03), context->codeAddress))
   );
 }

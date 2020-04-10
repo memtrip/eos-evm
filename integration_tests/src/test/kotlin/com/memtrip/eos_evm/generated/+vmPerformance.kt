@@ -6,7 +6,6 @@ import com.memtrip.eos_evm.eos.raw.RawAction
 import com.memtrip.eos_evm.ethereum.EthAccount
 import com.memtrip.eos_evm.ethereum.EthereumTransaction
 import com.memtrip.eos_evm.ethereum.toHex
-import com.memtrip.eos_evm.fixture.TestCases
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.junit.Assert.assertEquals
@@ -15,7 +14,7 @@ import java.math.BigInteger
 import java.util.concurrent.TimeUnit
 
 //
-// 04.04.2020
+// 11.04.2020
 // Auto generated based off the Ethereum tests found here:
 // https://github.com/ethereum/tests/blob/develop/VMTests/
 //

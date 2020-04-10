@@ -1,5 +1,5 @@
 //
-// 27.03.2020
+// 11.04.2020
 // Auto generated based off the Ethereum tests found here:
 // https://github.com/ethereum/tests/blob/develop/VMTests/
 //
@@ -69,9 +69,11 @@ TEST_CASE("201503110206PYTHON______ad34ff6291ab537633ab5e7163537b24617cc4edb2f45
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
   VM vm(context, stack);
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
   Gasometer gasometer(params.gas);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   vm.execute(mem, accountState, external, call);
@@ -134,9 +136,11 @@ TEST_CASE("201503111844PYTHON______a8049871a173837bf8fbfab3352baf9bb9e33d0ffa2bd
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
   VM vm(context, stack);
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
   Gasometer gasometer(params.gas);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   vm.execute(mem, accountState, external, call);
@@ -199,9 +203,11 @@ TEST_CASE("201503112218PYTHON______6fc205d30fd7493b6e120e18c91e1e41f6fe334b94aba
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
   VM vm(context, stack);
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
   Gasometer gasometer(params.gas);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   vm.execute(mem, accountState, external, call);
@@ -264,9 +270,11 @@ TEST_CASE("201503110219PYTHON______93dd23cbf213b07ac96a1fdfc826f41475452fea6da2e
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
   VM vm(context, stack);
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
   Gasometer gasometer(params.gas);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   vm.execute(mem, accountState, external, call);
@@ -329,9 +337,11 @@ TEST_CASE("201503102320PYTHON______38aa9ba7f7836987852734619b0192d42434bd7106da1
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
   VM vm(context, stack);
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
   Gasometer gasometer(params.gas);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   vm.execute(mem, accountState, external, call);
@@ -394,9 +404,11 @@ TEST_CASE("201503110346PYTHON_PUSH24______953cb389f468c0d45697c57895679d7675ab43
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
   VM vm(context, stack);
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
   Gasometer gasometer(params.gas);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   vm.execute(mem, accountState, external, call);

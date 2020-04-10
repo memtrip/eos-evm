@@ -486,7 +486,7 @@ instruction_result_t Operation::sha3(
   uint256_t offset = stack->peek(0);
   uint256_t size = stack->peek(1);
   stack->pop(2);
-  bytes_t bytes = memory->readSlice(offset, size);
+  std::shared_ptr<bytes_t> bytes = memory->readSlice(offset, size); // WASM memory issue 
   bytes_t hashBytes = Hash::keccak256(bytes);
   stack->push(BigInt::fromBigEndianBytes(hashBytes));
   return std::make_pair(InstructionResult::OK, 0);
@@ -561,7 +561,7 @@ instruction_result_t Operation::calldataload(
   uint256_t index = stack->peek(0);
   stack->pop(1);
   if (context->data->size() < index) {
-    stack->push(StackMachine::FALSE);
+    stack->push(UINT256_ZERO);
   } else {
     size_t begin = static_cast<size_t>(index);
     uint256_t value = BigInt::load32(begin, context->data);
@@ -815,7 +815,7 @@ instruction_result_t Operation::jumpi(
   std::shared_ptr<StackMachine> stack
 ) {
   uint256_t condition = stack->peek(1);
-  if (condition == StackMachine::TRUE) {
+  if (condition == UINT256_ONE) {
     uint256_t position = stack->peek(0);
     stack->pop(2);
     return std::make_pair(
@@ -940,11 +940,14 @@ instruction_result_t Operation::log(
   uint256_t offset = stack->peek(0);
   uint256_t size = stack->peek(1);
 
-  std::vector<uint256_t> topics = stack->peekMany(2, numberOfTopics); 
+  std::vector<uint256_t> topics;
+  for (int i = 2; i < 2 + numberOfTopics; i++) {
+    topics.push_back(stack->peek(i));
+  }
 
   stack->pop(2 + numberOfTopics);
 
-  bytes_t bytes = memory->readSlice(offset, size);
+  std::shared_ptr<bytes_t> bytes = memory->readSlice(offset, size);
 
   external->log(topics, bytes);
   
@@ -1072,7 +1075,8 @@ instruction_result_t Operation::sload(
   std::shared_ptr<StackMachine> stack
 ) {
   uint256_t key = stack->peek(0);
-  uint256_t word = accountState->get(key);
+  uint256_t word = accountState->get(key, context->codeAddress);
+
   stack->pop(1);
   stack->push(word);
   return std::make_pair(InstructionResult::OK, 0);
@@ -1088,9 +1092,10 @@ instruction_result_t Operation::sstore(
   std::shared_ptr<Memory> memory, 
   std::shared_ptr<StackMachine> stack
 ) {
-  std::pair<uint256_t, uint256_t> topPair = stack->topPair();
+  uint256_t key = stack->peek(0);
+  uint256_t value = stack->peek(1);  
   stack->pop(2);
-  accountState->put(topPair.first, topPair.second);
+  accountState->put(key, value, context->codeAddress);
   return std::make_pair(InstructionResult::OK, 0);
 }
 

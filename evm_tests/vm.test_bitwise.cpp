@@ -6,6 +6,7 @@
 #include <evm/return_data.h>
 #include <evm/call.h>
 #include <evm/gasometer.h>
+#include <evm/hash.h>
 #include "external_mock.h"
 
 TEST_CASE("Bitwise AND", "[bitwise]") {
@@ -42,8 +43,10 @@ TEST_CASE("Bitwise AND", "[bitwise]") {
   VM vm(context, stack);
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   vm.execute(mem, accountState, external, call);
@@ -88,8 +91,10 @@ TEST_CASE("Bitwise OR", "[bitwise]") {
   VM vm(context, stack);
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   vm.execute(mem, accountState, external, call);
@@ -134,8 +139,10 @@ TEST_CASE("Bitwise XOR", "[bitwise]") {
   VM vm(context, stack);
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   vm.execute(mem, accountState, external, call);
@@ -177,17 +184,19 @@ TEST_CASE("Bitops", "[bitwise]") {
   VM vm(context, stack);
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   vm.execute(mem, accountState, external, call);
 
   // then
-  CHECK("00000000000000000000000000000000000000000000000000000000000000f0" == Utils::uint256_2str(accountState->get(0x00)));
-  CHECK("0000000000000000000000000000000000000000000000000000000000000fff" == Utils::uint256_2str(accountState->get(0x01)));
-  CHECK("0000000000000000000000000000000000000000000000000000000000000f0f" == Utils::uint256_2str(accountState->get(0x02)));
-  CHECK("0000000000000000000000000000000000000000000000000000000000000001" == Utils::uint256_2str(accountState->get(0x03)));
-  CHECK("0000000000000000000000000000000000000000000000000000000000000000" == Utils::uint256_2str(accountState->get(0x04)));
-  CHECK("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" == Utils::uint256_2str(accountState->get(0x05)));
+  CHECK("00000000000000000000000000000000000000000000000000000000000000f0" == Utils::uint256_2str(accountState->get(uint256_t(0x00), context->codeAddress)));
+  CHECK("0000000000000000000000000000000000000000000000000000000000000fff" == Utils::uint256_2str(accountState->get(uint256_t(0x01), context->codeAddress)));
+  CHECK("0000000000000000000000000000000000000000000000000000000000000f0f" == Utils::uint256_2str(accountState->get(uint256_t(0x02), context->codeAddress)));
+  CHECK("0000000000000000000000000000000000000000000000000000000000000001" == Utils::uint256_2str(accountState->get(uint256_t(0x03), context->codeAddress)));
+  CHECK("0000000000000000000000000000000000000000000000000000000000000000" == Utils::uint256_2str(accountState->get(uint256_t(0x04), context->codeAddress)));
+  CHECK("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" == Utils::uint256_2str(accountState->get(uint256_t(0x05), context->codeAddress)));
 }

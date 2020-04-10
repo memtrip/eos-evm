@@ -7,6 +7,7 @@
 #include <evm/call.h>
 #include <evm/gasometer.h>
 #include <evm/big_int.h>
+#include <evm/hash.h>
 #include "external_mock.h"
 
 TEST_CASE("Add two large numbers, store the result, verify gas", "[gasometer]") {
@@ -43,8 +44,10 @@ TEST_CASE("Add two large numbers, store the result, verify gas", "[gasometer]") 
   VM vm(context, stack);
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   exec_result_t result = vm.execute(mem, accountState, external, call);
@@ -53,7 +56,7 @@ TEST_CASE("Add two large numbers, store the result, verify gas", "[gasometer]") 
   CHECK(79988 == Utils::gasLeft(result));
 
   CHECK("fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe" == 
-    Utils::uint256_2str(accountState->get(0x00))
+    Utils::uint256_2str(accountState->get(uint256_t(0x00), context->codeAddress))
   );
 }
 
@@ -91,8 +94,10 @@ TEST_CASE("Store the result of an SHA3 hash, verify gas", "[gasometer]") {
   VM vm(context, stack);
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   exec_result_t result = vm.execute(mem, accountState, external, call);
@@ -101,7 +106,7 @@ TEST_CASE("Store the result of an SHA3 hash, verify gas", "[gasometer]") {
   CHECK(79961 == Utils::gasLeft(result));
 
   CHECK("c5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470" == 
-    Utils::uint256_2str(accountState->get(0x00))
+    Utils::uint256_2str(accountState->get(uint256_t(0x00), context->codeAddress))
   );
 }
 
@@ -150,8 +155,10 @@ TEST_CASE("Address, verify gas", "[gasometer]") {
   VM vm(context, stack);
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   exec_result_t result = vm.execute(mem, accountState, external, call);
@@ -160,7 +167,7 @@ TEST_CASE("Address, verify gas", "[gasometer]") {
   CHECK(79995 == Utils::gasLeft(result));
 
   CHECK("0000000000000000000000000f572e5295c57f15886f9b263e2f6d2d6c7b5ec6" == 
-    Utils::uint256_2str(accountState->get(0x00))
+    Utils::uint256_2str(accountState->get(uint256_t(0x00), context->codeAddress))
   );
 }
 
@@ -209,8 +216,10 @@ TEST_CASE("Origin, verify gas", "[gasometer]") {
   VM vm(context, stack);
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   exec_result_t result = vm.execute(mem, accountState, external, call);
@@ -219,7 +228,7 @@ TEST_CASE("Origin, verify gas", "[gasometer]") {
   CHECK(79995 == Utils::gasLeft(result));
 
   CHECK("000000000000000000000000cd1722f2947def4cf144679da39c4c32bdc35681" == 
-    Utils::uint256_2str(accountState->get(0x00))
+    Utils::uint256_2str(accountState->get(uint256_t(0x00), context->codeAddress))
   );
 }
 
@@ -271,8 +280,10 @@ TEST_CASE("Self balance, verify gas", "[gasometer]") {
   VM vm(context, stack);
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   exec_result_t result = vm.execute(mem, accountState, external, call);
@@ -326,8 +337,10 @@ TEST_CASE("Sender, verify gas", "[gasometer]") {
   VM vm(context, stack);
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   exec_result_t result = vm.execute(mem, accountState, external, call);
@@ -336,7 +349,7 @@ TEST_CASE("Sender, verify gas", "[gasometer]") {
   CHECK(79995 == Utils::gasLeft(result));
 
   CHECK("000000000000000000000000cd1722f2947def4cf144679da39c4c32bdc35681" == 
-    Utils::uint256_2str(accountState->get(0x00))
+    Utils::uint256_2str(accountState->get(uint256_t(0x00), context->codeAddress))
   );
 }
 
@@ -374,8 +387,10 @@ TEST_CASE("Chain id, verify gas", "[gasometer]") {
   VM vm(context, stack);
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   exec_result_t result = vm.execute(mem, accountState, external, call);
@@ -384,7 +399,7 @@ TEST_CASE("Chain id, verify gas", "[gasometer]") {
   CHECK(79995 == Utils::gasLeft(result));
 
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
-    Utils::uint256_2str(accountState->get(0x00))
+    Utils::uint256_2str(accountState->get(uint256_t(0x00), context->codeAddress))
   );
 }
 
@@ -438,8 +453,10 @@ TEST_CASE("Extcodecopy verify gas", "[gasometer]") {
   VM vm(context, stack);
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   exec_result_t result = vm.execute(mem, accountState, external, call);
@@ -448,7 +465,7 @@ TEST_CASE("Extcodecopy verify gas", "[gasometer]") {
   CHECK(79935 == Utils::gasLeft(result));
 
   CHECK("6005600055000000000000000000000000000000000000000000000000000000" == 
-    Utils::uint256_2str(accountState->get(0x00))
+    Utils::uint256_2str(accountState->get(uint256_t(0x00), context->codeAddress))
   );
 }
 
@@ -497,8 +514,10 @@ TEST_CASE("Blockhash, verify gas", "[gasometer]") {
   VM vm(context, stack);
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   exec_result_t result = vm.execute(mem, accountState, external, call);
@@ -507,7 +526,7 @@ TEST_CASE("Blockhash, verify gas", "[gasometer]") {
   CHECK(79974 == Utils::gasLeft(result));
 
   CHECK("f1250fd89a1c3e517ae92cc1f73865c594bfad34db20f3b3396af4efe19d3bfb" == 
-    Utils::uint256_2str(accountState->get(0x00))
+    Utils::uint256_2str(accountState->get(uint256_t(0x00), context->codeAddress))
   );
 }
 
@@ -559,8 +578,10 @@ TEST_CASE("Calldataload verify gas", "[gasometer]") {
   VM vm(context, stack);
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   exec_result_t result = vm.execute(mem, accountState, external, call);
@@ -569,7 +590,7 @@ TEST_CASE("Calldataload verify gas", "[gasometer]") {
   CHECK(79991 == Utils::gasLeft(result));
 
   CHECK("23ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff23" == 
-    Utils::uint256_2str(accountState->get(0x00))
+    Utils::uint256_2str(accountState->get(uint256_t(0x00), context->codeAddress))
   );
 }
 
@@ -607,8 +628,10 @@ TEST_CASE("Multiply, store the result, verify gas", "[gasometer]") {
   VM vm(context, stack);
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   exec_result_t result = vm.execute(mem, accountState, external, call);
@@ -617,7 +640,7 @@ TEST_CASE("Multiply, store the result, verify gas", "[gasometer]") {
   CHECK(79983 == Utils::gasLeft(result));
 
   CHECK("000000000000000000000000000000000000000000000000734349397b853383" == 
-    Utils::uint256_2str(accountState->get(0x00))
+    Utils::uint256_2str(accountState->get(uint256_t(0x00), context->codeAddress))
   );
 }
 
@@ -655,8 +678,10 @@ TEST_CASE("Subtract, store the result, verify gas", "[gasometer]") {
   VM vm(context, stack);
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   exec_result_t result = vm.execute(mem, accountState, external, call);
@@ -665,7 +690,7 @@ TEST_CASE("Subtract, store the result, verify gas", "[gasometer]") {
   CHECK(79985 == Utils::gasLeft(result));
 
   CHECK("0000000000000000000000000000000000000000000000000000012364ad0302" == 
-    Utils::uint256_2str(accountState->get(0x00))
+    Utils::uint256_2str(accountState->get(uint256_t(0x00), context->codeAddress))
   );
 }
 
@@ -703,8 +728,10 @@ TEST_CASE("Division, store the result, verify gas", "[gasometer]") {
   VM vm(context, stack);
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   exec_result_t result = vm.execute(mem, accountState, external, call);
@@ -713,7 +740,7 @@ TEST_CASE("Division, store the result, verify gas", "[gasometer]") {
   CHECK(79983 == Utils::gasLeft(result));
 
   CHECK("000000000000000000000000000000000000000000000000000000000002e0ac" == 
-    Utils::uint256_2str(accountState->get(0x00))
+    Utils::uint256_2str(accountState->get(uint256_t(0x00), context->codeAddress))
   );
 }
 
@@ -751,8 +778,10 @@ TEST_CASE("Div zero, store the result, verify gas", "[gasometer]") {
   VM vm(context, stack);
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   exec_result_t result = vm.execute(mem, accountState, external, call);
@@ -761,7 +790,7 @@ TEST_CASE("Div zero, store the result, verify gas", "[gasometer]") {
   CHECK(94983 == Utils::gasLeft(result));
 
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
-    Utils::uint256_2str(accountState->get(0x00))
+    Utils::uint256_2str(accountState->get(uint256_t(0x00), context->codeAddress))
   );
 }
 
@@ -799,8 +828,10 @@ TEST_CASE("Mod, store the result, verify gas", "[gasometer]") {
   VM vm(context, stack);
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   exec_result_t result = vm.execute(mem, accountState, external, call);
@@ -809,10 +840,10 @@ TEST_CASE("Mod, store the result, verify gas", "[gasometer]") {
   CHECK(74966 == Utils::gasLeft(result));
 
   CHECK("0000000000000000000000000000000000000000000000000000000000076b4b" == 
-    Utils::uint256_2str(accountState->get(0x00))
+    Utils::uint256_2str(accountState->get(uint256_t(0x00), context->codeAddress))
   );
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
-    Utils::uint256_2str(accountState->get(0x01))
+    Utils::uint256_2str(accountState->get(uint256_t(0x01), context->codeAddress))
   );
 }
 
@@ -850,8 +881,10 @@ TEST_CASE("SMOD, store the result, verify gas", "[gasometer]") {
   VM vm(context, stack);
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   exec_result_t result = vm.execute(mem, accountState, external, call);
@@ -860,10 +893,10 @@ TEST_CASE("SMOD, store the result, verify gas", "[gasometer]") {
   CHECK(74966 == Utils::gasLeft(result));
 
   CHECK("0000000000000000000000000000000000000000000000000000000000076b4b" == 
-    Utils::uint256_2str(accountState->get(0x00))
+    Utils::uint256_2str(accountState->get(uint256_t(0x00), context->codeAddress))
   );
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
-    Utils::uint256_2str(accountState->get(0x01))
+    Utils::uint256_2str(accountState->get(uint256_t(0x01), context->codeAddress))
   );
 }
 
@@ -901,8 +934,10 @@ TEST_CASE("SDIV, store the result, verify gas", "[gasometer]") {
   VM vm(context, stack);
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   exec_result_t result = vm.execute(mem, accountState, external, call);
@@ -911,10 +946,10 @@ TEST_CASE("SDIV, store the result, verify gas", "[gasometer]") {
   CHECK(74966 == Utils::gasLeft(result));
 
   CHECK("000000000000000000000000000000000000000000000000000000000002e0ac" == 
-    Utils::uint256_2str(accountState->get(0x00))
+    Utils::uint256_2str(accountState->get(uint256_t(0x00), context->codeAddress))
   );
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
-    Utils::uint256_2str(accountState->get(0x01))
+    Utils::uint256_2str(accountState->get(uint256_t(0x01), context->codeAddress))
   );
 }
 
@@ -952,8 +987,10 @@ TEST_CASE("Exp, store the result, verify gas", "[gasometer]") {
   VM vm(context, stack);
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   exec_result_t result = vm.execute(mem, accountState, external, call);
@@ -962,13 +999,13 @@ TEST_CASE("Exp, store the result, verify gas", "[gasometer]") {
   CHECK(39923 == Utils::gasLeft(result));
 
   CHECK("90fd23767b60204c3d6fc8aec9e70a42a3f127140879c133a20129a597ed0c59" == 
-    Utils::uint256_2str(accountState->get(0x00))
+    Utils::uint256_2str(accountState->get(uint256_t(0x00), context->codeAddress))
   );
   CHECK("0000000000000000000000000000000000000000000000000000012365124623" == 
-    Utils::uint256_2str(accountState->get(0x01))
+    Utils::uint256_2str(accountState->get(uint256_t(0x01), context->codeAddress))
   );
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
-    Utils::uint256_2str(accountState->get(0x02))
+    Utils::uint256_2str(accountState->get(uint256_t(0x02), context->codeAddress))
   );
 }
 
@@ -1006,8 +1043,10 @@ TEST_CASE("Comparison, store the result, verify gas", "[gasometer]") {
   VM vm(context, stack);
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   exec_result_t result = vm.execute(mem, accountState, external, call);
@@ -1016,16 +1055,16 @@ TEST_CASE("Comparison, store the result, verify gas", "[gasometer]") {
   CHECK(49952 == Utils::gasLeft(result));
 
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
-    Utils::uint256_2str(accountState->get(0x00))
+    Utils::uint256_2str(accountState->get(uint256_t(0x00), context->codeAddress))
   );
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
-    Utils::uint256_2str(accountState->get(0x01))
+    Utils::uint256_2str(accountState->get(uint256_t(0x01), context->codeAddress))
   );
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
-    Utils::uint256_2str(accountState->get(0x02))
+    Utils::uint256_2str(accountState->get(uint256_t(0x02), context->codeAddress))
   );
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
-    Utils::uint256_2str(accountState->get(0x03))
+    Utils::uint256_2str(accountState->get(uint256_t(0x03), context->codeAddress))
   );
 }
 
@@ -1063,8 +1102,10 @@ TEST_CASE("Signed comparison, store the result, verify gas", "[gasometer]") {
   VM vm(context, stack);
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   exec_result_t result = vm.execute(mem, accountState, external, call);
@@ -1073,16 +1114,16 @@ TEST_CASE("Signed comparison, store the result, verify gas", "[gasometer]") {
   CHECK(49940 == Utils::gasLeft(result));
 
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
-    Utils::uint256_2str(accountState->get(0x00))
+    Utils::uint256_2str(accountState->get(uint256_t(0x00), context->codeAddress))
   );
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
-    Utils::uint256_2str(accountState->get(0x01))
+    Utils::uint256_2str(accountState->get(uint256_t(0x01), context->codeAddress))
   );
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
-    Utils::uint256_2str(accountState->get(0x02))
+    Utils::uint256_2str(accountState->get(uint256_t(0x02), context->codeAddress))
   );
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
-    Utils::uint256_2str(accountState->get(0x03))
+    Utils::uint256_2str(accountState->get(uint256_t(0x03), context->codeAddress))
   );
 }
 
@@ -1121,8 +1162,10 @@ TEST_CASE("Bitops, store the result, verify gas", "[gasometer]") {
   VM vm(context, stack);
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   exec_result_t result = vm.execute(mem, accountState, external, call);
@@ -1131,22 +1174,22 @@ TEST_CASE("Bitops, store the result, verify gas", "[gasometer]") {
   CHECK(44937 == Utils::gasLeft(result));
 
   CHECK("00000000000000000000000000000000000000000000000000000000000000f0" == 
-    Utils::uint256_2str(accountState->get(0x00))
+    Utils::uint256_2str(accountState->get(uint256_t(0x00), context->codeAddress))
   );
   CHECK("0000000000000000000000000000000000000000000000000000000000000fff" == 
-    Utils::uint256_2str(accountState->get(0x01))
+    Utils::uint256_2str(accountState->get(uint256_t(0x01), context->codeAddress))
   );
   CHECK("0000000000000000000000000000000000000000000000000000000000000f0f" == 
-    Utils::uint256_2str(accountState->get(0x02))
+    Utils::uint256_2str(accountState->get(uint256_t(0x02), context->codeAddress))
   );
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
-    Utils::uint256_2str(accountState->get(0x03))
+    Utils::uint256_2str(accountState->get(uint256_t(0x03), context->codeAddress))
   );
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
-    Utils::uint256_2str(accountState->get(0x04))
+    Utils::uint256_2str(accountState->get(uint256_t(0x04), context->codeAddress))
   );
   CHECK("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" == 
-    Utils::uint256_2str(accountState->get(0x05))
+    Utils::uint256_2str(accountState->get(uint256_t(0x05), context->codeAddress))
   );
 }
 
@@ -1184,8 +1227,10 @@ TEST_CASE("Add mod - mul mod, store the result, verify gas", "[gasometer]") {
   VM vm(context, stack);
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   exec_result_t result = vm.execute(mem, accountState, external, call);
@@ -1194,16 +1239,16 @@ TEST_CASE("Add mod - mul mod, store the result, verify gas", "[gasometer]") {
   CHECK(19914 == Utils::gasLeft(result));
 
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
-    Utils::uint256_2str(accountState->get(0x00))
+    Utils::uint256_2str(accountState->get(uint256_t(0x00), context->codeAddress))
   );
   CHECK("000000000000000000000000000000000000000000000000000000000000000f" == 
-    Utils::uint256_2str(accountState->get(0x01))
+    Utils::uint256_2str(accountState->get(uint256_t(0x01), context->codeAddress))
   );
   CHECK("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" == 
-    Utils::uint256_2str(accountState->get(0x02))
+    Utils::uint256_2str(accountState->get(uint256_t(0x02), context->codeAddress))
   );
   CHECK("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" == 
-    Utils::uint256_2str(accountState->get(0x03))
+    Utils::uint256_2str(accountState->get(uint256_t(0x03), context->codeAddress))
   );
 }
 
@@ -1241,8 +1286,10 @@ TEST_CASE("Byte, store the result, verify gas", "[gasometer]") {
   VM vm(context, stack);
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   exec_result_t result = vm.execute(mem, accountState, external, call);
@@ -1251,10 +1298,10 @@ TEST_CASE("Byte, store the result, verify gas", "[gasometer]") {
   CHECK(74976 == Utils::gasLeft(result));
 
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
-    Utils::uint256_2str(accountState->get(0x00))
+    Utils::uint256_2str(accountState->get(uint256_t(0x00), context->codeAddress))
   );
   CHECK("00000000000000000000000000000000000000000000000000000000000000ff" == 
-    Utils::uint256_2str(accountState->get(0x01))
+    Utils::uint256_2str(accountState->get(uint256_t(0x01), context->codeAddress))
   );
 }
 
@@ -1292,8 +1339,10 @@ TEST_CASE("Signextend, store the result, verify gas", "[gasometer]") {
   VM vm(context, stack);
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   exec_result_t result = vm.execute(mem, accountState, external, call);
@@ -1302,10 +1351,10 @@ TEST_CASE("Signextend, store the result, verify gas", "[gasometer]") {
   CHECK(59972 == Utils::gasLeft(result));
 
   CHECK("0000000000000000000000000000000000000000000000000000000000000fff" == 
-    Utils::uint256_2str(accountState->get(0x00))
+    Utils::uint256_2str(accountState->get(uint256_t(0x00), context->codeAddress))
   );
   CHECK("00000000000000000000000000000000000000000000000000000000000000ff" == 
-    Utils::uint256_2str(accountState->get(0x01))
+    Utils::uint256_2str(accountState->get(uint256_t(0x01), context->codeAddress))
   );
 }
 
@@ -1343,8 +1392,10 @@ TEST_CASE("Pop, store the result, verify gas", "[gasometer]") {
   VM vm(context, stack);
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   exec_result_t result = vm.execute(mem, accountState, external, call);
@@ -1353,7 +1404,7 @@ TEST_CASE("Pop, store the result, verify gas", "[gasometer]") {
   CHECK(79989 == Utils::gasLeft(result));
 
   CHECK("00000000000000000000000000000000000000000000000000000000000000f0" == 
-    Utils::uint256_2str(accountState->get(0x00))
+    Utils::uint256_2str(accountState->get(uint256_t(0x00), context->codeAddress))
   );
 }
 
@@ -1402,8 +1453,10 @@ TEST_CASE("Extops, store the result, verify gas", "[gasometer]") {
   VM vm(context, stack);
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   exec_result_t result = vm.execute(mem, accountState, external, call);
@@ -1412,22 +1465,22 @@ TEST_CASE("Extops, store the result, verify gas", "[gasometer]") {
   CHECK(29898 == Utils::gasLeft(result));
 
   CHECK("0000000000000000000000000000000000000000000000000000000000000004" == 
-    Utils::uint256_2str(accountState->get(0x00))
+    Utils::uint256_2str(accountState->get(uint256_t(0x00), context->codeAddress))
   );
   CHECK("00000000000000000000000000000000000000000000000000000000000249ee" == 
-    Utils::uint256_2str(accountState->get(0x01))
+    Utils::uint256_2str(accountState->get(uint256_t(0x01), context->codeAddress))
   );
   CHECK("0000000000000000000000000000000000000000000000000000000000000032" == 
-    Utils::uint256_2str(accountState->get(0x02))
+    Utils::uint256_2str(accountState->get(uint256_t(0x02), context->codeAddress))
   );
   CHECK("0000000000000000000000000000000000000000000000000000000000000020" == 
-    Utils::uint256_2str(accountState->get(0x03))
+    Utils::uint256_2str(accountState->get(uint256_t(0x03), context->codeAddress))
   );
   CHECK("0000000000000000000000000000000000000000000000000000000000000099" == 
-    Utils::uint256_2str(accountState->get(0x04))
+    Utils::uint256_2str(accountState->get(uint256_t(0x04), context->codeAddress))
   );
   CHECK("0000000000000000000000000000000000000000000000000000000000000032" == 
-    Utils::uint256_2str(accountState->get(0x05))
+    Utils::uint256_2str(accountState->get(uint256_t(0x05), context->codeAddress))
   );
 }
 
@@ -1477,8 +1530,10 @@ TEST_CASE("Jumps, store the result, verify gas", "[gasometer]") {
   VM vm(context, stack);
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   exec_result_t result = vm.execute(mem, accountState, external, call);

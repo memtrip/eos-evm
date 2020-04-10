@@ -14,6 +14,7 @@
 class eos_execute {
   public:
     static call_result_t transaction(
+      uint256_t address,
       std::shared_ptr<std::vector<RLPItem>> rlp, 
       std::shared_ptr<bytes_t> data,
       std::shared_ptr<External> external,
@@ -21,9 +22,6 @@ class eos_execute {
       std::shared_ptr<Call> call
     ) {
       env_t env = eos_system::env();
-
-      bytes_t callerAddress = bytes_t(); // TODO: take from RLP
-      uint256_t address = BigInt::fromBigEndianBytes(callerAddress);
 
       call_result_t result;
 

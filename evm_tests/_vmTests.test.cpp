@@ -1,5 +1,5 @@
 //
-// 27.03.2020
+// 11.04.2020
 // Auto generated based off the Ethereum tests found here:
 // https://github.com/ethereum/tests/blob/develop/VMTests/
 //
@@ -69,9 +69,11 @@ TEST_CASE("suicide______4622c577440f9db4b3954a1de60bf2fac55886dcb0ec4ecaf906c25b
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
   VM vm(context, stack);
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
   Gasometer gasometer(params.gas);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   vm.execute(mem, accountState, external, call);

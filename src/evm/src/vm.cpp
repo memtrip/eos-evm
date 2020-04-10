@@ -100,6 +100,7 @@ exec_result_t VM::stepInner(
     instruction, 
     memoryLength,
     gasCalculation,
+    context,
     stack, 
     external
   );
@@ -218,10 +219,11 @@ exec_result_t VM::stepInner(
         StopExecutionResult stop = std::get<StopExecutionResult>(result.second);
 
         ReturnData returnData;
-        bytes_t returnDataBytes = memory->readSlice(stop.initOff, stop.initSize);
-        if (returnDataBytes.size() > 0) {
+        std::shared_ptr<bytes_t> returnDataBytes = memory->readSlice(stop.initOff, stop.initSize);
+        if (returnDataBytes->size() > 0) {
+          bytes_t bytes = bytes_t(returnDataBytes->begin(), returnDataBytes->end());
           returnData = {
-            returnDataBytes,
+            bytes,
             UINT256_ZERO,
             stop.initSize
           };
@@ -299,7 +301,7 @@ instruction_result_t VM::executeCreateInstruction(
 
   // TODO: check there is a high enough balance to perform create
 
-  bytes_t contractCode = memory->readSlice(initOff, initSize);
+  std::shared_ptr<bytes_t> contractCode = memory->readSlice(initOff, initSize);
 
   // TODO: create a new context for this child call
   // call_result_t callResult = call->create(
@@ -445,7 +447,7 @@ instruction_result_t VM::executeCallInstruction(
 
   // TODO: if there is not enough balance, or the stack depth is reached, return 0
 
-  bytes_t input = memory->readSlice(inOffset, inSize);
+  std::shared_ptr<bytes_t> input = memory->readSlice(inOffset, inSize);
   // TODO: external call with result
 
   // TODO: create a new context for this child call

@@ -51,6 +51,8 @@ class CreateTest {
             )
         ).blockingGet()
 
+        Thread.sleep(500) // avoid duplicate transaction error if these two identical transactions are published too quickly
+
         val response2 = createAction.pushTransaction(
             newAccountName,
             ethAccount.address,

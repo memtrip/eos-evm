@@ -7,6 +7,7 @@ instruction_requirements_t Gasometer::requirements(
   instruct_t instruction,
   gas_t currentMemorySize,
   std::shared_ptr<GasCalculation> gasCalculation,
+  std::shared_ptr<Context> context,
   std::shared_ptr<StackMachine> stack,
   std::shared_ptr<External> external
 ) {
@@ -53,6 +54,7 @@ instruction_requirements_t Gasometer::requirements(
         defaultGas,
         currentGas,
         currentMemorySize,
+        context,
         stack,
         external
       );

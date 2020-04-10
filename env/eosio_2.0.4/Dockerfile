@@ -4,6 +4,7 @@ RUN apt-get update -y
 RUN apt-get install wget -y
 RUN apt-get install curl -y
 RUN apt-get install git -y
+RUN apt-get install uuid-runtime -y
 
 RUN wget https://github.com/eosio/eos/releases/download/v2.0.4/eosio_2.0.4-1-ubuntu-18.04_amd64.deb
 RUN apt-get install ./eosio_2.0.4-1-ubuntu-18.04_amd64.deb -y

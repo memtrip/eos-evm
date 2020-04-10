@@ -11,9 +11,6 @@ typedef intx::uint256 uint256_t;
 typedef unsigned int instruct_t; 
 typedef std::set<unsigned long> jump_set_t;
 
-typedef std::pair<uint256_t, uint256_t> store_item_t;
-typedef std::vector<store_item_t> account_store_t;
-
 typedef ethash::hash256 keccak256_t;
 typedef ethash::hash512 keccak512_t;
 

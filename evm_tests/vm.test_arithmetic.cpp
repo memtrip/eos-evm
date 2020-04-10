@@ -6,6 +6,7 @@
 #include <evm/return_data.h>
 #include <evm/call.h>
 #include <evm/gasometer.h>
+#include <evm/hash.h>
 #include "external_mock.h"
 
 TEST_CASE("Add two large numbers", "[arithmetic]") {
@@ -43,8 +44,10 @@ TEST_CASE("Add two large numbers", "[arithmetic]") {
   VM vm(context, stack);
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   vm.execute(mem, accountState, external, call);
@@ -90,8 +93,10 @@ TEST_CASE("Multiply two numbers", "[arithmetic]") {
   VM vm(context, stack);
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   vm.execute(mem, accountState, external, call);
@@ -137,8 +142,10 @@ TEST_CASE("Multiply two larger numbers", "[arithmetic]") {
   VM vm(context, stack);
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   vm.execute(mem, accountState, external, call);
@@ -187,15 +194,17 @@ TEST_CASE("Multiply and store", "[arithmetic]") {
   VM vm(context, stack);
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   vm.execute(mem, accountState, external, call);
 
   // then
   CHECK("000000000000000000000000000000000000000000000000734349397b853383" == 
-    Utils::uint256_2str(accountState->get(0x00))
+    Utils::uint256_2str(accountState->get(uint256_t(0x00), context->codeAddress))
   );
 }
 
@@ -234,8 +243,10 @@ TEST_CASE("Subtract two numbers", "[arithmetic]") {
   VM vm(context, stack);
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   vm.execute(mem, accountState, external, call);
@@ -284,15 +295,17 @@ TEST_CASE("Subtract and store", "[arithmetic]") {
   VM vm(context, stack);
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   vm.execute(mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000012364ad0302" == 
-    Utils::uint256_2str(accountState->get(0x00))
+    Utils::uint256_2str(accountState->get(uint256_t(0x00), context->codeAddress))
   );
 }
 
@@ -331,8 +344,10 @@ TEST_CASE("Divide two numbers", "[arithmetic]") {
   VM vm(context, stack);
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   vm.execute(mem, accountState, external, call);
@@ -378,8 +393,10 @@ TEST_CASE("Divide 2 / 0", "[arithmetic]") {
   VM vm(context, stack);
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   vm.execute(mem, accountState, external, call);
@@ -428,15 +445,17 @@ TEST_CASE("Divide and store", "[arithmetic]") {
   VM vm(context, stack);
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   vm.execute(mem, accountState, external, call);
 
   // then
   CHECK("000000000000000000000000000000000000000000000000000000000002e0ac" == 
-    Utils::uint256_2str(accountState->get(0x00))
+    Utils::uint256_2str(accountState->get(uint256_t(0x00), context->codeAddress))
   );
 }
 
@@ -478,15 +497,17 @@ TEST_CASE("Divide by zero and store", "[arithmetic]") {
   VM vm(context, stack);
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   vm.execute(mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
-    Utils::uint256_2str(accountState->get(0x00))
+    Utils::uint256_2str(accountState->get(uint256_t(0x00), context->codeAddress))
   );
 }
 
@@ -521,19 +542,21 @@ TEST_CASE("Mod and store", "[arithmetic]") {
   VM vm(context, stack);
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   vm.execute(mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000076b4b" == 
-    Utils::uint256_2str(accountState->get(0x00))
+    Utils::uint256_2str(accountState->get(uint256_t(0x00), context->codeAddress))
   );
 
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
-    Utils::uint256_2str(accountState->get(0x01))
+    Utils::uint256_2str(accountState->get(uint256_t(0x01), context->codeAddress))
   );
 }
 
@@ -573,8 +596,10 @@ TEST_CASE("Modulus 8 % 2", "[arithmetic]") {
   VM vm(context, stack);
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   vm.execute(mem, accountState, external, call);
@@ -620,8 +645,10 @@ TEST_CASE("Modulus 5 % 2", "[arithmetic]") {
   VM vm(context, stack);
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   vm.execute(mem, accountState, external, call);
@@ -667,8 +694,10 @@ TEST_CASE("Modulus 2 % 0", "[arithmetic]") {
   VM vm(context, stack);
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   vm.execute(mem, accountState, external, call);
@@ -710,18 +739,20 @@ TEST_CASE("Byte", "[arithmetic]") {
   VM vm(context, stack);
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   vm.execute(mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
-    Utils::uint256_2str(accountState->get(0x00))
+    Utils::uint256_2str(accountState->get(uint256_t(0x00), context->codeAddress))
   );
 
   CHECK("00000000000000000000000000000000000000000000000000000000000000ff" == 
-    Utils::uint256_2str(accountState->get(0x01))
+    Utils::uint256_2str(accountState->get(uint256_t(0x01), context->codeAddress))
   );
 }

@@ -37,14 +37,19 @@ CONTRACT eos_evm : public contract {
     > account_table;
 
     TABLE account_state {
-      name user;
+      uint64_t pk;
+      checksum256 accountIdentifier;
       checksum256 key;
       checksum256 value;
 
-      auto primary_key() const { return user.value; }
+      uint64_t primary_key() const { return pk; }
       checksum256 secondary_key() const { return key; }
     };
-    typedef multi_index<name("accountstate"), account_state> account_state_table;
+    typedef multi_index<
+      name("accountstate"), 
+      account_state, 
+      indexed_by<name("statekey"), const_mem_fun<account_state, checksum256, &account_state::secondary_key> >
+    > account_state_table;
 
     TABLE account_code {
       name user;

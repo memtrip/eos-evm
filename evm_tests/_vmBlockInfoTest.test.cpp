@@ -1,5 +1,5 @@
 //
-// 27.03.2020
+// 11.04.2020
 // Auto generated based off the Ethereum tests found here:
 // https://github.com/ethereum/tests/blob/develop/VMTests/
 //
@@ -69,16 +69,18 @@ TEST_CASE("gaslimit______f1250fd89a1c3e517ae92cc1f73865c594bfad34db20f3b3396af4e
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
   VM vm(context, stack);
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
   Gasometer gasometer(params.gas);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   vm.execute(mem, accountState, external, call);
 
   // then
   CHECK("00000000000000000000000000000000000000000000000000000000000f4240" ==
-    Utils::uint256_2str(accountState->get(0x00))
+    Utils::uint256_2str(accountState->get(uint256_t(0x00), context->codeAddress))
   );
 }
 
@@ -137,16 +139,18 @@ TEST_CASE("number______404caf239c3e0ad4394c1417b728d10e1f68a8eee3963425d9e391f4f
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
   VM vm(context, stack);
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
   Gasometer gasometer(params.gas);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   vm.execute(mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
-    Utils::uint256_2str(accountState->get(0x00))
+    Utils::uint256_2str(accountState->get(uint256_t(0x00), context->codeAddress))
   );
 }
 
@@ -205,16 +209,18 @@ TEST_CASE("difficulty______30c06d1988994e3f4e738e60b1e0d6b8734fb576e3b2580151251
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
   VM vm(context, stack);
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
   Gasometer gasometer(params.gas);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   vm.execute(mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000100" ==
-    Utils::uint256_2str(accountState->get(0x00))
+    Utils::uint256_2str(accountState->get(uint256_t(0x00), context->codeAddress))
   );
 }
 
@@ -273,16 +279,18 @@ TEST_CASE("coinbase______9f5df0c263c2b48fbf48db70ec64ddf3efa5f1651ced1fedf933ee2
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
   VM vm(context, stack);
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
   Gasometer gasometer(params.gas);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   vm.execute(mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000002adc25665018aa1fe0e6bc666dac8fc2697ff9ba" ==
-    Utils::uint256_2str(accountState->get(0x00))
+    Utils::uint256_2str(accountState->get(uint256_t(0x00), context->codeAddress))
   );
 }
 
@@ -341,16 +349,18 @@ TEST_CASE("timestamp______44c8782a2b04af7092f76bfa83b1cb24e590722db220b32a52e4e2
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
   VM vm(context, stack);
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
   Gasometer gasometer(params.gas);
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
 
   // when
   vm.execute(mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
-    Utils::uint256_2str(accountState->get(0x00))
+    Utils::uint256_2str(accountState->get(uint256_t(0x00), context->codeAddress))
   );
 }
 

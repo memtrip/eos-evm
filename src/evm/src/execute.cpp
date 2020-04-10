@@ -20,7 +20,8 @@ finalization_result_t Execute::callWithStackDepth(
 
   VM vm(context, stack);
 
-  std::shared_ptr<Memory> memory = std::make_shared<Memory>();
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> memory = std::make_shared<Memory>(memoryBytes);
 
   exec_result_t vm_result = vm.execute(
     memory, 

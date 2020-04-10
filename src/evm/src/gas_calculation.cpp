@@ -45,6 +45,7 @@ gas_result_t GasCalculation::jumpdest(
   gas_t defaultGas,
   gas_t currentGas,
   gas_t currentMemorySize,
+  std::shared_ptr<Context> context,
   std::shared_ptr<StackMachine> stack,
   std::shared_ptr<External> external
 ) {
@@ -56,6 +57,7 @@ gas_result_t GasCalculation::sstore(
   gas_t defaultGas,
   gas_t currentGas,
   gas_t currentMemorySize,
+  std::shared_ptr<Context> context,
   std::shared_ptr<StackMachine> stack,
   std::shared_ptr<External> external
 ) {
@@ -65,7 +67,7 @@ gas_result_t GasCalculation::sstore(
 
   uint256_t address = stack->peek(0);
   uint256_t newVal = stack->peek(1);
-  bytes_t storageBytes = external->storageAt(address);
+  bytes_t storageBytes = external->storageAt(address, context->codeAddress);
 
   gas_t storeGasCost;
   if (storageBytes.size() == 0 && newVal != 0) {
@@ -82,6 +84,7 @@ gas_result_t GasCalculation::sload(
   gas_t defaultGas,
   gas_t currentGas,
   gas_t currentMemorySize,
+  std::shared_ptr<Context> context,
   std::shared_ptr<StackMachine> stack,
   std::shared_ptr<External> external
 ) {
@@ -93,6 +96,7 @@ gas_result_t GasCalculation::balance(
   gas_t defaultGas,
   gas_t currentGas,
   gas_t currentMemorySize,
+  std::shared_ptr<Context> context,
   std::shared_ptr<StackMachine> stack,
   std::shared_ptr<External> external
 ) {
@@ -104,6 +108,7 @@ gas_result_t GasCalculation::extcodesize(
   gas_t defaultGas,
   gas_t currentGas,
   gas_t currentMemorySize,
+  std::shared_ptr<Context> context,
   std::shared_ptr<StackMachine> stack,
   std::shared_ptr<External> external
 ) {
@@ -115,6 +120,7 @@ gas_result_t GasCalculation::extcodehash(
   gas_t defaultGas,
   gas_t currentGas,
   gas_t currentMemorySize,
+  std::shared_ptr<Context> context,
   std::shared_ptr<StackMachine> stack,
   std::shared_ptr<External> external
 ) {
@@ -126,6 +132,7 @@ gas_result_t GasCalculation::selfdestruct(
   gas_t defaultGas,
   gas_t currentGas,
   gas_t currentMemorySize,
+  std::shared_ptr<Context> context,
   std::shared_ptr<StackMachine> stack,
   std::shared_ptr<External> external
 ) {
@@ -137,6 +144,7 @@ gas_result_t GasCalculation::mstore_mload(
   gas_t defaultGas,
   gas_t currentGas,
   gas_t currentMemorySize,
+  std::shared_ptr<Context> context,
   std::shared_ptr<StackMachine> stack,
   std::shared_ptr<External> external
 ) {
@@ -149,6 +157,7 @@ gas_result_t GasCalculation::mstore8(
   gas_t defaultGas,
   gas_t currentGas,
   gas_t currentMemorySize,
+  std::shared_ptr<Context> context,
   std::shared_ptr<StackMachine> stack,
   std::shared_ptr<External> external
 ) {
@@ -161,6 +170,7 @@ gas_result_t GasCalculation::revert_return(
   gas_t defaultGas,
   gas_t currentGas,
   gas_t currentMemorySize,
+  std::shared_ptr<Context> context,
   std::shared_ptr<StackMachine> stack,
   std::shared_ptr<External> external
 ) {
@@ -174,6 +184,7 @@ gas_result_t GasCalculation::sha3(
   gas_t defaultGas,
   gas_t currentGas,
   gas_t currentMemorySize,
+  std::shared_ptr<Context> context,
   std::shared_ptr<StackMachine> stack,
   std::shared_ptr<External> external
 ) {
@@ -189,6 +200,7 @@ gas_result_t GasCalculation::calldatacopy_codecopy_returndatacopy(
   gas_t defaultGas,
   gas_t currentGas,
   gas_t currentMemorySize,
+  std::shared_ptr<Context> context,
   std::shared_ptr<StackMachine> stack,
   std::shared_ptr<External> external
 ) {
@@ -206,6 +218,7 @@ gas_result_t GasCalculation::extcodecopy(
   gas_t defaultGas,
   gas_t currentGas,
   gas_t currentMemorySize,
+  std::shared_ptr<Context> context,
   std::shared_ptr<StackMachine> stack,
   std::shared_ptr<External> external
 ) {
@@ -223,6 +236,7 @@ gas_result_t GasCalculation::log(
   gas_t defaultGas,
   gas_t currentGas,
   gas_t currentMemorySize,
+  std::shared_ptr<Context> context,
   std::shared_ptr<StackMachine> stack,
   std::shared_ptr<External> external
 ) {
@@ -240,6 +254,7 @@ gas_result_t GasCalculation::call_callcode(
   gas_t defaultGas,
   gas_t currentGas,
   gas_t currentMemorySize,
+  std::shared_ptr<Context> context,
   std::shared_ptr<StackMachine> stack,
   std::shared_ptr<External> external
 ) {
@@ -270,6 +285,7 @@ gas_result_t GasCalculation::deletatecall_staticcall(
   gas_t defaultGas,
   gas_t currentGas,
   gas_t currentMemorySize,
+  std::shared_ptr<Context> context,
   std::shared_ptr<StackMachine> stack,
   std::shared_ptr<External> external
 ) {
@@ -291,6 +307,7 @@ gas_result_t GasCalculation::create(
   gas_t defaultGas,
   gas_t currentGas,
   gas_t currentMemorySize,
+  std::shared_ptr<Context> context,
   std::shared_ptr<StackMachine> stack,
   std::shared_ptr<External> external
 ) {
@@ -306,6 +323,7 @@ gas_result_t GasCalculation::create2(
   gas_t defaultGas,
   gas_t currentGas,
   gas_t currentMemorySize,
+  std::shared_ptr<Context> context,
   std::shared_ptr<StackMachine> stack,
   std::shared_ptr<External> external
 ) {
@@ -325,6 +343,7 @@ gas_result_t GasCalculation::exp(
   gas_t defaultGas,
   gas_t currentGas,
   gas_t currentMemorySize,
+  std::shared_ptr<Context> context,
   std::shared_ptr<StackMachine> stack,
   std::shared_ptr<External> external
 ) {
@@ -339,6 +358,7 @@ gas_result_t GasCalculation::blockhash(
   gas_t defaultGas,
   gas_t currentGas,
   gas_t currentMemorySize,
+  std::shared_ptr<Context> context,
   std::shared_ptr<StackMachine> stack,
   std::shared_ptr<External> external
 ) {

@@ -9,8 +9,8 @@ ExternalMock::ExternalMock() {
   storageResponder = storage_responder_t();
 }
 
-void ExternalMock::log(std::vector<uint256_t>& topics, bytes_t& data) { 
-  logSpy.push_back(std::make_pair(topics, data));
+void ExternalMock::log(std::vector<uint256_t>& topics, std::shared_ptr<bytes_t> data) { 
+  logSpy.push_back(std::make_pair(topics, bytes_t(data->begin(), data->end())));
 }
 
 std::shared_ptr<bytes_t> ExternalMock::code(uint256_t address) {
@@ -30,9 +30,9 @@ double ExternalMock::balance(uint256_t address) {
   return 0.0; 
 };
 
-bytes_t ExternalMock::storageAt(uint256_t address) { 
+bytes_t ExternalMock::storageAt(uint256_t key, uint256_t codeAddress) { 
   for (int i = 0; i < storageResponder.size(); i++) {
-    if (storageResponder[i].first == address)
+    if (storageResponder[i].first == key)
       return storageResponder[i].second;
   }
   return bytes_t();
@@ -40,4 +40,8 @@ bytes_t ExternalMock::storageAt(uint256_t address) {
 
 void ExternalMock::suicide(uint256_t address) {
   suicideSpy.push_back(address);
+}
+
+bytes_t ExternalMock::keccak256(bytes_t& bytes) {
+  return bytes_t();
 }

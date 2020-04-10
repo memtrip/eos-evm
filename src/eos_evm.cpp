@@ -11,6 +11,7 @@
 #include <evm/hex.h>
 #include <evm/rlp.h>
 #include <evm/big_int.h>
+#include <evm/hash.h>
 
 ACTION eos_evm::raw(name from, string code, string sender) {
   require_auth(from);
@@ -21,7 +22,8 @@ ACTION eos_evm::raw(name from, string code, string sender) {
   RLPDecode::decode(bytes, rlp);
 
   std::shared_ptr<External> external = std::make_shared<eos_external>(this);
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
+  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
   std::shared_ptr<Call> call = std::make_unique<Call>(0);
 
   if (Transaction::hasSignature(rlp)) {
@@ -36,28 +38,26 @@ ACTION eos_evm::raw(name from, string code, string sender) {
     auto itr = idx.find(accountIdentifier);
 
     check(itr != idx.end(), "The account identifier associated with this transaction does not exist.");
-    // itr-user is used in the transaction
-    //bytes_t address = eos_utils::fixedToBytes(accountIdentifier);
-    bytes_t address = bytes_t();
+
     std::shared_ptr<bytes_t> data = Transaction::data(rlp);
-    call_result_t callResult = eos_execute::transaction(rlp, data, external, accountState, call);
+    uint256_t address = BigInt::fromBigEndianBytes(accountIdentifierBytes);
+    call_result_t callResult = eos_execute::transaction(address, rlp, data, external, accountState, call);
     handleCallResult(from, callResult, accountState);
     idx.modify(itr, get_self(), [&](auto& account) {
       account.nonce += 1;
     });
   } else {
-    eosio::checksum256 accountIdentifier = eos_utils::hexToChecksum256(sender);
+    std::pair<bytes_t, eosio::checksum256> accountIdentifier = eos_utils::senderToChecksum256(sender);
     account_table _account(get_self(), get_self().value);
     auto idx = _account.get_index<name("accountid")>();
-    auto itr = idx.find(accountIdentifier);
+    auto itr = idx.find(accountIdentifier.second);
 
     check(itr != idx.end(), "Could not find sender, did you provide the correct account identifier?");
     check(has_auth(itr->user), "You do not have permission to execute a transaction for the specified sender.");
-    // itr->user is used in the transaction
-    //bytes_t address = eos_utils::fixedToBytes(accountIdentifier);
-    bytes_t address = bytes_t();
+
     std::shared_ptr<bytes_t> data = Transaction::data(rlp);
-    call_result_t callResult = eos_execute::transaction(rlp, data, external, accountState, call);
+    uint256_t address = BigInt::fromBigEndianBytes(accountIdentifier.first);
+    call_result_t callResult = eos_execute::transaction(address, rlp, data, external, accountState, call);
     handleCallResult(from, callResult, accountState);
     idx.modify(itr, get_self(), [&](auto& account) {
       account.nonce += 1;
@@ -97,12 +97,18 @@ void eos_evm::handleCallResult(name from, call_result_t callResult, std::shared_
 }
 
 void eos_evm::commitState(name from, std::shared_ptr<AccountState> accountState) {
-  if (accountState->cacheItems.size() > 0) {
+  if (accountState->cacheItems->size() > 0) {
     account_state_table _account_state(get_self(), get_self().value);
-    for (int i = 0; i < accountState->cacheItems.size(); i++) {
+    for (int i = 0; i < accountState->cacheItems->size(); i++) {
+      uint256_t compositeKey = Hash::keccak256Word(
+        accountState->cacheItems->at(i).codeAddress,
+        accountState->cacheItems->at(i).key
+      );
       _account_state.emplace(from, [&](auto& account_state) {
-        account_state.key = BigInt::toFixed32(accountState->cacheItems[i].first);
-        account_state.value = BigInt::toFixed32(accountState->cacheItems[i].second);
+        account_state.pk = _account_state.available_primary_key();
+        account_state.accountIdentifier = BigInt::toFixed32(accountState->cacheItems->at(i).codeAddress);
+        account_state.key = BigInt::toFixed32(compositeKey);
+        account_state.value = BigInt::toFixed32(accountState->cacheItems->at(i).value);
       });
     }
   }

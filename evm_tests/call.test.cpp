@@ -19,7 +19,8 @@ TEST_CASE("Call with transaction", "[call]") {
   // env_t env = Utils::env();
 
   // std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
-  // std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external);
+  // std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
+  // std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
   // Call call = Call(0);
 
   // bytes_t addressBytes = Hex::hexToBytes("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6");

@@ -29,3 +29,13 @@ docker exec -it -w /eosio eosio_evm_v2.0.0 /bin/bash -c "nodeos -e -p eosio --pl
 ```
 docker exec -it -w /eosio eosio_evm_v2.0.0 /bin/bash -c "nodeos -e -p eosio --plugin eosio::http_plugin --plugin eosio::chain_plugin --plugin eosio::chain_api_plugin --plugin eosio::producer_plugin --plugin eosio::history_plugin --plugin eosio::history_api_plugin --data-dir /eosio/data --config-dir /eosio/config --http-server-address=0.0.0.0:8888 --access-control-allow-origin=* --http-validate-host=false --max-transaction-time=200 --hard-replay-blockchain --disable-replay-opts --contracts-console --filter-on=* --filter-out=eosio:onblock:"
 ```
+
+## Divergence from the EVM specification
+
+### SSTORE
+
+The SSTORE operation uses keccak256(code_address + key_operand) to store data to the Account State Table.
+
+### SLOAD
+
+THE SLOAD operation uses keccak256(code_address + key_operand) as the key to retreive data from the Account State Table.

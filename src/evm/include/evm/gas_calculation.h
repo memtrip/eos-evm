@@ -6,6 +6,7 @@
 #include <evm/instruction.h>
 #include <evm/external.h>
 #include <evm/stack.h>
+#include <evm/context.h>
 
 class GasCalculation {
   typedef gas_result_t (GasCalculation::*calculate_t)(
@@ -13,6 +14,7 @@ class GasCalculation {
     gas_t defaultGas,
     gas_t currentGas,
     gas_t currentMemorySize,
+    std::shared_ptr<Context> context,
     std::shared_ptr<StackMachine> stack,
     std::shared_ptr<External> external
   );
@@ -62,6 +64,7 @@ class GasCalculation {
       gas_t defaultGas,
       gas_t currentGas,
       gas_t currentMemorySize,
+      std::shared_ptr<Context> context,
       std::shared_ptr<StackMachine> stack,
       std::shared_ptr<External> external
     );
@@ -70,6 +73,7 @@ class GasCalculation {
       gas_t defaultGas,
       gas_t currentGas,
       gas_t currentMemorySize,
+      std::shared_ptr<Context> context,
       std::shared_ptr<StackMachine> stack,
       std::shared_ptr<External> external
     );
@@ -78,6 +82,7 @@ class GasCalculation {
       gas_t defaultGas,
       gas_t currentGas,
       gas_t currentMemorySize,
+      std::shared_ptr<Context> context,
       std::shared_ptr<StackMachine> stack,
       std::shared_ptr<External> external
     );
@@ -86,6 +91,7 @@ class GasCalculation {
       gas_t defaultGas,
       gas_t currentGas,
       gas_t currentMemorySize,
+      std::shared_ptr<Context> context,
       std::shared_ptr<StackMachine> stack,
       std::shared_ptr<External> external
     );
@@ -94,6 +100,7 @@ class GasCalculation {
       gas_t defaultGas,
       gas_t currentGas,
       gas_t currentMemorySize,
+      std::shared_ptr<Context> context,
       std::shared_ptr<StackMachine> stack,
       std::shared_ptr<External> external
     );
@@ -102,6 +109,7 @@ class GasCalculation {
       gas_t defaultGas,
       gas_t currentGas,
       gas_t currentMemorySize,
+      std::shared_ptr<Context> context,
       std::shared_ptr<StackMachine> stack,
       std::shared_ptr<External> external
     );
@@ -110,6 +118,7 @@ class GasCalculation {
       gas_t defaultGas,
       gas_t currentGas,
       gas_t currentMemorySize,
+      std::shared_ptr<Context> context,
       std::shared_ptr<StackMachine> stack,
       std::shared_ptr<External> external
     );
@@ -118,6 +127,7 @@ class GasCalculation {
       gas_t defaultGas,
       gas_t currentGas,
       gas_t currentMemorySize,
+      std::shared_ptr<Context> context,
       std::shared_ptr<StackMachine> stack,
       std::shared_ptr<External> external
     );
@@ -126,6 +136,7 @@ class GasCalculation {
       gas_t defaultGas,
       gas_t currentGas,
       gas_t currentMemorySize,
+      std::shared_ptr<Context> context,
       std::shared_ptr<StackMachine> stack,
       std::shared_ptr<External> external
     );
@@ -134,6 +145,7 @@ class GasCalculation {
       gas_t defaultGas,
       gas_t currentGas,
       gas_t currentMemorySize,
+      std::shared_ptr<Context> context,
       std::shared_ptr<StackMachine> stack,
       std::shared_ptr<External> external
     );
@@ -142,6 +154,7 @@ class GasCalculation {
       gas_t defaultGas,
       gas_t currentGas,
       gas_t currentMemorySize,
+      std::shared_ptr<Context> context,
       std::shared_ptr<StackMachine> stack,
       std::shared_ptr<External> external
     );
@@ -150,6 +163,7 @@ class GasCalculation {
       gas_t defaultGas,
       gas_t currentGas,
       gas_t currentMemorySize,
+      std::shared_ptr<Context> context,
       std::shared_ptr<StackMachine> stack,
       std::shared_ptr<External> external
     );
@@ -158,6 +172,7 @@ class GasCalculation {
       gas_t defaultGas,
       gas_t currentGas,
       gas_t currentMemorySize,
+      std::shared_ptr<Context> context,
       std::shared_ptr<StackMachine> stack,
       std::shared_ptr<External> external
     );
@@ -166,6 +181,7 @@ class GasCalculation {
       gas_t defaultGas,
       gas_t currentGas,
       gas_t currentMemorySize,
+      std::shared_ptr<Context> context,
       std::shared_ptr<StackMachine> stack,
       std::shared_ptr<External> external
     );
@@ -174,6 +190,7 @@ class GasCalculation {
       gas_t defaultGas,
       gas_t currentGas,
       gas_t currentMemorySize,
+      std::shared_ptr<Context> context,
       std::shared_ptr<StackMachine> stack,
       std::shared_ptr<External> external
     );
@@ -182,6 +199,7 @@ class GasCalculation {
       gas_t defaultGas,
       gas_t currentGas,
       gas_t currentMemorySize,
+      std::shared_ptr<Context> context,
       std::shared_ptr<StackMachine> stack,
       std::shared_ptr<External> external
     );
@@ -190,6 +208,7 @@ class GasCalculation {
       gas_t defaultGas,
       gas_t currentGas,
       gas_t currentMemorySize,
+      std::shared_ptr<Context> context,
       std::shared_ptr<StackMachine> stack,
       std::shared_ptr<External> external
     );
@@ -198,6 +217,7 @@ class GasCalculation {
       gas_t defaultGas,
       gas_t currentGas,
       gas_t currentMemorySize,
+      std::shared_ptr<Context> context,
       std::shared_ptr<StackMachine> stack,
       std::shared_ptr<External> external
     );
@@ -206,6 +226,7 @@ class GasCalculation {
       gas_t defaultGas,
       gas_t currentGas,
       gas_t currentMemorySize,
+      std::shared_ptr<Context> context,
       std::shared_ptr<StackMachine> stack,
       std::shared_ptr<External> external
     );
@@ -214,6 +235,7 @@ class GasCalculation {
       gas_t defaultGas,
       gas_t currentGas,
       gas_t currentMemorySize,
+      std::shared_ptr<Context> context,
       std::shared_ptr<StackMachine> stack,
       std::shared_ptr<External> external
     );

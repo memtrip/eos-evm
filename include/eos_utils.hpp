@@ -16,9 +16,9 @@ class eos_utils {
       return checksum256;
     }
 
-    static std::array<uint8_t, 32> hexToChecksum256(std::string& message) {
+    static std::pair<bytes_t, std::array<uint8_t, 32>> senderToChecksum256(std::string& message) {
       bytes_t bytes = Hex::hexToBytes(message);
-      return hexToChecksum256(bytes);
+      return std::make_pair(bytes, hexToChecksum256(bytes));
     }
 
     static std::string fixedToHex(eosio::fixed_bytes<32>& data) {

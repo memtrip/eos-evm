@@ -6,6 +6,7 @@
 #include <evm/external.h>
 #include <evm/stack.h>
 #include <evm/gas_calculation.h>
+#include <evm/context.h>
 
 class Gasometer {
   public:
@@ -20,6 +21,7 @@ class Gasometer {
       instruct_t instruction,
       gas_t currentMemorySize,
       std::shared_ptr<GasCalculation> gasCalculation,
+      std::shared_ptr<Context> context,
       std::shared_ptr<StackMachine> stack,
       std::shared_ptr<External> external
     );

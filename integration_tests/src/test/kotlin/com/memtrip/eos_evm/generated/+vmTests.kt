@@ -6,7 +6,6 @@ import com.memtrip.eos_evm.eos.raw.RawAction
 import com.memtrip.eos_evm.ethereum.EthAccount
 import com.memtrip.eos_evm.ethereum.EthereumTransaction
 import com.memtrip.eos_evm.ethereum.toHex
-import com.memtrip.eos_evm.fixture.TestCases
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.junit.Assert.assertEquals
@@ -15,7 +14,7 @@ import java.math.BigInteger
 import java.util.concurrent.TimeUnit
 
 //
-// 04.04.2020
+// 11.04.2020
 // Auto generated based off the Ethereum tests found here:
 // https://github.com/ethereum/tests/blob/develop/VMTests/
 //
@@ -57,7 +56,7 @@ class vmTests {
             BigInteger("5af3107a4000", 16),
             BigInteger("0186a0", 16),
             BigInteger("0de0b6b3a7640000", 16),
-            "0x6001600355"
+            "0x33ff"
         )
         val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHex()
 

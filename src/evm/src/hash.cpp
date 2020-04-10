@@ -1,5 +1,14 @@
 #include <evm/hash.h>
+#include <evm/big_int.h>
 #include <keccak/keccak.hpp>
+
+uint256_t Hash::keccak256Word(uint256_t word1, uint256_t word2) {
+  bytes_t word1Bytes = BigInt::toBytes(word1);
+  bytes_t word2Bytes = BigInt::toBytes(word2);
+  word1Bytes.insert(word1Bytes.end(), word2Bytes.begin(), word2Bytes.end());
+  bytes_t hashBytes = keccak256(word1Bytes);
+  return BigInt::fromBigEndianBytes(hashBytes);
+}
 
 bytes_t Hash::keccak256(bytes_t& bytes) {
   ethash::hash256 result = ethash::keccak256(bytes.data(), bytes.size());
