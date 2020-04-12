@@ -18,12 +18,12 @@ overflow_t Overflow::sub(uint64_t value, uint64_t value2) {
   return std::make_pair(value - value2, false);
 }
 
-overflow_t Overflow::uint256Cast(uint256_t value) {
+overflow_t Overflow::uint256Cast(const uint256_t& value) {
   if (value > std::numeric_limits<uint64_t>::max()) return std::make_pair(0, true);
   return std::make_pair(static_cast<uint64_t>(value), false);
 }
 
-overflow_t Overflow::toWordSize(uint256_t value) {
+overflow_t Overflow::toWordSize(const uint256_t& value) {
   overflow_t gas = add(static_cast<uint64_t>(value), 31);
   if (gas.second) {
     return gas;

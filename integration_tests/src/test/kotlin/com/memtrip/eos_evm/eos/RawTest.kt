@@ -5,7 +5,7 @@ import com.memtrip.eos.core.crypto.EosPrivateKey
 import com.memtrip.eos.http.rpc.Api
 import com.memtrip.eos_evm.eos.raw.RawAction
 import com.memtrip.eos_evm.ethereum.EthAccount
-import com.memtrip.eos_evm.ethereum.toHex
+import com.memtrip.eos_evm.ethereum.toHexString
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.junit.Assert.assertTrue
@@ -33,7 +33,7 @@ class RawTest {
         // given
         val newAccountName = generateUniqueAccountName()
         val newAccountPrivateKey = EosPrivateKey()
-        val unsignedTransaction = stubTransaction().sign(EthAccount.create()).unsignedTransaction.toHex()
+        val unsignedTransaction = stubTransaction().sign(EthAccount.create()).unsignedTransaction.toHexString()
 
         setupTransactions.createAccount(
             newAccountName,
@@ -64,45 +64,19 @@ class RawTest {
     fun `Unsigned transaction can only be signed by the EOS account associated with the sender account identifier`() {
 
         // given (action account)
-        val actionAccountName = generateUniqueAccountName()
-        val actionAccountPrivateKey = EosPrivateKey()
-        val actionEthAccount = EthAccount.create()
-
-        setupTransactions.createAccount(
-            actionAccountName,
-            actionAccountPrivateKey
-        ).blockingGet()
-
-        setupTransactions.createEthAccount(
-            actionAccountName,
-            actionAccountPrivateKey,
-            actionEthAccount
-        ).blockingGet()
+        val (actionAccountName, actionAccountPrivateKey, actionEthAccount) = setupTransactions.seed()
 
         // given (sender account)
-        val senderAccountName = generateUniqueAccountName()
-        val senderAccountPrivateKey = EosPrivateKey()
-        val senderEthAccount = EthAccount.create()
-
-        setupTransactions.createAccount(
-            senderAccountName,
-            senderAccountPrivateKey
-        ).blockingGet()
-
-        setupTransactions.createEthAccount(
-            senderAccountName,
-            senderAccountPrivateKey,
-            senderEthAccount
-        ).blockingGet()
+        val (senderAccountName, senderAccountPrivateKey, senderEthAccount) = setupTransactions.seed()
 
         // given (unsigned transaction)
-        val unsignedTransaction = stubTransaction().sign(EthAccount.create()).unsignedTransaction.toHex()
+        val unsignedTransaction = stubTransaction().sign(EthAccount.create()).unsignedTransaction.toHexString()
 
         // when
         val response = rawAction.pushTransaction(
             actionAccountName,
             unsignedTransaction,
-            AccountIdentifier.create(senderAccountName, senderEthAccount.address).toHex(),
+            AccountIdentifier.create(senderAccountName, senderEthAccount.address).toHexString(),
             TransactionContext(
                 actionAccountName,
                 actionAccountPrivateKey,
@@ -123,23 +97,10 @@ class RawTest {
     fun `The account identifier associated with a signed transaction must exist in the Account table`() {
 
         // given (action account)
-        val actionAccountName = generateUniqueAccountName()
-        val actionAccountPrivateKey = EosPrivateKey()
-        val actionEthAccount = EthAccount.create()
-
-        setupTransactions.createAccount(
-            actionAccountName,
-            actionAccountPrivateKey
-        ).blockingGet()
-
-        setupTransactions.createEthAccount(
-            actionAccountName,
-            actionAccountPrivateKey,
-            actionEthAccount
-        ).blockingGet()
+        val (actionAccountName, actionAccountPrivateKey, actionEthAccount) = setupTransactions.seed()
 
         // given (signed transaction)
-        val signedTransaction = stubTransaction().sign(EthAccount.create()).signedTransaction.toHex()
+        val signedTransaction = stubTransaction().sign(EthAccount.create()).signedTransaction.toHexString()
 
         // when
         val response = rawAction.pushTransaction(

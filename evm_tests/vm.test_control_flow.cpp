@@ -57,9 +57,10 @@ TEST_CASE("Conditional jump to destination truthy", "[jumps]") {
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("000000000000000000000000000000000000000000000000000000000000000b" == 
@@ -116,9 +117,10 @@ TEST_CASE("Conditional jump to destination not true", "[jumps]") {
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000012" == 
@@ -169,9 +171,10 @@ TEST_CASE("Unconditional jump to destination", "[jumps]") {
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000002" == 

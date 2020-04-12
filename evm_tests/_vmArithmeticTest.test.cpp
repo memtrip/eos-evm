@@ -13,6 +13,7 @@
 #include <evm/gasometer.h>
 #include <evm/big_int.h>
 #include "external_mock.h"
+#include <evm/operation.h>
 
 TEST_CASE("mulmoddivByZero______d2f1f45a525dd3c94e60ba59a808bfa6f526ff1517294eacdf4d09d9d33415d5", "[vm]") {
   env_t env = {
@@ -74,9 +75,10 @@ TEST_CASE("mulmoddivByZero______d2f1f45a525dd3c94e60ba59a808bfa6f526ff1517294eac
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
 }
@@ -141,9 +143,10 @@ TEST_CASE("sub0______6e271b6ee17cb23f68d252f5c2bddad3c667f05dc922fd4839721727eb1
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000016" ==
@@ -211,9 +214,10 @@ TEST_CASE("expPowerOf256_29______d1d28e8369ccb0a73475421072fcba58bc0491a0a30c154
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000010000000000000000000000000000000000000000000000000000000000" ==
@@ -287,9 +291,10 @@ TEST_CASE("signextend_BigByteBigByte______5cd096028c09eba94315bd6d591ae9cb76413b
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" ==
@@ -357,9 +362,10 @@ TEST_CASE("expPowerOf256Of256_22______c0e0c1457caeab0bedb354de662de3741cd90362ec
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("9ec55c33085514ff7f0000000000000000000000000000000000000000000001" ==
@@ -442,9 +448,10 @@ TEST_CASE("expPowerOf256Of256_8______eabf261994e71ba3fab018f76089ada2039bf58f854
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("230041a0e7602d6e459609ed39081ec55c33085514ff7f000000000000000001" ==
@@ -527,9 +534,10 @@ TEST_CASE("mul4______98024d8b456973580b82d5dfcc6e3d389628d673e12d43ff8653a44b435
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("8000000000000000000000000000000000000000000000000000000000000000" ==
@@ -597,9 +605,10 @@ TEST_CASE("expPowerOf256_13______9a5723090752b32355ffaefd5d4b998f17196c358567128
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000100000000000000000000000000" ==
@@ -673,9 +682,10 @@ TEST_CASE("mulmod3______a4466904098f2aa254af6f260446e643504d5993d6226da4cf88c829
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000005" ==
@@ -743,9 +753,10 @@ TEST_CASE("exp6______05a538a5941013f6dc6dfb36f122b6d6840d86e5cb69af7da789e71d14c
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
@@ -813,9 +824,10 @@ TEST_CASE("addmodDivByZero1______858b669ae5775b5aeae36c69828eb74ecfa9498698f01ae
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
 }
@@ -880,9 +892,10 @@ TEST_CASE("expPowerOf256Of256_18______9aae91d4c3217ab1ae7ac11ca2cdce036b3be2c2bc
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("698218879ec55c33085514ff7f00000000000000000000000000000000000001" ==
@@ -965,9 +978,10 @@ TEST_CASE("smod5______7b7e7c70fbcb291a99ff4ae3f8d46a67b94183a8cf3c5a93aff9262c81
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
 }
@@ -1032,9 +1046,10 @@ TEST_CASE("expPowerOf256_25______fce87c81a0e08fa580701f25ecc21b487f85741090abd8a
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000100000000000000000000000000000000000000000000000000" ==
@@ -1108,9 +1123,10 @@ TEST_CASE("mulmoddivByZero3______7f1443cbcb5f817b38aed7b0dd96af4d58e8025b71a380e
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
@@ -1178,9 +1194,10 @@ TEST_CASE("expPowerOf256_33______dcdd8d12914af51d9ebd69cf0085106850fcc496b40c13b
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("fb4c498e11e3f82e714be514ef024675bb48d678bd192222cd2e783d4df020ff" ==
@@ -1251,9 +1268,10 @@ TEST_CASE("expPowerOf256Of256_4______5758fdc80aadf2b69e7e75acfa05239e6c5d9d5ad13
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("e6540ce46eaf70da9d644015a661e0e245b13f307cb3885514ff7f0000000001" ==
@@ -1336,9 +1354,10 @@ TEST_CASE("sdiv7______2b55fc5f5e58371ec9404c0b8c5e009c45c2c2efdbb5f8856cec1e847f
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
 }
@@ -1403,9 +1422,10 @@ TEST_CASE("divByNonZero1______fcd51ef794022b0a97b5d1c20e12e1a725cdd126f9a42fc135
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
 }
@@ -1470,9 +1490,10 @@ TEST_CASE("addmod1_overflow2______bef2a19f1d2f3d74ad56dcff0d4f94046bf73b3b27472e
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
 }
@@ -1537,9 +1558,10 @@ TEST_CASE("expPowerOf256Of256_14______58cc5ba032541e61180d5bb54913a3b14ba2db81e6
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("db9902ec698218879ec55c33085514ff7f000000000000000000000000000001" ==
@@ -1622,9 +1644,10 @@ TEST_CASE("expPowerOf256Of256_15______ce849f731f8f9cfdb8c922cac2e16d847e6af0bea8
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("9882ec698218879ec55c33085514ff7f00000000000000000000000000000001" ==
@@ -1707,9 +1730,10 @@ TEST_CASE("divByNonZero0______70dda40426c888f3c2b4505f99842373bae332be0976cb37dd
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000002" ==
@@ -1777,9 +1801,10 @@ TEST_CASE("addmod1_overflow3______37950a5f52df8d7eb5241267f3b45a759284d77a88e876
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
@@ -1847,9 +1872,10 @@ TEST_CASE("sdiv6______e7b278490909bf62877a08100ade05781f50a8e1057283f7b8c734a0ae
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
 }
@@ -1914,9 +1940,10 @@ TEST_CASE("expPowerOf256Of256_5______b03dff0692fa130237d4d29c2879391227fd71f95a3
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("b581ac185aad71db2d177c286929c4c22809e5dcb3085514ff7f000000000001" ==
@@ -1999,9 +2026,10 @@ TEST_CASE("expPowerOf256_32______9a7aca6dc6ad1b3e6bbf7596f5d5f35e917f8e4be05eb7d
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("e1dd29730112f6ef1d8edabfd4c3c60c823d865cd592abcdf0bdec64a1efe001" ==
@@ -2072,9 +2100,10 @@ TEST_CASE("divBoostBug______d2e783985274bb48def6615bebddaf86d9ebdcf49e03f93a9854
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000089" ==
@@ -2142,9 +2171,10 @@ TEST_CASE("mulmoddivByZero2______dade878a93b655f3a61789e38fb21ece3dd658e3e58d13a
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
 }
@@ -2209,9 +2239,10 @@ TEST_CASE("addmod1_overflowDiff______fd000aecad4faf960141a35e708c6686bf6d29b9173
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000004" ==
@@ -2279,9 +2310,10 @@ TEST_CASE("expPowerOf256_24______e4c8a16c072ceeebfd96c18dbd58a9088c910a9d2b9e35f
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000001000000000000000000000000000000000000000000000000" ==
@@ -2355,9 +2387,10 @@ TEST_CASE("smod4______131b0f2f206b381215517d412fb1ea7564a8152d2f4d4cd6ab3bff2cee
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
 }
@@ -2422,9 +2455,10 @@ TEST_CASE("expPowerOf256Of256_19______82899697a114c2742a99d07558e3ff58075aed7ac8
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("8218879ec55c33085514ff7f0000000000000000000000000000000000000001" ==
@@ -2507,9 +2541,10 @@ TEST_CASE("mulmod2______79bc8735a59de453773cbcd0053df3cd759b8d55ece41192570ed004
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000002" ==
@@ -2577,9 +2612,10 @@ TEST_CASE("exp7______618bedd207234fc5c4da314056bc9550ecb1c3ace2bd12dd6ee9a305a58
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
 }
@@ -2644,9 +2680,10 @@ TEST_CASE("mul5______df427409c23049ff69ae32648441bacf7f46bfa8380019c6d1effaefa42
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
 }
@@ -2711,9 +2748,10 @@ TEST_CASE("expPowerOf256_12______2e2fede61e970560166c4fa485d48bc644ee46ba312aae4
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000001000000000000000000000000" ==
@@ -2787,9 +2825,10 @@ TEST_CASE("expPowerOf256Of256_9______f93cdd3e162869675b64e4a5e5bb04307b799762656
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("53017d8eb210db2c8cd4a299079ec55c33085514ff7f00000000000000000001" ==
@@ -2872,9 +2911,10 @@ TEST_CASE("signextend_BigByte_0______ed96ff1a29a7869a15e633346c24da243ef11761dbf
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
 }
@@ -2939,9 +2979,10 @@ TEST_CASE("expPowerOf256Of256_23______6ff02117a4131900b84bb38b99a97e590f197792f7
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("c55c33085514ff7f000000000000000000000000000000000000000000000001" ==
@@ -3024,9 +3065,10 @@ TEST_CASE("expPowerOf256_1______308cd7ec273573ca2f8a96a8300b5469c13bdf78fa4c4f64
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000100" ==
@@ -3100,9 +3142,10 @@ TEST_CASE("mulmod1_overflow______8746002a182b1690ee3c6f9285ae2f6293abc8531dce20c
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
 }
@@ -3167,9 +3210,10 @@ TEST_CASE("sub1______9c03702b06e54741e8c89a52f479d93892f0186c3d8cd469dd8c1ef4987
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" ==
@@ -3237,9 +3281,10 @@ TEST_CASE("expPowerOf256_28______02bf29a25df27bb8f98935cb17cdd2e1b37c3963178dfd2
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000100000000000000000000000000000000000000000000000000000000" ==
@@ -3313,9 +3358,10 @@ TEST_CASE("expPowerOf256_23______abfb8b178f10c9de69b1ee116db59a0f9a127e78c370610
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000010000000000000000000000000000000000000000000000" ==
@@ -3389,9 +3435,10 @@ TEST_CASE("addmod0______1315e3365bbf4b0d1ea7d5f885974318055ca1dc25f54a106df8f76f
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
@@ -3459,9 +3506,10 @@ TEST_CASE("add0______2d47e8f287f580e1e0ec6b926375f8fee1142475cbf3bdcdf9305e618b6
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe" ==
@@ -3529,9 +3577,10 @@ TEST_CASE("expPowerOf256Of256_28______f0bed14e403ae3cbb67dfbf7e93be879d04590226a
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("14ff7f0000000000000000000000000000000000000000000000000000000001" ==
@@ -3614,9 +3663,10 @@ TEST_CASE("mulmod2_1______ad3c90c6e0cbacf8ba3baab6c0f8540ec0ff24038b0768dadabf67
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
@@ -3684,9 +3734,10 @@ TEST_CASE("smod8_byZero______d21aca0c1e7c0240084f3604e37698a1495ee8777b0dcb2d3a6
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff3" ==
@@ -3754,9 +3805,10 @@ TEST_CASE("expPowerOf256Of256_2______249a51e755ea2cd7bdbc704a8b3825fc01d81452213
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("4ee4ceeaac565c81f55a87c43f82f7c889ef4fc7c679671e28d594ff7f000001" ==
@@ -3839,9 +3891,10 @@ TEST_CASE("expPowerOf256_19______91e9804a3d43e6f2e973625ca587f4e8583bec88aa3c53c
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000100000000000000000000000000000000000000" ==
@@ -3915,9 +3968,10 @@ TEST_CASE("signextend_bigBytePlus1______e1d4c88c2ad5fbe82fefe183562d1533a0408cce
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("00000000000000000000000000000000000000000000000000f0000000000001" ==
@@ -3985,9 +4039,10 @@ TEST_CASE("sdivByZero2______0395bca3ef9221cdfca63d08eceb32873be670cae868547e38aa
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
@@ -4055,9 +4110,10 @@ TEST_CASE("sdiv1______65482c2a8e74781262c4db10d43d8c7731628b313a56e48a8dfdc9af9a
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" ==
@@ -4125,9 +4181,10 @@ TEST_CASE("addmod1_overflow4______d256203dabe38a3e460b068f5f85039a7f3db2f87cdd47
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000002" ==
@@ -4195,9 +4252,10 @@ TEST_CASE("expPowerOf256Of256_12______8e662f9b2bcc90eacdf00d0f18353ff17d7bada18f
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("b0e95b83a36ce98218879ec55c33085514ff7f00000000000000000000000001" ==
@@ -4280,9 +4338,10 @@ TEST_CASE("expPowerOf256Of256_32______6391696ba6998cd4f6154479524ffa7c1fd2970c48
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
@@ -4368,9 +4427,10 @@ TEST_CASE("expPowerOf256_6______2513b1044fefd548846b5188b80ed9633303bbbf23522518
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000001000000000000" ==
@@ -4444,9 +4504,10 @@ TEST_CASE("expPowerOf256Of256_24______cbbb2605b3283fff77ffccb39e107bd2a9353d0f25
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("5c33085514ff7f00000000000000000000000000000000000000000000000001" ==
@@ -4529,9 +4590,10 @@ TEST_CASE("expPowerOf2_32______1c83675482424298675a170ac78731d2fd4660aa4a42739a1
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000100000000" ==
@@ -4605,9 +4667,10 @@ TEST_CASE("signextend_0_BigByte______9690d6442d8ff89edda5c528ab4e1cb01ee09ba06c4
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" ==
@@ -4675,9 +4738,10 @@ TEST_CASE("mod1______efb4ba86b8ead1a13d49883472aa7876f6c2f22d094d84a22e0aa206bcf
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
@@ -4745,9 +4809,10 @@ TEST_CASE("sdiv_i256min______0fb4aa11ee10780f512ea76b238c096b781768ac4048e45d4b5
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" ==
@@ -4815,9 +4880,10 @@ TEST_CASE("expPowerOf256_15______5b661530dd5092ea6c0916ede1eac91b3650b6eb747c7fb
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000001000000000000000000000000000000" ==
@@ -4891,9 +4957,10 @@ TEST_CASE("mul2______d78a8768183f5c845b70898608b589cea44445d770bac7d08071fbccd91
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
 }
@@ -4958,9 +5025,10 @@ TEST_CASE("exp0______becfe094fe303afc738e2960a64d60ec529d99bf137a608b055ba1ae426
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000004" ==
@@ -5028,9 +5096,10 @@ TEST_CASE("signextend_BitIsNotSetInHigherByte______d7fe1705027d2eaee0adc232f8c10
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000006af4" ==
@@ -5098,9 +5167,10 @@ TEST_CASE("smod3______065fa0c03f285a3f544803b152a83747c02e25bfa2534c5aaae56128a8
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
 }
@@ -5165,9 +5235,10 @@ TEST_CASE("smod2______0ae154b4126001a661cccd291c9f3a10cc9051e554a729f22dc26cb32f
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe" ==
@@ -5235,9 +5306,10 @@ TEST_CASE("signextend_Overflow_dj42______7670c75ec39bedeeac949ccec613c786efedd31
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
 }
@@ -5302,9 +5374,10 @@ TEST_CASE("mulmod4______d0eab7707b7c4159ec4e9b68f395056a16fefb9a701a45e137b89931
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
 }
@@ -5369,9 +5442,10 @@ TEST_CASE("exp1______865320dd21d6636f4bf6f450f1df11b3df505304b74e57940db08814078
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
@@ -5439,9 +5513,10 @@ TEST_CASE("expPowerOf256_14______61841ab9a30c340ba56febf6d767ab19f91d9bb32ddd7a0
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000010000000000000000000000000000" ==
@@ -5515,9 +5590,10 @@ TEST_CASE("mul3______ea10c103a01bd1ae9bf5e1b964928ced5f84e6dbcdaa589400d20efcc3f
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000017" ==
@@ -5585,9 +5661,10 @@ TEST_CASE("smod_i256min1______1ac5584b891146649c93c9adb684f955bb539884cb37173d67
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
 }
@@ -5652,9 +5729,10 @@ TEST_CASE("expPowerOf2_64______8e369c41de5a6a6e3c87ed3f76e2a56d98b8283b18c9ef028
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000010000000000000000" ==
@@ -5728,9 +5806,10 @@ TEST_CASE("mod0______44970c0ef5fc5d700edaf9be35380d95cc5f91ac6f813a57046b9e1884a
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000002" ==
@@ -5798,9 +5877,10 @@ TEST_CASE("expPowerOf256Of256_25______681b6391573ae3638d187cb462c2ceac81bb651942
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("33085514ff7f0000000000000000000000000000000000000000000000000001" ==
@@ -5883,9 +5963,10 @@ TEST_CASE("expPowerOf256_7______ccc726de1f10bdaaee5b164f93a976e78f4c031e826a8237
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000100000000000000" ==
@@ -5959,9 +6040,10 @@ TEST_CASE("expPowerOf256Of256_33______52733d6f69e238cd513f28e3fe30dc303493edb9c0
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
@@ -6047,9 +6129,10 @@ TEST_CASE("expPowerOf256Of256_13______d7052bc90b7237c69a4efdf860a687a529c09e545d
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("e02639036c698218879ec55c33085514ff7f0000000000000000000000000001" ==
@@ -6132,9 +6215,10 @@ TEST_CASE("sdiv0______f0994462e2dd8cc0e076a7379a5a88a01a40586601ff426717cf1d678c
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" ==
@@ -6202,9 +6286,10 @@ TEST_CASE("expPowerOf256_18______5a677d007106e82a37e13f3560fa0e97f88bad6f826a0b6
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000001000000000000000000000000000000000000" ==
@@ -6278,9 +6363,10 @@ TEST_CASE("expPowerOf256Of256_3______54eb95326b641250ce064811abbd4d246395a7fedaf
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("109a00e1370d2d2922bf892e85becb54297354b2e5c75388d514ff7f00000001" ==
@@ -6363,9 +6449,10 @@ TEST_CASE("signextend_AlmostBiggestByte______fbfe54fdecb381ce1abdf7dcd95076ae6a3
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe" ==
@@ -6433,9 +6520,10 @@ TEST_CASE("addmod3_0______45cf97d25ad676aeea9764fcff1d6e7ec78270b322af420c5a3a66
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
 }
@@ -6500,9 +6588,10 @@ TEST_CASE("mulmod2_0______e7772703144f24ed842d6df70931910c59e3cf48885caa204e1cfc
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
 }
@@ -6567,9 +6656,10 @@ TEST_CASE("expPowerOf256Of256_29______eea0d96d36132886c8e85240f2ce145ee5d78888bf
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("ff7f000000000000000000000000000000000000000000000000000000000001" ==
@@ -6652,9 +6742,10 @@ TEST_CASE("signextend_BigBytePlus1_2______ab3be4aeefd25904d80c1a58bec3280e86ce66
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("00000000000000000000000000000000000000000000000000000000000000ff" ==
@@ -6722,9 +6813,10 @@ TEST_CASE("add1______d67a2f100d1736e3bc391e1ed2aea12f7fe8b1b9009c854c07c188c70a2
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000003" ==
@@ -6792,9 +6884,10 @@ TEST_CASE("addmod1______2ff6c05f22a0669f6a2cbfe5d7706c016e3849448e53e62612515849
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
@@ -6862,9 +6955,10 @@ TEST_CASE("expPowerOf256_22______6c41658d1a70ae8cbafb18046c8863fdf6d5b2ecd6fedaa
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000100000000000000000000000000000000000000000000" ==
@@ -6938,9 +7032,10 @@ TEST_CASE("expPowerOf256Of256_10______21b4b949d4f8bc1ab587529fc2373e244edd037443
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("fe0f60957dc223578a0298879ec55c33085514ff7f0000000000000000000001" ==
@@ -7023,9 +7118,10 @@ TEST_CASE("sdiv3______0b700f5943e191289b5c0bee1e9c8d4cae53ef77c61f055af8df241c94
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe" ==
@@ -7093,9 +7189,10 @@ TEST_CASE("sdivByZero0______8527a93d7cd284bffde534c9240234c0325249bc55a94cbc7bbe
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
 }
@@ -7160,9 +7257,10 @@ TEST_CASE("mulmod1_overflow3______cea734f62c2074f0e7220b0a22f7cffe76276077677881
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000004" ==
@@ -7230,9 +7328,10 @@ TEST_CASE("expXY_success______671a3326670385e9a6a354d8b382a4b62cdd57425bc6d6e673
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000002" ==
@@ -7306,9 +7405,10 @@ TEST_CASE("expPowerOf256Of256_0______005d6e42bfd4e4c18da7d75bdaa44190606fd695395
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000100" ==
@@ -7400,9 +7500,10 @@ TEST_CASE("div1______aad64e6d9e7887c570b9203d54147d896b21832207288f19a71473bf953
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
 }
@@ -7467,9 +7568,10 @@ TEST_CASE("add2______4f9cfe5905693f7a54fedaa484e51920df01a064e3c9c5bd1e479d50606
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
 }
@@ -7534,9 +7636,10 @@ TEST_CASE("expPowerOf256_8______c1a5c8ebaaa46926bf87a4cfe02f647400e739fac7761296
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000010000000000000000" ==
@@ -7610,9 +7713,10 @@ TEST_CASE("expPowerOf2_256______12737b4806aed49d7ab7eb74ddda1f35510496a85e1e478a
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("8000000000000000000000000000000000000000000000000000000000000000" ==
@@ -7680,9 +7784,10 @@ TEST_CASE("expPowerOf2_128______07c52f2c971e3f0c01c5e6ff304223399f96a48fcdc3434f
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000100000000000000000000000000000000" ==
@@ -7756,9 +7861,10 @@ TEST_CASE("addmod2______0d2340969d1058d6112d1aaaafd1e242260a075b9801fc37576ce9df
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000002" ==
@@ -7826,9 +7932,10 @@ TEST_CASE("expPowerOf256_21______c1c01fc64a2e345e6bb31672d7f8bc063b652f80d0f7500
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000001000000000000000000000000000000000000000000" ==
@@ -7902,9 +8009,10 @@ TEST_CASE("not1______e3aa182b2227b5b90343ecfd84d5e7ecdc8ef49a282262a4651d4809aaf
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
 }
@@ -7969,9 +8077,10 @@ TEST_CASE("smod1______d9e61a2b0310599d823b17276f69995d294e799066503dcd6bd06a62b6
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000002" ==
@@ -8039,9 +8148,10 @@ TEST_CASE("divByZero______5872a3754ed6c302fcba58fd2332eb0e9d1eaebac9e83d906e5317
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
 }
@@ -8106,9 +8216,10 @@ TEST_CASE("exp2______bd970c7eba2b9d704a1afd3831e8c17073a5c1080806048085d89dccdbe
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("bc8cccccccc888888880000000aaaaaab00000000fffffffffffffff7fffffff" ==
@@ -8176,9 +8287,10 @@ TEST_CASE("mul0______45cd7403ec890b29ae80f0d74b103c96059310c00ecc103470031fd8887
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000006" ==
@@ -8246,9 +8358,10 @@ TEST_CASE("expPowerOf256_17______f8e9fd0755c46024b28013f53f8259f6dd3827cc79db275
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000010000000000000000000000000000000000" ==
@@ -8322,9 +8435,10 @@ TEST_CASE("smod_i256min2______2482d9bf2796986ef35654b87d92ccc1132251b51dc9ad3d8b
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" ==
@@ -8392,9 +8506,10 @@ TEST_CASE("fibbonacci_unrolled______6ca8d6f0f1975e8ffe105ae83d44902ae15cc738402d
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
 }
@@ -8459,9 +8574,10 @@ TEST_CASE("mod3______e8738afe9d6d4a8e2a3f430ea09cfcaa563a4779254b91c81374e5a2974
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
 }
@@ -8526,9 +8642,10 @@ TEST_CASE("expPowerOf256Of256_26______466a34547f08dfadfe7b8170595dbcd4a85e8841d6
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("085514ff7f000000000000000000000000000000000000000000000000000001" ==
@@ -8611,9 +8728,10 @@ TEST_CASE("expPowerOf256_4______c2d1ac475be3d9708dd091aeee22a87804a4004cbe6a382c
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000100000000" ==
@@ -8687,9 +8805,10 @@ TEST_CASE("expPowerOf256Of256_30______479e812da82943e323dfedc14ea5728ff43add90f4
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("7f00000000000000000000000000000000000000000000000000000000000001" ==
@@ -8772,9 +8891,10 @@ TEST_CASE("sub4______05d9e4b327336db04e1b79dd21df56bd61361029dd7b4efb33e94315f6f
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" ==
@@ -8842,9 +8962,10 @@ TEST_CASE("signextend_BitIsNotSet______ad6c39d9aab1ff75cc4d29e0952352a880d3239b3
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("000000000000000000000000000000000000000000000000000000000000006a" ==
@@ -8912,9 +9033,10 @@ TEST_CASE("expPowerOf256Of256_31______c0c9812a4aec910c25f698f7851d356969417e40a6
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
@@ -8997,9 +9119,10 @@ TEST_CASE("signextend_BitIsSetInHigherByte______ac72667a2e447bdbe107272ec54041d0
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffaf4" ==
@@ -9067,9 +9190,10 @@ TEST_CASE("expPowerOf256_5______6146ceb91510b1cb9c01dab28929f5c50ab7351b971631b7
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000010000000000" ==
@@ -9143,9 +9267,10 @@ TEST_CASE("expPowerOf256Of256_27______4cb84dd85410e6e10a6fb0903c5336c92f1f3b1183
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("5514ff7f00000000000000000000000000000000000000000000000000000001" ==
@@ -9228,9 +9353,10 @@ TEST_CASE("expPowerOf2_2______a2bac0fecd9bb22498ef34248c689e040dff1c9551695bb524
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000004" ==
@@ -9304,9 +9430,10 @@ TEST_CASE("addmodDivByZero______07a2c67042f0a0a767dabddeff135071990a3121c53e5938
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
 }
@@ -9371,9 +9498,10 @@ TEST_CASE("mod2______1f5ca72bfa3c2c922df107ec65b03875606654bc9323bbe4d0d6917cc70
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
 }
@@ -9438,9 +9566,10 @@ TEST_CASE("mul1______62739e6b84ff552b35b894761b28b32935dd20af24275507ba8fb2823e2
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
@@ -9508,9 +9637,10 @@ TEST_CASE("expPowerOf256_16______9b8e345adf5a89c6fd364d4f668a7bd07dafbe8d54035b5
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000100000000000000000000000000000000" ==
@@ -9584,9 +9714,10 @@ TEST_CASE("exp3______60cc7f7666a3c4ef52e3af53332f1cf55f8a6b0bffe0395fa9236bb58d6
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
 }
@@ -9651,9 +9782,10 @@ TEST_CASE("smod0______657d85189406a5174b2e2c8d2a156aa8bd3844d715a6a21cca3f977769
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe" ==
@@ -9721,9 +9853,10 @@ TEST_CASE("expPowerOf256_20______d1c3af7ccb5c6194e2169b9e2f961b10e1899b7fefde762
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000010000000000000000000000000000000000000000" ==
@@ -9797,9 +9930,10 @@ TEST_CASE("addmod3______90b707def53d6810926ea7b4b409adf597e5ab856e36916ad59bd008
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000005" ==
@@ -9867,9 +10001,10 @@ TEST_CASE("expPowerOf256_9______1c9cbff4e50f2007147b4c1ee0f4f1bce34cc34003bdf76c
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000001000000000000000000" ==
@@ -9943,9 +10078,10 @@ TEST_CASE("add3______3bd86a492ae4e00b1432d5458d920592919816b61704a200a619a4519dc
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
 }
@@ -10010,9 +10146,10 @@ TEST_CASE("expPowerOf256Of256_1______cfa261cd17404f41ad16a6c50f85e826ba31c9ef0f4
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("06c3acd330b959ad6efabce6d2d2125e73a88a65a9880d203dddf5957f7f0001" ==
@@ -10095,9 +10232,10 @@ TEST_CASE("mulmod1_overflow2______39bbcf3f466015094b1966b488fb130f5f43e7f754742d
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
@@ -10165,9 +10303,10 @@ TEST_CASE("sdiv2______f23ddbb1007d7edd1cc43aa31e6754f5bffc664fd470d83d4ba9c5d73f
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
 }
@@ -10232,9 +10371,10 @@ TEST_CASE("sdivByZero1______da488af1640adb0d5fe53576afb146ba3e48b79d6fb20ebc0a72
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
 }
@@ -10299,9 +10439,10 @@ TEST_CASE("expPowerOf256Of256_11______0b1366d68a11bbb8b60d5458d1c5f75983c677beda
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("e1440264b8ee0cea0218879ec55c33085514ff7f000000000000000000000001" ==
@@ -10384,9 +10525,10 @@ TEST_CASE("divByZero_2______78d75e4a3fa542827bcd7d0ea0219c73036b1894b4f4f1d2db51
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000007" ==
@@ -10454,9 +10596,10 @@ TEST_CASE("smod7______a36ed55f2f8ba020ce5a62ef6e40d293dd21f437a822cd6f33b5525c8a
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
 }
@@ -10521,9 +10664,10 @@ TEST_CASE("addmodDivByZero3______9d7b88296068c5ed1620b7eaad6d1790e9140bd888ff108
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" ==
@@ -10591,9 +10735,10 @@ TEST_CASE("sdiv9______18566af59c50610c4d0730ca3171edb8079ef515fe3580e356caf81401
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" ==
@@ -10661,9 +10806,10 @@ TEST_CASE("exp4______3e3173753802a0d3265703667247f978ebbe5f0e2d22c9cf94f0c09efb3
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
@@ -10731,9 +10877,10 @@ TEST_CASE("mulmod1______ed3024180ecf5192c2c72e6c0e0c646a31121a9c2d81f8fc661cc404
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
 }
@@ -10798,9 +10945,10 @@ TEST_CASE("expPowerOf256_11______b1c6926a4ec774b5eb1dc422f228e11e96f892b8bbb40a5
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000010000000000000000000000" ==
@@ -10874,9 +11022,10 @@ TEST_CASE("mul6______93939ec6ec2137f19afdb9596236ff35ae94068ba39563ed649153ed975
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
@@ -10944,9 +11093,10 @@ TEST_CASE("expPowerOf256Of256_20______c3555c8b166600d82076a8dace17cdba2e354cc84b
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("18879ec55c33085514ff7f000000000000000000000000000000000000000001" ==
@@ -11029,9 +11179,10 @@ TEST_CASE("expPowerOf256_2______c16dec87b8f5f4457c20c3ef8bba3a291ca99433d10c52a8
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000010000" ==
@@ -11105,9 +11256,10 @@ TEST_CASE("sub2______2a70037d8d25f8333be090608c64a57f9d894ba31647d9ca910f1d68f6f
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe9" ==
@@ -11175,9 +11327,10 @@ TEST_CASE("signextendInvalidByteNumber______fafb83f281612538c3b8a0ad616214c94f23
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000126af4" ==
@@ -11245,9 +11398,10 @@ TEST_CASE("expPowerOf256Of256_16______7abe4db41b9db5ddba7e759a19f56721bfda3633d9
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("82ec698218879ec55c33085514ff7f0000000000000000000000000000000001" ==
@@ -11330,9 +11484,10 @@ TEST_CASE("modByZero______60d18d29ddc0d3fada77384fd6a1fdb5c8db6f39cac1d49150133a
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" ==
@@ -11400,9 +11555,10 @@ TEST_CASE("divByNonZero3______18eb2a03d9fb6139351c9348177f453fae7b4d0147cb61f0bc
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
@@ -11470,9 +11626,10 @@ TEST_CASE("exp8______8cc82dc5b40b6997018e4dd9ed813adc10d48b61aa086c3d44b89c02180
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
@@ -11540,9 +11697,10 @@ TEST_CASE("sdiv5______900ae8a1b5b71f5af75af223f8157cca4eac7224648cae647c2e9973be
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("8000000000000000000000000000000000000000000000000000000000000000" ==
@@ -11610,9 +11768,10 @@ TEST_CASE("expPowerOf2_16______d929b716ca2db29bb5383636946442ae3b248a8044221ae84
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000010000" ==
@@ -11686,9 +11845,10 @@ TEST_CASE("expPowerOf256Of256_6______0b504c01aa8be1b0f4d75843a158f9ece56004fdfb3
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("1948059de1def03c4ec35fc22c2bb8f2bf45dc33085514ff7f00000000000001" ==
@@ -11771,9 +11931,10 @@ TEST_CASE("expPowerOf256_31______49c27829894da6d63678e456733ea6fdc70f2757967ba5a
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0100000000000000000000000000000000000000000000000000000000000000" ==
@@ -11847,9 +12008,10 @@ TEST_CASE("sdiv_i256min2______90030696ae4a357369cc2782a28d4815a9935a9de909919b56
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("8000000000000000000000000000000000000000000000000000000000000000" ==
@@ -11917,9 +12079,10 @@ TEST_CASE("addmod2_1______98bb343b4feee04868cc71c50989783b808acc50b1c98e7ade4776
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
@@ -11987,9 +12150,10 @@ TEST_CASE("mulmoddivByZero1______a98185211df6a24ee07ad038dcac863c96507e63593dfa4
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
 }
@@ -12054,9 +12218,10 @@ TEST_CASE("add4______84ab9087035c1a89c5fb97de39f5a70014a07ccd234033a86345e1023a9
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
 }
@@ -12121,9 +12286,10 @@ TEST_CASE("addmodBigIntCast______08fea224001a172ce28f79d64d39b6ae2010c93b8db2a22
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
@@ -12191,9 +12357,10 @@ TEST_CASE("expPowerOf256_27______0b01e16cc7bd26138401de1bc3b8243c48d1b0a460b24a5
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000001000000000000000000000000000000000000000000000000000000" ==
@@ -12267,9 +12434,10 @@ TEST_CASE("expPowerOf256_26______6dccbbcb0ee8cd7d2f5843ad5ddf775a3226c7bf803ec5e
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000010000000000000000000000000000000000000000000000000000" ==
@@ -12343,9 +12511,10 @@ TEST_CASE("mulUnderFlow______f00e90cf7a2da69a3d545bd6f562a8277dd75b34d1ef2c4a939
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
 }
@@ -12410,9 +12579,10 @@ TEST_CASE("mulmod3_0______0070f9a443a2322b95c7b5087c03809c2f1998b04ba560d40d23e9
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
 }
@@ -12477,9 +12647,10 @@ TEST_CASE("sdiv_i256min3______c515fc2566610c432b0de0dd441f64fa3786ed7b2f921e19dd
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
 }
@@ -12544,9 +12715,10 @@ TEST_CASE("addmod2_0______15d55915fdfbaed97e9812ea54813c07e1882f34b815255f6d7951
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
 }
@@ -12611,9 +12783,10 @@ TEST_CASE("stop______e2fb82d7e038c48bcb3dc482432600771264d43e043100f7c8ac802958a
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
 }
@@ -12678,9 +12851,10 @@ TEST_CASE("signextend_bitIsSet______079a0a92b727ced019553f0b8d57e0a53cf85803f09a
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff4" ==
@@ -12748,9 +12922,10 @@ TEST_CASE("expPowerOf256_30______48e0ff7a9fb61234eb98e08920d2f6edc07d27fb3d8ce29
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0001000000000000000000000000000000000000000000000000000000000000" ==
@@ -12824,9 +12999,10 @@ TEST_CASE("sdiv_dejavu______6018ba5a8727b5f6c60678c66c95b410fcc2b2c14fe8b47e88ae
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" ==
@@ -12894,9 +13070,10 @@ TEST_CASE("expPowerOf2_8______b501d810365e03840b7f8635052551bd05c65ee103cdbd9894
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000100" ==
@@ -12970,9 +13147,10 @@ TEST_CASE("expPowerOf256Of256_7______987100c02d0255c99706c19220a994ab2b46102fc68
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("8bb02654111ad8c60ad8af132283a81f455c33085514ff7f0000000000000001" ==
@@ -13055,9 +13233,10 @@ TEST_CASE("expXY______b1f48c92fc069d4c6db24060394e4753fd7768e6d8c71dcf842e09536b
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000002" ==
@@ -13128,9 +13307,10 @@ TEST_CASE("mulmod1_overflow4______e299f946769fce28c47007d1e2e2313465406917bacada
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000003" ==
@@ -13198,9 +13378,10 @@ TEST_CASE("sdiv4______3065d6c46735c24934865e9b79e22fb6f62c23bf23882402a1690dfe87
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" ==
@@ -13268,9 +13449,10 @@ TEST_CASE("divByNonZero2______07c53576e7fa46c1ee1d5f30da0d479a49411004f70ea23881
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
 }
@@ -13335,9 +13517,10 @@ TEST_CASE("expPowerOf256Of256_17______d7a8e01c7d7ef07a3ab3091cf3116a4f6ec8efab1f
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("ec698218879ec55c33085514ff7f000000000000000000000000000000000001" ==
@@ -13420,9 +13603,10 @@ TEST_CASE("sub3______0e65bb014804438d489adaded93fa290d960a3c2400d795a7da572d8dd6
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
@@ -13490,9 +13674,10 @@ TEST_CASE("expPowerOf256_3______4ab92df5bf373064de3eeb8b359d28c9f1146673cf826d2e
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000001000000" ==
@@ -13566,9 +13751,10 @@ TEST_CASE("expPowerOf256Of256_21______10c6f39a124dba927aaa49875627683b285895b497
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("879ec55c33085514ff7f00000000000000000000000000000000000000000001" ==
@@ -13651,9 +13837,10 @@ TEST_CASE("expPowerOf2_4______631f6dc2dc4c0da8fcd51e6b47631de57699ba5552f74bfffc
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000010" ==
@@ -13727,9 +13914,10 @@ TEST_CASE("signextend_00______f2d0e5f5e92b4fabe5f8849039ea24659f13dd41ab170684ac
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
 }
@@ -13794,9 +13982,10 @@ TEST_CASE("mod4______1251fd388dafce899b3b8aaa3c1609354b876b279fb749c000888334946
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000002" ==
@@ -13864,9 +14053,10 @@ TEST_CASE("expPowerOf256_10______136a6ef3b914e46f9118f5d870a74dd1a4e9a3cfc97c84f
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000100000000000000000000" ==
@@ -13940,9 +14130,10 @@ TEST_CASE("mul7______68228cd9e856bee3481b095c8d1d2ab9fa30a0a1b1fbe697e3a8b01dfb6
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
 }
@@ -14007,9 +14198,10 @@ TEST_CASE("sdiv8______ea05e5ca26b556596f9d6e65f84d238632215eb308b26b1da829b48a4f
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
@@ -14077,9 +14269,10 @@ TEST_CASE("exp5______e6fc1d5718f3d1bcbc540b19ad2c208aab3e582d581278b7d692ea4b733
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000101" ==
@@ -14147,9 +14340,10 @@ TEST_CASE("mulmod0______15ef0419e36c1c1b45577f633dde9b4f4c0fc16258a46060ac228551
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
 }
@@ -14214,9 +14408,10 @@ TEST_CASE("addmodDivByZero2______ac86e7a61c79097514f97614f6afbd86d3f7d6e529c48b1
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
 }
@@ -14281,9 +14476,10 @@ TEST_CASE("arith1______e8665046be1f18c3372a4cdc4aab1ffc95156012239eaca43fd5c6c38
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
 }
@@ -14348,9 +14544,10 @@ TEST_CASE("smod6______23d40161e481cfa284f74d8d7a49de035d09bf5fc3f565f80292f804f9
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==

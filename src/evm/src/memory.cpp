@@ -21,7 +21,7 @@ void Memory::expand(uint64_t size) {
   }
 }
 
-void Memory::writeByte(uint256_t offset, uint256_t value) {
+void Memory::writeByte(const uint256_t& offset, const uint256_t& value) {
   overflow_t index = Overflow::uint256Cast(offset);
   bytes_t bytes = BigInt::toBytes(value);
   if (index.second || index.first >= length()) return;
@@ -29,7 +29,7 @@ void Memory::writeByte(uint256_t offset, uint256_t value) {
   memory->insert(memory->begin() + index.first, byte);
 }
 
-void Memory::write(uint256_t offset, uint256_t& word) {
+void Memory::write(const uint256_t& offset, const uint256_t& word) {
   overflow_t index = Overflow::uint256Cast(offset);
   if (index.second) return;
   bytes_t bytes = BigInt::toBytes(word);
@@ -38,21 +38,21 @@ void Memory::write(uint256_t offset, uint256_t& word) {
   memory->insert(memory->begin() + position, bytes.begin(), bytes.end());
 }
 
-uint256_t Memory::read(uint256_t offset) {
+uint256_t Memory::read(const uint256_t& offset) {
   overflow_t index = Overflow::uint256Cast(offset);
   if (index.second || index.first >= length()) return UINT256_ZERO;
   bytes_t bytes = bytes_t(memory->begin() + index.first, memory->begin() + index.first + WORD_SIZE);
   return BigInt::fromBigEndianBytes(bytes);
 }
 
-void Memory::writeSlice(uint256_t offsetArg, bytes_t& bytes) {
+void Memory::writeSlice(const uint256_t& offsetArg, const bytes_t& bytes) {
   overflow_t offset = Overflow::uint256Cast(offsetArg);
   if (offset.second || bytes.size() != 0) {
     std::copy(bytes.begin(), bytes.end(), memory->begin() + offset.first);
   }
 }
 
-std::shared_ptr<bytes_t> Memory::readSlice(uint256_t& offsetArg, uint256_t& sizeArg) {
+std::shared_ptr<bytes_t> Memory::readSlice(const uint256_t& offsetArg, const uint256_t& sizeArg) {
   overflow_t offset = Overflow::uint256Cast(offsetArg);
   overflow_t size = Overflow::uint256Cast(sizeArg);
   if (offset.second 
@@ -70,9 +70,9 @@ bool Memory::isValidRange(uint64_t offset, uint64_t size) {
 }
 
 void Memory::copyData(
-  uint256_t destOffset, 
-  uint256_t sourceOffset,
-  uint256_t size,
+  const uint256_t& destOffset, 
+  const uint256_t& sourceOffset,
+  const uint256_t& size,
   std::shared_ptr<bytes_t> data
 ) {
 

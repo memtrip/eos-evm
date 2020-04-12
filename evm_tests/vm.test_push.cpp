@@ -47,9 +47,10 @@ TEST_CASE("Push1", "[push]") {
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000009" == 
@@ -96,9 +97,10 @@ TEST_CASE("Push2", "[push]") {
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000015700" == 
@@ -145,9 +147,10 @@ TEST_CASE("Push3", "[push]") {
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("00000000000000000000000000000000000000000000000000000000015701de" == 
@@ -194,9 +197,10 @@ TEST_CASE("Push4", "[push]") {
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("000000000000000000000000000000000000000000000000000000002468a978" == 
@@ -243,9 +247,10 @@ TEST_CASE("Push5", "[push]") {
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000002468a97824" == 
@@ -292,9 +297,10 @@ TEST_CASE("Push6", "[push]") {
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("00000000000000000000000000000000000000000000000000002468a9782468" == 
@@ -341,9 +347,10 @@ TEST_CASE("Push7", "[push]") {
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000020000000000024" == 
@@ -390,9 +397,10 @@ TEST_CASE("Push8", "[push]") {
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000002000000000000024" == 

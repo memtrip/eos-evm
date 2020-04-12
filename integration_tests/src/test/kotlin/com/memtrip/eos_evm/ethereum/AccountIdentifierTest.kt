@@ -19,7 +19,7 @@ class AccountIdentifierTest {
         // then
         assertEquals(
             "d4706907910db93a5cad49fd0edd88e53dfba20e",
-            id.toHex()
+            id.toHexString()
         )
     }
 }

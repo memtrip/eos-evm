@@ -2,6 +2,7 @@ package com.memtrip.eos_evm.eos
 
 import com.memtrip.eos.chain.actions.ChainResponse
 import com.memtrip.eos_evm.ethereum.EthereumTransaction
+import java.lang.IllegalStateException
 import java.math.BigInteger
 import java.util.*
 import kotlin.streams.asSequence

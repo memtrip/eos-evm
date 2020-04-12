@@ -4,6 +4,7 @@
 #include <evm/return_data.h>
 #include <evm/account_state.h>
 #include <evm/call.h>
+#include <evm/operation.h>
 
 struct Finalization {
   uint256_t gasLeft;
@@ -31,6 +32,7 @@ typedef std::pair<
 class Execute {
   public:
     static finalization_result_t callWithStackDepth(
+      Operation& operation,
       size_t stackDepth,
       std::shared_ptr<External> external,
       std::shared_ptr<AccountState> accountState,

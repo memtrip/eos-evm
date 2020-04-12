@@ -5,8 +5,10 @@
 #include <evm/vm.h>
 #include <evm/external.h>
 #include <evm/hex.h>
+#include <evm/operation.h>
 
 finalization_result_t Execute::callWithStackDepth(
+  Operation& operation,
   size_t stackDepth,
   std::shared_ptr<External> external,
   std::shared_ptr<AccountState> accountState,
@@ -24,6 +26,7 @@ finalization_result_t Execute::callWithStackDepth(
   std::shared_ptr<Memory> memory = std::make_shared<Memory>(memoryBytes);
 
   exec_result_t vm_result = vm.execute(
+    operation,
     memory, 
     accountState, 
     external, 

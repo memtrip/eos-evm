@@ -47,9 +47,10 @@ TEST_CASE("Bitwise AND", "[bitwise]") {
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
@@ -95,9 +96,10 @@ TEST_CASE("Bitwise OR", "[bitwise]") {
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000006" == 
@@ -143,9 +145,10 @@ TEST_CASE("Bitwise XOR", "[bitwise]") {
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000005" == 
@@ -188,9 +191,10 @@ TEST_CASE("Bitops", "[bitwise]") {
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("00000000000000000000000000000000000000000000000000000000000000f0" == Utils::uint256_2str(accountState->get(uint256_t(0x00), context->codeAddress)));

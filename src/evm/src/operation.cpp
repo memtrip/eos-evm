@@ -99,8 +99,9 @@ instruction_result_t Operation::sdiv(
 ) {
   uint256_t a = stack->peek(0);
   uint256_t b = stack->peek(1);
+  uint256_t result = b != 0 ? intx::sdivrem(a, b).quot : 0;
   stack->pop(2);
-  stack->push(b != 0 ? intx::sdivrem(a, b).quot : 0);
+  stack->push(result);
   return std::make_pair(InstructionResult::OK, 0);
 }
 
@@ -174,8 +175,9 @@ instruction_result_t Operation::mulmod(
   uint256_t a = stack->peek(0);
   uint256_t b = stack->peek(1);
   uint256_t c = stack->peek(2);
+  uint256_t result = c != 0 ? intx::mulmod(a, b, c) : 0;
   stack->pop(3);
-  stack->push(c != 0 ? intx::mulmod(a, b, c) : 0);
+  stack->push(result);
   return std::make_pair(InstructionResult::OK, 0);
 }
 
@@ -403,11 +405,12 @@ instruction_result_t Operation::_byte(
   uint256_t word = stack->peek(0);
   uint256_t val = stack->peek(1);
   stack->pop(2);
-  if (word < uint256_t(32)) {
+  if (word < UINT256_32) {
     uint64_t word64 = static_cast<uint64_t>(word);
-    stack->push(val >> (8 * (31 - word64)) & uint256_t(0xff));
+    uint256_t result = val >> (8 * (31 - word64)) & UINT256_FF;
+    stack->push(result);
   } else {
-    stack->push(uint256_t(0));
+    stack->push(UINT256_ZERO);
   }
   return std::make_pair(InstructionResult::OK, 0);
 }

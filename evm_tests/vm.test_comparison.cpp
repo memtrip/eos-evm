@@ -48,9 +48,10 @@ TEST_CASE("Less than comparison truthy", "[LT]") {
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
@@ -97,9 +98,10 @@ TEST_CASE("Less than comparison not true", "[LT]") {
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
@@ -146,9 +148,10 @@ TEST_CASE("Greater than comparison truthy", "[GT]") {
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
@@ -195,9 +198,10 @@ TEST_CASE("Greater than comparison not true", "[GT]") {
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
@@ -244,9 +248,10 @@ TEST_CASE("Equal comparison truthy", "[EQ]") {
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
@@ -293,9 +298,10 @@ TEST_CASE("Equal comparison not true", "[EQ]") {
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
@@ -341,9 +347,10 @@ TEST_CASE("Is zero comparison truthy", "[ISZERO]") {
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
@@ -389,9 +396,10 @@ TEST_CASE("Is zero comparison not true", "[ISZERO]") {
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
@@ -434,9 +442,10 @@ TEST_CASE("Comparison with many instructions", "[comparison]") {
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 

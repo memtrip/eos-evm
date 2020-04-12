@@ -43,7 +43,7 @@ ACTION eos_evm::raw(name from, string code, string sender) {
     uint256_t address = BigInt::fromBigEndianBytes(accountIdentifierBytes);
     call_result_t callResult = eos_execute::transaction(address, rlp, data, external, accountState, call);
     handleCallResult(from, callResult, accountState);
-    idx.modify(itr, get_self(), [&](auto& account) {
+    idx.modify(itr, from, [&](auto& account) {
       account.nonce += 1;
     });
   } else {
@@ -59,7 +59,7 @@ ACTION eos_evm::raw(name from, string code, string sender) {
     uint256_t address = BigInt::fromBigEndianBytes(accountIdentifier.first);
     call_result_t callResult = eos_execute::transaction(address, rlp, data, external, accountState, call);
     handleCallResult(from, callResult, accountState);
-    idx.modify(itr, get_self(), [&](auto& account) {
+    idx.modify(itr, from, [&](auto& account) {
       account.nonce += 1;
     });
   }
@@ -98,18 +98,27 @@ void eos_evm::handleCallResult(name from, call_result_t callResult, std::shared_
 
 void eos_evm::commitState(name from, std::shared_ptr<AccountState> accountState) {
   if (accountState->cacheItems->size() > 0) {
-    account_state_table _account_state(get_self(), get_self().value);
+    // TODO: the scope of account_state should be derived from codeAddress
+    account_state_table _account_state(get_self(), from.value);
     for (int i = 0; i < accountState->cacheItems->size(); i++) {
-      uint256_t compositeKey = Hash::keccak256Word(
+      eosio::checksum256 compositeKey =  BigInt::toFixed32(Hash::keccak256Word(
         accountState->cacheItems->at(i).codeAddress,
         accountState->cacheItems->at(i).key
-      );
-      _account_state.emplace(from, [&](auto& account_state) {
-        account_state.pk = _account_state.available_primary_key();
-        account_state.accountIdentifier = BigInt::toFixed32(accountState->cacheItems->at(i).codeAddress);
-        account_state.key = BigInt::toFixed32(compositeKey);
-        account_state.value = BigInt::toFixed32(accountState->cacheItems->at(i).value);
-      });
+      ));
+      auto idx = _account_state.get_index<name("statekey")>();
+      auto itr = idx.find(compositeKey);
+      if (itr != idx.end()) {
+        idx.modify(itr, from, [&](auto& account_state) {
+          account_state.value = BigInt::toFixed32(accountState->cacheItems->at(i).value);
+        });
+      } else {
+        _account_state.emplace(from, [&](auto& account_state) {
+          account_state.pk = _account_state.available_primary_key();
+          account_state.accountIdentifier = BigInt::toFixed32(accountState->cacheItems->at(i).codeAddress);
+          account_state.key = compositeKey;
+          account_state.value = BigInt::toFixed32(accountState->cacheItems->at(i).value);
+        });
+      }
     }
   }
 }

@@ -13,6 +13,7 @@
 #include <evm/gasometer.h>
 #include <evm/big_int.h>
 #include "external_mock.h"
+#include <evm/operation.h>
 
 TEST_CASE("suicide______4622c577440f9db4b3954a1de60bf2fac55886dcb0ec4ecaf906c25bc77372e7", "[vm]") {
   env_t env = {
@@ -74,9 +75,10 @@ TEST_CASE("suicide______4622c577440f9db4b3954a1de60bf2fac55886dcb0ec4ecaf906c25b
   Gasometer gasometer(params.gas);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
 }

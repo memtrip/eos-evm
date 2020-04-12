@@ -22,14 +22,14 @@ class EthereumTransactionTest {
 
         // then
         println("Unsigned transaction::")
-        println(signedTransaction.unsignedTransaction.toHex())
+        println(signedTransaction.unsignedTransaction.toHexString())
         println("Signed transaction::")
-        println(signedTransaction.signedTransaction.toHex())
+        println(signedTransaction.signedTransaction.toHexString())
         println("Digest::")
-        println(signedTransaction.digest.toHex())
+        println(signedTransaction.digest.toHexString())
         println("Address::")
         println(signedTransaction.address)
         println("Signature v::")
-        println(signedTransaction.signature.v.toHex())
+        println(signedTransaction.signature.v.toHexString())
     }
 }

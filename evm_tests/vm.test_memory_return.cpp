@@ -45,9 +45,10 @@ TEST_CASE("shift left, write to memory, return", "[return_memory]") {
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(mem, accountState, external, call);
+  exec_result_t result = vm.execute(operation, mem, accountState, external, call);
 
   // then
   REQUIRE(ExecResult::DONE == result.first);
@@ -95,9 +96,10 @@ TEST_CASE("shift right, write to memory, return", "[return_memory]") {
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(mem, accountState, external, call);
+  exec_result_t result = vm.execute(operation, mem, accountState, external, call);
 
   // then
   REQUIRE(ExecResult::DONE == result.first);
@@ -147,9 +149,10 @@ TEST_CASE("sar, write to memory, revert", "[return_memory]") {
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(mem, accountState, external, call);
+  exec_result_t result = vm.execute(operation, mem, accountState, external, call);
 
   // then
   REQUIRE(ExecResult::DONE == result.first);

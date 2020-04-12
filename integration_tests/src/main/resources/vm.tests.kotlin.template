@@ -2,16 +2,22 @@ import com.memtrip.eos.chain.actions.transaction.TransactionContext
 import com.memtrip.eos.core.crypto.EosPrivateKey
 import com.memtrip.eos.http.rpc.Api
 import com.memtrip.eos_evm.eos.*
+import com.memtrip.eos_evm.eos.account_state.GetAccountState
 import com.memtrip.eos_evm.eos.raw.RawAction
 import com.memtrip.eos_evm.ethereum.EthAccount
 import com.memtrip.eos_evm.ethereum.EthereumTransaction
-import com.memtrip.eos_evm.ethereum.toHex
+import com.memtrip.eos_evm.ethereum.toHexString
+import com.memtrip.eos_evm.ethereum.toHexBytes
+import com.memtrip.eos_evm.ethereum.pad256
+import com.memtrip.eos_evm.ethereum.AccountStateKey
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.math.BigInteger
 import java.util.concurrent.TimeUnit
+import com.memtrip.eos_evm.eos.TestTransaction
+import com.memtrip.eos_evm.eos.faultTolerant
 
 //
 // ${lastUpdated?string('dd.MM.yyyy')}
@@ -32,51 +38,58 @@ class ${groupName} {
 
     private val rawAction = RawAction(chainApi)
 
+    private val getAccountState = GetAccountState(chainApi)
+
     <#list tests as test>
     @Test
     fun `${test.name}______${test.fixture._info.sourceHash}`() {
-        // given
-        val newAccountName = generateUniqueAccountName()
-        val newAccountPrivateKey = EosPrivateKey()
-        val newEthAccount = EthAccount.create()
 
-        setupTransactions.createAccount(
-            newAccountName,
-            newAccountPrivateKey
-        ).blockingGet()
+        val (accountName, accountIdentifier, response) = faultTolerant {
+            // given
+            val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
 
-        setupTransactions.createEthAccount(
-            newAccountName,
-            newAccountPrivateKey,
-            newEthAccount
-        ).blockingGet()
-
-        // when
-        val transaction = EthereumTransaction(
-            1,
-            BigInteger("${test.fixture.exec.gasPrice[2..]}", 16),
-            BigInteger("${test.fixture.exec.gas[2..]}", 16),
-            BigInteger("${test.fixture.exec.value[2..]}", 16),
-            "${test.fixture.exec.code}"
-        )
-        val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHex()
-
-        // then
-        val response = rawAction.pushTransaction(
-            newAccountName,
-            signedTransaction,
-            AccountIdentifier.create(newAccountName, newEthAccount.address).toHex(),
-            TransactionContext(
-                newAccountName,
-                newAccountPrivateKey,
-                transactionDefaultExpiry()
+            // when
+            val transaction = EthereumTransaction(
+                1,
+                BigInteger("${test.fixture.exec.gasPrice[2..]}", 16),
+                BigInteger("${test.fixture.exec.gas[2..]}", 16),
+                BigInteger("${test.fixture.exec.value[2..]}", 16),
+                "${test.fixture.exec.code}"
             )
-        ).blockingGet()
+            val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+
+            // then
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
+            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
+                newAccountName,
+                signedTransaction,
+                accountIdentifier.toHexString(),
+                TransactionContext(
+                    newAccountName,
+                    newAccountPrivateKey,
+                    transactionDefaultExpiry()
+                )
+            ).blockingGet())
+        }
 
         assertEquals(202, response.statusCode)
 
-        // TODO: verify the account state table
-    }
+        // and then
+        <#if test.fixture.post??>
+        <#list test.fixture.post.accountState.storage?keys as key>
+        // ${key}
+        val value_${key} = getAccountState.getValue(
+            accountName,
+            <#if key?length <= 8>
+            AccountStateKey.create(accountIdentifier.pad256(), ${key})
+            <#else>
+            AccountStateKey.create(accountIdentifier.pad256(), "${key[2..]}".toHexBytes())
+            </#if>
+        ).blockingGet()
+        assertEquals("${test.fixture.post.accountState.storage[key]}", value_${key})
 
+        </#list>
+        </#if>
+    }
     </#list>
 }

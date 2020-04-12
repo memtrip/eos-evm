@@ -44,9 +44,10 @@ TEST_CASE("Log empty (LOG0)", "[log]") {
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(mem, accountState, external, call);
+  exec_result_t result = vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK(99619 == Utils::gasLeft(result));
@@ -93,9 +94,10 @@ TEST_CASE("Log sender (LOG1)", "[log]") {
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(mem, accountState, external, call);
+  exec_result_t result = vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK(98974 == Utils::gasLeft(result));
@@ -147,9 +149,10 @@ TEST_CASE("Log origin and sender (LOG2)", "[log]") {
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(mem, accountState, external, call);
+  exec_result_t result = vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK(98977 == Utils::gasLeft(result));
@@ -204,9 +207,10 @@ TEST_CASE("Log caller, origin, sender (LOG3)", "[log]") {
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(mem, accountState, external, call);
+  exec_result_t result = vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK(98977 == Utils::gasLeft(result));
@@ -264,9 +268,10 @@ TEST_CASE("Log number, caller, origin and sender (LOG4)", "[log]") {
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(mem, accountState, external, call);
+  exec_result_t result = vm.execute(operation, mem, accountState, external, call);
 
   // then
   CHECK(79935 == Utils::gasLeft(result));

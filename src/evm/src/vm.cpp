@@ -11,6 +11,7 @@
 #include <evm/gas_calculation.h>
 
 exec_result_t VM::execute(
+  Operation& operation,
   std::shared_ptr<Memory> memory,
   std::shared_ptr<AccountState> accountState,
   std::shared_ptr<External> external,
@@ -25,6 +26,7 @@ exec_result_t VM::execute(
 
   do {
     result = VM::step(
+      operation,
       jumps, 
       gasCalculation,
       memory, 
@@ -39,6 +41,7 @@ exec_result_t VM::execute(
 }
 
 exec_result_t VM::step(
+  Operation& operation,
   jump_set_t& jumps, 
   std::shared_ptr<GasCalculation> gasCalculation,
   std::shared_ptr<Memory> memory,
@@ -58,6 +61,7 @@ exec_result_t VM::step(
     );
   } else {
     return VM::stepInner(
+      operation,
       jumps, 
       gasCalculation,
       memory, 
@@ -70,6 +74,7 @@ exec_result_t VM::step(
 }
 
 exec_result_t VM::stepInner(
+  Operation& operation,
   jump_set_t& jumps,
   std::shared_ptr<GasCalculation> gasCalculation,
   std::shared_ptr<Memory> memory,
@@ -150,6 +155,7 @@ exec_result_t VM::stepInner(
       {
         printf("(CREATE / CREATE2 ");
         result = executeCreateInstruction(
+          operation,
           opcode,
           provideGas,
           memory,
@@ -166,6 +172,7 @@ exec_result_t VM::stepInner(
       {
         printf("(CALL / CALLCODE / DELEGATECALL / STATICCALL ");
         result = executeCallInstruction(
+          operation,
           opcode,
           provideGas,
           memory,
@@ -267,6 +274,7 @@ exec_result_t VM::stepInner(
 }
 
 instruction_result_t VM::executeCreateInstruction(
+  Operation& operation,
   uint8_t opcode,
   gas_t providedGas,
   std::shared_ptr<Memory> memory,
@@ -365,6 +373,7 @@ instruction_result_t VM::executeCreateInstruction(
 }
 
 instruction_result_t VM::executeCallInstruction(
+  Operation& operation,
   uint8_t opcode,
   gas_t providedGas,
   std::shared_ptr<Memory> memory,

@@ -13,8 +13,10 @@ TEST_CASE("Put pair", "[account_state]") {
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
 
   // when
+  uint256_t key = uint256_t(1);
+  uint256_t value = uint256_t(2);
   uint256_t codeAddress = uint256_t(0xFF);
-  accountState->put(uint256_t(1), uint256_t(2), codeAddress);
+  accountState->put(key, value, codeAddress);
 
   // then
   CHECK(uint256_t(2) == accountState->get(0x01, codeAddress));
@@ -27,8 +29,10 @@ TEST_CASE("Get by index", "[account_state]") {
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
 
   // when
+  uint256_t key = uint256_t(3);
+  uint256_t value = uint256_t(4);
   uint256_t codeAddress = uint256_t(0xFF);
-  accountState->put(uint256_t(3), uint256_t(4), codeAddress);
+  accountState->put(key, value, codeAddress);
 
   // then
   CHECK(uint256_t(4) == accountState->get(uint256_t(3), codeAddress));

@@ -2,7 +2,7 @@
 #include <evm/account_state.h>
 #include <evm/big_int.h>
 
-void AccountState::put(uint256_t key, uint256_t value, uint256_t codeAddress) {
+void AccountState::put(const uint256_t& key, const uint256_t& value, const uint256_t& codeAddress) {
   int existingIndex = exists(key, codeAddress);
   store_item_t item {
     key,
@@ -16,7 +16,7 @@ void AccountState::put(uint256_t key, uint256_t value, uint256_t codeAddress) {
   }
 }
 
-uint256_t AccountState::get(uint256_t key, uint256_t codeAddress) {
+uint256_t AccountState::get(const uint256_t& key, const uint256_t& codeAddress) {
   for (int i = 0; i < cacheItems->size(); i++) {
     if (key == cacheItems->at(i).key && codeAddress == cacheItems->at(i).codeAddress)
       return cacheItems->at(i).value;

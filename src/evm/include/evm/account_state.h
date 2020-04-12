@@ -21,7 +21,7 @@ class AccountState {
     };
     std::shared_ptr<External> external;
     std::shared_ptr<account_store_t> cacheItems;
-    void put(uint256_t key, uint256_t value, uint256_t codeAddress);
-    uint256_t get(uint256_t key, uint256_t codeAddress);
+    void put(const uint256_t& key, const uint256_t& value, const uint256_t& codeAddress);
+    uint256_t get(const uint256_t& key, const uint256_t& codeAddress);
     int exists(uint256_t key, uint256_t codeAddress);
 };

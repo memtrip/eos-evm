@@ -45,9 +45,10 @@ TEST_CASE("shift left ", "[shift]") {
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   REQUIRE("8000000000000000000000000000000000000000000000000000000000000000" == 
@@ -90,9 +91,10 @@ TEST_CASE("shift left (2)", "[shift]") {
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   REQUIRE("fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe" 
@@ -135,9 +137,10 @@ TEST_CASE("shift left (3)", "[shift]") {
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  vm.execute(mem, accountState, external, call);
+  vm.execute(operation, mem, accountState, external, call);
 
   // then
   REQUIRE("000000000000000000000000000000000000000000000000000000000000000a" ==
@@ -180,9 +183,10 @@ TEST_CASE("shift right ", "[shift]") {
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(mem, accountState, external, call);
+  exec_result_t result = vm.execute(operation, mem, accountState, external, call);
 
   // then
   REQUIRE("4000000000000000000000000000000000000000000000000000000000000000" == 
@@ -225,9 +229,10 @@ TEST_CASE("shift right (1)", "[shift]") {
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(mem, accountState, external, call);
+  exec_result_t result = vm.execute(operation, mem, accountState, external, call);
 
   // then
   REQUIRE("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" == 
@@ -270,9 +275,10 @@ TEST_CASE("shift right (2)", "[shift]") {
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(mem, accountState, external, call);
+  exec_result_t result = vm.execute(operation, mem, accountState, external, call);
 
   // then
   REQUIRE("0000000000000000000000000000000000000000000000000000000000000002" == 
@@ -315,9 +321,10 @@ TEST_CASE("sar", "[shift]") {
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(mem, accountState, external, call);
+  exec_result_t result = vm.execute(operation, mem, accountState, external, call);
 
   // then
   REQUIRE("c000000000000000000000000000000000000000000000000000000000000000" 
@@ -360,9 +367,10 @@ TEST_CASE("sar (1)", "[shift]") {
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(mem, accountState, external, call);
+  exec_result_t result = vm.execute(operation, mem, accountState, external, call);
 
   // then
   REQUIRE("0000000000000000000000000000000000000000000000000000000000000001" == 
@@ -405,9 +413,10 @@ TEST_CASE("sar (2)", "[shift]") {
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(mem, accountState, external, call);
+  exec_result_t result = vm.execute(operation, mem, accountState, external, call);
 
   // then
   REQUIRE("000000000000000000000000000000000000000000000000000000000000007f" == 
@@ -450,9 +459,10 @@ TEST_CASE("sar (3)", "[shift]") {
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(mem, accountState, external, call);
+  exec_result_t result = vm.execute(operation, mem, accountState, external, call);
 
   // then
   REQUIRE("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" == 

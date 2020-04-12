@@ -17,12 +17,12 @@ typedef std::vector<std::pair<uint256_t, bytes_t>> storage_responder_t;
 class ExternalMock: public External {
   public:
     ExternalMock();
-    void log(std::vector<uint256_t>& topics, std::shared_ptr<bytes_t> data);
-    std::shared_ptr<bytes_t> code(uint256_t address);
-    double balance(uint256_t address);
-    bytes_t storageAt(uint256_t key, uint256_t codeAddress);
-    void suicide(uint256_t address);
-    bytes_t keccak256(bytes_t& bytes);
+    void log(const std::vector<uint256_t>& topics, std::shared_ptr<bytes_t> data);
+    std::shared_ptr<bytes_t> code(const uint256_t& address);
+    double balance(const uint256_t& address);
+    bytes_t storageAt(const uint256_t& key, const uint256_t& codeAddress);
+    void suicide(const uint256_t& address);
+    bytes_t keccak256(const bytes_t& bytes);
     log_spy_t logSpy;
     code_spy_t codeSpy;
     suicide_spy_t suicideSpy;

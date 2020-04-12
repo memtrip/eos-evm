@@ -6,6 +6,7 @@
 #include <evm/gasometer.h>
 #include <evm/execute.h>
 #include <evm/big_int.h>
+#include <evm/operation.h>
 
 call_result_t Call::create(
   bool trap,
@@ -51,7 +52,10 @@ call_result_t Call::makeCall(
 
   std::shared_ptr<Call> innerCall = std::make_shared<Call>(stackDepth);
 
+  Operation operation = Operation();
+
   finalization_result_t finalizationResult = Execute::callWithStackDepth(
+    operation,
     stackDepth + 1,
     external,
     accountState,

@@ -15,20 +15,21 @@ class VM {
     explicit VM(
       std::shared_ptr<Context> contextArg,
       std::shared_ptr<StackMachine> stackArg,
-      const Gasometer& g = Gasometer(0),
-      const Operation& o = Operation()
-    ): gasometer(g), operation(o) {
+      const Gasometer& g = Gasometer(0)
+    ): gasometer(g) {
       context = contextArg;
       stack = stackArg;
       gasometer.currentGas = context->gas;
     };
     exec_result_t execute(
+      Operation& operation,
       std::shared_ptr<Memory> memory,
       std::shared_ptr<AccountState> accountState,
       std::shared_ptr<External> external,
       std::shared_ptr<Call> call
     );
     exec_result_t step(
+      Operation& operation,
       jump_set_t& jumps, 
       std::shared_ptr<GasCalculation> gasCalculation,
       std::shared_ptr<Memory> memory,
@@ -38,6 +39,7 @@ class VM {
       std::shared_ptr<Call> call
     );
     exec_result_t stepInner(
+      Operation& operation,
       jump_set_t& jumps, 
       std::shared_ptr<GasCalculation> gasCalculation,
       std::shared_ptr<Memory> memory,
@@ -47,6 +49,7 @@ class VM {
       std::shared_ptr<Call> call
     );
     instruction_result_t executeCreateInstruction(
+      Operation& operation,
       uint8_t opcode,
       gas_t providedGas,
       std::shared_ptr<Memory> memory,
@@ -55,6 +58,7 @@ class VM {
       std::shared_ptr<Call> call
     );
     instruction_result_t executeCallInstruction(
+      Operation& operation,
       uint8_t opcode,
       gas_t providedGas,
       std::shared_ptr<Memory> memory,
@@ -66,5 +70,4 @@ class VM {
   private:
     std::shared_ptr<Context> context;
     Gasometer gasometer;
-    Operation operation;
 };

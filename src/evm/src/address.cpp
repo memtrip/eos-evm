@@ -39,7 +39,7 @@ bytes_t Address::accountIdentifierFromBytes(const std::string& accountName, cons
   return accountIdentifierBytes;
 }
 
-bytes_t Address::ethereumAddress(bytes_t& uncompressedPubKey) {
+bytes_t Address::ethereumAddress(const bytes_t& uncompressedPubKey) {
 
   bytes_t hash = Hash::keccak256(uncompressedPubKey);
 

@@ -1,3 +1,4 @@
+#pragma once
 #include <memory>
 #include <evm/types.h>
 #include <evm/instruction.h>

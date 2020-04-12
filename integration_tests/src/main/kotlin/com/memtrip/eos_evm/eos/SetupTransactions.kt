@@ -11,11 +11,47 @@ import com.memtrip.eos_evm.eos.Config.CONTRACT_ACCOUNT_NAME
 import com.memtrip.eos_evm.eos.Config.ISSUE_PRIVATE_KEY
 import com.memtrip.eos_evm.eos.create.CreateAction
 import com.memtrip.eos_evm.ethereum.EthAccount
+import java.lang.IllegalStateException
 
 class SetupTransactions(
     private val chainApi: ChainApi,
     private val createAction: CreateAction = CreateAction(chainApi)
 ) {
+
+    data class TestAccounts(
+        val eosAccount: String,
+        val eosPrivateKey: EosPrivateKey,
+        val ethAccount: EthAccount
+    )
+
+    fun seed(): TestAccounts {
+        for (i in 0 until 3) {
+            val newAccountName = generateUniqueAccountName()
+            val newAccountPrivateKey = EosPrivateKey()
+            val newEthAccount = EthAccount.create()
+
+            val createAccountResult = createAccount(
+                newAccountName,
+                newAccountPrivateKey
+            ).blockingGet()
+
+            val createEthAccountResult = createEthAccount(
+                newAccountName,
+                newAccountPrivateKey,
+                newEthAccount
+            ).blockingGet()
+
+            if (createAccountResult.isSuccessful && createEthAccountResult.isSuccessful) {
+                return TestAccounts(
+                    newAccountName,
+                    newAccountPrivateKey,
+                    newEthAccount
+                )
+            }
+        }
+
+        throw IllegalStateException("Failed to seed the test accounts")
+    }
 
     fun createAccount(
         accountName: String,
@@ -28,7 +64,7 @@ class SetupTransactions(
             CreateAccountChain.Args(
                 accountName,
                 CreateAccountChain.Args.Quantity(
-                3048,
+                7048,
                 "0.0100 ${Config.SYMBOL}",
                 "0.0100 ${Config.SYMBOL}"),
                 privateKey.publicKey,

@@ -103,6 +103,8 @@ const size_t ADDRESS_SIZE = 20;
 constexpr char HEX_VALUES[] = "0123456789abcdef";
 
 constexpr uint256_t UINT256_ZERO = uint256_t(0);
+constexpr uint256_t UINT256_32 = uint256_t(32);
+constexpr uint256_t UINT256_FF = uint256_t(0xff);
 constexpr uint256_t UINT256_ONE = uint256_t(1);
 
 const size_t STACK_LIMIT = 1024;
