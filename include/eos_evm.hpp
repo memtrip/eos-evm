@@ -18,6 +18,21 @@ CONTRACT eos_evm : public contract {
     ACTION writelog(name from, string message);
     ACTION clearlog();
 
+    TABLE account_state {
+      uint64_t pk;
+      checksum256 accountIdentifier;
+      checksum256 key;
+      checksum256 value;
+
+      uint64_t primary_key() const { return pk; }
+      checksum256 secondary_key() const { return key; }
+    };
+    typedef multi_index<
+      name("accountstate"), 
+      account_state, 
+      indexed_by<name("statekey"), const_mem_fun<account_state, checksum256, &account_state::secondary_key> >
+    > account_state_table;
+
   private:
     void handleCallResult(name from, call_result_t callResult, std::shared_ptr<AccountState> accountState);
     void commitState(name from, std::shared_ptr<AccountState> accountState);
@@ -35,21 +50,6 @@ CONTRACT eos_evm : public contract {
       account, 
       indexed_by<name("accountid"), const_mem_fun<account, checksum256, &account::secondary_key> >
     > account_table;
-
-    TABLE account_state {
-      uint64_t pk;
-      checksum256 accountIdentifier;
-      checksum256 key;
-      checksum256 value;
-
-      uint64_t primary_key() const { return pk; }
-      checksum256 secondary_key() const { return key; }
-    };
-    typedef multi_index<
-      name("accountstate"), 
-      account_state, 
-      indexed_by<name("statekey"), const_mem_fun<account_state, checksum256, &account_state::secondary_key> >
-    > account_state_table;
 
     TABLE account_code {
       name user;

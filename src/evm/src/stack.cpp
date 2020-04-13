@@ -4,7 +4,7 @@ void StackMachine::pop(uint16_t n) {
   stack->resize(stack->size() - n);
 }
 
-uint256_t& StackMachine::peek(uint16_t n) {
+uint256_t StackMachine::peek(uint16_t n) {
   return stack->at(stack->size() - n - 1);
 }
 
@@ -20,7 +20,7 @@ void StackMachine::swapWithTop(uint16_t n) {
   std::iter_swap(stack->end() - n - 1, stack->end() - 1);
 }
 
-uint256_t& StackMachine::top() {
+uint256_t StackMachine::top() {
   return StackMachine::peek(0);
 }
 

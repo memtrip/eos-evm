@@ -42,7 +42,9 @@ TEST_CASE("Save to memory", "[memory]") {
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
-  VM vm(context, stack);
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(context, stack, gasometer);
+
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
@@ -55,7 +57,7 @@ TEST_CASE("Save to memory", "[memory]") {
   vm.execute(operation, mem, accountState, external, call);
 
   // then
-  uint256_t word = mem->read(uint256_t(0x00));
+  uint256_t word = mem->read(0x00);
   CHECK("0000000000000000000000000000000000000000000000000000000000000006" == 
     Utils::uint256_2str(word)
   );
@@ -95,7 +97,9 @@ TEST_CASE("Save to memory, and retreive", "[memory]") {
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
-  VM vm(context, stack);
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(context, stack, gasometer);
+
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
@@ -148,7 +152,9 @@ TEST_CASE("Save to memory, retreive, and apply addition", "[memory]") {
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
-  VM vm(context, stack);
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(context, stack, gasometer);
+
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
@@ -202,7 +208,9 @@ TEST_CASE("Save byte to memory, retreive, and apply addition", "[memory]") {
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
-  VM vm(context, stack);
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(context, stack, gasometer);
+
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
@@ -256,7 +264,9 @@ TEST_CASE("Save byte to memory (1)", "[memory]") {
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
-  VM vm(context, stack);
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(context, stack, gasometer);
+
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
@@ -304,7 +314,9 @@ TEST_CASE("Memory size", "[memory]") {
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
-  VM vm(context, stack);
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(context, stack, gasometer);
+
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();

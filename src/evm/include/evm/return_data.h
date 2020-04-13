@@ -2,13 +2,9 @@
 #include <variant>
 #include <evm/types.h>
 
-class ReturnData {
-  public:
-    bytes_t mem;
-    uint256_t offset;
-    uint256_t size;
-    ReturnData copy() const;
-    static ReturnData empty();
+struct SlicePosition {
+  uint64_t offset;
+  uint64_t size;
 };
 
 enum GasType {
@@ -17,13 +13,13 @@ enum GasType {
 };
 
 struct NeedsReturn {
-  uint256_t gasLeft;
-  ReturnData data;
+  gas_t gasLeft;
+  SlicePosition slicePosition;
   bool apply;
 };
 
 typedef std::variant<
-  uint256_t,
+  gas_t,
   NeedsReturn
 > gas_return_t;
 

@@ -6,6 +6,7 @@
 #include <evm/external.h>
 #include <evm/account_state.h>
 #include <evm/context.h>
+#include <evm/memory.h>
 
 // message call result
 enum MessageCallResult {
@@ -18,7 +19,7 @@ enum MessageCallResult {
 
 struct MessageCallReturn {
   uint256_t gasLeft;
-  ReturnData returnData;
+  SlicePosition slicePosition;
 };
 
 typedef std::variant<
@@ -68,12 +69,14 @@ class Call {
     explicit Call(uint16_t s): stackDepth(s) { };
     call_result_t create(
       bool trap,
+      std::shared_ptr<Memory> memory,
       std::shared_ptr<Context> context,
       std::shared_ptr<External> external,
       std::shared_ptr<AccountState> accountState
     );
     call_result_t call(
       bool trap,
+      std::shared_ptr<Memory> memory,
       std::shared_ptr<Context> context,
       std::shared_ptr<External> external,
       std::shared_ptr<AccountState> accountState
@@ -83,6 +86,7 @@ class Call {
     call_result_t makeCall(
       action_type_t callType,
       bool trap,
+      std::shared_ptr<Memory> memory,
       std::shared_ptr<Context> context,
       std::shared_ptr<External> external,
       std::shared_ptr<AccountState> accountState

@@ -41,7 +41,9 @@ TEST_CASE("Add two large numbers, store the result, verify gas", "[gasometer]") 
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
-  VM vm(context, stack);
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(context, stack, gasometer);
+
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
@@ -92,7 +94,9 @@ TEST_CASE("Store the result of an SHA3 hash, verify gas", "[gasometer]") {
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
-  VM vm(context, stack);
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(context, stack, gasometer);
+
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
@@ -154,7 +158,9 @@ TEST_CASE("Address, verify gas", "[gasometer]") {
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
-  VM vm(context, stack);
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(context, stack, gasometer);
+
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
@@ -216,7 +222,9 @@ TEST_CASE("Origin, verify gas", "[gasometer]") {
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
-  VM vm(context, stack);
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(context, stack, gasometer);
+
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
@@ -281,7 +289,9 @@ TEST_CASE("Self balance, verify gas", "[gasometer]") {
 
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
-  VM vm(context, stack);
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(context, stack, gasometer);
+
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
@@ -339,7 +349,9 @@ TEST_CASE("Sender, verify gas", "[gasometer]") {
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
-  VM vm(context, stack);
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(context, stack, gasometer);
+
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
@@ -390,7 +402,9 @@ TEST_CASE("Chain id, verify gas", "[gasometer]") {
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
-  VM vm(context, stack);
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(context, stack, gasometer);
+
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
@@ -457,7 +471,9 @@ TEST_CASE("Extcodecopy verify gas", "[gasometer]") {
 
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
-  VM vm(context, stack);
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(context, stack, gasometer);
+
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
@@ -519,7 +535,9 @@ TEST_CASE("Blockhash, verify gas", "[gasometer]") {
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
-  VM vm(context, stack);
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(context, stack, gasometer);
+
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
@@ -584,7 +602,9 @@ TEST_CASE("Calldataload verify gas", "[gasometer]") {
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
-  VM vm(context, stack);
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(context, stack, gasometer);
+
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
@@ -635,7 +655,9 @@ TEST_CASE("Multiply, store the result, verify gas", "[gasometer]") {
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
-  VM vm(context, stack);
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(context, stack, gasometer);
+
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
@@ -686,7 +708,9 @@ TEST_CASE("Subtract, store the result, verify gas", "[gasometer]") {
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
-  VM vm(context, stack);
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(context, stack, gasometer);
+
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
@@ -737,7 +761,9 @@ TEST_CASE("Division, store the result, verify gas", "[gasometer]") {
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
-  VM vm(context, stack);
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(context, stack, gasometer);
+
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
@@ -788,7 +814,9 @@ TEST_CASE("Div zero, store the result, verify gas", "[gasometer]") {
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
-  VM vm(context, stack);
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(context, stack, gasometer);
+
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
@@ -839,7 +867,9 @@ TEST_CASE("Mod, store the result, verify gas", "[gasometer]") {
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
-  VM vm(context, stack);
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(context, stack, gasometer);
+
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
@@ -893,7 +923,9 @@ TEST_CASE("SMOD, store the result, verify gas", "[gasometer]") {
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
-  VM vm(context, stack);
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(context, stack, gasometer);
+
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
@@ -947,7 +979,9 @@ TEST_CASE("SDIV, store the result, verify gas", "[gasometer]") {
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
-  VM vm(context, stack);
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(context, stack, gasometer);
+
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
@@ -1001,7 +1035,9 @@ TEST_CASE("Exp, store the result, verify gas", "[gasometer]") {
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
-  VM vm(context, stack);
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(context, stack, gasometer);
+
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
@@ -1058,7 +1094,9 @@ TEST_CASE("Comparison, store the result, verify gas", "[gasometer]") {
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
-  VM vm(context, stack);
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(context, stack, gasometer);
+
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
@@ -1118,7 +1156,9 @@ TEST_CASE("Signed comparison, store the result, verify gas", "[gasometer]") {
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
-  VM vm(context, stack);
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(context, stack, gasometer);
+
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
@@ -1179,7 +1219,9 @@ TEST_CASE("Bitops, store the result, verify gas", "[gasometer]") {
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
-  VM vm(context, stack);
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(context, stack, gasometer);
+
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
@@ -1245,7 +1287,9 @@ TEST_CASE("Add mod - mul mod, store the result, verify gas", "[gasometer]") {
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
-  VM vm(context, stack);
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(context, stack, gasometer);
+
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
@@ -1305,7 +1349,9 @@ TEST_CASE("Byte, store the result, verify gas", "[gasometer]") {
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
-  VM vm(context, stack);
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(context, stack, gasometer);
+
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
@@ -1359,7 +1405,9 @@ TEST_CASE("Signextend, store the result, verify gas", "[gasometer]") {
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
-  VM vm(context, stack);
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(context, stack, gasometer);
+
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
@@ -1413,7 +1461,9 @@ TEST_CASE("Pop, store the result, verify gas", "[gasometer]") {
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
-  VM vm(context, stack);
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(context, stack, gasometer);
+
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
@@ -1475,7 +1525,9 @@ TEST_CASE("Extops, store the result, verify gas", "[gasometer]") {
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
-  VM vm(context, stack);
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(context, stack, gasometer);
+
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
@@ -1553,7 +1605,9 @@ TEST_CASE("Jumps, store the result, verify gas", "[gasometer]") {
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
-  VM vm(context, stack);
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(context, stack, gasometer);
+
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();

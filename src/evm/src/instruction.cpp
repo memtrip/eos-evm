@@ -320,6 +320,7 @@ uint8_t Instruction::logTopics(instruct_t instruction) {
 }
 
 instruction_verify_t Instruction::verify(instruct_t instruction, size_t stackSize) {
+  if (instruction == 0x000000FF) return InstructionVerifyResult::INSTRUCTION_NOT_DEFINED;
   uint8_t argsLen = args(instruction);
   uint8_t retLen = ret(instruction);
   if (stackSize < argsLen) {

@@ -14,6 +14,7 @@ nodeos \
 --data-dir $ROOTDIR"/blockchain/data" \
 --blocks-dir $ROOTDIR"/blockchain/blocks" \
 --config-dir $ROOTDIR"/blockchain/config" \
+--logconf $ROOTDIR"/logging.json" \
 --producer-name $PRODUCER_NAME \
 --http-server-address 0.0.0.0:8888 \
 --p2p-listen-endpoint 0.0.0.0:9011 \

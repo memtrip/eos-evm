@@ -12,6 +12,7 @@
 #include <evm/rlp.h>
 #include <evm/big_int.h>
 #include <evm/hash.h>
+#include <evm/memory.h>
 
 ACTION eos_evm::raw(name from, string code, string sender) {
   require_auth(from);
@@ -25,6 +26,9 @@ ACTION eos_evm::raw(name from, string code, string sender) {
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
   std::shared_ptr<Call> call = std::make_unique<Call>(0);
+
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> memory = std::make_shared<Memory>(memoryBytes);
 
   if (Transaction::hasSignature(rlp)) {
     bytes_t accountIdentifierBytes = eos_ecrecover::recover(
@@ -41,7 +45,7 @@ ACTION eos_evm::raw(name from, string code, string sender) {
 
     std::shared_ptr<bytes_t> data = Transaction::data(rlp);
     uint256_t address = BigInt::fromBigEndianBytes(accountIdentifierBytes);
-    call_result_t callResult = eos_execute::transaction(address, rlp, data, external, accountState, call);
+    call_result_t callResult = eos_execute::transaction(address, rlp, data, memory, external, accountState, call);
     handleCallResult(from, callResult, accountState);
     idx.modify(itr, from, [&](auto& account) {
       account.nonce += 1;
@@ -57,7 +61,7 @@ ACTION eos_evm::raw(name from, string code, string sender) {
 
     std::shared_ptr<bytes_t> data = Transaction::data(rlp);
     uint256_t address = BigInt::fromBigEndianBytes(accountIdentifier.first);
-    call_result_t callResult = eos_execute::transaction(address, rlp, data, external, accountState, call);
+    call_result_t callResult = eos_execute::transaction(address, rlp, data, memory, external, accountState, call);
     handleCallResult(from, callResult, accountState);
     idx.modify(itr, from, [&](auto& account) {
       account.nonce += 1;
@@ -71,6 +75,13 @@ void eos_evm::handleCallResult(name from, call_result_t callResult, std::shared_
       {
         MessageCallReturn callReturn = std::get<MessageCallReturn>(callResult.second);
         uint256_t gasLeft = callReturn.gasLeft;
+        /*
+          TODO: use the return bytes
+          std::shared_ptr<bytes_t> returnDataBytes = memory->readSlice(
+            finalization.returnData.offset, finalization.returnData.size
+          );
+          bytes_t copyBytes = returnDataBytes->size() ? bytes_t(returnDataBytes->begin(), returnDataBytes->end()) : bytes_t();
+        */
         commitState(from, accountState);
         break;
       }

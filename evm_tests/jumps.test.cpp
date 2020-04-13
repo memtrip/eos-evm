@@ -30,9 +30,9 @@ TEST_CASE("Verify jumps", "[jumps]") {
   jumps.insert(10);
 
   // then
-  REQUIRE(5 == Jumps::verifyJump(uint256_t(5), jumps)); 
-  REQUIRE(2 == Jumps::verifyJump(uint256_t(2), jumps)); 
-  REQUIRE(10 == Jumps::verifyJump(uint256_t(10), jumps)); 
+  REQUIRE(5 == Jumps::verifyJump(5, jumps)); 
+  REQUIRE(2 == Jumps::verifyJump(2, jumps)); 
+  REQUIRE(10 == Jumps::verifyJump(10, jumps)); 
   REQUIRE(INVALID_ARGUMENT == Jumps::verifyJump(3, jumps)); 
-  REQUIRE(INVALID_ARGUMENT == Jumps::verifyJump(Utils::bigIntFromBigEndianBytes("FFFFFFFFFFFFFFFFFFFFF"), jumps)); 
+  REQUIRE(INVALID_ARGUMENT == Jumps::verifyJump(0xFFFFFFFF, jumps)); 
 }

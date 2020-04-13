@@ -10,6 +10,7 @@
 
 call_result_t Call::create(
   bool trap,
+  std::shared_ptr<Memory> memory,
   std::shared_ptr<Context> context,
   std::shared_ptr<External> external,
   std::shared_ptr<AccountState> accountState
@@ -17,6 +18,7 @@ call_result_t Call::create(
   return makeCall(
     ActionType::ACTION_CREATE,
     trap,
+    memory,
     context,
     external,
     accountState
@@ -25,6 +27,7 @@ call_result_t Call::create(
 
 call_result_t Call::call(
   bool trap,
+  std::shared_ptr<Memory> memory,
   std::shared_ptr<Context> context,
   std::shared_ptr<External> external,
   std::shared_ptr<AccountState> accountState
@@ -36,6 +39,7 @@ call_result_t Call::call(
   return makeCall(
     ActionType::ACTION_CALL,
     trap,
+    memory,
     context,
     external,
     accountState
@@ -45,18 +49,20 @@ call_result_t Call::call(
 call_result_t Call::makeCall(
   action_type_t callType,
   bool trap,
+  std::shared_ptr<Memory> memory,
   std::shared_ptr<Context> context,
   std::shared_ptr<External> external,
   std::shared_ptr<AccountState> accountState
 ) {
 
-  std::shared_ptr<Call> innerCall = std::make_shared<Call>(stackDepth);
-
   Operation operation = Operation();
+
+  std::shared_ptr<Call> innerCall = std::make_shared<Call>(stackDepth);
 
   finalization_result_t finalizationResult = Execute::callWithStackDepth(
     operation,
     stackDepth + 1,
+    memory,
     external,
     accountState,
     context,
@@ -70,7 +76,7 @@ call_result_t Call::makeCall(
 
         MessageCallReturn messageCallReturn {
           finalization.gasLeft,
-          finalization.returnData
+          finalization.slicePosition
         };
 
         if (finalization.applyState) {

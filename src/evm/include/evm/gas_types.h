@@ -30,8 +30,7 @@ const size_t QUAD_COEFF_DIV = 512;
 
 enum InstructionRequirementsResult {
   INSTRUCTION_RESULT_OK,
-  INSTRUCTION_RESULT_OUT_OF_GAS,
-  INSTRUCTION_RESULT_ERROR
+  INSTRUCTION_RESULT_OUT_OF_GAS
 };
 
 struct InstructionRequirements {

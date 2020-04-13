@@ -4,7 +4,6 @@ import com.memtrip.eos.http.rpc.ChainApi
 import com.memtrip.eos.http.rpc.model.contract.request.GetTableRows
 import com.memtrip.eos_evm.eos.Config
 import io.reactivex.Single
-import java.lang.IllegalStateException
 
 class GetAccountState(
     private val chainApi: ChainApi

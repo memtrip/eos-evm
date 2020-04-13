@@ -1,6 +1,7 @@
 #include <evm/operation.h>
 #include <evm/big_int.h>
 #include <evm/hash.h>
+#include <evm/overflow.h>
 
 instruction_result_t Operation::stop(
   gas_t gas,
@@ -80,8 +81,9 @@ instruction_result_t Operation::div(
     stack->pop(2);
     stack->push(uint256_t(0));
   } else {
+    uint256_t result = a / b;
     stack->pop(2);
-    stack->push(a / b);
+    stack->push(result);
   }
 
   return std::make_pair(InstructionResult::OK, 0);
@@ -121,8 +123,9 @@ instruction_result_t Operation::mod(
     stack->pop(2);
     stack->push(uint256_t(0));
   } else {
+    uint256_t result = a % b;
     stack->pop(2);
-    stack->push(a % b);
+    stack->push(result);
   }
   return std::make_pair(InstructionResult::OK, 0);
 }
@@ -139,8 +142,9 @@ instruction_result_t Operation::smod(
 ) {
   uint256_t a = stack->peek(0);
   uint256_t b = stack->peek(1);
+  uint256_t result = b != 0 ? intx::sdivrem(a, b).rem : 0;
   stack->pop(2);
-  stack->push(b != 0 ? intx::sdivrem(a, b).rem : 0);
+  stack->push(result);
   return std::make_pair(InstructionResult::OK, 0);
 }
 
@@ -157,8 +161,9 @@ instruction_result_t Operation::addmod(
   uint256_t a = stack->peek(0);
   uint256_t b = stack->peek(1);
   uint256_t c = stack->peek(2);
+  uint256_t result = c != 0 ? intx::addmod(a, b, c) : 0;
   stack->pop(3);
-  stack->push(c != 0 ? intx::addmod(a, b, c) : 0);
+  stack->push(result);
   return std::make_pair(InstructionResult::OK, 0);
 }
 
@@ -193,8 +198,9 @@ instruction_result_t Operation::exp(
 ) {
   uint256_t a = stack->peek(0);
   uint256_t b = stack->peek(1);
+  uint256_t result = intx::exp(a, b);
   stack->pop(2);
-  stack->push(intx::exp(a, b));
+  stack->push(result);
   return std::make_pair(InstructionResult::OK, 0);
 }
 
@@ -322,7 +328,7 @@ instruction_result_t Operation::iszero(
   std::shared_ptr<Memory> memory, 
   std::shared_ptr<StackMachine> stack
 ) {
-  bool result = stack->peek(0) == 0;
+  bool result = stack->peek(0) == UINT256_ZERO;
   stack->pop(1);
   stack->pushBool(result);
   return std::make_pair(InstructionResult::OK, 0);
@@ -406,7 +412,7 @@ instruction_result_t Operation::_byte(
   uint256_t val = stack->peek(1);
   stack->pop(2);
   if (word < UINT256_32) {
-    uint64_t word64 = static_cast<uint64_t>(word);
+    uint64_t word64 = Overflow::uint256Cast(word).first;
     uint256_t result = val >> (8 * (31 - word64)) & UINT256_FF;
     stack->push(result);
   } else {
@@ -488,8 +494,11 @@ instruction_result_t Operation::sha3(
 ) {
   uint256_t offset = stack->peek(0);
   uint256_t size = stack->peek(1);
+  std::shared_ptr<bytes_t> bytes = memory->readSlice(
+    Overflow::uint256Cast(offset).first, 
+    Overflow::uint256Cast(size).first
+  );
   stack->pop(2);
-  std::shared_ptr<bytes_t> bytes = memory->readSlice(offset, size); // WASM memory issue 
   bytes_t hashBytes = Hash::keccak256(bytes);
   stack->push(BigInt::fromBigEndianBytes(hashBytes));
   return std::make_pair(InstructionResult::OK, 0);
@@ -566,7 +575,7 @@ instruction_result_t Operation::calldataload(
   if (context->data->size() < index) {
     stack->push(UINT256_ZERO);
   } else {
-    size_t begin = static_cast<size_t>(index);
+    size_t begin = Overflow::uint256Cast(index).first;
     uint256_t value = BigInt::load32(begin, context->data);
     stack->push(value);
   }
@@ -600,14 +609,14 @@ instruction_result_t Operation::calldatacopy(
   uint256_t destOffset = stack->peek(0);
   uint256_t sourceOffset = stack->peek(1);
   uint256_t sizeItem = stack->peek(2);
-  stack->pop(3);
 
   memory->copyData(
-    destOffset, 
-    sourceOffset, 
-    sizeItem, 
+    Overflow::uint256Cast(destOffset).first, 
+    Overflow::uint256Cast(sourceOffset).first, 
+    Overflow::uint256Cast(sizeItem).first, 
     context->data
   );
+  stack->pop(3);
   return std::make_pair(InstructionResult::OK, 0);
 }
 
@@ -749,8 +758,8 @@ instruction_result_t Operation::mload(
   std::shared_ptr<StackMachine> stack
 ) {
   uint256_t offset = stack->peek(0);
+  uint256_t word = memory->read(Overflow::uint256Cast(offset).first);
   stack->pop(1);
-  uint256_t word = memory->read(offset);
   stack->push(word);
   return std::make_pair(InstructionResult::OK, 0);
 }
@@ -767,8 +776,8 @@ instruction_result_t Operation::mstore(
 ) {
   uint256_t offset = stack->peek(0);
   uint256_t word = stack->peek(1);
+  memory->write(Overflow::uint256Cast(offset).first, word);
   stack->pop(2);
-  memory->write(offset, word);
   return std::make_pair(InstructionResult::OK, 0);
 }
 
@@ -784,8 +793,8 @@ instruction_result_t Operation::mstore8(
 ) {
   uint256_t offset = stack->peek(0);
   uint256_t byte = stack->peek(1);
+  memory->writeByte(Overflow::uint256Cast(offset).first, byte);
   stack->pop(2);
-  memory->writeByte(offset, byte);
   return std::make_pair(InstructionResult::OK, 0);
 }
 
@@ -802,8 +811,8 @@ instruction_result_t Operation::jump(
   uint256_t position = stack->peek(0);
   stack->pop(1);
   return std::make_pair(
-    InstructionResult::JUMP_POSITION, 
-    position
+    InstructionResult::JUMP_POSITION,
+    Overflow::uint256Cast(position).first
   );
 }
 
@@ -820,12 +829,14 @@ instruction_result_t Operation::jumpi(
   uint256_t condition = stack->peek(1);
   if (condition == UINT256_ONE) {
     uint256_t position = stack->peek(0);
+    uint64_t positionValue = Overflow::uint256Cast(position).first;
     stack->pop(2);
     return std::make_pair(
       InstructionResult::JUMP_POSITION, 
-      position
+      positionValue
     );
   }
+  stack->pop(2);
   return std::make_pair(InstructionResult::OK, 0);
 }
 
@@ -903,15 +914,14 @@ instruction_result_t Operation::extcodecopy(
   uint256_t destOffset = stack->peek(1);
   uint256_t sourceOffset = stack->peek(2);
   uint256_t sizeItem = stack->peek(3);
-  
-  stack->pop(4);
 
   memory->copyData(
-    destOffset, 
-    sourceOffset, 
-    sizeItem, 
+    Overflow::uint256Cast(destOffset).first, 
+    Overflow::uint256Cast(sourceOffset).first, 
+    Overflow::uint256Cast(sizeItem).first, 
     external->code(address)
   );
+  stack->pop(4);
   return std::make_pair(InstructionResult::OK, 0);
 }
 
@@ -948,9 +958,12 @@ instruction_result_t Operation::log(
     topics.push_back(stack->peek(i));
   }
 
-  stack->pop(2 + numberOfTopics);
+  std::shared_ptr<bytes_t> bytes = memory->readSlice(
+    Overflow::uint256Cast(offset).first, 
+    Overflow::uint256Cast(size).first
+  );
 
-  std::shared_ptr<bytes_t> bytes = memory->readSlice(offset, size);
+  stack->pop(2 + numberOfTopics);
 
   external->log(topics, bytes);
   
@@ -983,7 +996,7 @@ instruction_result_t Operation::codesize(
   std::shared_ptr<Memory> memory, 
   std::shared_ptr<StackMachine> stack
 ) {
-  stack->push(uint256_t(reader->bytes->size()));
+  stack->push(uint256_t(context->code->size()));
   return std::make_pair(InstructionResult::OK, 0);
 }
 
@@ -1000,14 +1013,14 @@ instruction_result_t Operation::codecopy(
   uint256_t destOffset = stack->peek(0);
   uint256_t sourceOffset = stack->peek(1);
   uint256_t sizeItem = stack->peek(2);
-  stack->pop(3);
 
   memory->copyData(
-    destOffset, 
-    sourceOffset, 
-    sizeItem, 
-    reader->bytes
+    Overflow::uint256Cast(destOffset).first, 
+    Overflow::uint256Cast(sourceOffset).first, 
+    Overflow::uint256Cast(sizeItem).first, 
+    context->code
   );
+  stack->pop(3);
   return std::make_pair(InstructionResult::OK, 0);
 }
 
@@ -1021,7 +1034,7 @@ instruction_result_t Operation::pc(
   std::shared_ptr<Memory> memory, 
   std::shared_ptr<StackMachine> stack
 ) {
-  stack->push(uint256_t(reader->position - 1));
+  stack->push(uint256_t(reader->pc()));
   return std::make_pair(InstructionResult::OK, 0);
 }
 
@@ -1035,7 +1048,7 @@ instruction_result_t Operation::push(
   std::shared_ptr<Memory> memory, 
   std::shared_ptr<StackMachine> stack
 ) {
-  stack->push(reader->read(Instruction::pushBytes(instruction)));
+  stack->push(reader->read(Instruction::pushBytes(instruction), context->code));
   return std::make_pair(InstructionResult::OK, 0);
 }
 
@@ -1132,8 +1145,8 @@ instruction_result_t Operation::_return(
 
   StopExecutionResult result {
     gas,
-    initOff,
-    initSize,
+    Overflow::uint256Cast(initOff).first,
+    Overflow::uint256Cast(initSize).first,
     true
   };
   
@@ -1159,8 +1172,8 @@ instruction_result_t Operation::_revert(
 
   StopExecutionResult result {
     gas,
-    initOff,
-    initSize,
+    Overflow::uint256Cast(initOff).first,
+    Overflow::uint256Cast(initSize).first,
     false
   };
   

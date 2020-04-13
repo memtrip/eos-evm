@@ -68,11 +68,13 @@ TEST_CASE("loop-mul______9862bc727536901c182cf2638655d9b9f3b45ee0e0ea8030084b5ca
 
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
-  VM vm(context, stack);
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(context, stack, gasometer);
+
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
-  Gasometer gasometer(params.gas);
+
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
@@ -136,11 +138,13 @@ TEST_CASE("loop-exp-nop-1M______b6fa0af7e999498530fc565052fd9465f33fae61a400d370
 
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
-  VM vm(context, stack);
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(context, stack, gasometer);
+
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
-  Gasometer gasometer(params.gas);
+
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
@@ -204,11 +208,13 @@ TEST_CASE("manyFunctions100______a93da81ce1ea6b18ce5a5f95f19ee134cfe381ce597da0a
 
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
-  VM vm(context, stack);
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(context, stack, gasometer);
+
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
-  Gasometer gasometer(params.gas);
+
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
@@ -272,11 +278,13 @@ TEST_CASE("loop-exp-4b-100k______a6616d3c0d567d66a39509265b0da159f3e37e491c7a6ef
 
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
-  VM vm(context, stack);
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(context, stack, gasometer);
+
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
-  Gasometer gasometer(params.gas);
+
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
@@ -340,11 +348,13 @@ TEST_CASE("loop-divadd-10M______8cbe4da3d582b59b481644f6c0fdee99b20263faf1fb8ce8
 
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
-  VM vm(context, stack);
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(context, stack, gasometer);
+
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
-  Gasometer gasometer(params.gas);
+
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
@@ -408,11 +418,13 @@ TEST_CASE("loop-add-10M______5c0bcc64ea53ba66564fffc011787768e911914b980b779def1
 
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
-  VM vm(context, stack);
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(context, stack, gasometer);
+
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
-  Gasometer gasometer(params.gas);
+
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
@@ -476,11 +488,13 @@ TEST_CASE("ackermann33______9ca98b508adbdde3ddffac1cb761f46e4a972d5dcc060f51cbec
 
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
-  VM vm(context, stack);
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(context, stack, gasometer);
+
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
-  Gasometer gasometer(params.gas);
+
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
@@ -544,11 +558,13 @@ TEST_CASE("ackermann32______2c220fb24fa74c1103827f156dee5953dbb59bc82e00c9d44e83
 
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
-  VM vm(context, stack);
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(context, stack, gasometer);
+
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
-  Gasometer gasometer(params.gas);
+
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
@@ -612,11 +628,13 @@ TEST_CASE("loop-mulmod-2M______e7bcb6168cc420c350cb8e46fc0e4193087cec3caf5ec8e10
 
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
-  VM vm(context, stack);
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(context, stack, gasometer);
+
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
-  Gasometer gasometer(params.gas);
+
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
@@ -680,11 +698,13 @@ TEST_CASE("loop-exp-1b-1M______dc13c59f93368d567ca54b18844958fd2634507758610cc03
 
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
-  VM vm(context, stack);
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(context, stack, gasometer);
+
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
-  Gasometer gasometer(params.gas);
+
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
@@ -748,11 +768,13 @@ TEST_CASE("loop-exp-32b-100k______c441959642aba02713db192952a1ab606b7de704105046
 
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
-  VM vm(context, stack);
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(context, stack, gasometer);
+
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
-  Gasometer gasometer(params.gas);
+
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
@@ -816,11 +838,13 @@ TEST_CASE("ackermann31______ec9c697bacfc0222a155e3dfb773c7af8d830fd04dcb7dd5cfab
 
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
-  VM vm(context, stack);
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(context, stack, gasometer);
+
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
-  Gasometer gasometer(params.gas);
+
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
@@ -884,11 +908,13 @@ TEST_CASE("loop-exp-8b-100k______7af55eaae7594831f1c1a4ed4fbc9d2fec423b5de431907
 
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
-  VM vm(context, stack);
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(context, stack, gasometer);
+
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
-  Gasometer gasometer(params.gas);
+
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
@@ -952,11 +978,13 @@ TEST_CASE("fibonacci10______aa39e6e6cb25a56031874d788400c4ca511cba5b20cc82b63f25
 
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
-  VM vm(context, stack);
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(context, stack, gasometer);
+
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
-  Gasometer gasometer(params.gas);
+
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
@@ -1020,11 +1048,13 @@ TEST_CASE("loop-exp-16b-100k______e3c31a352e72a71e814fb5324abb479c88ff30b29f6191
 
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
-  VM vm(context, stack);
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(context, stack, gasometer);
+
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
-  Gasometer gasometer(params.gas);
+
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
@@ -1088,11 +1118,13 @@ TEST_CASE("loop-divadd-unr100-10M______11eb4a4dbb8a456df4bd281916d914690f0994d7b
 
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
-  VM vm(context, stack);
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(context, stack, gasometer);
+
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
-  Gasometer gasometer(params.gas);
+
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
@@ -1156,11 +1188,13 @@ TEST_CASE("fibonacci16______64fac88f45e60627f6828c45c53c43b0a1e245a25f011b88ad9e
 
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
-  VM vm(context, stack);
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(context, stack, gasometer);
+
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
-  Gasometer gasometer(params.gas);
+
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
@@ -1224,11 +1258,13 @@ TEST_CASE("loop-exp-2b-100k______d546cccc293768c0dfbf21a81cb82dcc7fe19e709cc85d6
 
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
-  VM vm(context, stack);
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(context, stack, gasometer);
+
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
-  Gasometer gasometer(params.gas);
+
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();

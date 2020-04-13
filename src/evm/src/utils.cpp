@@ -507,7 +507,36 @@ void Utils::printInstructionRequirements(InstructionRequirements instructionRequ
   printf("\n");
 }
 
-std::string Utils::uint256_2str(uint256_t value) {
+void Utils::printTrap(const trap_t& trap) {
+  switch (trap.first) {
+    case TrapKind::TRAP_NONE:
+      printf("trap{none}\n");
+      break;
+    case TrapKind::TRAP_STACK_UNDERFLOW:
+      printf("trap{stack_underflow}\n");
+      break;
+    case TrapKind::TRAP_OUT_OF_STACK:
+      printf("trap{out_of_stack}\n");
+      break;
+    case TrapKind::TRAP_INVALID_INSTRUCTION:
+      printf("trap{invalid_instruction}\n");
+      break;
+    case TrapKind::TRAP_CALL:
+      printf("trap{call}\n");
+      break;
+    case TrapKind::TRAP_CREATE:
+      printf("trap{create}\n");
+      break;
+    case TrapKind::TRAP_INVALID_JUMP:
+      {
+        JumpTrapInfo jumpInfo = std::get<JumpTrapInfo>(trap.second);
+        printf("trap{invalid_jump, %llu}\n", jumpInfo.attemptedPosition);
+        break;
+      }
+  }
+}
+
+std::string Utils::uint256_2str(const uint256_t& value) {
   bytes_t bytes = BigInt::toBytes(value);
   return Hex::bytesToHex(bytes);
 }
@@ -563,16 +592,6 @@ params_t Utils::createParams(bytes_t code, bytes_t data) {
   };
 };
 
-bytes_t Utils::returnDataSlice(ReturnData returnData) {
-  size_t offset = static_cast<size_t>(returnData.offset);
-  size_t size = static_cast<size_t>(returnData.size);
-  bytes_t returnDataSlice(
-    returnData.mem.begin() + offset, 
-    returnData.mem.begin() + offset + size
-  );
-  return returnDataSlice;
-}
-
 gas_t Utils::gasLeft(exec_result_t vm_result) {
   if (vm_result.first == ExecResult::DONE) {
     gas_left_t gasLeft = std::get<gas_left_t>(vm_result.second);
@@ -580,15 +599,22 @@ gas_t Utils::gasLeft(exec_result_t vm_result) {
       case GasType::NEEDS_RETURN:
         {
           NeedsReturn needsReturn = std::get<NeedsReturn>(gasLeft.second);
-          return gas_t(needsReturn.gasLeft);
+          return needsReturn.gasLeft;
         }
       case GasType::KNOWN:
         {
-          uint256_t gas = std::get<uint256_t>(gasLeft.second);
-          return gas_t(gas);
+          gas_t gas = std::get<gas_t>(gasLeft.second);
+          return gas;
         }
     }
   }
 
   return 0xFFFF;
+}
+
+void Utils::printJumps(const jump_set_t& jumps) {
+  printf("jumpsize{%zu}\n", jumps.size());
+  for(uint64_t jump : jumps) {
+    printf("jump(%llu)\n", jump);
+  }   
 }

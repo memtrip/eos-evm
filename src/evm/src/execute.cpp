@@ -10,6 +10,7 @@
 finalization_result_t Execute::callWithStackDepth(
   Operation& operation,
   size_t stackDepth,
+  std::shared_ptr<Memory> memory,
   std::shared_ptr<External> external,
   std::shared_ptr<AccountState> accountState,
   std::shared_ptr<Context> context,
@@ -19,11 +20,9 @@ finalization_result_t Execute::callWithStackDepth(
 ) {
   std::shared_ptr<std::vector<uint256_t>> stackVector = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack =  std::make_shared<StackMachine>(stackVector);
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
 
-  VM vm(context, stack);
-
-  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
-  std::shared_ptr<Memory> memory = std::make_shared<Memory>(memoryBytes);
+  VM vm(context, stack, gasometer);
 
   exec_result_t vm_result = vm.execute(
     operation,
@@ -36,10 +35,12 @@ finalization_result_t Execute::callWithStackDepth(
   switch (vm_result.first) {
     case STOPPED:
       {
+        SlicePosition slicePosition { 0, 0 };
+
         Finalization finalization {
           uint256_t(0),
           false,
-          ReturnData::empty()
+          slicePosition
         };
 
         return std::make_pair(
@@ -53,12 +54,14 @@ finalization_result_t Execute::callWithStackDepth(
         switch (gasLeft.first) {
           case KNOWN:
             {
-              uint256_t gasLeftValue = std::get<uint256_t>(gasLeft.second); 
+              uint256_t gasLeftValue = std::get<gas_t>(gasLeft.second); 
+
+              SlicePosition slicePosition { 0, 0 };
 
               Finalization finalization {
                 gasLeftValue,
                 true,
-                ReturnData::empty()
+                slicePosition
               };
 
               return std::make_pair(
@@ -73,7 +76,7 @@ finalization_result_t Execute::callWithStackDepth(
               Finalization finalization {
                 needsReturn.gasLeft,
                 needsReturn.apply,
-                needsReturn.data
+                needsReturn.slicePosition
               };
    
               return std::make_pair(

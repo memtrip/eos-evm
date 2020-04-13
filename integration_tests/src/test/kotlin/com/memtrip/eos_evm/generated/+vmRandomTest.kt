@@ -1,10 +1,8 @@
 import com.memtrip.eos.chain.actions.transaction.TransactionContext
-import com.memtrip.eos.core.crypto.EosPrivateKey
 import com.memtrip.eos.http.rpc.Api
 import com.memtrip.eos_evm.eos.*
 import com.memtrip.eos_evm.eos.account_state.GetAccountState
 import com.memtrip.eos_evm.eos.raw.RawAction
-import com.memtrip.eos_evm.ethereum.EthAccount
 import com.memtrip.eos_evm.ethereum.EthereumTransaction
 import com.memtrip.eos_evm.ethereum.toHexString
 import com.memtrip.eos_evm.ethereum.toHexBytes
@@ -20,7 +18,7 @@ import com.memtrip.eos_evm.eos.TestTransaction
 import com.memtrip.eos_evm.eos.faultTolerant
 
 //
-// 12.04.2020
+// 13.04.2020
 // Auto generated based off the Ethereum tests found here:
 // https://github.com/ethereum/tests/blob/develop/VMTests/
 //

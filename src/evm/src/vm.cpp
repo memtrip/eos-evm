@@ -21,7 +21,7 @@ exec_result_t VM::execute(
   exec_result_t result;
 
   jump_set_t jumps = Jumps::findDestinations(context->code);
-  std::shared_ptr<ByteReader> reader = std::make_shared<ByteReader>(0, context->code);
+  std::shared_ptr<ByteReader> reader = std::make_shared<ByteReader>(0);
   std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   do {
@@ -52,12 +52,12 @@ exec_result_t VM::step(
 ) {
   // TODO: done check required?
 
-  if (gasometer.currentGas == 0) {
+  if (gasometer->currentGas == 0) {
     return std::make_pair(ExecResult::VM_OUT_OF_GAS, 0);
-  } else if (reader->len() == 0) {
+  } else if (context->code->size() == 0) {
     return std::make_pair(
       ExecResult::DONE, 
-      std::make_pair(GasType::KNOWN, uint256_t(gasometer.currentGas))
+      std::make_pair(GasType::KNOWN, gasometer->currentGas)
     );
   } else {
     return VM::stepInner(
@@ -83,24 +83,27 @@ exec_result_t VM::stepInner(
   std::shared_ptr<External> external,
   std::shared_ptr<Call> call
 ) {
-  uint8_t opcode = reader->bytes->at(reader->position);
+  uint8_t opcode = reader->currentOp(context->code);
   unsigned int instruction = Instruction::values[opcode];
-  reader->position += 1;
+  reader->next();
 
-  if (instruction == 0x000000FF) return std::make_pair(ExecResult::STOPPED, 0); // TODO: handle error
+  // Utils::printInstruction(instruction);
 
   instruction_verify_t verifyResult = Instruction::verify(instruction, stack->size());
   switch (verifyResult) {
     case InstructionVerifyResult::INSTRUCTION_ERROR_UNDER_FLOW:
+      return std::make_pair(ExecResult::STOPPED, Trap::create(TrapKind::TRAP_STACK_UNDERFLOW, 0)); // TODO: handle error
     case InstructionVerifyResult::INSTRUCTION_ERROR_OUT_OF_STACK:
-      return std::make_pair(ExecResult::STOPPED, 0); // TODO: handle error
+      return std::make_pair(ExecResult::STOPPED, Trap::create(TrapKind::TRAP_OUT_OF_STACK, 0)); // TODO: handle error
+    case InstructionVerifyResult::INSTRUCTION_NOT_DEFINED:
+      return std::make_pair(ExecResult::STOPPED, Trap::create(TrapKind::TRAP_INVALID_INSTRUCTION, 0)); // TODO: handle error
     case InstructionVerifyResult::INSTRUCTION_VALID:
       break;
   }
 
   // Calculate gas cost requirements
   uint64_t memoryLength = memory->length();
-  instruction_requirements_t calculateRequirements = gasometer.requirements(
+  instruction_requirements_t calculateRequirements = gasometer->requirements(
     opcode,
     instruction, 
     memoryLength,
@@ -118,21 +121,19 @@ exec_result_t VM::stepInner(
       break;
     case InstructionRequirementsResult::INSTRUCTION_RESULT_OUT_OF_GAS:
       return std::make_pair(ExecResult::VM_OUT_OF_GAS, 0);
-    case InstructionRequirementsResult::INSTRUCTION_RESULT_ERROR:
-      return std::make_pair(ExecResult::STOPPED, 0); // TODO: handle error
   }
 
   // expand memory
   gas_t memoryRequiredSize = requirements.memoryRequiredSize;
   memory->expand(memoryRequiredSize);
   
-  gas_t currentGas = Overflow::sub(gasometer.currentGas, requirements.gasCost).first;
-  gasometer.currentGas = currentGas;
+  gas_t currentGas = Overflow::sub(gasometer->currentGas, requirements.gasCost).first;
+  gasometer->currentGas = currentGas;
 
   //printf(">> currentGas{%llu}\n", currentGas);
 
   gas_t memoryTotalGas = requirements.memoryTotalGas;
-  gasometer.currentMemGas = memoryTotalGas;
+  gasometer->currentMemGas = memoryTotalGas;
 
   gas_t provideGas = requirements.provideGas;
 
@@ -202,22 +203,22 @@ exec_result_t VM::stepInner(
       break;
     case InstructionResult::UNUSED_GAS:
       {
-        uint256_t gasLeft = std::get<uint256_t>(result.second);
-        gasometer.currentGas = gasometer.currentGas + static_cast<gas_t>(gasLeft);
+        gas_t gasLeft = std::get<gas_t>(result.second);
+        gasometer->currentGas = gasometer->currentGas + gasLeft;
         break;
       }
     case InstructionResult::JUMP_POSITION:
       {
-        uint256_t position = std::get<uint256_t>(result.second);
+        uint64_t position = std::get<uint64_t>(result.second);
 
         if (jumps.size() == 0) {
           // TODO: check jump position for child contracts?
           // i.e; resolve the jumps from the code attached to the VM
         }
 
-        unsigned long pos = Jumps::verifyJump(position, jumps);
-        if (pos == INVALID_ARGUMENT) return std::make_pair(ExecResult::STOPPED, 0); // TODO: handle error
-        reader->position = pos;
+        uint64_t pos = Jumps::verifyJump(position, jumps);
+        if (pos == INVALID_ARGUMENT) return std::make_pair(ExecResult::STOPPED, Trap::jump(pos));
+        reader->move(pos);
         break;
       }
     case InstructionResult::STOP_EXEC_RETURN:
@@ -225,27 +226,14 @@ exec_result_t VM::stepInner(
         // TODO: clear memory
         StopExecutionResult stop = std::get<StopExecutionResult>(result.second);
 
-        ReturnData returnData;
-        std::shared_ptr<bytes_t> returnDataBytes = memory->readSlice(stop.initOff, stop.initSize);
-        if (returnDataBytes->size() > 0) {
-          bytes_t bytes = bytes_t(returnDataBytes->begin(), returnDataBytes->end());
-          returnData = {
-            bytes,
-            UINT256_ZERO,
-            stop.initSize
-          };
-        } else {
-          bytes_t empty = bytes_t();
-          returnData = {
-            empty,
-            UINT256_ZERO,
-            UINT256_ZERO
-          };
-        }
+        SlicePosition slicePosition = {
+          stop.initOff,
+          stop.initSize
+        };
         
         NeedsReturn needsReturn {
-          uint256_t(stop.gas),
-          returnData,
+          stop.gas,
+          slicePosition,
           stop.apply
         };
         
@@ -257,16 +245,16 @@ exec_result_t VM::stepInner(
     case InstructionResult::STOP_EXEC:
       return std::make_pair(
         ExecResult::DONE, 
-        std::make_pair(GasType::KNOWN, uint256_t(gasometer.currentGas))
+        std::make_pair(GasType::KNOWN, gasometer->currentGas)
       );
     case InstructionResult::INSTRUCTION_TRAP:
       break;
   }
   
-  if (reader->position >= reader->len()) {
+  if (reader->atEnd(context->code)) {
     return std::make_pair(
       ExecResult::DONE, 
-      std::make_pair(GasType::KNOWN, uint256_t(gasometer.currentGas))
+      std::make_pair(GasType::KNOWN, gasometer->currentGas)
     );
   }
 
@@ -308,8 +296,10 @@ instruction_result_t VM::executeCreateInstruction(
   }
 
   // TODO: check there is a high enough balance to perform create
-
-  std::shared_ptr<bytes_t> contractCode = memory->readSlice(initOff, initSize);
+  std::shared_ptr<bytes_t> contractCode = memory->readSlice(
+    Overflow::uint256Cast(initOff).first, 
+    Overflow::uint256Cast(initSize).first
+  );
 
   // TODO: create a new context for this child call
   // call_result_t callResult = call->create(
@@ -324,8 +314,12 @@ instruction_result_t VM::executeCreateInstruction(
   //   accountState
   // );
 
+  std::shared_ptr<bytes_t> callMemoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> callMemory = std::make_shared<Memory>(callMemoryBytes);
+
   call_result_t callResult = call->create(
     true, 
+    callMemory,
     context,
     external,
     accountState
@@ -336,27 +330,25 @@ instruction_result_t VM::executeCreateInstruction(
       {
         printf("MESSAGE_CALL_SUCCESS");
         MessageCallReturn callReturn = std::get<MessageCallReturn>(callResult.second);
-        uint256_t gasLeft = callReturn.gasLeft;
 
         // TODO: Address should come from cal_result_t
         stack->push(address);
 
         return std::make_pair(
           InstructionResult::UNUSED_GAS,
-          gasLeft
+          Overflow::uint256Cast(callReturn.gasLeft).first
         );
       }
     case MESSAGE_CALL_REVERTED:
       {
         printf("MESSAGE_CALL_REVERTED");
         MessageCallReturn callReturn = std::get<MessageCallReturn>(callResult.second);
-        uint256_t gasLeft = callReturn.gasLeft;
 
         stack->push(UINT256_ZERO);
 
         return std::make_pair(
           InstructionResult::UNUSED_GAS,
-          gasLeft
+          Overflow::uint256Cast(callReturn.gasLeft).first
         );
       }
     case MESSAGE_CALL_OUT_OF_GAS:
@@ -455,8 +447,10 @@ instruction_result_t VM::executeCallInstruction(
   }
 
   // TODO: if there is not enough balance, or the stack depth is reached, return 0
-
-  std::shared_ptr<bytes_t> input = memory->readSlice(inOffset, inSize);
+  std::shared_ptr<bytes_t> input = memory->readSlice(
+    Overflow::uint256Cast(inOffset).first, 
+    Overflow::uint256Cast(inSize).first
+  );
   // TODO: external call with result
 
   // TODO: create a new context for this child call
@@ -474,8 +468,12 @@ instruction_result_t VM::executeCallInstruction(
   //   accountState
   // );
 
+  std::shared_ptr<bytes_t> callMemoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> callMemory = std::make_shared<Memory>(callMemoryBytes);
+
   call_result_t callResult = call->call(
     true, 
+    callMemory,
     context,
     external,
     accountState
@@ -486,38 +484,32 @@ instruction_result_t VM::executeCallInstruction(
       {
         printf("MESSAGE_CALL_SUCCESS");
         MessageCallReturn callReturn = std::get<MessageCallReturn>(callResult.second);
-        uint256_t gasLeft = callReturn.gasLeft;
     
-        bytes_t outBytes(
-          callReturn.returnData.mem.begin(), 
-          callReturn.returnData.mem.begin() + outSize
-        );
-        memory->writeSlice(outOffset, outBytes);
+        std::shared_ptr<bytes_t> returnDataBytes = callMemory->readSlice(callReturn.slicePosition.offset, callReturn.slicePosition.size);
+
+        memory->writeSlice(Overflow::uint256Cast(outOffset).first, returnDataBytes);
 
         stack->push(UINT256_ONE);
 
         return std::make_pair(
           InstructionResult::UNUSED_GAS,
-          gasLeft
+          Overflow::uint256Cast(callReturn.gasLeft).first
         );
       }
     case MESSAGE_CALL_REVERTED:
       {
         printf("MESSAGE_CALL_REVERTED");
         MessageCallReturn callReturn = std::get<MessageCallReturn>(callResult.second);
-        uint256_t gasLeft = callReturn.gasLeft;
 
-        bytes_t outBytes(
-          callReturn.returnData.mem.begin(), 
-          callReturn.returnData.mem.begin() + outSize
-        );
-        memory->writeSlice(outOffset, outBytes);
+        std::shared_ptr<bytes_t> returnDataBytes = callMemory->readSlice(callReturn.slicePosition.offset, callReturn.slicePosition.size);
+
+        memory->writeSlice(Overflow::uint256Cast(outOffset).first, returnDataBytes);
 
         stack->push(UINT256_ZERO);
 
         return std::make_pair(
           InstructionResult::UNUSED_GAS,
-          gasLeft
+          Overflow::uint256Cast(callReturn.gasLeft).first
         );
       }
     case MESSAGE_CALL_OUT_OF_GAS:

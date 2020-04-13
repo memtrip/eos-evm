@@ -3,6 +3,7 @@
 #include <evm/overflow.h>
 #include <evm/big_int.h>
 #include <evm/hex.h>
+#include <evm/utils.h>
 
 uint64_t Memory::length() const {
   return memorySize;
@@ -21,47 +22,44 @@ void Memory::expand(uint64_t size) {
   }
 }
 
-void Memory::writeByte(const uint256_t& offset, const uint256_t& value) {
-  overflow_t index = Overflow::uint256Cast(offset);
+void Memory::writeByte(uint64_t offset, const uint256_t& value) {
   bytes_t bytes = BigInt::toBytes(value);
-  if (index.second || index.first >= length()) return;
+  if (offset >= length()) return;
   uint8_t byte = bytes[bytes.size() - 1];
-  memory->insert(memory->begin() + index.first, byte);
+  memory->insert(memory->begin() + offset, byte);
 }
 
-void Memory::write(const uint256_t& offset, const uint256_t& word) {
-  overflow_t index = Overflow::uint256Cast(offset);
-  if (index.second) return;
+void Memory::write(uint64_t offset, const uint256_t& word) {
   bytes_t bytes = BigInt::toBytes(word);
-  uint64_t position = index.first + (WORD_SIZE - bytes.size());
+  uint64_t position = offset + (WORD_SIZE - bytes.size());
   if (position >= length()) return;
   memory->insert(memory->begin() + position, bytes.begin(), bytes.end());
 }
 
-uint256_t Memory::read(const uint256_t& offset) {
-  overflow_t index = Overflow::uint256Cast(offset);
-  if (index.second || index.first >= length()) return UINT256_ZERO;
-  bytes_t bytes = bytes_t(memory->begin() + index.first, memory->begin() + index.first + WORD_SIZE);
+uint256_t Memory::read(uint64_t offset) {
+  if (offset >= length()) return UINT256_ZERO;
+  bytes_t bytes = bytes_t(memory->begin() + offset, memory->begin() + offset + WORD_SIZE);
   return BigInt::fromBigEndianBytes(bytes);
 }
 
-void Memory::writeSlice(const uint256_t& offsetArg, const bytes_t& bytes) {
-  overflow_t offset = Overflow::uint256Cast(offsetArg);
-  if (offset.second || bytes.size() != 0) {
-    std::copy(bytes.begin(), bytes.end(), memory->begin() + offset.first);
+void Memory::writeSlice(uint64_t offset, const bytes_t& bytes) {
+  if (bytes.size() > 0) {
+    std::copy(bytes.begin(), bytes.end(), memory->begin() + offset);
   }
 }
 
-std::shared_ptr<bytes_t> Memory::readSlice(const uint256_t& offsetArg, const uint256_t& sizeArg) {
-  overflow_t offset = Overflow::uint256Cast(offsetArg);
-  overflow_t size = Overflow::uint256Cast(sizeArg);
-  if (offset.second 
-    || size.second 
-    || !isValidRange(offset.first, size.first) 
-    || offset.first > memorySize 
-    || size.first > memorySize
+void Memory::writeSlice(uint64_t offset, std::shared_ptr<bytes_t> bytes) {
+  if (bytes->size() > 0) {
+    std::copy(bytes->begin(), bytes->end(), memory->begin() + offset);
+  }
+}
+
+std::shared_ptr<bytes_t> Memory::readSlice(uint64_t offset, uint64_t size) {
+  if (!isValidRange(offset, size) 
+    || offset > memorySize 
+    || size > memorySize
   ) return std::make_shared<bytes_t>(bytes_t());
-  return std::make_shared<bytes_t>(bytes_t(memory->begin() + offset.first, memory->begin() + offset.first + size.first));
+  return std::make_shared<bytes_t>(bytes_t(memory->begin() + offset, memory->begin() + offset + size));
 }
 
 bool Memory::isValidRange(uint64_t offset, uint64_t size) {
@@ -70,39 +68,38 @@ bool Memory::isValidRange(uint64_t offset, uint64_t size) {
 }
 
 void Memory::copyData(
-  const uint256_t& destOffset, 
-  const uint256_t& sourceOffset,
-  const uint256_t& size,
+  uint64_t destOffset, 
+  uint64_t sourceOffset,
+  uint64_t size,
   std::shared_ptr<bytes_t> data
 ) {
 
-  uint256_t sourceSize = uint256_t(data->size());
-
   uint64_t outputEnd;
-  if (sourceOffset > sourceSize || size > sourceSize || sourceOffset + size > sourceSize) {
-    if (sourceOffset > sourceSize) {
+  if (sourceOffset > data->size() || size > data->size() || sourceOffset + size > data->size()) {
+    if (sourceOffset > data->size()) {
       std::fill(
-        memory->begin() + Overflow::uint256Cast(destOffset).first,
-        memory->begin() + Overflow::uint256Cast(size).first, 
+        memory->begin() + destOffset,
+        memory->begin() + destOffset + size, 
         0
       );
     } else {
+      uint64_t writeableOffset = destOffset + data->size() - sourceOffset;
+      uint64_t writeableSize = sourceOffset + size - data->size();
       std::fill(
-        memory->begin() + Overflow::uint256Cast(destOffset + sourceSize - sourceOffset).first, 
-        memory->begin() + Overflow::uint256Cast(sourceOffset + size - sourceSize).first, 
+        memory->begin() + writeableOffset, 
+        memory->begin() + writeableOffset + writeableSize, 
         0
       );
     }
     outputEnd = data->size();
   } else {
-    outputEnd = Overflow::uint256Cast(size + sourceOffset).first; 
+    outputEnd = (size + sourceOffset); 
   }
 
-  if (sourceOffset < sourceSize) {
-    uint64_t outputBegin = Overflow::uint256Cast(sourceOffset).first;
-    bytes_t sliceBytes = bytes_t(data->begin() + outputBegin, data->begin() + outputEnd);
+  if (sourceOffset < data->size()) {
+    bytes_t sliceBytes = bytes_t(data->begin() + sourceOffset, data->begin() + outputEnd);
     writeSlice(
-      Overflow::uint256Cast(destOffset).first,
+      destOffset,
       sliceBytes
     );
   }

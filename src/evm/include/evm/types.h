@@ -9,7 +9,7 @@
 typedef intx::uint256 uint256_t;
 
 typedef unsigned int instruct_t; 
-typedef std::set<unsigned long> jump_set_t;
+typedef std::set<uint64_t> jump_set_t;
 
 typedef ethash::hash256 keccak256_t;
 typedef ethash::hash512 keccak512_t;
@@ -63,23 +63,6 @@ enum TransactionActionType {
   TRANSACTION_CREATE,
   TRANSACTION_CALL,
 };
-
-struct TransactionData {
-  TransactionActionType action; /* ? */
-  uint256_t nonce;
-  uint256_t gas_price;
-  uint256_t gas_limit;
-  address_t to;
-  uint256_t value;
-  bytes_t data;
-  bytes_t v;
-  bytes_t r;
-  bytes_t s;
-  bytes_t digest;
-  bytes_t signatureBytes;
-};
-
-typedef TransactionData transaction_t;
 
 enum RLPType {
   STRING,

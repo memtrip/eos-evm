@@ -3,20 +3,7 @@
 #include <evm/types.h>
 #include <evm/return_data.h>
 #include <evm/call.h>
-
-// trap
-enum TrapKind {
-  TRAP_NONE,
-  TRAP_CALL,
-  TRAP_CREATE
-};
-
-struct TrapInfo {
-  params_t params;
-  uint256_t address;
-};
-
-typedef std::pair<TrapKind, TrapInfo> trap_t;
+#include <evm/trap.h>
 
 enum ExecResult {
   STOPPED,
@@ -48,17 +35,16 @@ enum InstructionResult {
 // stop execution
 struct StopExecutionResult {
   gas_t gas;
-  uint256_t initOff;
-  uint256_t initSize;
+  uint64_t initOff;
+  uint64_t initSize;
   bool apply;
 };
 
 // instruction result
 typedef std::variant<
-  uint256_t,
   StopExecutionResult,
   trap_t,
-  uint8_t
+  uint64_t
 > instruction_result_info_t;
 
 typedef std::pair<InstructionResult, instruction_result_info_t> instruction_result_t;

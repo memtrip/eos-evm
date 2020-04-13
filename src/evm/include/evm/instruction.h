@@ -3,6 +3,7 @@
 #include <evm/stack.h>
 
 enum InstructionVerifyResult {
+  INSTRUCTION_NOT_DEFINED,
   INSTRUCTION_ERROR_UNDER_FLOW,
   INSTRUCTION_ERROR_OUT_OF_STACK,
   INSTRUCTION_VALID

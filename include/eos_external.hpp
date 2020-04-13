@@ -1,9 +1,12 @@
 #include <vector>
 #include <memory>
+#include <eosio/eosio.hpp>
 #include <evm/types.h>
 #include <evm/external.h>
-#include <eos_evm.hpp>
 #include <evm/hash.h>
+#include <evm/utils.h>
+#include <evm/hex.h>
+#include <eos_evm.hpp>
 #include <eos_utils.hpp>
 
 class eos_external: public External {
@@ -24,6 +27,12 @@ eos_external::eos_external(eos_evm* contractArg) {
 }
 
 void eos_external::log(const std::vector<uint256_t>& topics, std::shared_ptr<bytes_t> data) {
+  std::string output;
+  for (int i = 0; i < topics.size(); i++) {
+    output += "[" + Utils::uint256_2str(topics[i]) + "]\n";
+  }
+  output += "{" + Hex::bytesToHex(data) + "}";
+  eosio::print(output);
 }
 
 std::shared_ptr<bytes_t> eos_external::code(const uint256_t& address) {
@@ -35,14 +44,11 @@ double eos_external::balance(const uint256_t& address) {
 }
 
 bytes_t eos_external::storageAt(const uint256_t& key, const uint256_t& codeAddress) {
-  // uint256_t compositeKey = Hash::keccak256Word(
-  //   accountState->cacheItems->at(i).codeAddress,
-  //   accountState->cacheItems->at(i).key
-  // );
-  // account_state_table _account_state(contract->get_self(), contract->get_self().value);
-  // auto idx = _account_state.get_index<name("statekey")>();
-  // auto itr = idx.find(BigInt::toFixed32(compositeKey));
-  // if (itr != idx.end()) return eos_utils::fixedToBytes(itr->value);
+  uint256_t compositeKey = Hash::keccak256Word(codeAddress, key);
+  eos_evm::account_state_table _account_state(contract->get_self(), contract->get_self().value);
+  auto idx = _account_state.get_index<name("statekey")>();
+  auto itr = idx.find(BigInt::toFixed32(compositeKey));
+  if (itr != idx.end()) return eos_utils::fixedToBytes(itr->value);
   return bytes_t();
 }
 

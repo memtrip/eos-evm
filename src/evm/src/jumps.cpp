@@ -23,8 +23,7 @@ jump_set_t Jumps::findDestinations(std::shared_ptr<bytes_t> bytes) {
   return jumps;
 }
 
-uint64_t Jumps::verifyJump(const uint256_t& position, jump_set_t& validDestinations) {
-  uint64_t jump = static_cast<uint64_t>(position);
-  if (validDestinations.find(jump) != validDestinations.end()) return jump;
+uint64_t Jumps::verifyJump(uint64_t position, const jump_set_t& validDestinations) {
+  if (validDestinations.find(position) != validDestinations.end()) return position;
   return INVALID_ARGUMENT;
 }

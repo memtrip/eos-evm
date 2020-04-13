@@ -38,7 +38,9 @@ TEST_CASE("shift left, write to memory, return", "[return_memory]") {
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
-  VM vm(context, stack);
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(context, stack, gasometer);
+
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
@@ -57,8 +59,9 @@ TEST_CASE("shift left, write to memory, return", "[return_memory]") {
   REQUIRE(GasType::NEEDS_RETURN == gasResult.first);
 
   NeedsReturn needsReturn = std::get<NeedsReturn>(gasResult.second);
-  bytes_t returnDataSlice = Utils::returnDataSlice(needsReturn.data);
-  CHECK("0a" == Hex::bytesToHex(returnDataSlice));
+
+  std::shared_ptr<bytes_t> returnBytes = mem->readSlice(needsReturn.slicePosition.offset, needsReturn.slicePosition.size);
+  CHECK("0a" == Hex::bytesToHex(returnBytes));
 }
 
 TEST_CASE("shift right, write to memory, return", "[return_memory]") {
@@ -89,7 +92,9 @@ TEST_CASE("shift right, write to memory, return", "[return_memory]") {
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
-  VM vm(context, stack);
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(context, stack, gasometer);
+
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
@@ -108,8 +113,9 @@ TEST_CASE("shift right, write to memory, return", "[return_memory]") {
   REQUIRE(GasType::NEEDS_RETURN == gasResult.first);
 
   NeedsReturn needsReturn = std::get<NeedsReturn>(gasResult.second);
-  bytes_t returnDataSlice = Utils::returnDataSlice(needsReturn.data);
-  CHECK("02" == Hex::bytesToHex(returnDataSlice));
+
+  std::shared_ptr<bytes_t> returnBytes = mem->readSlice(needsReturn.slicePosition.offset, needsReturn.slicePosition.size);
+  CHECK("02" == Hex::bytesToHex(returnBytes));
 }
 
 TEST_CASE("sar, write to memory, revert", "[return_memory]") {
@@ -142,7 +148,9 @@ TEST_CASE("sar, write to memory, revert", "[return_memory]") {
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
-  VM vm(context, stack);
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(context, stack, gasometer);
+
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
@@ -161,6 +169,7 @@ TEST_CASE("sar, write to memory, revert", "[return_memory]") {
   REQUIRE(GasType::NEEDS_RETURN == gasResult.first);
 
   NeedsReturn needsReturn = std::get<NeedsReturn>(gasResult.second);
-  bytes_t returnDataSlice = Utils::returnDataSlice(needsReturn.data);
-  CHECK("ff" == Hex::bytesToHex(returnDataSlice));
+
+  std::shared_ptr<bytes_t> returnBytes = mem->readSlice(needsReturn.slicePosition.offset, needsReturn.slicePosition.size);
+  CHECK("ff" == Hex::bytesToHex(returnBytes));
 }

@@ -30,19 +30,9 @@ class CreateTest {
         // given
         val (eosAccountName, eosPrivateKey, ethAccount) = setupTransactions.seed()
 
+        Thread.sleep(500) // avoid duplicate transaction exception
+
         // when
-        val response1 = createAction.pushTransaction(
-            eosAccountName,
-            ethAccount.address,
-            TransactionContext(
-                eosAccountName,
-                eosPrivateKey,
-                transactionDefaultExpiry()
-            )
-        ).blockingGet()
-
-        Thread.sleep(500) // avoid duplicate transaction error if these two identical transactions are published too quickly
-
         val response2 = createAction.pushTransaction(
             eosAccountName,
             ethAccount.address,
@@ -54,7 +44,6 @@ class CreateTest {
         ).blockingGet()
 
         // then
-        assertEquals(202, response1.statusCode)
         assertEquals(500, response2.statusCode)
     }
 }

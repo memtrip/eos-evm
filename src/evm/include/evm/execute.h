@@ -9,7 +9,7 @@
 struct Finalization {
   uint256_t gasLeft;
   bool applyState;
-  ReturnData returnData;
+  SlicePosition slicePosition;
 };
 
 typedef std::variant<
@@ -34,6 +34,7 @@ class Execute {
     static finalization_result_t callWithStackDepth(
       Operation& operation,
       size_t stackDepth,
+      std::shared_ptr<Memory> memory,
       std::shared_ptr<External> external,
       std::shared_ptr<AccountState> accountState,
       std::shared_ptr<Context> context,

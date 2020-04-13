@@ -17,6 +17,7 @@ class eos_execute {
       uint256_t address,
       std::shared_ptr<std::vector<RLPItem>> rlp, 
       std::shared_ptr<bytes_t> data,
+      std::shared_ptr<Memory> memory,
       std::shared_ptr<External> external,
       std::shared_ptr<AccountState> accountState,
       std::shared_ptr<Call> call
@@ -50,6 +51,7 @@ class eos_execute {
             );
             result = call->create(
               true,
+              memory,
               context,
               external,
               accountState
@@ -80,6 +82,7 @@ class eos_execute {
             );
             result = call->call(
               true,
+              memory,
               context,
               external,
               accountState

@@ -15,11 +15,11 @@ class VM {
     explicit VM(
       std::shared_ptr<Context> contextArg,
       std::shared_ptr<StackMachine> stackArg,
-      const Gasometer& g = Gasometer(0)
-    ): gasometer(g) {
+      std::shared_ptr<Gasometer> gasometerArg
+    ) {
       context = contextArg;
       stack = stackArg;
-      gasometer.currentGas = context->gas;
+      gasometer = gasometerArg;
     };
     exec_result_t execute(
       Operation& operation,
@@ -69,5 +69,5 @@ class VM {
     std::shared_ptr<StackMachine> stack;
   private:
     std::shared_ptr<Context> context;
-    Gasometer gasometer;
+    std::shared_ptr<Gasometer> gasometer;
 };
