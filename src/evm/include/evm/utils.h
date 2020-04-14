@@ -3,7 +3,7 @@
 #include <evm/return_data.h>
 #include <evm/call.h>
 #include <evm/vm_result.h>
-#include <evm/gasometer.h>
+#include <evm/gasometer.hpp>
 #include <evm/trap.hpp>
 
 enum GasTierPrice: uint8_t {
@@ -24,7 +24,7 @@ class Utils {
     static void printOpcodeHex(uint8_t value);
     static void printInstruction(unsigned int value);
     static void printInstructionList();
-    static void printInstructionRequirements(InstructionRequirements instructionRequirements);
+    static void printInstructionRequirements(GasRequirements gasRequirements);
     static void printTrap(const trap_t& trap);
     static void printJumps(const jump_set_t& jumps);
     static std::string uint256_2str(const uint256_t& value);

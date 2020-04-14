@@ -28,12 +28,12 @@ const size_t COPY_GAS = 3;
 const size_t MEMORY_GAS = 3;
 const size_t QUAD_COEFF_DIV = 512;
 
-enum InstructionRequirementsResult {
-  INSTRUCTION_RESULT_OK,
-  INSTRUCTION_RESULT_OUT_OF_GAS
+enum GasometerResult {
+  GASOMETER_RESULT_OK,
+  GASOMETER_RESULT_OUT_OF_GAS
 };
 
-struct InstructionRequirements {
+struct GasRequirements {
   gas_t gasCost;
   gas_t provideGas;
   gas_t memoryRequiredSize;
@@ -42,11 +42,11 @@ struct InstructionRequirements {
 
 typedef std::variant<
   uint8_t,
-  InstructionRequirements
+  GasRequirements
 > instruction_requirements_result_t;
 
 typedef std::pair<
-  InstructionRequirementsResult,
+  GasometerResult,
   instruction_requirements_result_t
 > instruction_requirements_t;
 

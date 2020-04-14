@@ -118,13 +118,13 @@ exec_result_t VM::stepInner(
     external
   );
 
-  InstructionRequirements requirements;
+  GasRequirements requirements;
   switch (calculateRequirements.first) {
-    case InstructionRequirementsResult::INSTRUCTION_RESULT_OK:
-      requirements = std::get<InstructionRequirements>(calculateRequirements.second);
+    case GasometerResult::GASOMETER_RESULT_OK:
+      requirements = std::get<GasRequirements>(calculateRequirements.second);
       //Utils::printInstructionRequirements(requirements);
       break;
-    case InstructionRequirementsResult::INSTRUCTION_RESULT_OUT_OF_GAS:
+    case GasometerResult::GASOMETER_RESULT_OUT_OF_GAS:
       return std::make_pair(ExecResult::VM_OUT_OF_GAS, 0);
   }
 

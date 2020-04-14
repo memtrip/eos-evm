@@ -496,12 +496,12 @@ void Utils::printInstructionList() {
   }
 }
 
-void Utils::printInstructionRequirements(InstructionRequirements instructionRequirements) {
+void Utils::printInstructionRequirements(GasRequirements gasRequirements) {
   printf("\n(");
-  printf("gasCost{%llu},", instructionRequirements.gasCost);
-  printf("provideGas{%llu},", instructionRequirements.provideGas);
-  printf("memoryTotalGas{%llu},", instructionRequirements.memoryTotalGas);
-  printf("memoryRequiredSize{%llu}", instructionRequirements.memoryRequiredSize);
+  printf("gasCost{%llu},", gasRequirements.gasCost);
+  printf("provideGas{%llu},", gasRequirements.provideGas);
+  printf("memoryTotalGas{%llu},", gasRequirements.memoryTotalGas);
+  printf("memoryRequiredSize{%llu}", gasRequirements.memoryRequiredSize);
   printf(")");
   printf("\n");
 }

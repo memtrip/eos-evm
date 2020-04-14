@@ -6,7 +6,7 @@
 #include <evm/vm_result.h>
 #include <evm/memory.hpp>
 #include <evm/external.h>
-#include <evm/gasometer.h>
+#include <evm/gasometer.hpp>
 #include <evm/context.h>
 #include <evm/operation.h>
 

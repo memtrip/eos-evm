@@ -5,7 +5,7 @@
 #include <evm/hex.hpp>
 #include <evm/return_data.h>
 #include <evm/call.h>
-#include <evm/gasometer.h>
+#include <evm/gasometer.hpp>
 #include <evm/hash.hpp>
 #include <evm/big_int.hpp>
 #include "external_mock.h"

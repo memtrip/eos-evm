@@ -3,7 +3,7 @@
 #include <evm/vm.h>
 #include <evm/return_data.h>
 #include <evm/account_state.hpp>
-#include <evm/gasometer.h>
+#include <evm/gasometer.hpp>
 #include <evm/execute.h>
 #include <evm/big_int.hpp>
 #include <evm/operation.h>
