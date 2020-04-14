@@ -4,8 +4,40 @@
 #include <evm/execute.h>
 #include <evm/vm.h>
 #include <evm/external.h>
-#include <evm/hex.h>
+#include <evm/hex.hpp>
 #include <evm/operation.h>
+
+finalization_result_t Execute::createWithStackDepth(
+  size_t stackDepth,
+  std::shared_ptr<External> external,
+  std::shared_ptr<Context> context
+  /* tracer */
+  /* vm_tracer */
+) {
+  std::shared_ptr<bytes_t> existingCode = external->code(context->codeAddress);
+  if (existingCode->size() > 0) {
+    // handle this error properly
+    return std::make_pair(
+      FinalizationResult::FINALIZATION_ERROR,
+      0
+    );
+  } else {
+    printf("emplaceCode\n");
+    external->emplaceCode(context->codeAddress, context->code);
+    SlicePosition slicePosition { 0, 0 };
+
+    Finalization finalization {
+      context->gas,
+      true,
+      slicePosition
+    };
+
+    return std::make_pair(
+      FinalizationResult::FINALIZATION_OK,
+      finalization
+    );
+  }
+}
 
 finalization_result_t Execute::callWithStackDepth(
   Operation& operation,
@@ -22,10 +54,11 @@ finalization_result_t Execute::callWithStackDepth(
   std::shared_ptr<StackMachine> stack =  std::make_shared<StackMachine>(stackVector);
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
 
-  VM vm(context, stack, gasometer);
+  VM vm(stack, gasometer);
 
   exec_result_t vm_result = vm.execute(
     operation,
+    context,
     memory, 
     accountState, 
     external, 
@@ -38,7 +71,7 @@ finalization_result_t Execute::callWithStackDepth(
         SlicePosition slicePosition { 0, 0 };
 
         Finalization finalization {
-          uint256_t(0),
+          0,
           false,
           slicePosition
         };
@@ -54,7 +87,7 @@ finalization_result_t Execute::callWithStackDepth(
         switch (gasLeft.first) {
           case KNOWN:
             {
-              uint256_t gasLeftValue = std::get<gas_t>(gasLeft.second); 
+              gas_t gasLeftValue = std::get<gas_t>(gasLeft.second); 
 
               SlicePosition slicePosition { 0, 0 };
 

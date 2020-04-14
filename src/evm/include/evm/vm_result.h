@@ -3,7 +3,7 @@
 #include <evm/types.h>
 #include <evm/return_data.h>
 #include <evm/call.h>
-#include <evm/trap.h>
+#include <evm/trap.hpp>
 
 enum ExecResult {
   STOPPED,

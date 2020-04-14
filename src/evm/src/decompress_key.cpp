@@ -1,6 +1,6 @@
 #include <evm/types.h>
 #include <evm/decompress_key.h>
-#include <evm/hex.h>
+#include <evm/hex.hpp>
 
 bytes_t pBytes = Hex::hexToBytes("fffffffffffffffffffffffffffffffffffffffffffffffffffffffefffffc2f");
 

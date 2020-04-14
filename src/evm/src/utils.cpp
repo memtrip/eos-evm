@@ -1,11 +1,10 @@
 #include <string>
 
 #include <evm/opcode.h>
-#include <evm/instruction.h>
-#include <evm/gas_tier_price.h>
+#include <evm/instruction.hpp>
 #include <evm/utils.h>
-#include <evm/big_int.h>
-#include <evm/hex.h>
+#include <evm/big_int.hpp>
+#include <evm/hex.hpp>
 
 void Utils::printOpcode(uint8_t value) {
   switch (value) {

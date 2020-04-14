@@ -1,8 +1,9 @@
 #include "catch.hpp"
 #include <memory>
-#include <evm/address.h>
+#include <evm/address.hpp>
 #include <evm/utils.h>
-#include <evm/hex.h>
+#include <evm/hex.hpp>
+#include "test_utils.hpp"
 
 TEST_CASE("accountIdentifierFromString", "[address]" ) {
 
@@ -13,7 +14,7 @@ TEST_CASE("accountIdentifierFromString", "[address]" ) {
 
   CHECK(20 == accountIdentifier.size());
   CHECK("86a2700da1f451fa70a0dd52225f986d552eda0f" == 
-    Hex::bytesToHex(accountIdentifier)
+    TestUtils::bytesToHex(accountIdentifier)
   );
 }
 
@@ -27,7 +28,7 @@ TEST_CASE("accountIdentifierFromBytes", "[address]" ) {
 
   CHECK(20 == accountIdentifier.size());
   CHECK("86a2700da1f451fa70a0dd52225f986d552eda0f" == 
-    Hex::bytesToHex(accountIdentifier)
+    TestUtils::bytesToHex(accountIdentifier)
   );
 }
 
@@ -37,6 +38,6 @@ TEST_CASE("Uncompressed public key", "[address]" ) {
   bytes_t address = Address::ethereumAddress(ethereumPublicKey);
 
   CHECK("7a5470ca3884388f8a284ac0c63eaf0695a200ea" == 
-    Hex::bytesToHex(address)
+    TestUtils::bytesToHex(address)
   );
 }

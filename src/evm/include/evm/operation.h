@@ -1,12 +1,12 @@
 #pragma once
 #include <memory>
 #include <evm/types.h>
-#include <evm/instruction.h>
-#include <evm/memory.h>
-#include <evm/stack.h>
+#include <evm/instruction.hpp>
+#include <evm/memory.hpp>
+#include <evm/stack.hpp>
 #include <evm/vm_result.h>
 #include <evm/opcode.h>
-#include <evm/byte_reader.h>
+#include <evm/byte_reader.hpp>
 
 class Operation { 
   typedef instruction_result_t (Operation::*operation_t)(

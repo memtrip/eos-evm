@@ -2,10 +2,10 @@
 #include <evm/call.h>
 #include <evm/vm.h>
 #include <evm/return_data.h>
-#include <evm/account_state.h>
+#include <evm/account_state.hpp>
 #include <evm/gasometer.h>
 #include <evm/execute.h>
-#include <evm/big_int.h>
+#include <evm/big_int.hpp>
 #include <evm/operation.h>
 
 call_result_t Call::create(
@@ -59,15 +59,37 @@ call_result_t Call::makeCall(
 
   std::shared_ptr<Call> innerCall = std::make_shared<Call>(stackDepth);
 
-  finalization_result_t finalizationResult = Execute::callWithStackDepth(
-    operation,
-    stackDepth + 1,
-    memory,
-    external,
-    accountState,
-    context,
-    innerCall
-  );
+  finalization_result_t finalizationResult;
+
+  switch (callType) {
+    case ActionType::ACTION_CREATE:
+    case ActionType::ACTION_CREATE2:
+      {
+        printf("ACTION_CREATE / ACTION_CREATE2\n");
+        finalizationResult = Execute::createWithStackDepth(
+          stackDepth + 1,
+          external,
+          context
+        );
+        break;
+      }
+    case ActionType::ACTION_CALL_CODE:
+    case ActionType::ACTION_CALL:
+    case ActionType::ACTION_STATIC_CALL:
+    case ActionType::ACTION_DELEGATE_CALL:
+      {
+        finalizationResult = Execute::callWithStackDepth(
+          operation,
+          stackDepth + 1,
+          memory,
+          external,
+          accountState,
+          context,
+          innerCall
+        );
+        break;
+      }
+  }
 
   switch (finalizationResult.first) {
     case FINALIZATION_OK:

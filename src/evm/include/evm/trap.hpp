@@ -1,6 +1,7 @@
 #pragma once
 #include <variant>
 #include <utility>
+#include <evm/types.h>
 
 enum TrapKind {
   TRAP_NONE,
@@ -25,6 +26,16 @@ typedef std::pair<TrapKind, trap_info_t> trap_t;
 
 class Trap {
   public:
-    static trap_t jump(uint64_t attemptedPosition);
-    static trap_t create(TrapKind kind, trap_info_t info);
+    static trap_t jump(uint64_t attemptedPosition) {
+      JumpTrapInfo info {
+        attemptedPosition
+      };
+      return create(TrapKind::TRAP_INVALID_JUMP, info);
+    }
+
+    static trap_t create(TrapKind kind, trap_info_t info) {
+      trap_t trap = std::make_pair(kind, info);
+      // Utils::printTrap(trap);
+      return trap;
+    }
 };

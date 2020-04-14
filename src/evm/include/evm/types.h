@@ -73,6 +73,11 @@ struct RLPItem {
   RLPType type;
   bytes_t bytes;
   std::vector<RLPItem> values;
+
+  static const uint8_t OFFSET_SHORT_STRING = 0x80;
+  static const uint8_t OFFSET_LONG_STRING = 0xb7;
+  static const uint8_t OFFSET_SHORT_LIST = 0xc0;
+  static const uint8_t OFFSET_LONG_LIST = 0xf7;
 };
 
 typedef std::vector<RLPItem> rlp_t;

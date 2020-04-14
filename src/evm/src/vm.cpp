@@ -1,17 +1,18 @@
 #include <algorithm>
 #include <evm/vm.h>
 #include <evm/opcode.h>
-#include <evm/instruction.h>
-#include <evm/jumps.h>
-#include <evm/big_int.h>
-#include <evm/hash.h>
-#include <evm/overflow.h>
-#include <evm/hex.h>
+#include <evm/instruction.hpp>
+#include <evm/jumps.hpp>
+#include <evm/big_int.hpp>
+#include <evm/hash.hpp>
+#include <evm/overflow.hpp>
+#include <evm/hex.hpp>
 #include <evm/utils.h>
-#include <evm/gas_calculation.h>
+#include <evm/gas_calculation.hpp>
 
 exec_result_t VM::execute(
   Operation& operation,
+  std::shared_ptr<Context> context,
   std::shared_ptr<Memory> memory,
   std::shared_ptr<AccountState> accountState,
   std::shared_ptr<External> external,
@@ -28,6 +29,7 @@ exec_result_t VM::execute(
     result = VM::step(
       operation,
       jumps, 
+      context,
       gasCalculation,
       memory, 
       reader, 
@@ -43,6 +45,7 @@ exec_result_t VM::execute(
 exec_result_t VM::step(
   Operation& operation,
   jump_set_t& jumps, 
+  std::shared_ptr<Context> context,
   std::shared_ptr<GasCalculation> gasCalculation,
   std::shared_ptr<Memory> memory,
   std::shared_ptr<ByteReader> reader, 
@@ -63,6 +66,7 @@ exec_result_t VM::step(
     return VM::stepInner(
       operation,
       jumps, 
+      context,
       gasCalculation,
       memory, 
       reader, 
@@ -76,6 +80,7 @@ exec_result_t VM::step(
 exec_result_t VM::stepInner(
   Operation& operation,
   jump_set_t& jumps,
+  std::shared_ptr<Context> context,
   std::shared_ptr<GasCalculation> gasCalculation,
   std::shared_ptr<Memory> memory,
   std::shared_ptr<ByteReader> reader, 
@@ -154,11 +159,12 @@ exec_result_t VM::stepInner(
     case Opcode::CREATE:
     case Opcode::CREATE2:
       {
-        printf("(CREATE / CREATE2 ");
+        printf("(CREATE / CREATE2 \n");
         result = executeCreateInstruction(
           operation,
           opcode,
           provideGas,
+          context,
           memory,
           accountState,
           external,
@@ -176,6 +182,7 @@ exec_result_t VM::stepInner(
           operation,
           opcode,
           provideGas,
+          context,
           memory,
           accountState,
           external,
@@ -205,6 +212,7 @@ exec_result_t VM::stepInner(
       {
         gas_t gasLeft = std::get<gas_t>(result.second);
         gasometer->currentGas = gasometer->currentGas + gasLeft;
+        printf("\n>> currentGas{%llu}\n", gasometer->currentGas);
         break;
       }
     case InstructionResult::JUMP_POSITION:
@@ -265,6 +273,7 @@ instruction_result_t VM::executeCreateInstruction(
   Operation& operation,
   uint8_t opcode,
   gas_t providedGas,
+  std::shared_ptr<Context> context,
   std::shared_ptr<Memory> memory,
   std::shared_ptr<AccountState> accountState,
   std::shared_ptr<External> external,
@@ -282,12 +291,14 @@ instruction_result_t VM::executeCreateInstruction(
   switch (opcode) {
     case Opcode::CREATE:
       {
-        address = context->address;
+        printf("CREATE\n");
+        address = context->sender;
         callType = ActionType::ACTION_CREATE;
         break;
       }
     case Opcode::CREATE2:
       {
+        printf("CREATE2\n");
         address = stack->peek(0);
         callType = ActionType::ACTION_CREATE2;
         stack->pop(1);
@@ -314,13 +325,36 @@ instruction_result_t VM::executeCreateInstruction(
   //   accountState
   // );
 
+  // TODO: make create gas calculation
+
+  std::shared_ptr<Context> innerContext = std::make_shared<Context>(
+    context->chainId,
+    context->blockNumber,
+    context->timestamp,
+    context->gasLimit,
+    context->coinbase,
+    context->difficulty,
+    context->blockHash,
+    address, /* codeAddress */
+    context->codeHash,
+    context->codeVersion,
+    address, /* address */
+    context->sender,
+    context->origin,
+    providedGas, /* gas */
+    context->gasPrice,
+    endowment, /* value */
+    contractCode, /* code */
+    std::shared_ptr<bytes_t>()
+  );
+
   std::shared_ptr<bytes_t> callMemoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> callMemory = std::make_shared<Memory>(callMemoryBytes);
 
   call_result_t callResult = call->create(
     true, 
     callMemory,
-    context,
+    innerContext,
     external,
     accountState
   );
@@ -334,9 +368,12 @@ instruction_result_t VM::executeCreateInstruction(
         // TODO: Address should come from cal_result_t
         stack->push(address);
 
+        // TODO: minus the gasLeft from the above gasCalcuation,
+        // or perform the gasCalculation within call / execute and return in "gasLeft"
+
         return std::make_pair(
           InstructionResult::UNUSED_GAS,
-          Overflow::uint256Cast(callReturn.gasLeft).first
+          callReturn.gasLeft
         );
       }
     case MESSAGE_CALL_REVERTED:
@@ -348,7 +385,7 @@ instruction_result_t VM::executeCreateInstruction(
 
         return std::make_pair(
           InstructionResult::UNUSED_GAS,
-          Overflow::uint256Cast(callReturn.gasLeft).first
+          callReturn.gasLeft
         );
       }
     case MESSAGE_CALL_OUT_OF_GAS:
@@ -368,6 +405,7 @@ instruction_result_t VM::executeCallInstruction(
   Operation& operation,
   uint8_t opcode,
   gas_t providedGas,
+  std::shared_ptr<Context> context,
   std::shared_ptr<Memory> memory,
   std::shared_ptr<AccountState> accountState,
   std::shared_ptr<External> external,
@@ -493,7 +531,7 @@ instruction_result_t VM::executeCallInstruction(
 
         return std::make_pair(
           InstructionResult::UNUSED_GAS,
-          Overflow::uint256Cast(callReturn.gasLeft).first
+          callReturn.gasLeft
         );
       }
     case MESSAGE_CALL_REVERTED:
@@ -509,7 +547,7 @@ instruction_result_t VM::executeCallInstruction(
 
         return std::make_pair(
           InstructionResult::UNUSED_GAS,
-          Overflow::uint256Cast(callReturn.gasLeft).first
+          callReturn.gasLeft
         );
       }
     case MESSAGE_CALL_OUT_OF_GAS:

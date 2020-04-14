@@ -1,7 +1,7 @@
 #include <evm/operation.h>
-#include <evm/big_int.h>
-#include <evm/hash.h>
-#include <evm/overflow.h>
+#include <evm/big_int.hpp>
+#include <evm/hash.hpp>
+#include <evm/overflow.hpp>
 
 instruction_result_t Operation::stop(
   gas_t gas,
@@ -1091,7 +1091,7 @@ instruction_result_t Operation::sload(
   std::shared_ptr<StackMachine> stack
 ) {
   uint256_t key = stack->peek(0);
-  uint256_t word = accountState->get(key, context->codeAddress);
+  uint256_t word = accountState->get(external, key, context->codeAddress);
 
   stack->pop(1);
   stack->push(word);
@@ -1111,7 +1111,7 @@ instruction_result_t Operation::sstore(
   uint256_t key = stack->peek(0);
   uint256_t value = stack->peek(1);  
   stack->pop(2);
-  accountState->put(key, value, context->codeAddress);
+  accountState->put(external, key, value, context->codeAddress);
   return std::make_pair(InstructionResult::OK, 0);
 }
 

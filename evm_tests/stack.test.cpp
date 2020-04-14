@@ -1,7 +1,7 @@
 #include "catch.hpp"
 #include <memory>
 #include <evm/types.h>
-#include <evm/stack.h>
+#include <evm/stack.hpp>
 #include <evm/utils.h>
 
 TEST_CASE("pop", "[stack]") {

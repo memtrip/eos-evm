@@ -2,11 +2,11 @@
 #include <vector>
 #include "catch.hpp"
 #include <memory>
-#include <evm/instruction.h>
+#include <evm/instruction.hpp>
 #include <evm/utils.h>
 #include <evm/types.h>
 #include <evm/opcode.h>
-#include <evm/hex.h>
+#include <evm/hex.hpp>
 
 std::vector<instruct_t> parse(std::string bytecode_str) {
   std::vector<instruct_t> values = std::vector<instruct_t>();

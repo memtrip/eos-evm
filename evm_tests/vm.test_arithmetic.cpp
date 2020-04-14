@@ -2,11 +2,12 @@
 #include <memory>
 #include <evm/utils.h>
 #include <evm/vm.h>
-#include <evm/hex.h>
+#include <evm/hex.hpp>
 #include <evm/return_data.h>
 #include <evm/call.h>
 #include <evm/gasometer.h>
-#include <evm/hash.h>
+#include <evm/hash.hpp>
+#include <evm/big_int.hpp>
 #include "external_mock.h"
 
 TEST_CASE("Add two large numbers", "[arithmetic]") {
@@ -15,7 +16,7 @@ TEST_CASE("Add two large numbers", "[arithmetic]") {
 	// (PUSH32 ((7f)fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff))
 	// (ADD (01))
   std::string bytecode_str = "7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff01";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
+  bytes_t codeBytes = Hex::hexToBytes(bytecode_str);
   env_t env = Utils::env();
   std::shared_ptr<Context> context = std::make_shared<Context>(
     env.chainId,
@@ -25,35 +26,35 @@ TEST_CASE("Add two large numbers", "[arithmetic]") {
     env.coinbase,
     env.difficulty,
     env.blockHash,
-    params.address,
-    params.codeHash,
-    params.codeVersion,
-    params.address,
-    params.sender,
-    params.origin,
-    params.gas,
-    params.gasPrice,
-    params.value,
-    std::make_shared<bytes_t>(params.code),
-    std::make_shared<bytes_t>(params.data)
+    uint256_t(0xea0e9a), /* address */
+    uint256_t(0xf9313a), /* codeHash */
+    uint256_t(0x193821), /* codeVersion */
+    uint256_t(0xea0e9a), /* address */
+    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    uint256_t(0x1283fe), /* origin */
+    100000,
+    uint256_t(0),
+    uint256_t(0),
+    std::make_shared<bytes_t>(codeBytes),
+    std::make_shared<bytes_t>()
   );
 
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
-  VM vm(context, stack, gasometer);
+  VM vm(stack, gasometer);
 
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(cacheItems);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
 
   // when
-  vm.execute(operation, mem, accountState, external, call);
+  vm.execute(operation, context, mem, accountState, external, call);
 
   // then
   CHECK("fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe" == 
@@ -67,7 +68,7 @@ TEST_CASE("Multiply two numbers", "[arithmetic]") {
 	// (PUSH1 ((60)03))
 	// (MUL (02))
   std::string bytecode_str = "6003600302";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
+  bytes_t codeBytes = Hex::hexToBytes(bytecode_str);
   env_t env = Utils::env();
   std::shared_ptr<Context> context = std::make_shared<Context>(
     env.chainId,
@@ -77,35 +78,35 @@ TEST_CASE("Multiply two numbers", "[arithmetic]") {
     env.coinbase,
     env.difficulty,
     env.blockHash,
-    params.address,
-    params.codeHash,
-    params.codeVersion,
-    params.address,
-    params.sender,
-    params.origin,
-    params.gas,
-    params.gasPrice,
-    params.value,
-    std::make_shared<bytes_t>(params.code),
-    std::make_shared<bytes_t>(params.data)
+    uint256_t(0xea0e9a), /* address */
+    uint256_t(0xf9313a), /* codeHash */
+    uint256_t(0x193821), /* codeVersion */
+    uint256_t(0xea0e9a), /* address */
+    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    uint256_t(0x1283fe), /* origin */
+    100000,
+    uint256_t(0),
+    uint256_t(0),
+    std::make_shared<bytes_t>(codeBytes),
+    std::make_shared<bytes_t>()
   );
 
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
-  VM vm(context, stack, gasometer);
+  VM vm(stack, gasometer);
 
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(cacheItems);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
 
   // when
-  vm.execute(operation, mem, accountState, external, call);
+  vm.execute(operation, context, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000009" == 
@@ -119,7 +120,7 @@ TEST_CASE("Multiply two larger numbers", "[arithmetic]") {
 	// (PUSH2 ((61)0B12))
 	// (MUL (02))
   std::string bytecode_str = "6016601602";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
+  bytes_t codeBytes = Hex::hexToBytes(bytecode_str);
   env_t env = Utils::env();
   std::shared_ptr<Context> context = std::make_shared<Context>(
     env.chainId,
@@ -129,35 +130,35 @@ TEST_CASE("Multiply two larger numbers", "[arithmetic]") {
     env.coinbase,
     env.difficulty,
     env.blockHash,
-    params.address,
-    params.codeHash,
-    params.codeVersion,
-    params.address,
-    params.sender,
-    params.origin,
-    params.gas,
-    params.gasPrice,
-    params.value,
-    std::make_shared<bytes_t>(params.code),
-    std::make_shared<bytes_t>(params.data)
+    uint256_t(0xea0e9a), /* address */
+    uint256_t(0xf9313a), /* codeHash */
+    uint256_t(0x193821), /* codeVersion */
+    uint256_t(0xea0e9a), /* address */
+    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    uint256_t(0x1283fe), /* origin */
+    100000,
+    uint256_t(0),
+    uint256_t(0),
+    std::make_shared<bytes_t>(codeBytes),
+    std::make_shared<bytes_t>()
   );
 
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
-  VM vm(context, stack, gasometer);
+  VM vm(stack, gasometer);
 
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(cacheItems);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
 
   // when
-  vm.execute(operation, mem, accountState, external, call);
+  vm.execute(operation, context, mem, accountState, external, call);
 
   // then
   CHECK("00000000000000000000000000000000000000000000000000000000000001e4" == 
@@ -174,7 +175,7 @@ TEST_CASE("Multiply and store", "[arithmetic]") {
   // (PUSH1 ((60) 00))
   // (SSTORE 55)
   std::string bytecode_str = "65012365124623626543219002600055";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
+  bytes_t codeBytes = Hex::hexToBytes(bytecode_str);
   env_t env = Utils::env();
   std::shared_ptr<Context> context = std::make_shared<Context>(
     env.chainId,
@@ -184,39 +185,39 @@ TEST_CASE("Multiply and store", "[arithmetic]") {
     env.coinbase,
     env.difficulty,
     env.blockHash,
-    params.address,
-    params.codeHash,
-    params.codeVersion,
-    params.address,
-    params.sender,
-    params.origin,
-    params.gas,
-    params.gasPrice,
-    params.value,
-    std::make_shared<bytes_t>(params.code),
-    std::make_shared<bytes_t>(params.data)
+    uint256_t(0xea0e9a), /* address */
+    uint256_t(0xf9313a), /* codeHash */
+    uint256_t(0x193821), /* codeVersion */
+    uint256_t(0xea0e9a), /* address */
+    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    uint256_t(0x1283fe), /* origin */
+    100000,
+    uint256_t(0),
+    uint256_t(0),
+    std::make_shared<bytes_t>(codeBytes),
+    std::make_shared<bytes_t>()
   );
 
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
-  VM vm(context, stack, gasometer);
+  VM vm(stack, gasometer);
 
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(cacheItems);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
 
   // when
-  vm.execute(operation, mem, accountState, external, call);
+  vm.execute(operation, context, mem, accountState, external, call);
 
   // then
   CHECK("000000000000000000000000000000000000000000000000734349397b853383" == 
-    Utils::uint256_2str(accountState->get(uint256_t(0x00), context->codeAddress))
+    Utils::uint256_2str(accountState->get(external, uint256_t(0x00), context->codeAddress))
   );
 }
 
@@ -226,7 +227,7 @@ TEST_CASE("Subtract two numbers", "[arithmetic]") {
 	// (PUSH1 ((60)05))
 	// (SUB (03))
   std::string bytecode_str = "6003600503";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
+  bytes_t codeBytes = Hex::hexToBytes(bytecode_str);
   env_t env = Utils::env();
   std::shared_ptr<Context> context = std::make_shared<Context>(
     env.chainId,
@@ -236,35 +237,35 @@ TEST_CASE("Subtract two numbers", "[arithmetic]") {
     env.coinbase,
     env.difficulty,
     env.blockHash,
-    params.address,
-    params.codeHash,
-    params.codeVersion,
-    params.address,
-    params.sender,
-    params.origin,
-    params.gas,
-    params.gasPrice,
-    params.value,
-    std::make_shared<bytes_t>(params.code),
-    std::make_shared<bytes_t>(params.data)
+    uint256_t(0xea0e9a), /* address */
+    uint256_t(0xf9313a), /* codeHash */
+    uint256_t(0x193821), /* codeVersion */
+    uint256_t(0xea0e9a), /* address */
+    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    uint256_t(0x1283fe), /* origin */
+    100000,
+    uint256_t(0),
+    uint256_t(0),
+    std::make_shared<bytes_t>(codeBytes),
+    std::make_shared<bytes_t>()
   );
 
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
-  VM vm(context, stack, gasometer);
+  VM vm(stack, gasometer);
 
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(cacheItems);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
 
   // when
-  vm.execute(operation, mem, accountState, external, call);
+  vm.execute(operation, context, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000002" == 
@@ -281,7 +282,7 @@ TEST_CASE("Subtract and store", "[arithmetic]") {
 	// (PUSH1 (60)00)
   // (SSTORE 55)
   std::string bytecode_str = "65012365124623626543219003600055";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
+  bytes_t codeBytes = Hex::hexToBytes(bytecode_str);
   env_t env = Utils::env();
   std::shared_ptr<Context> context = std::make_shared<Context>(
     env.chainId,
@@ -291,39 +292,39 @@ TEST_CASE("Subtract and store", "[arithmetic]") {
     env.coinbase,
     env.difficulty,
     env.blockHash,
-    params.address,
-    params.codeHash,
-    params.codeVersion,
-    params.address,
-    params.sender,
-    params.origin,
-    params.gas,
-    params.gasPrice,
-    params.value,
-    std::make_shared<bytes_t>(params.code),
-    std::make_shared<bytes_t>(params.data)
+    uint256_t(0xea0e9a), /* address */
+    uint256_t(0xf9313a), /* codeHash */
+    uint256_t(0x193821), /* codeVersion */
+    uint256_t(0xea0e9a), /* address */
+    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    uint256_t(0x1283fe), /* origin */
+    100000,
+    uint256_t(0),
+    uint256_t(0),
+    std::make_shared<bytes_t>(codeBytes),
+    std::make_shared<bytes_t>()
   );
 
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
-  VM vm(context, stack, gasometer);
+  VM vm(stack, gasometer);
 
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(cacheItems);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
 
   // when
-  vm.execute(operation, mem, accountState, external, call);
+  vm.execute(operation, context, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000012364ad0302" == 
-    Utils::uint256_2str(accountState->get(uint256_t(0x00), context->codeAddress))
+    Utils::uint256_2str(accountState->get(external, uint256_t(0x00), context->codeAddress))
   );
 }
 
@@ -333,7 +334,7 @@ TEST_CASE("Divide two numbers", "[arithmetic]") {
 	// (PUSH1 ((60)04))
 	// (DIV (04))
   std::string bytecode_str = "6002600404";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
+  bytes_t codeBytes = Hex::hexToBytes(bytecode_str);
   env_t env = Utils::env();
   std::shared_ptr<Context> context = std::make_shared<Context>(
     env.chainId,
@@ -343,35 +344,35 @@ TEST_CASE("Divide two numbers", "[arithmetic]") {
     env.coinbase,
     env.difficulty,
     env.blockHash,
-    params.address,
-    params.codeHash,
-    params.codeVersion,
-    params.address,
-    params.sender,
-    params.origin,
-    params.gas,
-    params.gasPrice,
-    params.value,
-    std::make_shared<bytes_t>(params.code),
-    std::make_shared<bytes_t>(params.data)
+    uint256_t(0xea0e9a), /* address */
+    uint256_t(0xf9313a), /* codeHash */
+    uint256_t(0x193821), /* codeVersion */
+    uint256_t(0xea0e9a), /* address */
+    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    uint256_t(0x1283fe), /* origin */
+    100000,
+    uint256_t(0),
+    uint256_t(0),
+    std::make_shared<bytes_t>(codeBytes),
+    std::make_shared<bytes_t>()
   );
 
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
-  VM vm(context, stack, gasometer);
+  VM vm(stack, gasometer);
 
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(cacheItems);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
 
   // when
-  vm.execute(operation, mem, accountState, external, call);
+  vm.execute(operation, context, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000002" == 
@@ -385,7 +386,7 @@ TEST_CASE("Divide 2 / 0", "[arithmetic]") {
 	// (PUSH1 ((60)02))
 	// (DIV (04))
   std::string bytecode_str = "6000600204";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
+  bytes_t codeBytes = Hex::hexToBytes(bytecode_str);
   env_t env = Utils::env();
   std::shared_ptr<Context> context = std::make_shared<Context>(
     env.chainId,
@@ -395,35 +396,35 @@ TEST_CASE("Divide 2 / 0", "[arithmetic]") {
     env.coinbase,
     env.difficulty,
     env.blockHash,
-    params.address,
-    params.codeHash,
-    params.codeVersion,
-    params.address,
-    params.sender,
-    params.origin,
-    params.gas,
-    params.gasPrice,
-    params.value,
-    std::make_shared<bytes_t>(params.code),
-    std::make_shared<bytes_t>(params.data)
+    uint256_t(0xea0e9a), /* address */
+    uint256_t(0xf9313a), /* codeHash */
+    uint256_t(0x193821), /* codeVersion */
+    uint256_t(0xea0e9a), /* address */
+    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    uint256_t(0x1283fe), /* origin */
+    100000,
+    uint256_t(0),
+    uint256_t(0),
+    std::make_shared<bytes_t>(codeBytes),
+    std::make_shared<bytes_t>()
   );
 
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
-  VM vm(context, stack, gasometer);
+  VM vm(stack, gasometer);
 
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(cacheItems);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
 
   // when
-  vm.execute(operation, mem, accountState, external, call);
+  vm.execute(operation, context, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
@@ -440,7 +441,7 @@ TEST_CASE("Divide and store", "[arithmetic]") {
 	// (PUSH1 (60)00)
   // (SSTORE 55)
   std::string bytecode_str = "65012365124623626543219004600055";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
+  bytes_t codeBytes = Hex::hexToBytes(bytecode_str);
   env_t env = Utils::env();
   std::shared_ptr<Context> context = std::make_shared<Context>(
     env.chainId,
@@ -450,39 +451,39 @@ TEST_CASE("Divide and store", "[arithmetic]") {
     env.coinbase,
     env.difficulty,
     env.blockHash,
-    params.address,
-    params.codeHash,
-    params.codeVersion,
-    params.address,
-    params.sender,
-    params.origin,
-    params.gas,
-    params.gasPrice,
-    params.value,
-    std::make_shared<bytes_t>(params.code),
-    std::make_shared<bytes_t>(params.data)
+    uint256_t(0xea0e9a), /* address */
+    uint256_t(0xf9313a), /* codeHash */
+    uint256_t(0x193821), /* codeVersion */
+    uint256_t(0xea0e9a), /* address */
+    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    uint256_t(0x1283fe), /* origin */
+    100000,
+    uint256_t(0),
+    uint256_t(0),
+    std::make_shared<bytes_t>(codeBytes),
+    std::make_shared<bytes_t>()
   );
 
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
-  VM vm(context, stack, gasometer);
+  VM vm(stack, gasometer);
 
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(cacheItems);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
 
   // when
-  vm.execute(operation, mem, accountState, external, call);
+  vm.execute(operation, context, mem, accountState, external, call);
 
   // then
   CHECK("000000000000000000000000000000000000000000000000000000000002e0ac" == 
-    Utils::uint256_2str(accountState->get(uint256_t(0x00), context->codeAddress))
+    Utils::uint256_2str(accountState->get(external, uint256_t(0x00), context->codeAddress))
   );
 }
 
@@ -495,7 +496,7 @@ TEST_CASE("Divide by zero and store", "[arithmetic]") {
 	// (PUSH1 (60)00)
   // (SSTORE 55)
   std::string bytecode_str = "6501236512462360009004600055";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
+  bytes_t codeBytes = Hex::hexToBytes(bytecode_str);
   env_t env = Utils::env();
   std::shared_ptr<Context> context = std::make_shared<Context>(
     env.chainId,
@@ -505,45 +506,45 @@ TEST_CASE("Divide by zero and store", "[arithmetic]") {
     env.coinbase,
     env.difficulty,
     env.blockHash,
-    params.address,
-    params.codeHash,
-    params.codeVersion,
-    params.address,
-    params.sender,
-    params.origin,
-    params.gas,
-    params.gasPrice,
-    params.value,
-    std::make_shared<bytes_t>(params.code),
-    std::make_shared<bytes_t>(params.data)
+    uint256_t(0xea0e9a), /* address */
+    uint256_t(0xf9313a), /* codeHash */
+    uint256_t(0x193821), /* codeVersion */
+    uint256_t(0xea0e9a), /* address */
+    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    uint256_t(0x1283fe), /* origin */
+    100000,
+    uint256_t(0),
+    uint256_t(0),
+    std::make_shared<bytes_t>(codeBytes),
+    std::make_shared<bytes_t>()
   );
 
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
-  VM vm(context, stack, gasometer);
+  VM vm(stack, gasometer);
 
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(cacheItems);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
 
   // when
-  vm.execute(operation, mem, accountState, external, call);
+  vm.execute(operation, context, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
-    Utils::uint256_2str(accountState->get(uint256_t(0x00), context->codeAddress))
+    Utils::uint256_2str(accountState->get(external, uint256_t(0x00), context->codeAddress))
   );
 }
 
 TEST_CASE("Mod and store", "[arithmetic]") {
   std::string bytecode_str = "650123651246236265432290066000556501236512462360009006600155";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
+  bytes_t codeBytes = Hex::hexToBytes(bytecode_str);
   env_t env = Utils::env();
   std::shared_ptr<Context> context = std::make_shared<Context>(
     env.chainId,
@@ -553,43 +554,43 @@ TEST_CASE("Mod and store", "[arithmetic]") {
     env.coinbase,
     env.difficulty,
     env.blockHash,
-    params.address,
-    params.codeHash,
-    params.codeVersion,
-    params.address,
-    params.sender,
-    params.origin,
-    params.gas,
-    params.gasPrice,
-    params.value,
-    std::make_shared<bytes_t>(params.code),
-    std::make_shared<bytes_t>(params.data)
+    uint256_t(0xea0e9a), /* address */
+    uint256_t(0xf9313a), /* codeHash */
+    uint256_t(0x193821), /* codeVersion */
+    uint256_t(0xea0e9a), /* address */
+    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    uint256_t(0x1283fe), /* origin */
+    100000,
+    uint256_t(0),
+    uint256_t(0),
+    std::make_shared<bytes_t>(codeBytes),
+    std::make_shared<bytes_t>()
   );
 
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
-  VM vm(context, stack, gasometer);
+  VM vm(stack, gasometer);
 
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(cacheItems);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
 
   // when
-  vm.execute(operation, mem, accountState, external, call);
+  vm.execute(operation, context, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000076b4b" == 
-    Utils::uint256_2str(accountState->get(uint256_t(0x00), context->codeAddress))
+    Utils::uint256_2str(accountState->get(external, uint256_t(0x00), context->codeAddress))
   );
 
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
-    Utils::uint256_2str(accountState->get(uint256_t(0x01), context->codeAddress))
+    Utils::uint256_2str(accountState->get(external, uint256_t(0x01), context->codeAddress))
   );
 }
 
@@ -600,7 +601,7 @@ TEST_CASE("Modulus 8 % 2", "[arithmetic]") {
 	// (PUSH1 ((60)08))
 	// (MOD (06))
   std::string bytecode_str = "6002600806";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
+  bytes_t codeBytes = Hex::hexToBytes(bytecode_str);
   env_t env = Utils::env();
   std::shared_ptr<Context> context = std::make_shared<Context>(
     env.chainId,
@@ -610,35 +611,35 @@ TEST_CASE("Modulus 8 % 2", "[arithmetic]") {
     env.coinbase,
     env.difficulty,
     env.blockHash,
-    params.address,
-    params.codeHash,
-    params.codeVersion,
-    params.address,
-    params.sender,
-    params.origin,
-    params.gas,
-    params.gasPrice,
-    params.value,
-    std::make_shared<bytes_t>(params.code),
-    std::make_shared<bytes_t>(params.data)
+    uint256_t(0xea0e9a), /* address */
+    uint256_t(0xf9313a), /* codeHash */
+    uint256_t(0x193821), /* codeVersion */
+    uint256_t(0xea0e9a), /* address */
+    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    uint256_t(0x1283fe), /* origin */
+    100000,
+    uint256_t(0),
+    uint256_t(0),
+    std::make_shared<bytes_t>(codeBytes),
+    std::make_shared<bytes_t>()
   );
 
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
-  VM vm(context, stack, gasometer);
+  VM vm(stack, gasometer);
 
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(cacheItems);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
 
   // when
-  vm.execute(operation, mem, accountState, external, call);
+  vm.execute(operation, context, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
@@ -652,7 +653,7 @@ TEST_CASE("Modulus 5 % 2", "[arithmetic]") {
 	// (PUSH1 ((60)02))
 	// (MOD (06))
   std::string bytecode_str = "6002600506";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
+  bytes_t codeBytes = Hex::hexToBytes(bytecode_str);
   env_t env = Utils::env();
   std::shared_ptr<Context> context = std::make_shared<Context>(
     env.chainId,
@@ -662,35 +663,35 @@ TEST_CASE("Modulus 5 % 2", "[arithmetic]") {
     env.coinbase,
     env.difficulty,
     env.blockHash,
-    params.address,
-    params.codeHash,
-    params.codeVersion,
-    params.address,
-    params.sender,
-    params.origin,
-    params.gas,
-    params.gasPrice,
-    params.value,
-    std::make_shared<bytes_t>(params.code),
-    std::make_shared<bytes_t>(params.data)
+    uint256_t(0xea0e9a), /* address */
+    uint256_t(0xf9313a), /* codeHash */
+    uint256_t(0x193821), /* codeVersion */
+    uint256_t(0xea0e9a), /* address */
+    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    uint256_t(0x1283fe), /* origin */
+    100000,
+    uint256_t(0),
+    uint256_t(0),
+    std::make_shared<bytes_t>(codeBytes),
+    std::make_shared<bytes_t>()
   );
 
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
-  VM vm(context, stack, gasometer);
+  VM vm(stack, gasometer);
 
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(cacheItems);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
 
   // when
-  vm.execute(operation, mem, accountState, external, call);
+  vm.execute(operation, context, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
@@ -704,7 +705,7 @@ TEST_CASE("Modulus 2 % 0", "[arithmetic]") {
 	// (PUSH1 ((60)00))
 	// (MOD (06))
   std::string bytecode_str = "6000600206";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
+  bytes_t codeBytes = Hex::hexToBytes(bytecode_str);
   env_t env = Utils::env();
   std::shared_ptr<Context> context = std::make_shared<Context>(
     env.chainId,
@@ -714,35 +715,35 @@ TEST_CASE("Modulus 2 % 0", "[arithmetic]") {
     env.coinbase,
     env.difficulty,
     env.blockHash,
-    params.address,
-    params.codeHash,
-    params.codeVersion,
-    params.address,
-    params.sender,
-    params.origin,
-    params.gas,
-    params.gasPrice,
-    params.value,
-    std::make_shared<bytes_t>(params.code),
-    std::make_shared<bytes_t>(params.data)
+    uint256_t(0xea0e9a), /* address */
+    uint256_t(0xf9313a), /* codeHash */
+    uint256_t(0x193821), /* codeVersion */
+    uint256_t(0xea0e9a), /* address */
+    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    uint256_t(0x1283fe), /* origin */
+    100000,
+    uint256_t(0),
+    uint256_t(0),
+    std::make_shared<bytes_t>(codeBytes),
+    std::make_shared<bytes_t>()
   );
 
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
-  VM vm(context, stack, gasometer);
+  VM vm(stack, gasometer);
 
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(cacheItems);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
 
   // when
-  vm.execute(operation, mem, accountState, external, call);
+  vm.execute(operation, context, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
@@ -752,7 +753,7 @@ TEST_CASE("Modulus 2 % 0", "[arithmetic]") {
 
 TEST_CASE("Byte", "[arithmetic]") {
   std::string bytecode_str = "60f061ffff1a600055610fff601f1a600155";
-  params_t params =  Utils::params(Hex::hexToBytes(bytecode_str), bytes_t());
+  bytes_t codeBytes = Hex::hexToBytes(bytecode_str);
   env_t env = Utils::env();
   std::shared_ptr<Context> context = std::make_shared<Context>(
     env.chainId,
@@ -762,42 +763,42 @@ TEST_CASE("Byte", "[arithmetic]") {
     env.coinbase,
     env.difficulty,
     env.blockHash,
-    params.address,
-    params.codeHash,
-    params.codeVersion,
-    params.address,
-    params.sender,
-    params.origin,
-    params.gas,
-    params.gasPrice,
-    params.value,
-    std::make_shared<bytes_t>(params.code),
-    std::make_shared<bytes_t>(params.data)
+    uint256_t(0xea0e9a), /* address */
+    uint256_t(0xf9313a), /* codeHash */
+    uint256_t(0x193821), /* codeVersion */
+    uint256_t(0xea0e9a), /* address */
+    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    uint256_t(0x1283fe), /* origin */
+    100000,
+    uint256_t(0),
+    uint256_t(0),
+    std::make_shared<bytes_t>(codeBytes),
+    std::make_shared<bytes_t>()
   );
 
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
-  VM vm(context, stack, gasometer);
+  VM vm(stack, gasometer);
 
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(cacheItems);
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
 
   // when
-  vm.execute(operation, mem, accountState, external, call);
+  vm.execute(operation, context, mem, accountState, external, call);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
-    Utils::uint256_2str(accountState->get(uint256_t(0x00), context->codeAddress))
+    Utils::uint256_2str(accountState->get(external, uint256_t(0x00), context->codeAddress))
   );
 
   CHECK("00000000000000000000000000000000000000000000000000000000000000ff" == 
-    Utils::uint256_2str(accountState->get(uint256_t(0x01), context->codeAddress))
+    Utils::uint256_2str(accountState->get(external, uint256_t(0x01), context->codeAddress))
   );
 }

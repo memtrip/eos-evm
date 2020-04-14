@@ -2,10 +2,10 @@
 #include <memory>
 #include <evm/call.h>
 #include <evm/types.h>
-#include <evm/account_state.h>
-#include <evm/big_int.h>
+#include <evm/account_state.hpp>
+#include <evm/big_int.hpp>
 #include <evm/context.h>
-#include <evm/overflow.h>
+#include <evm/overflow.hpp>
 #include <evm/external.h>
 
 #include <eos_external.hpp>

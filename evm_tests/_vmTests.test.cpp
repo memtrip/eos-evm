@@ -7,11 +7,11 @@
 #include <memory>
 #include <evm/utils.h>
 #include <evm/vm.h>
-#include <evm/hex.h>
+#include <evm/hex.hpp>
 #include <evm/return_data.h>
 #include <evm/call.h>
 #include <evm/gasometer.h>
-#include <evm/big_int.h>
+#include <evm/big_int.hpp>
 #include "external_mock.h"
 #include <evm/operation.h>
 
@@ -69,18 +69,18 @@ TEST_CASE("suicide______4622c577440f9db4b3954a1de60bf2fac55886dcb0ec4ecaf906c25b
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
-  VM vm(context, stack, gasometer);
+  VM vm(stack, gasometer);
 
   std::shared_ptr<Call> call = std::make_shared<Call>(0);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(cacheItems);
 
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
 
   // when
-  vm.execute(operation, mem, accountState, external, call);
+  vm.execute(operation, context, mem, accountState, external, call);
 
   // then
 }

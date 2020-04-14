@@ -4,15 +4,13 @@
 
 typedef std::vector<std::pair<std::vector<uint256_t>, bytes_t>> log_spy_t;
 
-typedef std::vector<uint256_t> code_spy_t;
+typedef std::vector<std::pair<uint256_t, bytes_t>> bytes_spy_t;
 
-typedef std::vector<uint256_t> suicide_spy_t;
+typedef std::vector<uint256_t> word_spy_t;
 
 typedef std::vector<std::pair<uint256_t, double>> balance_responder_t;
 
-typedef std::vector<std::pair<uint256_t, bytes_t>> code_responder_t;
-
-typedef std::vector<std::pair<uint256_t, bytes_t>> storage_responder_t;
+typedef std::vector<std::pair<uint256_t, bytes_t>> bytes_responder_t;
 
 class ExternalMock: public External {
   public:
@@ -22,11 +20,12 @@ class ExternalMock: public External {
     double balance(const uint256_t& address);
     bytes_t storageAt(const uint256_t& key, const uint256_t& codeAddress);
     void suicide(const uint256_t& address);
-    bytes_t keccak256(const bytes_t& bytes);
+    void emplaceCode(const uint256_t& address, std::shared_ptr<bytes_t> code);
     log_spy_t logSpy;
-    code_spy_t codeSpy;
-    suicide_spy_t suicideSpy;
-    code_responder_t codeResponder;
+    word_spy_t codeSpy;
+    word_spy_t suicideSpy;
+    bytes_spy_t emplaceSpy;
+    bytes_responder_t codeResponder;
     balance_responder_t balanceResponder;
-    storage_responder_t storageResponder;
+    bytes_responder_t storageResponder;
 };

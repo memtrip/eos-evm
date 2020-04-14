@@ -1,13 +1,14 @@
 #include <vector>
 #include "catch.hpp"
 #include <memory>
-#include <evm/memory.h>
+#include <evm/memory.hpp>
 #include <evm/types.h>
 #include <evm/utils.h>
-#include <evm/hex.h>
+#include <evm/hex.hpp>
 #include <evm/return_data.h>
 #include <evm/call.h>
-#include <evm/big_int.h>
+#include <evm/big_int.hpp>
+#include "test_utils.hpp"
 
 TEST_CASE("Memory write and read", "[memory]") {
   // given
@@ -99,13 +100,13 @@ TEST_CASE("Memory read slice and write slice", "[memory]") {
   memory->writeSlice(0x00, slice1);
 
   std::shared_ptr<bytes_t> readSlice1 = memory->readSlice(0x00, 0x0D);
-  REQUIRE("aabbccee112233445566778899" == Hex::bytesToHex(readSlice1)); 
+  REQUIRE("aabbccee112233445566778899" == TestUtils::bytesToHex(readSlice1)); 
   
   bytes_t slice2 = Hex::hexToBytes("FFFF");
   memory->writeSlice(0x01, slice2);
 
   std::shared_ptr<bytes_t> readSlice2 = memory->readSlice(0x00, 0x06);
-  REQUIRE("aaffffee1122" == Hex::bytesToHex(readSlice2)); 
+  REQUIRE("aaffffee1122" == TestUtils::bytesToHex(readSlice2)); 
 
   bytes_t emptySlice = bytes_t();
   memory->writeSlice(0x1000, emptySlice);
@@ -170,7 +171,7 @@ TEST_CASE("Memory copy data", "[memory]") {
 
   std::shared_ptr<bytes_t> slice = memory->readSlice(0x00, 0xB8);
   REQUIRE("6080604052348015600f57600080fd5b506004361060285760003560e01c8063771602f714602d575b600080fd5b606060048036036040811015604157600080fd5b8101908080359060200190929190803590602001909291905050506076565b6040518082815260200191505060405180910390f35b600081830190509291505056fea265627a7a723158209551755b4e59ca6cf78d79f5356d91565950805937074458700610f23c6ecf9b64736f6c63430005100032" == 
-    Hex::bytesToHex(slice)
+    TestUtils::bytesToHex(slice)
   ); 
 }
 
@@ -206,6 +207,6 @@ TEST_CASE("Memory to return", "[memory]") {
   std::shared_ptr<bytes_t> returnDataBytes = memory->readSlice(0x1f, 0x20);
 
   CHECK("0a00000000000000000000000000000000000000000000000000000000000000" ==
-    Hex::bytesToHex(returnDataBytes)
+    TestUtils::bytesToHex(returnDataBytes)
   );
 }

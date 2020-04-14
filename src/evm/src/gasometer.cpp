@@ -1,6 +1,6 @@
 #include <evm/gasometer.h>
-#include <evm/overflow.h>
-#include <evm/big_int.h>
+#include <evm/overflow.hpp>
+#include <evm/big_int.hpp>
 
 instruction_requirements_t Gasometer::requirements(
   uint8_t opcode,

@@ -3,9 +3,9 @@
 #include <eosio/eosio.hpp>
 #include <evm/types.h>
 #include <evm/external.h>
-#include <evm/hash.h>
+#include <evm/hash.hpp>
 #include <evm/utils.h>
-#include <evm/hex.h>
+#include <evm/hex.hpp>
 #include <eos_evm.hpp>
 #include <eos_utils.hpp>
 
@@ -18,6 +18,7 @@ class eos_external: public External {
     bytes_t storageAt(const uint256_t& address, const uint256_t& codeAddress);
     void suicide(const uint256_t& address);
     bytes_t keccak256(const bytes_t& bytes);
+    void emplaceCode(const uint256_t& address, std::shared_ptr<bytes_t> code);
   private:
     eos_evm* contract;
 };
@@ -55,6 +56,5 @@ bytes_t eos_external::storageAt(const uint256_t& key, const uint256_t& codeAddre
 void eos_external::suicide(const uint256_t& address) {
 }
 
-bytes_t eos_external::keccak256(const bytes_t& bytes) {
-  return Hash::keccak256(bytes);
-}
+void eos_external::emplaceCode(const uint256_t& address, std::shared_ptr<bytes_t> code) { 
+};

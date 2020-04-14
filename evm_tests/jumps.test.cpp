@@ -1,8 +1,8 @@
 #include "catch.hpp"
 #include <memory>
-#include <evm/jumps.h>
+#include <evm/jumps.hpp>
 #include <evm/types.h>
-#include <evm/hex.h>
+#include <evm/hex.hpp>
 #include <evm/utils.h>
 
 jump_set_t jump_destinations(std::string bytecode_str) {

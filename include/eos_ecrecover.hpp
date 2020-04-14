@@ -4,10 +4,10 @@
 #include <eosio/crypto.hpp>
 
 #include <evm/types.h>
-#include <evm/hash.h>
-#include <evm/address.h>
-#include <evm/hex.h>
-#include <evm/transaction.h>
+#include <evm/hash.hpp>
+#include <evm/address.hpp>
+#include <evm/hex.hpp>
+#include <evm/transaction.hpp>
 #include <evm/decompress_key.h>
 
 class eos_ecrecover {

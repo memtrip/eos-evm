@@ -1,5 +1,5 @@
 #include <evm/types.h>
-#include <evm/big_int.h>
+#include <evm/big_int.hpp>
 
 class DecompressKey {
   public:

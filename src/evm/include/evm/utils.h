@@ -4,7 +4,18 @@
 #include <evm/call.h>
 #include <evm/vm_result.h>
 #include <evm/gasometer.h>
-#include <evm/trap.h>
+#include <evm/trap.hpp>
+
+enum GasTierPrice: uint8_t {
+  ZERO = 0x00,
+  BASE = 0x01,
+  VERY_LOW = 0x02,
+  LOW = 0x03,
+  MID = 0x04,
+  HIGH = 0x05,
+  EXT = 0x06,
+  SPECIAL = 0x07,
+};
 
 class Utils {
   public:

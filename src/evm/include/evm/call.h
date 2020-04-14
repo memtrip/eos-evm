@@ -4,9 +4,9 @@
 #include <evm/return_data.h>
 #include <evm/call.h>
 #include <evm/external.h>
-#include <evm/account_state.h>
+#include <evm/account_state.hpp>
 #include <evm/context.h>
-#include <evm/memory.h>
+#include <evm/memory.hpp>
 
 // message call result
 enum MessageCallResult {
@@ -18,7 +18,7 @@ enum MessageCallResult {
 };
 
 struct MessageCallReturn {
-  uint256_t gasLeft;
+  gas_t gasLeft;
   SlicePosition slicePosition;
 };
 

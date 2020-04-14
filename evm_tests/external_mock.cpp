@@ -2,11 +2,12 @@
 
 ExternalMock::ExternalMock() {
   logSpy = log_spy_t();
-  codeSpy = code_spy_t();
-  suicideSpy = suicide_spy_t();
-  codeResponder = code_responder_t();
+  codeSpy = word_spy_t();
+  suicideSpy = word_spy_t();
+  emplaceSpy = bytes_spy_t();
+  codeResponder = bytes_responder_t();
   balanceResponder = balance_responder_t();
-  storageResponder = storage_responder_t();
+  storageResponder = bytes_responder_t();
 }
 
 void ExternalMock::log(const std::vector<uint256_t>& topics, std::shared_ptr<bytes_t> data) { 
@@ -42,6 +43,6 @@ void ExternalMock::suicide(const uint256_t& address) {
   suicideSpy.push_back(address);
 }
 
-bytes_t ExternalMock::keccak256(const bytes_t& bytes) {
-  return bytes_t();
-}
+void ExternalMock::emplaceCode(const uint256_t& address, std::shared_ptr<bytes_t> code) {
+  emplaceSpy.push_back(std::make_pair(address, bytes_t(code->begin(), code->end())));
+};

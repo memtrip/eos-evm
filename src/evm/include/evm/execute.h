@@ -2,12 +2,12 @@
 #include <memory>
 #include <evm/types.h>
 #include <evm/return_data.h>
-#include <evm/account_state.h>
+#include <evm/account_state.hpp>
 #include <evm/call.h>
 #include <evm/operation.h>
 
 struct Finalization {
-  uint256_t gasLeft;
+  gas_t gasLeft;
   bool applyState;
   SlicePosition slicePosition;
 };
@@ -31,6 +31,14 @@ typedef std::pair<
 
 class Execute {
   public:
+    static finalization_result_t createWithStackDepth(
+      size_t stackDepth,
+      std::shared_ptr<External> external,
+      std::shared_ptr<Context> context
+      /* tracer */
+      /* vm_tracer */
+    );
+
     static finalization_result_t callWithStackDepth(
       Operation& operation,
       size_t stackDepth,

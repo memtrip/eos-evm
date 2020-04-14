@@ -1,10 +1,11 @@
 #include "catch.hpp"
 #include <memory>
-#include <evm/rlp.h>
+#include <evm/rlp_decode.hpp>
 #include <evm/types.h>
-#include <evm/big_int.h>
+#include <evm/big_int.hpp>
 #include <evm/utils.h>
-#include <evm/hex.h>
+#include <evm/hex.hpp>
+#include "test_utils.hpp"
 
 TEST_CASE("Empty byte array", "[rlp_decode]") {
 
@@ -261,7 +262,7 @@ TEST_CASE("Payload (1)", "[rlp_decode]") {
 
   // to
   CHECK("095e7baea6a6c7c4c2dfeb977efac326af552d87" == 
-    Hex::bytesToHex(items->at(0).values[3].bytes)
+    TestUtils::bytesToHex(items->at(0).values[3].bytes)
   );
 
   // value
@@ -271,7 +272,7 @@ TEST_CASE("Payload (1)", "[rlp_decode]") {
 
   // data
   CHECK("" == 
-    Hex::bytesToHex(items->at(0).values[5].bytes)
+    TestUtils::bytesToHex(items->at(0).values[5].bytes)
   );
 
   // v
@@ -281,11 +282,11 @@ TEST_CASE("Payload (1)", "[rlp_decode]") {
   
   // r
   CHECK("48b55bfa915ac795c431978d8a6a992b628d557da5ff759b307d495a36649353" == 
-    Hex::bytesToHex(items->at(0).values[7].bytes)
+    TestUtils::bytesToHex(items->at(0).values[7].bytes)
   );
 
   // s
   CHECK("efffd310ac743f371de3b9f7f9cb56c0b28ad43601b4ab949f53faa07bd2c804" == 
-    Hex::bytesToHex(items->at(0).values[8].bytes)
+    TestUtils::bytesToHex(items->at(0).values[8].bytes)
   );
 }

@@ -2,10 +2,10 @@
 #include <memory>
 #include <evm/gas_types.h>
 #include <evm/opcode.h>
-#include <evm/instruction.h>
+#include <evm/instruction.hpp>
 #include <evm/external.h>
-#include <evm/stack.h>
-#include <evm/gas_calculation.h>
+#include <evm/stack.hpp>
+#include <evm/gas_calculation.hpp>
 #include <evm/context.h>
 
 class Gasometer {

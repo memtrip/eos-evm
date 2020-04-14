@@ -1,10 +1,10 @@
 #include <vector>
 #include "catch.hpp"
 #include <memory>
-#include <evm/hash.h>
-#include <evm/big_int.h>
+#include <evm/hash.hpp>
+#include <evm/big_int.hpp>
 #include <evm/utils.h>
-#include <evm/hex.h>
+#include <evm/hex.hpp>
 
 TEST_CASE("keccak256", "[hash]" ) {
   bytes_t bytes = bytes_t();

@@ -6,13 +6,13 @@
 #include <eos_utils.hpp>
 #include <eos_execute.hpp>
 
-#include <evm/address.h>
-#include <evm/transaction.h>
-#include <evm/hex.h>
-#include <evm/rlp.h>
-#include <evm/big_int.h>
-#include <evm/hash.h>
-#include <evm/memory.h>
+#include <evm/address.hpp>
+#include <evm/transaction.hpp>
+#include <evm/hex.hpp>
+#include <evm/rlp_decode.hpp>
+#include <evm/big_int.hpp>
+#include <evm/hash.hpp>
+#include <evm/memory.hpp>
 
 ACTION eos_evm::raw(name from, string code, string sender) {
   require_auth(from);
@@ -24,7 +24,7 @@ ACTION eos_evm::raw(name from, string code, string sender) {
 
   std::shared_ptr<External> external = std::make_shared<eos_external>(this);
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(external, cacheItems);
+  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(cacheItems);
   std::shared_ptr<Call> call = std::make_unique<Call>(0);
 
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();

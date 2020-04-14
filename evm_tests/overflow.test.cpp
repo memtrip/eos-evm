@@ -1,7 +1,7 @@
 #include <climits>
 #include "catch.hpp"
 #include <memory>
-#include <evm/overflow.h>
+#include <evm/overflow.hpp>
 
 TEST_CASE("Overflow add", "[overflow]") {
   std::pair<unsigned int, bool> result = Overflow::add(1, UINT_MAX);

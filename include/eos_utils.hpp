@@ -1,8 +1,8 @@
 #pragma once
 #include <eosio/eosio.hpp>
 #include <evm/types.h>
-#include <evm/hex.h>
-#include <evm/big_int.h>
+#include <evm/hex.hpp>
+#include <evm/big_int.hpp>
 
 class eos_utils {
   public:

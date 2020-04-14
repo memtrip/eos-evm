@@ -1,8 +1,8 @@
 #include "catch.hpp"
 #include <memory>
-#include <evm/byte_reader.h>
+#include <evm/byte_reader.hpp>
 #include <evm/types.h>
-#include <evm/hex.h>
+#include <evm/hex.hpp>
 #include <evm/utils.h>
 
 TEST_CASE("Byte Reader read(32)", "[byte_reader]" ) {
