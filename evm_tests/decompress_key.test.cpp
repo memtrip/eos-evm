@@ -1,6 +1,5 @@
 #include "catch.hpp"
-#include <memory>
-#include <evm/decompress_key.h>
+#include <evm/decompress_key.hpp>
 #include <evm/hex.hpp>
 #include "test_utils.hpp"
 
@@ -15,7 +14,9 @@ TEST_CASE("Decompress a compressed secp256k1 public key", "[decompress_key]" ) {
   }
 
   // when
-  bytes_t decompressedKey = DecompressKey::decompress(compressedKey);
+  uint256_t p = DecompressKey::p();
+
+  bytes_t decompressedKey = DecompressKey::decompress(p, compressedKey);
 
   // then
   
