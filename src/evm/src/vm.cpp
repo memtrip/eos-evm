@@ -7,7 +7,7 @@
 #include <evm/hash.hpp>
 #include <evm/overflow.hpp>
 #include <evm/hex.hpp>
-#include <evm/utils.h>
+#include <evm/utils.hpp>
 #include <evm/gas_calculation.hpp>
 
 exec_result_t VM::execute(

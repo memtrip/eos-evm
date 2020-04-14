@@ -3,7 +3,7 @@
 #include <evm/byte_reader.hpp>
 #include <evm/types.h>
 #include <evm/hex.hpp>
-#include <evm/utils.h>
+#include <evm/utils.hpp>
 
 TEST_CASE("Byte Reader read(32)", "[byte_reader]" ) {
   std::string bytecode_str = "7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff01600055";

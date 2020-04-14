@@ -1,7 +1,7 @@
 #include "catch.hpp"
 #include <memory>
 #include <evm/address.hpp>
-#include <evm/utils.h>
+#include <evm/utils.hpp>
 #include <evm/hex.hpp>
 #include "test_utils.hpp"
 

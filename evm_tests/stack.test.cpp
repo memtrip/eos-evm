@@ -2,7 +2,7 @@
 #include <memory>
 #include <evm/types.h>
 #include <evm/stack.hpp>
-#include <evm/utils.h>
+#include <evm/utils.hpp>
 
 TEST_CASE("pop", "[stack]") {
 

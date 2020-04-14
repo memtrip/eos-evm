@@ -3,7 +3,7 @@
 #include <evm/rlp_encode.hpp>
 #include <evm/types.h>
 #include <evm/big_int.hpp>
-#include <evm/utils.h>
+#include <evm/utils.hpp>
 #include <evm/hex.hpp>
 #include "test_utils.hpp"
 

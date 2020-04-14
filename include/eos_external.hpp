@@ -4,7 +4,7 @@
 #include <evm/types.h>
 #include <evm/external.h>
 #include <evm/hash.hpp>
-#include <evm/utils.h>
+#include <evm/utils.hpp>
 #include <evm/hex.hpp>
 #include <eos_evm.hpp>
 #include <eos_utils.hpp>

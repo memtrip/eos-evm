@@ -2,7 +2,7 @@
 #include <variant>
 #include "catch.hpp"
 #include <memory>
-#include <evm/utils.h>
+#include <evm/utils.hpp>
 #include <evm/vm.h>
 #include <evm/hex.hpp>
 #include <evm/return_data.h>

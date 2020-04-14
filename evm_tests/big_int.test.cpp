@@ -4,7 +4,7 @@
 #include <evm/big_int.hpp>
 #include <evm/types.h>
 #include <evm/hex.hpp>
-#include <evm/utils.h>
+#include <evm/utils.hpp>
 
 /**
   These tests assume little-endian byte ordering

@@ -17,6 +17,18 @@ typedef ethash::hash512 keccak512_t;
 typedef std::vector<uint8_t> address_t;
 typedef std::vector<uint8_t> bytes_t;
 typedef std::array<char, 33> compressed_key_t;
+typedef uint64_t gas_t;
+
+const unsigned long INVALID_ARGUMENT = 0xFFFFFFFF;
+const size_t WORD_SIZE = 32;
+const size_t ADDRESS_SIZE = 20;
+const size_t STACK_LIMIT = 1024;
+constexpr char HEX_VALUES[] = "0123456789abcdef";
+
+constexpr uint256_t UINT256_ZERO = uint256_t(0);
+constexpr uint256_t UINT256_32 = uint256_t(32);
+constexpr uint256_t UINT256_FF = uint256_t(0xff);
+constexpr uint256_t UINT256_ONE = uint256_t(1);
 
 struct EnvInfo {
   uint256_t chainId;
@@ -27,7 +39,6 @@ struct EnvInfo {
   uint256_t difficulty;
   uint256_t blockHash; 
 };
-
 typedef EnvInfo env_t;
 
 enum ActionType {
@@ -38,10 +49,7 @@ enum ActionType {
   ACTION_STATIC_CALL,
   ACTION_CREATE2
 };
-
 typedef ActionType action_type_t;
-
-typedef uint64_t gas_t;
 
 struct Params {
   uint256_t codeAddress;
@@ -56,7 +64,6 @@ struct Params {
   bytes_t code;
   bytes_t data;
 };
-
 typedef Params params_t;
 
 enum TransactionActionType {
@@ -79,22 +86,6 @@ struct RLPItem {
   static const uint8_t OFFSET_SHORT_LIST = 0xc0;
   static const uint8_t OFFSET_LONG_LIST = 0xf7;
 };
-
 typedef std::vector<RLPItem> rlp_t;
-
-const unsigned long INVALID_ARGUMENT = 0xFFFFFFFF;
-
-const size_t WORD_SIZE = 32;
-
-const size_t ADDRESS_SIZE = 20;
-
-constexpr char HEX_VALUES[] = "0123456789abcdef";
-
-constexpr uint256_t UINT256_ZERO = uint256_t(0);
-constexpr uint256_t UINT256_32 = uint256_t(32);
-constexpr uint256_t UINT256_FF = uint256_t(0xff);
-constexpr uint256_t UINT256_ONE = uint256_t(1);
-
-const size_t STACK_LIMIT = 1024;
 
 #endif

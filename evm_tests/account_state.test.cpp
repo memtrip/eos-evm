@@ -3,7 +3,7 @@
 #include <evm/types.h>
 #include <evm/account_state.hpp>
 #include <evm/stack.hpp>
-#include <evm/utils.h>
+#include <evm/utils.hpp>
 #include "external_mock.h"
 
 TEST_CASE("Put pair", "[account_state]") {

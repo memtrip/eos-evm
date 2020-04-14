@@ -1,7 +1,7 @@
 #include "catch.hpp"
 #include <memory>
 #include <evm/transaction.hpp>
-#include <evm/utils.h>
+#include <evm/utils.hpp>
 #include <evm/types.h>
 #include <evm/hex.hpp>
 #include <evm/rlp_decode.hpp>

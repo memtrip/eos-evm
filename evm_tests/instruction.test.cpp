@@ -3,7 +3,7 @@
 #include "catch.hpp"
 #include <memory>
 #include <evm/instruction.hpp>
-#include <evm/utils.h>
+#include <evm/utils.hpp>
 #include <evm/types.h>
 #include <evm/opcode.h>
 #include <evm/hex.hpp>

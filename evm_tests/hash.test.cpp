@@ -3,7 +3,7 @@
 #include <memory>
 #include <evm/hash.hpp>
 #include <evm/big_int.hpp>
-#include <evm/utils.h>
+#include <evm/utils.hpp>
 #include <evm/hex.hpp>
 
 TEST_CASE("keccak256", "[hash]" ) {
