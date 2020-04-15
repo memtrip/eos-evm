@@ -15,27 +15,8 @@ CONTRACT eos_evm : public contract {
 
     ACTION raw(name from, string code, string sender);
     ACTION create(name from, string message);
-    ACTION writelog(name from, string message);
-    ACTION clearlog();
 
-    TABLE account_state {
-      uint64_t pk;
-      checksum256 accountIdentifier;
-      checksum256 key;
-      checksum256 value;
-
-      uint64_t primary_key() const { return pk; }
-      checksum256 secondary_key() const { return key; }
-    };
-    typedef multi_index<
-      name("accountstate"), 
-      account_state, 
-      indexed_by<name("statekey"), const_mem_fun<account_state, checksum256, &account_state::secondary_key> >
-    > account_state_table;
-
-  private:
-    void handleCallResult(name from, call_result_t callResult, std::shared_ptr<AccountState> accountState);
-    void commitState(name from, std::shared_ptr<AccountState> accountState);
+    // <account>
     TABLE account {
       name user;
       uint64_t nonce;
@@ -50,20 +31,42 @@ CONTRACT eos_evm : public contract {
       account, 
       indexed_by<name("accountid"), const_mem_fun<account, checksum256, &account::secondary_key> >
     > account_table;
+    // </account>
 
+    // <account_state>
+    TABLE account_state {
+      uint64_t pk;
+      checksum256 accountIdentifier;
+      checksum256 key;
+      checksum256 value;
+
+      uint64_t primary_key() const { return pk; }
+      checksum256 secondary_key() const { return key; }
+    };
+    typedef multi_index<
+      name("accountstate"), 
+      account_state, 
+      indexed_by<name("statekey"), const_mem_fun<account_state, checksum256, &account_state::secondary_key> >
+    > account_state_table;
+    // </account_state>
+
+    // <account_code>
     TABLE account_code {
-      name user;
+      uint64_t pk;
+      checksum256 accountIdentifier;
       string code;
 
-      auto primary_key() const { return user.value; }
+      auto primary_key() const { return pk; }
+      checksum256 secondary_key() const { return accountIdentifier; }
     };
-    typedef multi_index<name("accountcode"), account_code> account_code_table;
+    typedef multi_index<
+      name("accountcode"), 
+      account_code, 
+      indexed_by<name("codeaddress"), const_mem_fun<account_code, checksum256, &account_code::secondary_key> >
+    > account_code_table;
+    // </account_code>
 
-    TABLE log {
-      uint64_t key;
-      name    user;
-      string  message;
-      uint64_t primary_key() const { return key; }
-    };
-    typedef multi_index<name("log"), log> log_table;
+  private:
+    void handleCallResult(name from, call_result_t callResult, std::shared_ptr<AccountState> accountState);
+    void commitState(name from, std::shared_ptr<AccountState> accountState);
 };

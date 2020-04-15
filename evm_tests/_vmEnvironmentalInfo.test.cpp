@@ -12,7 +12,7 @@
 #include <evm/call.h>
 #include <evm/gasometer.hpp>
 #include <evm/big_int.hpp>
-#include "external_mock.h"
+#include "external_mock.hpp"
 #include <evm/operation.h>
 
 TEST_CASE("calldataload_BigOffset______e118bc308ccdd052ea601f5cfa51d32fc907952cb1cd16e673bff87f8c9fe203", "[vm]") {

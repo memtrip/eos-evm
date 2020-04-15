@@ -12,7 +12,7 @@
 #include <evm/call.h>
 #include <evm/gasometer.hpp>
 #include <evm/big_int.hpp>
-#include "external_mock.h"
+#include "external_mock.hpp"
 #include <evm/operation.h>
 
 TEST_CASE("sha3_0______55a13dc9cd0457c545a8ff9a046a83facd094f8bc1b0aa57a04d58a47f1cca2c", "[vm]") {

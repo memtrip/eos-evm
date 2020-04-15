@@ -7,10 +7,12 @@
 #include <evm/account_state.hpp>
 #include <evm/context.h>
 #include <evm/memory.hpp>
+#include <evm/trap.hpp>
 
 // message call result
 enum MessageCallResult {
   MESSAGE_CALL_SUCCESS,
+  MESSAGE_CALL_APPLY_CREATE,
   MESSAGE_CALL_FAILED,
   MESSAGE_CALL_REVERTED,
   MESSAGE_CALL_OUT_OF_GAS,
@@ -24,6 +26,7 @@ struct MessageCallReturn {
 
 typedef std::variant<
   uint8_t,
+  trap_t,
   MessageCallReturn
 > call_result_data_t;
 

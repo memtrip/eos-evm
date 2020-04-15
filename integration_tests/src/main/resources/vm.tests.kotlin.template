@@ -1,7 +1,7 @@
 import com.memtrip.eos.chain.actions.transaction.TransactionContext
 import com.memtrip.eos.http.rpc.Api
 import com.memtrip.eos_evm.eos.*
-import com.memtrip.eos_evm.eos.account_state.GetAccountState
+import com.memtrip.eos_evm.eos.state.GetAccountState
 import com.memtrip.eos_evm.eos.raw.RawAction
 import com.memtrip.eos_evm.ethereum.EthereumTransaction
 import com.memtrip.eos_evm.ethereum.toHexString

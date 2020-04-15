@@ -7,38 +7,6 @@
 #include <evm/hex.hpp>
 #include <evm/operation.h>
 
-finalization_result_t Execute::createWithStackDepth(
-  size_t stackDepth,
-  std::shared_ptr<External> external,
-  std::shared_ptr<Context> context
-  /* tracer */
-  /* vm_tracer */
-) {
-  std::shared_ptr<bytes_t> existingCode = external->code(context->codeAddress);
-  if (existingCode->size() > 0) {
-    // handle this error properly
-    return std::make_pair(
-      FinalizationResult::FINALIZATION_ERROR,
-      0
-    );
-  } else {
-    printf("emplaceCode\n");
-    external->emplaceCode(context->codeAddress, context->code);
-    SlicePosition slicePosition { 0, 0 };
-
-    Finalization finalization {
-      context->gas,
-      true,
-      slicePosition
-    };
-
-    return std::make_pair(
-      FinalizationResult::FINALIZATION_OK,
-      finalization
-    );
-  }
-}
-
 finalization_result_t Execute::callWithStackDepth(
   Operation& operation,
   size_t stackDepth,
@@ -66,7 +34,7 @@ finalization_result_t Execute::callWithStackDepth(
   );
 
   switch (vm_result.first) {
-    case STOPPED:
+    case ExecResult::STOPPED:
       {
         SlicePosition slicePosition { 0, 0 };
 
@@ -81,7 +49,7 @@ finalization_result_t Execute::callWithStackDepth(
           finalization
         );
       }
-    case DONE:
+    case ExecResult::DONE:
       {
         gas_left_t gasLeft = std::get<gas_left_t>(vm_result.second);
         switch (gasLeft.first) {
@@ -119,17 +87,20 @@ finalization_result_t Execute::callWithStackDepth(
             }
         }
       }
-    case VM_TRAP:
-      return std::make_pair(
-        FinalizationResult::FINALIZATION_ERROR,
-        0
-      );
-    case VM_OUT_OF_GAS:
+    case ExecResult::VM_TRAP:
+      {
+        trap_t trap = std::get<trap_t>(vm_result.second);
+        return std::make_pair(
+          FinalizationResult::FINALIZATION_ERROR,
+          trap
+        );
+      }
+    case ExecResult::VM_OUT_OF_GAS:
       return std::make_pair(
         FinalizationResult::FINALIZATION_OUT_OF_GAS,
         0
       );
-    case TRACE:
+    case ExecResult::TRACE:
       {
         uint8_t position = std::get<uint8_t>(vm_result.second);
         return std::make_pair(
@@ -137,7 +108,7 @@ finalization_result_t Execute::callWithStackDepth(
           position
         );
       }
-    case CONTINUE:
+    case ExecResult::CONTINUE:
       // In reality this option is never reached
       return std::make_pair(
         FinalizationResult::FINALIZATION_ERROR,

@@ -8,7 +8,7 @@
 #include <evm/gasometer.hpp>
 #include <evm/big_int.hpp>
 #include <evm/hash.hpp>
-#include "external_mock.h"
+#include "external_mock.hpp"
 
 TEST_CASE("Add two large numbers, store the result, verify gas", "[gasometer]") {
   // given

@@ -14,6 +14,7 @@ struct Finalization {
 
 typedef std::variant<
   uint8_t,
+  trap_t,
   Finalization
 > finalization_t;
 

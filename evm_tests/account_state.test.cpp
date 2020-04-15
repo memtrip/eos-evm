@@ -4,7 +4,7 @@
 #include <evm/account_state.hpp>
 #include <evm/stack.hpp>
 #include <evm/utils.hpp>
-#include "external_mock.h"
+#include "external_mock.hpp"
 
 TEST_CASE("Put pair", "[account_state]") {
   // given 

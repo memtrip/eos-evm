@@ -16,6 +16,14 @@ class BigInt {
       return intx::be::load<uint256_t>(data);
     }
 
+    static uint256_t fromFixed32(const std::array<uint8_t, 32>& bytes) {
+      uint8_t data[WORD_SIZE];
+      uint8_t offset = WORD_SIZE - bytes.size();
+      std::fill_n(data, WORD_SIZE, 0);
+      std::copy(bytes.begin(), bytes.end(), data + offset);
+      return intx::be::load<uint256_t>(data);
+    }
+
     static uint256_t fromBytes(const bytes_t& bytes) {
       uint8_t data[WORD_SIZE];
       uint8_t offset = WORD_SIZE - bytes.size();

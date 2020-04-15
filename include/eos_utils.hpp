@@ -10,7 +10,7 @@ class eos_utils {
       std::array<uint8_t, 32> checksum256;
 
       for (int i = 0; i < 32; i++) {
-        checksum256[i] = (i < 20) ? bytes[i] : 0;
+        checksum256[i] = (i >= 12) ? bytes[i - 12] : 0;
       }
 
       return checksum256;

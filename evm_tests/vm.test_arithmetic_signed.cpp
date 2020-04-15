@@ -8,7 +8,7 @@
 #include <evm/gasometer.hpp>
 #include <evm/hash.hpp>
 #include <evm/big_int.hpp>
-#include "external_mock.h"
+#include "external_mock.hpp"
 
 TEST_CASE("signed division", "[signed]") {
   std::string bytecode_str = "650123651246236265432290056000556501236512462360009005600155";

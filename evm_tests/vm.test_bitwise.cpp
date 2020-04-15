@@ -8,7 +8,7 @@
 #include <evm/gasometer.hpp>
 #include <evm/hash.hpp>
 #include <evm/big_int.hpp>
-#include "external_mock.h"
+#include "external_mock.hpp"
 
 TEST_CASE("Bitwise AND", "[bitwise]") {
   // (PUSH1 ((60)03))

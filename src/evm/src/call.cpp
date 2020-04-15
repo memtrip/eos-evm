@@ -7,6 +7,7 @@
 #include <evm/execute.h>
 #include <evm/big_int.hpp>
 #include <evm/operation.h>
+#include <evm/trap.hpp>
 
 call_result_t Call::create(
   bool trap,
@@ -15,7 +16,7 @@ call_result_t Call::create(
   std::shared_ptr<External> external,
   std::shared_ptr<AccountState> accountState
 ) {
-  return makeCall(
+  call_result_t callResult = makeCall(
     ActionType::ACTION_CREATE,
     trap,
     memory,
@@ -23,6 +24,31 @@ call_result_t Call::create(
     external,
     accountState
   );
+
+  if (callResult.first == MessageCallResult::MESSAGE_CALL_APPLY_CREATE) {
+    MessageCallReturn messageCallReturn = std::get<MessageCallReturn>(callResult.second);
+    std::shared_ptr<bytes_t> contractCode = memory->readSlice(
+      messageCallReturn.slicePosition.offset, 
+      messageCallReturn.slicePosition.size
+    );
+    emplace_t emplaceResult = external->emplaceCode(context->sender, contractCode);
+    switch (emplaceResult) {
+      case EmplaceResult::EMPLACE_ADDRESS_NOT_FOUND:
+        return std::make_pair(
+          MessageCallResult::MESSAGE_CALL_FAILED,
+          Trap::invalidCodeAddress()
+        );
+      case EmplaceResult::EMPLACE_CODE_EXISTS:
+        return std::make_pair(
+          MessageCallResult::MESSAGE_CALL_FAILED,
+          Trap::codeExists()
+        );
+      case EmplaceResult::EMPLACE_SUCCESS:
+        break;
+    }
+  }
+
+  return callResult;
 }
 
 call_result_t Call::call(
@@ -32,10 +58,6 @@ call_result_t Call::call(
   std::shared_ptr<External> external,
   std::shared_ptr<AccountState> accountState
 ) {
-
-  // TODO: move this up
-  // bytes_t code = external->code(codeAddress);
-
   return makeCall(
     ActionType::ACTION_CALL,
     trap,
@@ -59,37 +81,15 @@ call_result_t Call::makeCall(
 
   std::shared_ptr<Call> innerCall = std::make_shared<Call>(stackDepth);
 
-  finalization_result_t finalizationResult;
-
-  switch (callType) {
-    case ActionType::ACTION_CREATE:
-    case ActionType::ACTION_CREATE2:
-      {
-        printf("ACTION_CREATE / ACTION_CREATE2\n");
-        finalizationResult = Execute::createWithStackDepth(
-          stackDepth + 1,
-          external,
-          context
-        );
-        break;
-      }
-    case ActionType::ACTION_CALL_CODE:
-    case ActionType::ACTION_CALL:
-    case ActionType::ACTION_STATIC_CALL:
-    case ActionType::ACTION_DELEGATE_CALL:
-      {
-        finalizationResult = Execute::callWithStackDepth(
-          operation,
-          stackDepth + 1,
-          memory,
-          external,
-          accountState,
-          context,
-          innerCall
-        );
-        break;
-      }
-  }
+  finalization_result_t finalizationResult = Execute::callWithStackDepth(
+    operation,
+    stackDepth + 1,
+    memory,
+    external,
+    accountState,
+    context,
+    innerCall
+  );
 
   switch (finalizationResult.first) {
     case FINALIZATION_OK:
@@ -102,10 +102,17 @@ call_result_t Call::makeCall(
         };
 
         if (finalization.applyState) {
-          return std::make_pair(
-            MessageCallResult::MESSAGE_CALL_SUCCESS,
-            messageCallReturn
-          );
+          if (finalization.slicePosition.size > 0) {
+            return std::make_pair(
+              MessageCallResult::MESSAGE_CALL_APPLY_CREATE,
+              messageCallReturn
+            );
+          } else {
+            return std::make_pair(
+              MessageCallResult::MESSAGE_CALL_SUCCESS,
+              messageCallReturn
+            );
+          }
         } else {
           return std::make_pair(
             MessageCallResult::MESSAGE_CALL_REVERTED,
@@ -127,9 +134,12 @@ call_result_t Call::makeCall(
         );
       }
     case FINALIZATION_ERROR:
-      return std::make_pair(
-        MessageCallResult::MESSAGE_CALL_FAILED,
-        0 
-      );
+      {
+        trap_t trap = std::get<trap_t>(finalizationResult.second);
+        return std::make_pair(
+          MessageCallResult::MESSAGE_CALL_FAILED,
+          trap
+        );
+      }
   }
 }

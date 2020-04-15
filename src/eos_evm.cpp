@@ -72,16 +72,10 @@ ACTION eos_evm::raw(name from, string code, string sender) {
 void eos_evm::handleCallResult(name from, call_result_t callResult, std::shared_ptr<AccountState> accountState) {
   switch (callResult.first) {
     case MESSAGE_CALL_SUCCESS:
+    case MESSAGE_CALL_APPLY_CREATE:
       {
         MessageCallReturn callReturn = std::get<MessageCallReturn>(callResult.second);
         uint256_t gasLeft = callReturn.gasLeft;
-        /*
-          TODO: use the return bytes
-          std::shared_ptr<bytes_t> returnDataBytes = memory->readSlice(
-            finalization.returnData.offset, finalization.returnData.size
-          );
-          bytes_t copyBytes = returnDataBytes->size() ? bytes_t(returnDataBytes->begin(), returnDataBytes->end()) : bytes_t();
-        */
         commitState(from, accountState);
         break;
       }
@@ -102,8 +96,39 @@ void eos_evm::handleCallResult(name from, call_result_t callResult, std::shared_
       check(false, "MESSAGE_CALL_OUT_OF_GAS");
       break;
     case MESSAGE_CALL_FAILED:
-      check(false, "MESSAGE_CALL_FAILED");
-      break;
+      {
+        trap_t trap = std::get<trap_t>(callResult.second);
+        switch (trap.first) {
+          case TrapKind::TRAP_NONE:
+            check(false, "MESSAGE_CALL_FAILED");
+            break;
+          case TrapKind::TRAP_STACK_UNDERFLOW:
+            check(false, "STACK_UNDERFLOW");
+            break;
+          case TrapKind::TRAP_OUT_OF_STACK:
+            check(false, "OUT_OF_STACK");
+            break;
+          case TrapKind::TRAP_INVALID_INSTRUCTION:
+            check(false, "INVALID_INSTRUCTION");
+            break;
+          case TrapKind::TRAP_INVALID_JUMP:
+            check(false, "INVALID_JUMP");
+            break;
+          case TrapKind::TRAP_CODE_EXISTS:
+            check(false, "MESSAGE_CALL_FAILED [The sender address already contains a code entry, you must call suicide before creating another contract.]");
+            break;
+          case TrapKind::TRAP_INVALID_CODE_ADDRESS:
+            check(false, "MESSAGE_CALL_FAILED [An invalid address is attempting to create a contract.]");
+            break;
+          case TrapKind::TRAP_CALL:
+            check(false, "CALL FAILED");
+            break;
+          case TrapKind::TRAP_CREATE:
+            check(false, "CREATE FAILED");
+            break;
+        }
+        break;
+      }
   }
 }
 
@@ -149,32 +174,9 @@ ACTION eos_evm::create(name from, string message) {
 
   _account.emplace(from, [&](auto& account) {
     account.user = from;
-    account.nonce = 1;
+    account.nonce = 0;
     account.accountIdentifier = eos_utils::hexToChecksum256(accountIdentifier);
   });
 }
 
-ACTION eos_evm::writelog(name from, string message) {
-  require_auth(get_self());
-
-  log_table _log(get_self(), get_self().value);
-
-  _log.emplace(from, [&](auto& log) {
-    log.key = _log.available_primary_key();
-    log.user = from;
-    log.message = message;
-  });
-}
-
-ACTION eos_evm::clearlog() {
-  require_auth(get_self());
-
-  log_table _log(get_self(), get_self().value);
-
-  auto log_itr = _log.begin();
-  while (log_itr != _log.end()) {
-    log_itr = _log.erase(log_itr);
-  }
-}
-
-EOSIO_DISPATCH(eos_evm, (raw)(create)(writelog)(clearlog))
+EOSIO_DISPATCH(eos_evm, (raw)(create))

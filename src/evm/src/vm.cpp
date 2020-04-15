@@ -97,11 +97,11 @@ exec_result_t VM::stepInner(
   instruction_verify_t verifyResult = Instruction::verify(instruction, stack->size());
   switch (verifyResult) {
     case InstructionVerifyResult::INSTRUCTION_ERROR_UNDER_FLOW:
-      return std::make_pair(ExecResult::STOPPED, Trap::create(TrapKind::TRAP_STACK_UNDERFLOW, 0)); // TODO: handle error
+      return std::make_pair(ExecResult::VM_TRAP, Trap::create(TrapKind::TRAP_STACK_UNDERFLOW, 0));
     case InstructionVerifyResult::INSTRUCTION_ERROR_OUT_OF_STACK:
-      return std::make_pair(ExecResult::STOPPED, Trap::create(TrapKind::TRAP_OUT_OF_STACK, 0)); // TODO: handle error
+      return std::make_pair(ExecResult::VM_TRAP, Trap::create(TrapKind::TRAP_OUT_OF_STACK, 0));
     case InstructionVerifyResult::INSTRUCTION_NOT_DEFINED:
-      return std::make_pair(ExecResult::STOPPED, Trap::create(TrapKind::TRAP_INVALID_INSTRUCTION, 0)); // TODO: handle error
+      return std::make_pair(ExecResult::VM_TRAP, Trap::create(TrapKind::TRAP_INVALID_INSTRUCTION, 0));
     case InstructionVerifyResult::INSTRUCTION_VALID:
       break;
   }
@@ -159,7 +159,6 @@ exec_result_t VM::stepInner(
     case Opcode::CREATE:
     case Opcode::CREATE2:
       {
-        printf("(CREATE / CREATE2 \n");
         result = executeCreateInstruction(
           operation,
           opcode,
@@ -225,7 +224,7 @@ exec_result_t VM::stepInner(
         }
 
         uint64_t pos = Jumps::verifyJump(position, jumps);
-        if (pos == INVALID_ARGUMENT) return std::make_pair(ExecResult::STOPPED, Trap::jump(pos));
+        if (pos == INVALID_ARGUMENT) return std::make_pair(ExecResult::VM_TRAP, Trap::jump(pos));
         reader->move(pos);
         break;
       }
@@ -256,7 +255,13 @@ exec_result_t VM::stepInner(
         std::make_pair(GasType::KNOWN, gasometer->currentGas)
       );
     case InstructionResult::INSTRUCTION_TRAP:
-      break;
+      {
+        trap_t trap = std::get<trap_t>(result.second);
+        return std::make_pair(
+          ExecResult::VM_TRAP, 
+          trap
+        );
+      }
   }
   
   if (reader->atEnd(context->code)) {
@@ -282,7 +287,6 @@ instruction_result_t VM::executeCreateInstruction(
   uint256_t endowment = stack->peek(0);
   uint256_t initOff = stack->peek(1);
   uint256_t initSize = stack->peek(2);
-  size_t outSize = static_cast<size_t>(initSize);
   stack->pop(3);
 
   uint256_t address;
@@ -291,14 +295,12 @@ instruction_result_t VM::executeCreateInstruction(
   switch (opcode) {
     case Opcode::CREATE:
       {
-        printf("CREATE\n");
         address = context->sender;
         callType = ActionType::ACTION_CREATE;
         break;
       }
     case Opcode::CREATE2:
       {
-        printf("CREATE2\n");
         address = stack->peek(0);
         callType = ActionType::ACTION_CREATE2;
         stack->pop(1);
@@ -306,11 +308,37 @@ instruction_result_t VM::executeCreateInstruction(
       }
   }
 
-  // TODO: check there is a high enough balance to perform create
   std::shared_ptr<bytes_t> contractCode = memory->readSlice(
     Overflow::uint256Cast(initOff).first, 
     Overflow::uint256Cast(initSize).first
   );
+  
+  emplace_t emplaceResult = external->emplaceCode(address, contractCode);
+  switch (emplaceResult) {
+    case EmplaceResult::EMPLACE_SUCCESS:
+      {
+        // TODO: Address should come from cal_result_t
+        stack->push(address);
+
+        // TODO: minus the gasLeft from the above gasCalcuation,
+        // or perform the gasCalculation within call / execute and return in "gasLeft"
+
+        return std::make_pair(
+          InstructionResult::UNUSED_GAS,
+          providedGas // TODO: calculate gas
+        );
+      }
+    case EmplaceResult::EMPLACE_ADDRESS_NOT_FOUND:
+      {
+        stack->push(UINT256_ZERO);
+        return std::make_pair(InstructionResult::INSTRUCTION_TRAP, Trap::invalidCodeAddress());
+      }
+    case EmplaceResult::EMPLACE_CODE_EXISTS:
+      {
+        stack->push(UINT256_ZERO);
+        return std::make_pair(InstructionResult::INSTRUCTION_TRAP, Trap::codeExists());
+      }
+  }
 
   // TODO: create a new context for this child call
   // call_result_t callResult = call->create(
@@ -327,76 +355,76 @@ instruction_result_t VM::executeCreateInstruction(
 
   // TODO: make create gas calculation
 
-  std::shared_ptr<Context> innerContext = std::make_shared<Context>(
-    context->chainId,
-    context->blockNumber,
-    context->timestamp,
-    context->gasLimit,
-    context->coinbase,
-    context->difficulty,
-    context->blockHash,
-    address, /* codeAddress */
-    context->codeHash,
-    context->codeVersion,
-    address, /* address */
-    context->sender,
-    context->origin,
-    providedGas, /* gas */
-    context->gasPrice,
-    endowment, /* value */
-    contractCode, /* code */
-    std::shared_ptr<bytes_t>()
-  );
+  // std::shared_ptr<Context> innerContext = std::make_shared<Context>(
+  //   context->chainId,
+  //   context->blockNumber,
+  //   context->timestamp,
+  //   context->gasLimit,
+  //   context->coinbase,
+  //   context->difficulty,
+  //   context->blockHash,
+  //   address, /* codeAddress */
+  //   context->codeHash,
+  //   context->codeVersion,
+  //   address, /* address */
+  //   context->sender,
+  //   context->origin,
+  //   providedGas, /* gas */
+  //   context->gasPrice,
+  //   endowment, /* value */
+  //   contractCode, /* code */
+  //   std::shared_ptr<bytes_t>()
+  // );
 
-  std::shared_ptr<bytes_t> callMemoryBytes = std::make_shared<bytes_t>();
-  std::shared_ptr<Memory> callMemory = std::make_shared<Memory>(callMemoryBytes);
+  // std::shared_ptr<bytes_t> callMemoryBytes = std::make_shared<bytes_t>();
+  // std::shared_ptr<Memory> callMemory = std::make_shared<Memory>(callMemoryBytes);
 
-  call_result_t callResult = call->create(
-    true, 
-    callMemory,
-    innerContext,
-    external,
-    accountState
-  );
+  // call_result_t callResult = call->create(
+  //   true, 
+  //   callMemory,
+  //   innerContext,
+  //   external,
+  //   accountState
+  // );
   
-  switch (callResult.first) {
-    case MESSAGE_CALL_SUCCESS:
-      {
-        printf("MESSAGE_CALL_SUCCESS");
-        MessageCallReturn callReturn = std::get<MessageCallReturn>(callResult.second);
+  // switch (callResult.first) {
+  //   case MESSAGE_CALL_SUCCESS:
+  //     {
+  //       printf("MESSAGE_CALL_SUCCESS");
+  //       MessageCallReturn callReturn = std::get<MessageCallReturn>(callResult.second);
 
-        // TODO: Address should come from cal_result_t
-        stack->push(address);
+  //       // TODO: Address should come from cal_result_t
+  //       stack->push(address);
 
-        // TODO: minus the gasLeft from the above gasCalcuation,
-        // or perform the gasCalculation within call / execute and return in "gasLeft"
+  //       // TODO: minus the gasLeft from the above gasCalcuation,
+  //       // or perform the gasCalculation within call / execute and return in "gasLeft"
 
-        return std::make_pair(
-          InstructionResult::UNUSED_GAS,
-          callReturn.gasLeft
-        );
-      }
-    case MESSAGE_CALL_REVERTED:
-      {
-        printf("MESSAGE_CALL_REVERTED");
-        MessageCallReturn callReturn = std::get<MessageCallReturn>(callResult.second);
+  //       return std::make_pair(
+  //         InstructionResult::UNUSED_GAS,
+  //         callReturn.gasLeft
+  //       );
+  //     }
+  //   case MESSAGE_CALL_REVERTED:
+  //     {
+  //       printf("MESSAGE_CALL_REVERTED");
+  //       MessageCallReturn callReturn = std::get<MessageCallReturn>(callResult.second);
 
-        stack->push(UINT256_ZERO);
+  //       stack->push(UINT256_ZERO);
 
-        return std::make_pair(
-          InstructionResult::UNUSED_GAS,
-          callReturn.gasLeft
-        );
-      }
-    case MESSAGE_CALL_OUT_OF_GAS:
-    case MESSAGE_CALL_FAILED:
-    case MESSAGE_CALL_TRACE:
-      {
-        printf("MESSAGE_CALL_FAILED");
-        stack->push(UINT256_ZERO);
-        return std::make_pair(InstructionResult::OK, 0);
-      }
-  }
+  //       return std::make_pair(
+  //         InstructionResult::UNUSED_GAS,
+  //         callReturn.gasLeft
+  //       );
+  //     }
+  //   case MESSAGE_CALL_OUT_OF_GAS:
+  //   case MESSAGE_CALL_FAILED:
+  //   case MESSAGE_CALL_TRACE:
+  //     {
+  //       printf("MESSAGE_CALL_FAILED");
+  //       stack->push(UINT256_ZERO);
+  //       return std::make_pair(InstructionResult::OK, 0);
+  //     }
+  // }
 
   return std::make_pair(InstructionResult::OK, 0);
 }
@@ -549,6 +577,13 @@ instruction_result_t VM::executeCallInstruction(
           InstructionResult::UNUSED_GAS,
           callReturn.gasLeft
         );
+      }
+    case MESSAGE_CALL_APPLY_CREATE:
+      {
+        // TODO: how to respond to a message call that wants to create a contract?
+        printf("MESSAGE_CALL_APPLY_CREATE");
+        stack->push(UINT256_ZERO);
+        return std::make_pair(InstructionResult::OK, 0);
       }
     case MESSAGE_CALL_OUT_OF_GAS:
     case MESSAGE_CALL_FAILED:

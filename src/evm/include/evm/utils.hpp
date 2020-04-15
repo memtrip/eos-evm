@@ -616,6 +616,12 @@ class Utils {
         case TrapKind::TRAP_INVALID_INSTRUCTION:
           printf("trap{invalid_instruction}\n");
           break;
+        case TrapKind::TRAP_CODE_EXISTS:
+          printf("trap{code_exists}\n");
+          break;
+        case TrapKind::TRAP_INVALID_CODE_ADDRESS:
+          printf("trap{invalid_code_address}\n");
+          break;
         case TrapKind::TRAP_CALL:
           printf("trap{call}\n");
           break;

@@ -12,7 +12,7 @@
 #include <evm/call.h>
 #include <evm/gasometer.hpp>
 #include <evm/big_int.hpp>
-#include "external_mock.h"
+#include "external_mock.hpp"
 #include <evm/operation.h>
 
 TEST_CASE("loop-mul______9862bc727536901c182cf2638655d9b9f3b45ee0e0ea8030084b5cae38b4b7d0", "[vm]") {

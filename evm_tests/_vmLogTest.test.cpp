@@ -12,7 +12,7 @@
 #include <evm/call.h>
 #include <evm/gasometer.hpp>
 #include <evm/big_int.hpp>
-#include "external_mock.h"
+#include "external_mock.hpp"
 #include <evm/operation.h>
 
 TEST_CASE("log2_logMemsizeTooHigh______9fb39d1608049d1d5455c7409514acc175724f2b1e43102d17b631862c3bc1a4", "[vm]") {

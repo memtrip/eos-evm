@@ -9,7 +9,7 @@
 #include <evm/call.h>
 #include <evm/gasometer.hpp>
 #include <evm/big_int.hpp>
-#include "external_mock.h"
+#include "external_mock.hpp"
 #include "test_utils.hpp"
 
 TEST_CASE("shift left, write to memory, return", "[return_memory]") {

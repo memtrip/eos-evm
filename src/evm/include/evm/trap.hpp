@@ -9,6 +9,8 @@ enum TrapKind {
   TRAP_OUT_OF_STACK,
   TRAP_INVALID_INSTRUCTION,
   TRAP_INVALID_JUMP,
+  TRAP_CODE_EXISTS,
+  TRAP_INVALID_CODE_ADDRESS,
   TRAP_CALL,
   TRAP_CREATE
 };
@@ -31,6 +33,14 @@ class Trap {
         attemptedPosition
       };
       return create(TrapKind::TRAP_INVALID_JUMP, info);
+    }
+
+    static trap_t codeExists() {
+      return create(TrapKind::TRAP_CODE_EXISTS, 0);
+    }
+
+    static trap_t invalidCodeAddress() {
+      return create(TrapKind::TRAP_INVALID_CODE_ADDRESS, 0);
     }
 
     static trap_t create(TrapKind kind, trap_info_t info) {

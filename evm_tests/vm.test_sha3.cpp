@@ -7,7 +7,7 @@
 #include <evm/call.h>
 #include <evm/gasometer.hpp>
 #include <evm/big_int.hpp>
-#include "external_mock.h"
+#include "external_mock.hpp"
 
 TEST_CASE("Hash zero", "[sha3]") {
   // given
