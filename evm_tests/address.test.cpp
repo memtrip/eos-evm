@@ -41,3 +41,17 @@ TEST_CASE("Uncompressed public key", "[address]" ) {
     TestUtils::bytesToHex(address)
   );
 }
+
+TEST_CASE("Ethereum address from sender and nonce", "[address]" ) {
+  // given
+  uint256_t senderAddress = BigInt::fromBigEndianBytes(Hex::hexToBytes("86a2700da1f451fa70a0dd52225f986d552eda0e"));
+  uint256_t nonce = uint256_t(0x3412);
+
+  // when
+  address_t newAddress = Address::ethereumAddressFrom(senderAddress, nonce);
+
+  // then
+  CHECK("0000000000000000000000002c4cdf1918aea0508ed789d8c81828ab44dd475b" == 
+    Hex::fixedToHex(newAddress)
+  );
+}

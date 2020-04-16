@@ -9,8 +9,8 @@ import com.memtrip.eos_evm.ethereum.pad256
 import com.memtrip.eos_evm.ethereum.toHexString
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import org.junit.Assert
 import org.junit.Assert.assertEquals
+import org.junit.Assert.fail
 import org.junit.Test
 import java.math.BigInteger
 import java.util.concurrent.TimeUnit
@@ -62,22 +62,19 @@ class MessageCallTest {
         assertEquals(response.statusCode, 202)
 
         // and when
-        val result = getCode.getValue(
-            newAccountName,
+        val result = getCode.getAll(
             accountIdentifier.pad256().toHexString()
         ).blockingGet()
 
-        if (result is GetCode.Record.Value) {
+        if (result !is GetCode.Record.Multiple) fail("account_code record not found") else {
             assertEquals(
                 "60806040526004361061001e5760003560e01c80635c60da1b14610126575b7f2230ca5690d71a74605e39bd522eea4bff3859bc627abd4ac5e473fcb8c5c3b05a6040518082815260200191505060405180910390a16000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff165a34600036604051808383808284378083019250505092505050600060405180830381858888f193505050503d80600081146100e5576040519150601f19603f3d011682016040523d82523d6000602084013e6100ea565b606091505b5050507f2230ca5690d71a74605e39bd522eea4bff3859bc627abd4ac5e473fcb8c5c3b05a6040518082815260200191505060405180910390a1005b34801561013257600080fd5b5061013b61017d565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff168156fea265627a7a72315820a640f191ec583fbf9eec25b23042882a593697e120f7cea5230f7784081c042364736f6c63430005100032",
-                result.code
+                result.items[0].code
             )
             assertEquals(
                 accountIdentifier.pad256().toHexString(),
-                result.address
+                result.items[0].owner
             )
-        } else {
-            Assert.fail("account_code record not found")
         }
     }
 }

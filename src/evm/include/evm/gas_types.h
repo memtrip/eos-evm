@@ -1,5 +1,4 @@
 #pragma once
-#include <variant>
 #include <evm/types.h>
 
 constexpr uint8_t TIER_STEP_GAS[] = { 0, 2, 3, 5, 8, 10, 20, 0 };

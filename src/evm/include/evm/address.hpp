@@ -52,4 +52,33 @@ class Address {
 
       return address;
     }
+
+    static address_t ethereumAddressFrom(const uint256_t& address, const uint256_t& nonce) {
+
+      RLPItem addressItem {
+        RLPType::STRING,
+        BigInt::toBytes(address),
+        std::vector<RLPItem> {}
+      };
+
+      RLPItem nonceItem {
+        RLPType::STRING,
+        BigInt::toBytes(nonce),
+        std::vector<RLPItem> {}
+      };
+
+      RLPItem addressNonceList {
+        RLPType::LIST,
+        bytes_t {},
+        std::vector<RLPItem> { addressItem, nonceItem }
+      };
+
+      bytes_t result = RLPEncode::encode(addressNonceList);
+
+      bytes_t hashBytes = Hash::keccak256(result);
+
+      bytes_t accountIdentifierBytes(hashBytes.end() - ADDRESS_SIZE, hashBytes.end());
+
+      return Hex::hexToChecksum256(accountIdentifierBytes);
+    }
 };

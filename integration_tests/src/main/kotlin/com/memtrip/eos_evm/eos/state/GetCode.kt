@@ -9,35 +9,74 @@ class GetCode(
     private val chainApi: ChainApi
 ) {
 
+    data class Item(
+        val code: String,
+        val owner: String,
+        val address: String
+    )
+
     sealed class Record {
-        data class Value(val code: String, val address: String) : Record()
+        data class Value(val code: String, val owner: String, val address: String) : Record()
+        data class Multiple(val items: List<Item>) : Record()
         object None : Record()
     }
 
-    fun getValue(accountName: String, address: String): Single<Record> {
+    fun getValue(ownerAddress: String): Single<Record> {
         return chainApi.getTableRows(
             GetTableRows(
-                accountName,
+                Config.CONTRACT_ACCOUNT_NAME,
                 Config.CONTRACT_ACCOUNT_NAME,
                 "accountcode",
-                "codeaddress",
+                "owneraddress",
                 true,
                 1,
-                address,
-                address,
+                ownerAddress,
+                ownerAddress,
                 "sha256",
                 "2",
                 "dec"
             )
         ).map { response ->
-            if (response.isSuccessful) {
+            if (!response.isSuccessful) Record.None else {
                 val tableRows = response.body()!!.rows
-                Record.Value(
-                    if (tableRows.isNotEmpty()) tableRows[0]["code"].toString() else "",
-                    if (tableRows.isNotEmpty()) tableRows[0]["accountIdentifier"].toString() else ""
-                )
-            } else {
-                Record.None
+                if (tableRows.isEmpty()) Record.None else {
+                    Record.Value(
+                        tableRows[0]["code"].toString(),
+                        tableRows[0]["accountIdentifier"].toString(),
+                        tableRows[0]["address"].toString()
+                    )
+                }
+            }
+        }
+    }
+
+    fun getAll(ownerAddress: String): Single<Record> {
+        return chainApi.getTableRows(
+            GetTableRows(
+                Config.CONTRACT_ACCOUNT_NAME,
+                Config.CONTRACT_ACCOUNT_NAME,
+                "accountcode",
+                "owneraddress",
+                true,
+                100,
+                ownerAddress,
+                ownerAddress,
+                "sha256",
+                "2",
+                "dec"
+            )
+        ).map { response ->
+            if (!response.isSuccessful) Record.None else {
+                val tableRows = response.body()!!.rows
+                if (tableRows.isEmpty()) Record.None else {
+                    Record.Multiple(tableRows.mapIndexed { index, _ ->
+                        Item(
+                            tableRows[index]["code"].toString(),
+                            tableRows[index]["accountIdentifier"].toString(),
+                            tableRows[index]["address"].toString()
+                        )
+                    })
+                }
             }
         }
     }

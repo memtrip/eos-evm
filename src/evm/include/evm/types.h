@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <set>
+#include <variant>
 #include <intx/intx.hpp>
 #include <keccak/hash_types.hpp>
 
@@ -14,7 +15,7 @@ typedef std::set<uint64_t> jump_set_t;
 typedef ethash::hash256 keccak256_t;
 typedef ethash::hash512 keccak512_t;
 
-typedef std::vector<uint8_t> address_t;
+typedef std::array<uint8_t, 32> address_t;
 typedef std::vector<uint8_t> bytes_t;
 typedef std::array<char, 33> compressed_key_t;
 typedef uint64_t gas_t;
@@ -93,6 +94,12 @@ enum EmplaceResult {
   EMPLACE_CODE_EXISTS,
   EMPLACE_SUCCESS
 };
-typedef EmplaceResult emplace_t;
+
+typedef std::variant<
+  uint8_t,
+  address_t
+> emplace_result_t;
+
+typedef std::pair<EmplaceResult, emplace_result_t> emplace_t;
 
 #endif

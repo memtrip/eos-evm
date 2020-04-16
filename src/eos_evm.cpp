@@ -14,7 +14,7 @@
 #include <evm/hash.hpp>
 #include <evm/memory.hpp>
 
-ACTION eos_evm::raw(name from, string code, string sender) {
+void eos_evm::raw(name from, string code, string sender) {
   require_auth(from);
 
   bytes_t bytes = Hex::hexToBytes(code);
@@ -36,7 +36,7 @@ ACTION eos_evm::raw(name from, string code, string sender) {
       rlp
     );
 
-    eosio::checksum256 accountIdentifier = eos_utils::hexToChecksum256(accountIdentifierBytes);
+    eosio::checksum256 accountIdentifier = Hex::hexToChecksum256(accountIdentifierBytes);
     account_table _account(get_self(), get_self().value);
     auto idx = _account.get_index<name("accountid")>();
     auto itr = idx.find(accountIdentifier);
@@ -69,14 +69,14 @@ ACTION eos_evm::raw(name from, string code, string sender) {
   }
 }
 
-void eos_evm::handleCallResult(name from, call_result_t callResult, std::shared_ptr<AccountState> accountState) {
+void eos_evm::handleCallResult(const name& from, call_result_t callResult, std::shared_ptr<AccountState> accountState) {
   switch (callResult.first) {
     case MESSAGE_CALL_SUCCESS:
     case MESSAGE_CALL_APPLY_CREATE:
       {
         MessageCallReturn callReturn = std::get<MessageCallReturn>(callResult.second);
         uint256_t gasLeft = callReturn.gasLeft;
-        commitState(from, accountState);
+        resolveAccountState(from, accountState);
         break;
       }
     case MESSAGE_CALL_REVERTED:
@@ -132,7 +132,7 @@ void eos_evm::handleCallResult(name from, call_result_t callResult, std::shared_
   }
 }
 
-void eos_evm::commitState(name from, std::shared_ptr<AccountState> accountState) {
+void eos_evm::resolveAccountState(const name& from, std::shared_ptr<AccountState> accountState) {
   if (accountState->cacheItems->size() > 0) {
     // TODO: the scope of account_state should be derived from codeAddress
     account_state_table _account_state(get_self(), from.value);
@@ -159,7 +159,7 @@ void eos_evm::commitState(name from, std::shared_ptr<AccountState> accountState)
   }
 }
 
-ACTION eos_evm::create(name from, string message) {
+void eos_evm::create(name from, string message) {
   require_auth(from);
 
   account_table _account(get_self(), get_self().value);
@@ -175,8 +175,39 @@ ACTION eos_evm::create(name from, string message) {
   _account.emplace(from, [&](auto& account) {
     account.user = from;
     account.nonce = 0;
-    account.accountIdentifier = eos_utils::hexToChecksum256(accountIdentifier);
+    account.accountIdentifier = Hex::hexToChecksum256(accountIdentifier);
   });
 }
 
-EOSIO_DISPATCH(eos_evm, (raw)(create))
+void eos_evm::withdraw(name to, asset quantity) {
+  require_auth(to);
+
+  check(quantity.amount > 0, "Please provide a widthdraw quantity.");
+
+  account_table _account(get_self(), get_self().value);
+  auto iterator = _account.find(to.value);
+  check(iterator != _account.end(), "The `to` account is not linked to an Ethereum account.");
+  check(iterator->balance.amount >= quantity.amount, "Insufficient funds.");
+
+  _account.modify(iterator, eosio::same_payer, [&](auto& account) {
+    account.balance.amount -= quantity.amount;
+  });
+}
+
+void eos_evm::transfer(name from, name to, asset quantity, string memo) {
+  if (from == get_self()) return;
+  if (to != get_self()) return;
+  if (from == "eosio.stake"_n || from == "eosio.ram"_n || from == "eosio.names"_n || from == "eosio"_n) return;
+  
+  check(quantity.symbol == CONTRACT_SYMBOL, "The funds from an unknown token symbol were rejected.");
+  check(get_first_receiver() == TOKEN_CONTRACT, "The funds from an unknown token contract were rejected.");
+  check(quantity.amount > 0, "Please provide an amount to transfer.");
+
+  account_table _account(get_self(), get_self().value);
+  auto iterator = _account.find(from.value);
+  check(iterator != _account.end(), "The `from` account is not linked to an Ethereum account.");
+
+  _account.modify(iterator, eosio::same_payer, [&](auto& account) {
+    account.balance.amount += quantity.amount;
+  });
+}

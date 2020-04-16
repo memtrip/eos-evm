@@ -17,7 +17,7 @@ fun generateUniqueAccountName(): String {
 
 object Config {
     const val CHAIN_API_BASE_URL = "http://localhost:8888/"
-    const val ISSUE_PRIVATE_KEY = "5J8TXbmovr4mttQoZd6o7qAfJnvCcwumDJrPtVxbNZLY94UAq6B"
+    const val SEED_PRIVATE_KEY = "5J8TXbmovr4mttQoZd6o7qAfJnvCcwumDJrPtVxbNZLY94UAq6B"
     const val CONTRACT_ACCOUNT_NAME = "eos.evm"
     const val SYMBOL = "EVM"
 }

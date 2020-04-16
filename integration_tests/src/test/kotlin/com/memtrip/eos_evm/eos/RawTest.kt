@@ -31,8 +31,8 @@ class RawTest {
     fun `Unsigned transaction must include a valid sender`() {
 
         // given
-        val newAccountName = generateUniqueAccountName()
-        val newAccountPrivateKey = EosPrivateKey()
+        val (newAccountName, newAccountPrivateKey, _) = setupTransactions.seed()
+
         val unsignedTransaction = stubTransaction().sign(EthAccount.create()).unsignedTransaction.toHexString()
 
         setupTransactions.createAccount(

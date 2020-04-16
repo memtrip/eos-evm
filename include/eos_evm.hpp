@@ -9,15 +9,12 @@
 using namespace std;
 using namespace eosio;
 
-CONTRACT eos_evm : public contract {
+constexpr eosio::symbol CONTRACT_SYMBOL = eosio::symbol{"EVM", 4};
+constexpr eosio::name TOKEN_CONTRACT = eosio::name("eosio.token");
+
+class [[eosio::contract("eos_evm")]] eos_evm : public contract {
   public:
-    using contract::contract;
-
-    ACTION raw(name from, string code, string sender);
-    ACTION create(name from, string message);
-
-    // <account>
-    TABLE account {
+    struct [[eosio::table]] account {
       name user;
       uint64_t nonce;
       asset balance;
@@ -26,15 +23,14 @@ CONTRACT eos_evm : public contract {
       auto primary_key() const { return user.value; }
       checksum256 secondary_key() const { return accountIdentifier; }
     };
+
     typedef multi_index<
       name("account"), 
       account, 
-      indexed_by<name("accountid"), const_mem_fun<account, checksum256, &account::secondary_key> >
+      indexed_by<name("accountid"), const_mem_fun<account, checksum256, &account::secondary_key>>
     > account_table;
-    // </account>
 
-    // <account_state>
-    TABLE account_state {
+    struct [[eosio::table]] account_state {
       uint64_t pk;
       checksum256 accountIdentifier;
       checksum256 key;
@@ -43,30 +39,49 @@ CONTRACT eos_evm : public contract {
       uint64_t primary_key() const { return pk; }
       checksum256 secondary_key() const { return key; }
     };
+
     typedef multi_index<
       name("accountstate"), 
       account_state, 
-      indexed_by<name("statekey"), const_mem_fun<account_state, checksum256, &account_state::secondary_key> >
+      indexed_by<name("statekey"), const_mem_fun<account_state, checksum256, &account_state::secondary_key>>
     > account_state_table;
-    // </account_state>
 
-    // <account_code>
-    TABLE account_code {
+    struct [[eosio::table]] account_code {
       uint64_t pk;
       checksum256 accountIdentifier;
+      checksum256 address;
       string code;
 
       auto primary_key() const { return pk; }
       checksum256 secondary_key() const { return accountIdentifier; }
+      checksum256 tertiary_key() const { return address; }
     };
+
     typedef multi_index<
       name("accountcode"), 
       account_code, 
-      indexed_by<name("codeaddress"), const_mem_fun<account_code, checksum256, &account_code::secondary_key> >
+      indexed_by<name("owneraddress"), const_mem_fun<account_code, checksum256, &account_code::secondary_key>>,
+      indexed_by<name("codeaddress"), const_mem_fun<account_code, checksum256, &account_code::tertiary_key>>
     > account_code_table;
-    // </account_code>
+
+    eos_evm(name receiver, name code, datastream<const char *> ds): contract(receiver, code, ds) { }
+
+    [[eosio::action]]
+    void raw(name from, string code, string sender);
+
+    [[eosio::action]]
+    void create(name from, string message);
+
+    [[eosio::action]]
+    void withdraw(name to, asset quantity);
+
+    [[eosio::on_notify("eosio.token::transfer")]]
+    void transfer(name from, name to, asset quantity, string memo);
+
+    using withdraw_action = action_wrapper<"withdraw"_n, &eos_evm::withdraw>;
+    using transfer_action = action_wrapper<"transfer"_n, &eos_evm::transfer>;
 
   private:
-    void handleCallResult(name from, call_result_t callResult, std::shared_ptr<AccountState> accountState);
-    void commitState(name from, std::shared_ptr<AccountState> accountState);
+    void handleCallResult(const name& from, call_result_t callResult, std::shared_ptr<AccountState> accountState);
+    void resolveAccountState(const name& from, std::shared_ptr<AccountState> accountState);
 };

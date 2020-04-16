@@ -314,11 +314,11 @@ instruction_result_t VM::executeCreateInstruction(
   );
   
   emplace_t emplaceResult = external->emplaceCode(address, contractCode);
-  switch (emplaceResult) {
+  switch (emplaceResult.first) {
     case EmplaceResult::EMPLACE_SUCCESS:
       {
-        // TODO: Address should come from cal_result_t
-        stack->push(address);
+        address_t address = std::get<address_t>(emplaceResult.second);
+        stack->push(BigInt::fromFixed32(address));
 
         // TODO: minus the gasLeft from the above gasCalcuation,
         // or perform the gasCalculation within call / execute and return in "gasLeft"

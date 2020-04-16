@@ -1,6 +1,7 @@
 #include <memory>
 #include <evm/types.h>
 #include <evm/external.h>
+#include <evm/address.hpp>
 
 typedef std::vector<std::pair<std::vector<uint256_t>, bytes_t>> log_spy_t;
 
@@ -68,6 +69,6 @@ class ExternalMock: public External {
 
     emplace_t emplaceCode(const uint256_t& address, std::shared_ptr<bytes_t> code) {
       emplaceSpy.push_back(std::make_pair(address, bytes_t(code->begin(), code->end())));
-      return EmplaceResult::EMPLACE_SUCCESS;
+      return std::make_pair(EmplaceResult::EMPLACE_SUCCESS, Address::ethereumAddressFrom(address, uint256_t(0)));
     }
 };

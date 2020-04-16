@@ -26,13 +26,17 @@ call_result_t Call::create(
   );
 
   if (callResult.first == MessageCallResult::MESSAGE_CALL_APPLY_CREATE) {
+    
     MessageCallReturn messageCallReturn = std::get<MessageCallReturn>(callResult.second);
+
     std::shared_ptr<bytes_t> contractCode = memory->readSlice(
       messageCallReturn.slicePosition.offset, 
       messageCallReturn.slicePosition.size
     );
+
     emplace_t emplaceResult = external->emplaceCode(context->sender, contractCode);
-    switch (emplaceResult) {
+
+    switch (emplaceResult.first) {
       case EmplaceResult::EMPLACE_ADDRESS_NOT_FOUND:
         return std::make_pair(
           MessageCallResult::MESSAGE_CALL_FAILED,
