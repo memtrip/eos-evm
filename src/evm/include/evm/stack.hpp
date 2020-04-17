@@ -19,7 +19,7 @@ class StackMachine {
       return stack->at(stack->size() - n - 1);
     }
 
-    void push(uint256_t item) {
+    void push(const uint256_t& item) {
       stack->push_back(item);
     }
 
@@ -32,7 +32,7 @@ class StackMachine {
     }
 
     uint256_t top() {
-      return StackMachine::peek(0);
+      return stack->at(stack->size() - 1);
     }
 
     size_t size() const {

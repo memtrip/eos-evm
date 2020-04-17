@@ -2,7 +2,7 @@ import com.memtrip.eos.chain.actions.transaction.TransactionContext
 import com.memtrip.eos.http.rpc.Api
 import com.memtrip.eos_evm.eos.*
 import com.memtrip.eos_evm.eos.state.GetAccountState
-import com.memtrip.eos_evm.eos.raw.RawAction
+import com.memtrip.eos_evm.eos.actions.raw.RawAction
 import com.memtrip.eos_evm.ethereum.EthereumTransaction
 import com.memtrip.eos_evm.ethereum.toHexString
 import okhttp3.OkHttpClient
@@ -12,7 +12,7 @@ import org.junit.Test
 import java.math.BigInteger
 import java.util.concurrent.TimeUnit
 import com.memtrip.eos_evm.eos.TestTransaction
-import com.memtrip.eos_evm.eos.faultTolerant
+import com.memtrip.eos_evm.eos.faultTolerantCreateAccount
 
 //
 // 13.04.2020
@@ -38,7 +38,7 @@ class vmRandomTest {
     @Test
     fun `201503110206PYTHON______ad34ff6291ab537633ab5e7163537b24617cc4edb2f45eac65bed9d2c009cfc3`() {
 
-        val (accountName, accountIdentifier, response) = faultTolerant {
+        val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
 
@@ -73,7 +73,7 @@ class vmRandomTest {
     @Test
     fun `201503111844PYTHON______a8049871a173837bf8fbfab3352baf9bb9e33d0ffa2bd20ba6246a70d9c1b165`() {
 
-        val (accountName, accountIdentifier, response) = faultTolerant {
+        val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
 
@@ -108,7 +108,7 @@ class vmRandomTest {
     @Test
     fun `201503112218PYTHON______6fc205d30fd7493b6e120e18c91e1e41f6fe334b94abadbac37d2817066ebccb`() {
 
-        val (accountName, accountIdentifier, response) = faultTolerant {
+        val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
 
@@ -143,7 +143,7 @@ class vmRandomTest {
     @Test
     fun `201503110219PYTHON______93dd23cbf213b07ac96a1fdfc826f41475452fea6da2e4f8d3f5d206e9a1adb9`() {
 
-        val (accountName, accountIdentifier, response) = faultTolerant {
+        val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
 
@@ -178,7 +178,7 @@ class vmRandomTest {
     @Test
     fun `201503102320PYTHON______38aa9ba7f7836987852734619b0192d42434bd7106da17663d5fc85d81a1e6cf`() {
 
-        val (accountName, accountIdentifier, response) = faultTolerant {
+        val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
 
@@ -213,7 +213,7 @@ class vmRandomTest {
     @Test
     fun `201503110346PYTHON_PUSH24______953cb389f468c0d45697c57895679d7675ab43de963ad34a0ee547b8d27d10c8`() {
 
-        val (accountName, accountIdentifier, response) = faultTolerant {
+        val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
 

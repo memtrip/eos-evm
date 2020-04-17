@@ -41,6 +41,7 @@ cleos --url http://nodeos:8888/ set contract eosio.msig /contracts/build/contrac
 # install the eos.evm smart contract
 cleos --url http://nodeos:8888/ create account eosio eos.evm $PUBLIC_KEY
 cleos --url http://nodeos:8888/ set contract eos.evm /init/eos_evm/
+cleos --url http://nodeos:8888/ set account permission eos.evm active --add-code
 
 # PREACTIVE_FEATURE
 curl --request POST \

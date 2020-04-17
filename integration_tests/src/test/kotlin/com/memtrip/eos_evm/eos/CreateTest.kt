@@ -2,7 +2,7 @@ package com.memtrip.eos_evm.eos
 
 import com.memtrip.eos.chain.actions.transaction.TransactionContext
 import com.memtrip.eos.http.rpc.Api
-import com.memtrip.eos_evm.eos.create.CreateAction
+import com.memtrip.eos_evm.eos.actions.create.CreateAction
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.junit.Assert.assertEquals

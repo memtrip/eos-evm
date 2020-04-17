@@ -22,4 +22,15 @@ class eos_utils {
 
       return bytes;
     }
+
+    static uint256_t checksum256ToWord(const eosio::fixed_bytes<32>& fixedToBytes) {
+      auto bytes = fixedToBytes.data();
+      uint8_t checksum256[WORD_SIZE];
+
+      for (int i = 0; i < 32; i++) {
+        checksum256[i] = (i >= 12) ? bytes[i - 12] : 0;
+      }
+      
+      return intx::be::load<uint256_t>(checksum256);
+    }
 };

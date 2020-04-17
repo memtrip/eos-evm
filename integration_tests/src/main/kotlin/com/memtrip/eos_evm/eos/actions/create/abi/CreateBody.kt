@@ -1,4 +1,4 @@
-package com.memtrip.eos_evm.eos.create.abi
+package com.memtrip.eos_evm.eos.actions.create.abi
 
 import com.memtrip.eos.abi.writer.Abi
 import com.memtrip.eos.abi.writer.ChildCompress

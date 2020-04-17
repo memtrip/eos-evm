@@ -81,10 +81,10 @@ class GasCalculation {
 
       uint256_t address = stack->peek(0);
       uint256_t newVal = stack->peek(1);
-      bytes_t storageBytes = external->storageAt(address, context->codeAddress);
+      uint256_t word = external->storageAt(address, context->codeAddress);
 
       gas_t storeGasCost;
-      if (storageBytes.size() == 0 && newVal != 0) {
+      if (word == 0 && newVal != 0) {
         storeGasCost = SSTORE_SET_GAS;
       } else {
         storeGasCost = SSTORE_RESET_GAS;

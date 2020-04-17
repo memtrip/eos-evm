@@ -74,7 +74,7 @@ TEST_CASE("${test.name}______${test.fixture._info.sourceHash}", "[vm]") {
   <#list test.fixture.pre.accountState.storage?keys as key>
   external->storageResponder.push_back(std::make_pair(
     uint256_t(${key}),
-    Hex::hexToBytes("${test.fixture.pre.accountState.storage[key]}")
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("${test.fixture.pre.accountState.storage[key]}"))
   ));
   </#list>
   </#if>

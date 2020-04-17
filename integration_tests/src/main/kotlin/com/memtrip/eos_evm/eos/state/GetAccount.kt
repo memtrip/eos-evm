@@ -1,6 +1,7 @@
 package com.memtrip.eos_evm.eos.state
 
 import com.memtrip.eos.http.rpc.ChainApi
+import com.memtrip.eos.http.rpc.model.contract.request.GetCurrencyBalance
 import com.memtrip.eos.http.rpc.model.contract.request.GetTableRows
 import com.memtrip.eos_evm.eos.Config
 import com.memtrip.eos_evm.eos.EosName
@@ -55,7 +56,7 @@ class GetAccount(
         }
     }
 
-    fun getAccount(name: String): Single<Record> {
+    fun getEvmAccount(name: String): Single<Record> {
         return chainApi.getTableRows(
             GetTableRows(
                 Config.CONTRACT_ACCOUNT_NAME,
@@ -78,7 +79,7 @@ class GetAccount(
                         Item(
                             tableRows[0]["user"].toString(),
                             tableRows[0]["nonce"].toString(),
-                            tableRows[0]["asset"].toString(),
+                            tableRows[0]["balance"].toString(),
                             tableRows[0]["accountIdentifier"].toString()
                         )
                     )

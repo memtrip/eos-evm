@@ -35,17 +35,35 @@ class eos_external: public External {
       return std::make_shared<bytes_t>(Hex::hexToBytes(accountCodeItr->code));
     }
 
-    double balance(const uint256_t& address) {
-      return 0.0;
+    double balance(const uint256_t& addressWord) {
+      address_t address = BigInt::toFixed32(addressWord);
+
+      // get the account associated with the address
+      eos_evm::account_table _account(contract->get_self(), contract->get_self().value);
+      auto accountIdx = _account.get_index<name("accountid")>();
+      auto accountItr = accountIdx.find(address);
+      if (accountItr == accountIdx.end()) return 0; // TODO: handle this with an address not found
+
+      return accountItr->balance.amount;
     }
 
-    bytes_t storageAt(const uint256_t& address, const uint256_t& codeAddress) {
-      // uint256_t compositeKey = Hash::keccak256Word(codeAddress, key);
-      // eos_evm::account_state_table _account_state(contract->get_self(), contract->get_self().value);
-      // auto idx = _account_state.get_index<name("statekey")>();
-      // auto itr = idx.find(BigInt::toFixed32(compositeKey));
-      // if (itr != idx.end()) return eos_utils::fixedToBytes(itr->value);
-      return bytes_t();
+    uint256_t storageAt(const uint256_t& key, const uint256_t& codeAddress) {
+
+      address_t address = BigInt::toFixed32(codeAddress);
+
+      // get the account associated with the address
+      eos_evm::account_table _account(contract->get_self(), contract->get_self().value);
+      auto accountIdx = _account.get_index<name("accountid")>();
+      auto accountItr = accountIdx.find(address);
+      if (accountItr == accountIdx.end()) return uint256_t(0);
+
+      uint256_t compositeKey = Hash::keccak256Word(codeAddress, key);
+      eos_evm::account_state_table _account_state(contract->get_self(), accountItr->user.value);
+      auto idx = _account_state.get_index<name("statekey")>();
+      auto itr = idx.find(BigInt::toFixed32(compositeKey));
+      if (itr == idx.end()) return uint256_t(0); 
+
+      return eos_utils::checksum256ToWord(itr->value);
     }
 
     void suicide(const uint256_t& address) {
@@ -73,6 +91,7 @@ class eos_external: public External {
         account_code.pk = _account_code.available_primary_key();
         account_code.accountIdentifier = senderAddress;
         account_code.address = codeAddress;
+        account_code.nonce = 1;
         account_code.code = Hex::bytesToHex(code);
       });
 

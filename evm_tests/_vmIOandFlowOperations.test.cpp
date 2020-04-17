@@ -1,5 +1,5 @@
 //
-// 11.04.2020
+// 17.04.2020
 // Auto generated based off the Ethereum tests found here:
 // https://github.com/ethereum/tests/blob/develop/VMTests/
 //
@@ -140,7 +140,7 @@ TEST_CASE("JDfromStorageDynamicJump0_withoutJumpdest______696ced07844f15bee009a7
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   external->storageResponder.push_back(std::make_pair(
     uint256_t(0x00),
-    Hex::hexToBytes("0000000000000000000000000000000000000000000000000000000000000004")
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0000000000000000000000000000000000000000000000000000000000000004"))
   ));
 
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
@@ -932,7 +932,7 @@ TEST_CASE("JDfromStorageDynamicJump0_AfterJumpdest______06126bb58e44948750e412ea
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   external->storageResponder.push_back(std::make_pair(
     uint256_t(0x00),
-    Hex::hexToBytes("0000000000000000000000000000000000000000000000000000000000000004")
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0000000000000000000000000000000000000000000000000000000000000004"))
   ));
 
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
@@ -1782,7 +1782,7 @@ TEST_CASE("JDfromStorageDynamicJumpifInsidePushWithoutJumpDest______561fed985eda
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   external->storageResponder.push_back(std::make_pair(
     uint256_t(0x00),
-    Hex::hexToBytes("0000000000000000000000000000000000000000000000000000000000000004")
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0000000000000000000000000000000000000000000000000000000000000004"))
   ));
 
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
@@ -2066,7 +2066,7 @@ TEST_CASE("JDfromStorageDynamicJumpInsidePushWithoutJumpDest______53a491adcc7da0
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   external->storageResponder.push_back(std::make_pair(
     uint256_t(0x00),
-    Hex::hexToBytes("0000000000000000000000000000000000000000000000000000000000000004")
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0000000000000000000000000000000000000000000000000000000000000004"))
   ));
 
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
@@ -2861,7 +2861,7 @@ TEST_CASE("JDfromStorageDynamicJump0_jumpdest0______2f836ba88951147677580e5de7d8
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   external->storageResponder.push_back(std::make_pair(
     uint256_t(0x00),
-    Hex::hexToBytes("0000000000000000000000000000000000000000000000000000000000000004")
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0000000000000000000000000000000000000000000000000000000000000004"))
   ));
 
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
@@ -3081,7 +3081,7 @@ TEST_CASE("JDfromStorageDynamicJumpInsidePushWithJumpDest______561a67bc9db1011fb
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   external->storageResponder.push_back(std::make_pair(
     uint256_t(0x00),
-    Hex::hexToBytes("0000000000000000000000000000000000000000000000000000000000000004")
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0000000000000000000000000000000000000000000000000000000000000004"))
   ));
 
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
@@ -3998,7 +3998,7 @@ TEST_CASE("JDfromStorageDynamicJumpiOutsideBoundary______3c7f35eb2fe3c2ed05679b2
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   external->storageResponder.push_back(std::make_pair(
     uint256_t(0x00),
-    Hex::hexToBytes("0000000000000000000000000000000000000000000000000000000000000004")
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0000000000000000000000000000000000000000000000000000000000000004"))
   ));
 
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
@@ -4282,7 +4282,7 @@ TEST_CASE("JDfromStorageDynamicJumpifInsidePushWithJumpDest______f15ca2a706c969b
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   external->storageResponder.push_back(std::make_pair(
     uint256_t(0x00),
-    Hex::hexToBytes("0000000000000000000000000000000000000000000000000000000000000004")
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0000000000000000000000000000000000000000000000000000000000000004"))
   ));
 
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
@@ -5208,7 +5208,7 @@ TEST_CASE("JDfromStorageDynamicJump0_jumpdest2______efe088c5366793bcb33392254866
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   external->storageResponder.push_back(std::make_pair(
     uint256_t(0x00),
-    Hex::hexToBytes("0000000000000000000000000000000000000000000000000000000000000004")
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0000000000000000000000000000000000000000000000000000000000000004"))
   ));
 
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
@@ -5994,7 +5994,7 @@ TEST_CASE("JDfromStorageDynamicJumpi0______14e786db1b2df2c2a40be1a80c61baec31157
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   external->storageResponder.push_back(std::make_pair(
     uint256_t(0x00),
-    Hex::hexToBytes("0000000000000000000000000000000000000000000000000000000000000004")
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0000000000000000000000000000000000000000000000000000000000000004"))
   ));
 
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
@@ -6141,7 +6141,7 @@ TEST_CASE("JDfromStorageDynamicJumpi1______f90389bdfe2c1600f16db3b5ff8289b55a9f3
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   external->storageResponder.push_back(std::make_pair(
     uint256_t(0x00),
-    Hex::hexToBytes("0000000000000000000000000000000000000000000000000000000000000004")
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0000000000000000000000000000000000000000000000000000000000000004"))
   ));
 
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
@@ -7280,7 +7280,7 @@ TEST_CASE("DyanmicJump0_outOfBoundary______a2ae635e97f7381a5af1ea432d210faf19f4f
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   external->storageResponder.push_back(std::make_pair(
     uint256_t(0x00),
-    Hex::hexToBytes("0000000000000000000000000000000000000000000000000000000000000004")
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0000000000000000000000000000000000000000000000000000000000000004"))
   ));
 
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
@@ -7424,7 +7424,7 @@ TEST_CASE("JDfromStorageDynamicJumpiAfterStop______80d903064c1050cf1a2e527b8938e
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   external->storageResponder.push_back(std::make_pair(
     uint256_t(0x00),
-    Hex::hexToBytes("0000000000000000000000000000000000000000000000000000000000000004")
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0000000000000000000000000000000000000000000000000000000000000004"))
   ));
 
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
@@ -7650,7 +7650,7 @@ TEST_CASE("JDfromStorageDynamicJump0_foreverOutOfGas______a3046ce1b7f78c109aa36c
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   external->storageResponder.push_back(std::make_pair(
     uint256_t(0x00),
-    Hex::hexToBytes("0000000000000000000000000000000000000000000000000000000000000004")
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0000000000000000000000000000000000000000000000000000000000000004"))
   ));
 
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
@@ -8220,7 +8220,7 @@ TEST_CASE("JDfromStorageDynamicJump0_AfterJumpdest3______52880726a50d86ffdaea78e
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   external->storageResponder.push_back(std::make_pair(
     uint256_t(0x00),
-    Hex::hexToBytes("0000000000000000000000000000000000000000000000000000000000000004")
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0000000000000000000000000000000000000000000000000000000000000004"))
   ));
 
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
@@ -9496,7 +9496,7 @@ TEST_CASE("JDfromStorageDynamicJumpi1_jumpdest______cc7eadaee4927a2753204e40d702
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   external->storageResponder.push_back(std::make_pair(
     uint256_t(0x00),
-    Hex::hexToBytes("0000000000000000000000000000000000000000000000000000000000000004")
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0000000000000000000000000000000000000000000000000000000000000004"))
   ));
 
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
@@ -9786,7 +9786,7 @@ TEST_CASE("JDfromStorageDynamicJump1______bf061c0eb83d11c310f7ec309e56c3629f7157
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   external->storageResponder.push_back(std::make_pair(
     uint256_t(0x00),
-    Hex::hexToBytes("0000000000000000000000000000000000000000000000000000000000000004")
+    BigInt::fromBigEndianBytes(Hex::hexToBytes("0000000000000000000000000000000000000000000000000000000000000004"))
   ));
 
   std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();

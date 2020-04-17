@@ -2,7 +2,7 @@ import com.memtrip.eos.chain.actions.transaction.TransactionContext
 import com.memtrip.eos.http.rpc.Api
 import com.memtrip.eos_evm.eos.*
 import com.memtrip.eos_evm.eos.state.GetAccountState
-import com.memtrip.eos_evm.eos.raw.RawAction
+import com.memtrip.eos_evm.eos.actions.raw.RawAction
 import com.memtrip.eos_evm.ethereum.EthereumTransaction
 import com.memtrip.eos_evm.ethereum.toHexString
 import okhttp3.OkHttpClient
@@ -12,7 +12,7 @@ import org.junit.Test
 import java.math.BigInteger
 import java.util.concurrent.TimeUnit
 import com.memtrip.eos_evm.eos.TestTransaction
-import com.memtrip.eos_evm.eos.faultTolerant
+import com.memtrip.eos_evm.eos.faultTolerantCreateAccount
 
 //
 // 13.04.2020
@@ -38,7 +38,7 @@ class vmPerformance {
     @Test
     fun `loop-mul______9862bc727536901c182cf2638655d9b9f3b45ee0e0ea8030084b5cae38b4b7d0`() {
 
-        val (accountName, accountIdentifier, response) = faultTolerant {
+        val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
 
@@ -73,7 +73,7 @@ class vmPerformance {
     @Test
     fun `loop-exp-nop-1M______b6fa0af7e999498530fc565052fd9465f33fae61a400d370a6ea56f917ae7dfb`() {
 
-        val (accountName, accountIdentifier, response) = faultTolerant {
+        val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
 
@@ -108,7 +108,7 @@ class vmPerformance {
     @Test
     fun `manyFunctions100______a93da81ce1ea6b18ce5a5f95f19ee134cfe381ce597da0ac756b9fe46e51dd3e`() {
 
-        val (accountName, accountIdentifier, response) = faultTolerant {
+        val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
 
@@ -143,7 +143,7 @@ class vmPerformance {
     @Test
     fun `loop-exp-4b-100k______a6616d3c0d567d66a39509265b0da159f3e37e491c7a6ef78995324ae0ba559b`() {
 
-        val (accountName, accountIdentifier, response) = faultTolerant {
+        val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
 
@@ -178,7 +178,7 @@ class vmPerformance {
     @Test
     fun `loop-divadd-10M______8cbe4da3d582b59b481644f6c0fdee99b20263faf1fb8ce8e34a9fc4e146a077`() {
 
-        val (accountName, accountIdentifier, response) = faultTolerant {
+        val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
 
@@ -213,7 +213,7 @@ class vmPerformance {
     @Test
     fun `loop-add-10M______5c0bcc64ea53ba66564fffc011787768e911914b980b779def109e39e7b8a5c2`() {
 
-        val (accountName, accountIdentifier, response) = faultTolerant {
+        val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
 
@@ -248,7 +248,7 @@ class vmPerformance {
     @Test
     fun `ackermann33______9ca98b508adbdde3ddffac1cb761f46e4a972d5dcc060f51cbec1ce11f17ac84`() {
 
-        val (accountName, accountIdentifier, response) = faultTolerant {
+        val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
 
@@ -283,7 +283,7 @@ class vmPerformance {
     @Test
     fun `ackermann32______2c220fb24fa74c1103827f156dee5953dbb59bc82e00c9d44e838175dc67e5ba`() {
 
-        val (accountName, accountIdentifier, response) = faultTolerant {
+        val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
 
@@ -318,7 +318,7 @@ class vmPerformance {
     @Test
     fun `loop-mulmod-2M______e7bcb6168cc420c350cb8e46fc0e4193087cec3caf5ec8e1037eb8e0cb8890e1`() {
 
-        val (accountName, accountIdentifier, response) = faultTolerant {
+        val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
 
@@ -353,7 +353,7 @@ class vmPerformance {
     @Test
     fun `loop-exp-1b-1M______dc13c59f93368d567ca54b18844958fd2634507758610cc03e3a8e3ed19f2b1e`() {
 
-        val (accountName, accountIdentifier, response) = faultTolerant {
+        val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
 
@@ -388,7 +388,7 @@ class vmPerformance {
     @Test
     fun `loop-exp-32b-100k______c441959642aba02713db192952a1ab606b7de70410504696abbe9e24c787d3a3`() {
 
-        val (accountName, accountIdentifier, response) = faultTolerant {
+        val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
 
@@ -423,7 +423,7 @@ class vmPerformance {
     @Test
     fun `ackermann31______ec9c697bacfc0222a155e3dfb773c7af8d830fd04dcb7dd5cfabc11ef286dbff`() {
 
-        val (accountName, accountIdentifier, response) = faultTolerant {
+        val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
 
@@ -458,7 +458,7 @@ class vmPerformance {
     @Test
     fun `loop-exp-8b-100k______7af55eaae7594831f1c1a4ed4fbc9d2fec423b5de4319079187ae66183eb26c5`() {
 
-        val (accountName, accountIdentifier, response) = faultTolerant {
+        val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
 
@@ -493,7 +493,7 @@ class vmPerformance {
     @Test
     fun `fibonacci10______aa39e6e6cb25a56031874d788400c4ca511cba5b20cc82b63f25270006cd3d7b`() {
 
-        val (accountName, accountIdentifier, response) = faultTolerant {
+        val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
 
@@ -528,7 +528,7 @@ class vmPerformance {
     @Test
     fun `loop-exp-16b-100k______e3c31a352e72a71e814fb5324abb479c88ff30b29f6191ca097483536bba1121`() {
 
-        val (accountName, accountIdentifier, response) = faultTolerant {
+        val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
 
@@ -563,7 +563,7 @@ class vmPerformance {
     @Test
     fun `loop-divadd-unr100-10M______11eb4a4dbb8a456df4bd281916d914690f0994d7bbf808822d1fea68dbd04073`() {
 
-        val (accountName, accountIdentifier, response) = faultTolerant {
+        val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
 
@@ -598,7 +598,7 @@ class vmPerformance {
     @Test
     fun `fibonacci16______64fac88f45e60627f6828c45c53c43b0a1e245a25f011b88ad9e51994b179ca1`() {
 
-        val (accountName, accountIdentifier, response) = faultTolerant {
+        val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
 
@@ -633,7 +633,7 @@ class vmPerformance {
     @Test
     fun `loop-exp-2b-100k______d546cccc293768c0dfbf21a81cb82dcc7fe19e709cc85d697b22d1a12004ac7c`() {
 
-        val (accountName, accountIdentifier, response) = faultTolerant {
+        val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
 

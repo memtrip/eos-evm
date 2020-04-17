@@ -1,4 +1,4 @@
-package com.memtrip.eos_evm.eos.create
+package com.memtrip.eos_evm.eos.actions.create
 
 import com.memtrip.eos.abi.writer.compression.CompressionType
 import com.memtrip.eos.chain.actions.ChainResponse
@@ -10,8 +10,8 @@ import com.memtrip.eos.http.rpc.ChainApi
 import com.memtrip.eos.http.rpc.model.transaction.response.TransactionCommitted
 import com.memtrip.eos_evm.eos.AbiBinaryGenEvmWriter
 import com.memtrip.eos_evm.eos.Config.CONTRACT_ACCOUNT_NAME
-import com.memtrip.eos_evm.eos.create.abi.CreateArgs
-import com.memtrip.eos_evm.eos.create.abi.CreateBody
+import com.memtrip.eos_evm.eos.actions.create.abi.CreateArgs
+import com.memtrip.eos_evm.eos.actions.create.abi.CreateBody
 import io.reactivex.Single
 
 class CreateAction(chainApi: ChainApi) : ChainTransaction(chainApi) {

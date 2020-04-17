@@ -13,6 +13,8 @@ typedef std::vector<std::pair<uint256_t, double>> balance_responder_t;
 
 typedef std::vector<std::pair<uint256_t, bytes_t>> bytes_responder_t;
 
+typedef std::vector<std::pair<uint256_t, uint256_t>> word_responder_t;
+
 class ExternalMock: public External {
 
   public:
@@ -22,7 +24,7 @@ class ExternalMock: public External {
     bytes_spy_t emplaceSpy;
     bytes_responder_t codeResponder;
     balance_responder_t balanceResponder;
-    bytes_responder_t storageResponder;
+    word_responder_t storageResponder;
 
     ExternalMock() {
       logSpy = log_spy_t();
@@ -31,7 +33,7 @@ class ExternalMock: public External {
       emplaceSpy = bytes_spy_t();
       codeResponder = bytes_responder_t();
       balanceResponder = balance_responder_t();
-      storageResponder = bytes_responder_t();
+      storageResponder = word_responder_t();
     }
 
     void log(const std::vector<uint256_t>& topics, std::shared_ptr<bytes_t> data) {
@@ -47,20 +49,20 @@ class ExternalMock: public External {
       return std::make_shared<bytes_t>(bytes_t());
     }
 
-    double balance(const uint256_t& address) {
+    double balance(const uint256_t& addressWord) {
       for (int i = 0; i < balanceResponder.size(); i++) {
-        if (balanceResponder[i].first == address)
+        if (balanceResponder[i].first == addressWord)
           return balanceResponder[i].second;
       }
-      return 0.0; 
+      return 0.0;
     }
 
-    bytes_t storageAt(const uint256_t& key, const uint256_t& codeAddress) {
+    uint256_t storageAt(const uint256_t& key, const uint256_t& codeAddress) {
       for (int i = 0; i < storageResponder.size(); i++) {
         if (storageResponder[i].first == key)
           return storageResponder[i].second;
       }
-      return bytes_t();
+      return uint256_t(0);
     }
 
     void suicide(const uint256_t& address) {

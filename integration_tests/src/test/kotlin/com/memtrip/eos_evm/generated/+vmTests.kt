@@ -2,7 +2,7 @@ import com.memtrip.eos.chain.actions.transaction.TransactionContext
 import com.memtrip.eos.http.rpc.Api
 import com.memtrip.eos_evm.eos.*
 import com.memtrip.eos_evm.eos.state.GetAccountState
-import com.memtrip.eos_evm.eos.raw.RawAction
+import com.memtrip.eos_evm.eos.actions.raw.RawAction
 import com.memtrip.eos_evm.ethereum.EthereumTransaction
 import com.memtrip.eos_evm.ethereum.toHexString
 import okhttp3.OkHttpClient
@@ -12,7 +12,7 @@ import org.junit.Test
 import java.math.BigInteger
 import java.util.concurrent.TimeUnit
 import com.memtrip.eos_evm.eos.TestTransaction
-import com.memtrip.eos_evm.eos.faultTolerant
+import com.memtrip.eos_evm.eos.faultTolerantCreateAccount
 
 //
 // 13.04.2020
@@ -38,7 +38,7 @@ class vmTests {
     @Test
     fun `suicide______4622c577440f9db4b3954a1de60bf2fac55886dcb0ec4ecaf906c25bc77372e7`() {
 
-        val (accountName, accountIdentifier, response) = faultTolerant {
+        val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
 

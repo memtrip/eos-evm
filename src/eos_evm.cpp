@@ -13,6 +13,7 @@
 #include <evm/big_int.hpp>
 #include <evm/hash.hpp>
 #include <evm/memory.hpp>
+#include <evm/overflow.hpp>
 
 void eos_evm::raw(name from, string code, string sender) {
   require_auth(from);
@@ -29,6 +30,7 @@ void eos_evm::raw(name from, string code, string sender) {
 
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> memory = std::make_shared<Memory>(memoryBytes);
+  uint64_t transactionNonce = Overflow::uint256Cast(Transaction::nonce(rlp)).first;
 
   if (Transaction::hasSignature(rlp)) {
     bytes_t accountIdentifierBytes = eos_ecrecover::recover(
@@ -36,12 +38,13 @@ void eos_evm::raw(name from, string code, string sender) {
       rlp
     );
 
-    eosio::checksum256 accountIdentifier = Hex::hexToChecksum256(accountIdentifierBytes);
+    checksum256 accountIdentifier = Hex::hexToChecksum256(accountIdentifierBytes);
     account_table _account(get_self(), get_self().value);
     auto idx = _account.get_index<name("accountid")>();
     auto itr = idx.find(accountIdentifier);
 
     check(itr != idx.end(), "The account identifier associated with this transaction does not exist.");
+    check((transactionNonce - itr->nonce) == 1, "Transaction nonce invalid.");
 
     std::shared_ptr<bytes_t> data = Transaction::data(rlp);
     uint256_t address = BigInt::fromBigEndianBytes(accountIdentifierBytes);
@@ -51,13 +54,14 @@ void eos_evm::raw(name from, string code, string sender) {
       account.nonce += 1;
     });
   } else {
-    std::pair<bytes_t, eosio::checksum256> accountIdentifier = eos_utils::senderToChecksum256(sender);
+    std::pair<bytes_t, checksum256> accountIdentifier = eos_utils::senderToChecksum256(sender);
     account_table _account(get_self(), get_self().value);
     auto idx = _account.get_index<name("accountid")>();
     auto itr = idx.find(accountIdentifier.second);
 
     check(itr != idx.end(), "Could not find sender, did you provide the correct account identifier?");
     check(has_auth(itr->user), "You do not have permission to execute a transaction for the specified sender.");
+    check((transactionNonce - itr->nonce) == 1, "Transaction nonce invalid.");
 
     std::shared_ptr<bytes_t> data = Transaction::data(rlp);
     uint256_t address = BigInt::fromBigEndianBytes(accountIdentifier.first);
@@ -137,7 +141,7 @@ void eos_evm::resolveAccountState(const name& from, std::shared_ptr<AccountState
     // TODO: the scope of account_state should be derived from codeAddress
     account_state_table _account_state(get_self(), from.value);
     for (int i = 0; i < accountState->cacheItems->size(); i++) {
-      eosio::checksum256 compositeKey =  BigInt::toFixed32(Hash::keccak256Word(
+      checksum256 compositeKey =  BigInt::toFixed32(Hash::keccak256Word(
         accountState->cacheItems->at(i).codeAddress,
         accountState->cacheItems->at(i).key
       ));
@@ -175,6 +179,7 @@ void eos_evm::create(name from, string message) {
   _account.emplace(from, [&](auto& account) {
     account.user = from;
     account.nonce = 0;
+    account.balance = asset(0, CONTRACT_SYMBOL);
     account.accountIdentifier = Hex::hexToChecksum256(accountIdentifier);
   });
 }
@@ -182,16 +187,23 @@ void eos_evm::create(name from, string message) {
 void eos_evm::withdraw(name to, asset quantity) {
   require_auth(to);
 
-  check(quantity.amount > 0, "Please provide a widthdraw quantity.");
+  check(quantity.amount > 0, "Please provide a withdraw quantity.");
 
   account_table _account(get_self(), get_self().value);
   auto iterator = _account.find(to.value);
   check(iterator != _account.end(), "The `to` account is not linked to an Ethereum account.");
   check(iterator->balance.amount >= quantity.amount, "Insufficient funds.");
 
-  _account.modify(iterator, eosio::same_payer, [&](auto& account) {
+  _account.modify(iterator, same_payer, [&](auto& account) {
     account.balance.amount -= quantity.amount;
   });
+
+  action{
+    permission_level{get_self(), "active"_n},
+    "eosio.token"_n,
+    "transfer"_n,
+    std::make_tuple(get_self(), to, quantity, std::string("EVM withdrawal"))
+  }.send();
 }
 
 void eos_evm::transfer(name from, name to, asset quantity, string memo) {
@@ -207,7 +219,7 @@ void eos_evm::transfer(name from, name to, asset quantity, string memo) {
   auto iterator = _account.find(from.value);
   check(iterator != _account.end(), "The `from` account is not linked to an Ethereum account.");
 
-  _account.modify(iterator, eosio::same_payer, [&](auto& account) {
+  _account.modify(iterator, same_payer, [&](auto& account) {
     account.balance.amount += quantity.amount;
   });
 }

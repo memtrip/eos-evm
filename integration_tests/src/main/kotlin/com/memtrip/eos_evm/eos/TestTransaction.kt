@@ -15,11 +15,20 @@ data class TestTransaction(
  * included in a block. Rather than litter the code with arbitrary Thread.sleep(n), this method allows the
  * transaction under test to fail up to the THRESHOLD.
  */
-fun faultTolerant(executor: () -> TestTransaction): TestTransaction {
+fun faultTolerantCreateAccount(executor: () -> TestTransaction): TestTransaction {
     val threshold = 3
     for (i in 0 until 3) {
         val response = executor()
         if (response.chain.isSuccessful || i >= threshold - 1) return response
+    }
+    throw IllegalStateException("not reachable")
+}
+
+fun faultTolerant(executor: () -> ChainResponse<TransactionCommitted>): ChainResponse<TransactionCommitted> {
+    val threshold = 3
+    for (i in 0 until 3) {
+        val response = executor()
+        if (response.isSuccessful || i >= threshold - 1) return response
     }
     throw IllegalStateException("not reachable")
 }

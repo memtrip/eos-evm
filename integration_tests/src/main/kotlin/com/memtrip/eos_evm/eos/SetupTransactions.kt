@@ -11,7 +11,7 @@ import com.memtrip.eos.chain.actions.transaction.transfer.TransferChain
 import com.memtrip.eos_evm.eos.Config.CONTRACT_ACCOUNT_NAME
 import com.memtrip.eos_evm.eos.Config.SEED_PRIVATE_KEY
 import com.memtrip.eos_evm.eos.Config.SYMBOL
-import com.memtrip.eos_evm.eos.create.CreateAction
+import com.memtrip.eos_evm.eos.actions.create.CreateAction
 import com.memtrip.eos_evm.ethereum.EthAccount
 import java.lang.IllegalStateException
 

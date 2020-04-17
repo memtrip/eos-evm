@@ -42,8 +42,7 @@ class AccountState {
         if (key == cacheItems->at(i).key && codeAddress == cacheItems->at(i).codeAddress)
           return cacheItems->at(i).value;
       }
-      bytes_t bytes = external->storageAt(key, codeAddress);
-      return BigInt::fromBigEndianBytes(bytes);
+      return external->storageAt(key, codeAddress);
     }
     
     int exists(std::shared_ptr<External> external, uint256_t key, uint256_t codeAddress) {

@@ -1,13 +1,13 @@
-package com.memtrip.eos_evm.eos.raw.abi
+package com.memtrip.eos_evm.eos.actions.withdraw.abi
 
 import com.memtrip.eos.abi.writer.Abi
 import com.memtrip.eos.abi.writer.ChildCompress
 
 @Abi
-data class RawBody(
-    val args: RawArgs
+data class WithdrawBody(
+    val args: WithdrawArgs
 ) {
 
-    val getArgs: RawArgs
+    val getArgs: WithdrawArgs
         @ChildCompress get() = args
 }

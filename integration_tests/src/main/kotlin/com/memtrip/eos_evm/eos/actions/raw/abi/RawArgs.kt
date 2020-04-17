@@ -1,4 +1,4 @@
-package com.memtrip.eos_evm.eos.raw.abi
+package com.memtrip.eos_evm.eos.actions.raw.abi
 
 import com.memtrip.eos.abi.writer.*
 

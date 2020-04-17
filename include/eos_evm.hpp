@@ -9,9 +9,6 @@
 using namespace std;
 using namespace eosio;
 
-constexpr eosio::symbol CONTRACT_SYMBOL = eosio::symbol{"EVM", 4};
-constexpr eosio::name TOKEN_CONTRACT = eosio::name("eosio.token");
-
 class [[eosio::contract("eos_evm")]] eos_evm : public contract {
   public:
     struct [[eosio::table]] account {
@@ -50,6 +47,7 @@ class [[eosio::contract("eos_evm")]] eos_evm : public contract {
       uint64_t pk;
       checksum256 accountIdentifier;
       checksum256 address;
+      uint64_t nonce;
       string code;
 
       auto primary_key() const { return pk; }
@@ -78,10 +76,10 @@ class [[eosio::contract("eos_evm")]] eos_evm : public contract {
     [[eosio::on_notify("eosio.token::transfer")]]
     void transfer(name from, name to, asset quantity, string memo);
 
-    using withdraw_action = action_wrapper<"withdraw"_n, &eos_evm::withdraw>;
-    using transfer_action = action_wrapper<"transfer"_n, &eos_evm::transfer>;
-
   private:
+    static constexpr eosio::symbol CONTRACT_SYMBOL = eosio::symbol{"EVM", 4};
+    static constexpr eosio::name TOKEN_CONTRACT = eosio::name("eosio.token");
+
     void handleCallResult(const name& from, call_result_t callResult, std::shared_ptr<AccountState> accountState);
     void resolveAccountState(const name& from, std::shared_ptr<AccountState> accountState);
 };

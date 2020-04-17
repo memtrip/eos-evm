@@ -1,4 +1,4 @@
-package com.memtrip.eos_evm.eos.raw
+package com.memtrip.eos_evm.eos.actions.withdraw
 
 import com.memtrip.eos.abi.writer.compression.CompressionType
 import com.memtrip.eos.chain.actions.ChainResponse
@@ -10,16 +10,15 @@ import com.memtrip.eos.http.rpc.ChainApi
 import com.memtrip.eos.http.rpc.model.transaction.response.TransactionCommitted
 import com.memtrip.eos_evm.eos.AbiBinaryGenEvmWriter
 import com.memtrip.eos_evm.eos.Config
-import com.memtrip.eos_evm.eos.raw.abi.RawArgs
-import com.memtrip.eos_evm.eos.raw.abi.RawBody
+import com.memtrip.eos_evm.eos.actions.withdraw.abi.WithdrawArgs
+import com.memtrip.eos_evm.eos.actions.withdraw.abi.WithdrawBody
 import io.reactivex.Single
 
-class RawAction(chainApi: ChainApi) : ChainTransaction(chainApi) {
+class WithdrawAction(chainApi: ChainApi) : ChainTransaction(chainApi) {
 
     fun pushTransaction(
-        from: String,
-        code: String,
-        sender: String,
+        to: String,
+        quantity: String,
         transactionContext: TransactionContext
     ): Single<ChainResponse<TransactionCommitted>> {
         return push(
@@ -27,28 +26,22 @@ class RawAction(chainApi: ChainApi) : ChainTransaction(chainApi) {
             listOf(
                 ActionAbi(
                     Config.CONTRACT_ACCOUNT_NAME,
-                    "raw",
+                    "withdraw",
                     listOf(
                         TransactionAuthorizationAbi(
                             transactionContext.authorizingAccountName,
                             "active")
                     ),
-                    bin(from, code, sender)
+                    bin(to, quantity)
                 )
             ),
             transactionContext.authorizingPrivateKey
         )
     }
 
-    private fun bin(
-        from: String,
-        code: String,
-        sender: String
-    ): String {
-        return AbiBinaryGenEvmWriter(CompressionType.NONE).squishRawBody(
-            RawBody(
-                RawArgs(from, code, sender)
-            )
+    private fun bin(to: String, quantity: String): String {
+        return AbiBinaryGenEvmWriter(CompressionType.NONE).squishWithdrawBody(
+            WithdrawBody(WithdrawArgs(to, quantity))
         ).toHex()
     }
 }

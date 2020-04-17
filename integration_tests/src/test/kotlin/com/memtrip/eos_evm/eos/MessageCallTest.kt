@@ -2,7 +2,7 @@ package com.memtrip.eos_evm.eos
 
 import com.memtrip.eos.chain.actions.transaction.TransactionContext
 import com.memtrip.eos.http.rpc.Api
-import com.memtrip.eos_evm.eos.raw.RawAction
+import com.memtrip.eos_evm.eos.actions.raw.RawAction
 import com.memtrip.eos_evm.eos.state.GetCode
 import com.memtrip.eos_evm.ethereum.EthereumTransaction
 import com.memtrip.eos_evm.ethereum.pad256
