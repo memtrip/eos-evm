@@ -91,7 +91,7 @@ typedef std::vector<RLPItem> rlp_t;
 
 enum EmplaceResult {
   EMPLACE_ADDRESS_NOT_FOUND,
-  EMPLACE_CODE_EXISTS,
+  EMPLACE_INSUFFICIENT_FUNDS,
   EMPLACE_SUCCESS
 };
 

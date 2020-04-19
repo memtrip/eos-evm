@@ -982,8 +982,15 @@ instruction_result_t Operation::selfdestruct(
 ) {
   uint256_t address = stack->peek(0);
   stack->pop(1);
-  external->suicide(address);
-  return std::make_pair(InstructionResult::STOP_EXEC, 0);
+  emplace_t result = external->selfdestruct(address);
+
+  switch (result.first) {
+    case EmplaceResult::EMPLACE_ADDRESS_NOT_FOUND:
+    case EmplaceResult::EMPLACE_INSUFFICIENT_FUNDS:
+      return std::make_pair(InstructionResult::INSTRUCTION_TRAP, Trap::invalidCodeAddress());
+    case EmplaceResult::EMPLACE_SUCCESS:
+      return std::make_pair(InstructionResult::STOP_EXEC, 0);
+  }
 }
 
 instruction_result_t Operation::codesize(

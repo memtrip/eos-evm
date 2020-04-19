@@ -4,15 +4,10 @@
 #include <evm/address.hpp>
 
 typedef std::vector<std::pair<std::vector<uint256_t>, bytes_t>> log_spy_t;
-
 typedef std::vector<std::pair<uint256_t, bytes_t>> bytes_spy_t;
-
 typedef std::vector<uint256_t> word_spy_t;
-
 typedef std::vector<std::pair<uint256_t, double>> balance_responder_t;
-
 typedef std::vector<std::pair<uint256_t, bytes_t>> bytes_responder_t;
-
 typedef std::vector<std::pair<uint256_t, uint256_t>> word_responder_t;
 
 class ExternalMock: public External {
@@ -20,7 +15,7 @@ class ExternalMock: public External {
   public:
     log_spy_t logSpy;
     word_spy_t codeSpy;
-    word_spy_t suicideSpy;
+    word_spy_t selfdestructSpy;
     bytes_spy_t emplaceSpy;
     bytes_responder_t codeResponder;
     balance_responder_t balanceResponder;
@@ -29,11 +24,15 @@ class ExternalMock: public External {
     ExternalMock() {
       logSpy = log_spy_t();
       codeSpy = word_spy_t();
-      suicideSpy = word_spy_t();
+      selfdestructSpy = word_spy_t();
       emplaceSpy = bytes_spy_t();
       codeResponder = bytes_responder_t();
       balanceResponder = balance_responder_t();
       storageResponder = word_responder_t();
+    }
+
+    uint64_t senderAccountBalance() {
+      return 0;
     }
 
     void log(const std::vector<uint256_t>& topics, std::shared_ptr<bytes_t> data) {
@@ -65,11 +64,12 @@ class ExternalMock: public External {
       return uint256_t(0);
     }
 
-    void suicide(const uint256_t& address) {
-      suicideSpy.push_back(address);
+    emplace_t selfdestruct(const uint256_t& address) {
+      selfdestructSpy.push_back(address);
+      return std::make_pair(EmplaceResult::EMPLACE_SUCCESS, 0);
     }
 
-    emplace_t emplaceCode(const uint256_t& address, std::shared_ptr<bytes_t> code) {
+    emplace_t emplaceCode(const uint256_t& address, uint64_t endowment, std::shared_ptr<bytes_t> code) {
       emplaceSpy.push_back(std::make_pair(address, bytes_t(code->begin(), code->end())));
       return std::make_pair(EmplaceResult::EMPLACE_SUCCESS, Address::ethereumAddressFrom(address, uint256_t(0)));
     }

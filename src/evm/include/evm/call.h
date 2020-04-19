@@ -5,7 +5,7 @@
 #include <evm/call.h>
 #include <evm/external.h>
 #include <evm/account_state.hpp>
-#include <evm/context.h>
+#include <evm/context.hpp>
 #include <evm/memory.hpp>
 #include <evm/trap.hpp>
 

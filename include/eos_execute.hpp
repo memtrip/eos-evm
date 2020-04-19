@@ -4,7 +4,7 @@
 #include <evm/types.h>
 #include <evm/account_state.hpp>
 #include <evm/big_int.hpp>
-#include <evm/context.h>
+#include <evm/context.hpp>
 #include <evm/overflow.hpp>
 #include <evm/external.h>
 
@@ -29,26 +29,7 @@ class eos_execute {
       switch (Transaction::type(rlp)) {
         case TransactionActionType::TRANSACTION_CREATE:
           {
-            std::shared_ptr<Context> context = std::make_shared<Context>(
-              env.chainId,
-              env.blockNumber,
-              env.timestamp,
-              env.gasLimit,
-              env.coinbase,
-              env.difficulty,
-              env.blockHash,
-              address,
-              uint256_t(0),
-              uint256_t(0),
-              address,
-              address,
-              uint256_t(0),
-              Transaction::gasLimit(rlp),
-              Transaction::gasPrice(rlp),
-              Transaction::value(rlp),
-              data,
-              std::shared_ptr<bytes_t>()
-            );
+            std::shared_ptr<Context> context = Context::makeCreate(env, address, rlp);
             result = call->create(
               true,
               memory,
@@ -60,26 +41,7 @@ class eos_execute {
           }
         case TransactionActionType::TRANSACTION_CALL:
           {
-            std::shared_ptr<Context> context = std::make_shared<Context>(
-              env.chainId,
-              env.blockNumber,
-              env.timestamp,
-              env.gasLimit,
-              env.coinbase,
-              env.difficulty,
-              env.blockHash,
-              address,
-              uint256_t(0),
-              uint256_t(0),
-              address,
-              address,
-              uint256_t(0),
-              Transaction::gasLimit(rlp),
-              Transaction::gasPrice(rlp),
-              Transaction::value(rlp),
-              external->code(address), /* TODO: this should happen in eos_evm.cpp */
-              data
-            );
+            std::shared_ptr<Context> context = Context::makeCall(env, address, rlp, external);
             result = call->call(
               true,
               memory,

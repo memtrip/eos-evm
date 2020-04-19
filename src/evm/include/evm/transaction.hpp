@@ -36,7 +36,7 @@ class Transaction {
       return BigInt::fromBigEndianBytes(rlp->at(0).values[1].bytes);
     }
 
-    static uint64_t gasLimit(std::shared_ptr<std::vector<RLPItem>> rlp) {
+    static uint64_t gas(std::shared_ptr<std::vector<RLPItem>> rlp) {
       return Overflow::uint256Cast(BigInt::fromBigEndianBytes(rlp->at(0).values[2].bytes)).first;
     }
 

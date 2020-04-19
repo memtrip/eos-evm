@@ -604,9 +604,6 @@ class Utils {
 
     static void printTrap(const trap_t& trap) {
       switch (trap.first) {
-        case TrapKind::TRAP_NONE:
-          printf("trap{none}\n");
-          break;
         case TrapKind::TRAP_STACK_UNDERFLOW:
           printf("trap{stack_underflow}\n");
           break;
@@ -616,17 +613,11 @@ class Utils {
         case TrapKind::TRAP_INVALID_INSTRUCTION:
           printf("trap{invalid_instruction}\n");
           break;
-        case TrapKind::TRAP_CODE_EXISTS:
-          printf("trap{code_exists}\n");
-          break;
         case TrapKind::TRAP_INVALID_CODE_ADDRESS:
           printf("trap{invalid_code_address}\n");
           break;
-        case TrapKind::TRAP_CALL:
-          printf("trap{call}\n");
-          break;
-        case TrapKind::TRAP_CREATE:
-          printf("trap{create}\n");
+        case TrapKind::TRAP_INSUFFICIENT_FUNDS:
+          printf("trap{insufficient_funds}\n");
           break;
         case TrapKind::TRAP_INVALID_JUMP:
           {

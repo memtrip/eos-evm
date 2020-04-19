@@ -14,7 +14,7 @@ class GetAccount(
     data class Item(
         val user: String,
         val nonce: String,
-        val asset: String,
+        val balance: String,
         val accountIdentifier: String
     )
 
@@ -47,7 +47,7 @@ class GetAccount(
                         Item(
                             tableRows[index]["user"].toString(),
                             tableRows[index]["nonce"].toString(),
-                            tableRows[index]["asset"].toString(),
+                            tableRows[index]["balance"].toString(),
                             tableRows[index]["accountIdentifier"].toString()
                         )
                     })

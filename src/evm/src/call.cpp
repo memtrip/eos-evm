@@ -34,7 +34,7 @@ call_result_t Call::create(
       messageCallReturn.slicePosition.size
     );
 
-    emplace_t emplaceResult = external->emplaceCode(context->sender, contractCode);
+    emplace_t emplaceResult = external->emplaceCode(context->sender, 0, contractCode);
 
     switch (emplaceResult.first) {
       case EmplaceResult::EMPLACE_ADDRESS_NOT_FOUND:
@@ -42,11 +42,13 @@ call_result_t Call::create(
           MessageCallResult::MESSAGE_CALL_FAILED,
           Trap::invalidCodeAddress()
         );
-      case EmplaceResult::EMPLACE_CODE_EXISTS:
-        return std::make_pair(
-          MessageCallResult::MESSAGE_CALL_FAILED,
-          Trap::codeExists()
-        );
+      case EmplaceResult::EMPLACE_INSUFFICIENT_FUNDS:
+        {
+          return std::make_pair(
+            MessageCallResult::MESSAGE_CALL_FAILED,
+            Trap::insufficientFunds()
+          );
+        }
       case EmplaceResult::EMPLACE_SUCCESS:
         break;
     }

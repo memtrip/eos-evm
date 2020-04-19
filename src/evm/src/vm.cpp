@@ -284,7 +284,7 @@ instruction_result_t VM::executeCreateInstruction(
   std::shared_ptr<External> external,
   std::shared_ptr<Call> call
 ) {
-  uint256_t endowment = stack->peek(0);
+  uint64_t endowment = Overflow::uint256Cast(stack->peek(0)).first;
   uint256_t initOff = stack->peek(1);
   uint256_t initSize = stack->peek(2);
   stack->pop(3);
@@ -313,7 +313,7 @@ instruction_result_t VM::executeCreateInstruction(
     Overflow::uint256Cast(initSize).first
   );
   
-  emplace_t emplaceResult = external->emplaceCode(address, contractCode);
+  emplace_t emplaceResult = external->emplaceCode(address, endowment, contractCode);
   switch (emplaceResult.first) {
     case EmplaceResult::EMPLACE_SUCCESS:
       {
@@ -333,10 +333,10 @@ instruction_result_t VM::executeCreateInstruction(
         stack->push(UINT256_ZERO);
         return std::make_pair(InstructionResult::INSTRUCTION_TRAP, Trap::invalidCodeAddress());
       }
-    case EmplaceResult::EMPLACE_CODE_EXISTS:
+    case EmplaceResult::EMPLACE_INSUFFICIENT_FUNDS:
       {
         stack->push(UINT256_ZERO);
-        return std::make_pair(InstructionResult::INSTRUCTION_TRAP, Trap::codeExists());
+        return std::make_pair(InstructionResult::INSTRUCTION_TRAP, Trap::insufficientFunds());
       }
   }
 

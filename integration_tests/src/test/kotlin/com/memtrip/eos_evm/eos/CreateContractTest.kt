@@ -38,8 +38,23 @@ class CreateContractTest {
     fun `Create a contract via CREATE`() {
 
         // given
-        val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+        val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seedWithBalance()
         val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
+
+        // when
+        val transferResult = faultTolerant {
+            setupTransactions.transfer(
+                "eos.evm",
+                "0.5000 ${Config.SYMBOL}",
+                "evm funds",
+                newAccountName,
+                newAccountPrivateKey,
+                "eosio.token"
+            ).blockingGet()
+        }
+
+        // then
+        assertEquals(202, transferResult.statusCode)
 
         // when
         val transaction = EthereumTransaction(
@@ -73,17 +88,16 @@ class CreateContractTest {
         if (getCodeResult !is GetCode.Record.Value) fail("code record not found") else {
             assertEquals(
                 "601080600c6000396000f3006000355415600957005b60203560003555",
-                getCodeResult.code
+                getCodeResult.item.code
             )
             assertEquals(
                 accountIdentifier.pad256().toHexString(),
-                getCodeResult.owner
+                getCodeResult.item.owner
             )
         }
     }
 
     @Test
-
     fun `Create a contract via COPYCODE`() {
 
         // given
@@ -121,11 +135,11 @@ class CreateContractTest {
         if (getCodeResult !is GetCode.Record.Value) fail("code record not found") else {
             assertEquals(
                 "6080604052348015600f57600080fd5b506004361060285760003560e01c8063771602f714602d575b600080fd5b606060048036036040811015604157600080fd5b8101908080359060200190929190803590602001909291905050506076565b6040518082815260200191505060405180910390f35b600081830190509291505056fea265627a7a723158209551755b4e59ca6cf78d79f5356d91565950805937074458700610f23c6ecf9b64736f6c63430005100032",
-                getCodeResult.code
+                getCodeResult.item.code
             )
             assertEquals(
                 accountIdentifier.pad256().toHexString(),
-                getCodeResult.owner
+                getCodeResult.item.owner
             )
         }
     }

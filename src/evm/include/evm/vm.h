@@ -7,7 +7,7 @@
 #include <evm/memory.hpp>
 #include <evm/external.h>
 #include <evm/gasometer.hpp>
-#include <evm/context.h>
+#include <evm/context.hpp>
 #include <evm/operation.h>
 
 class VM {

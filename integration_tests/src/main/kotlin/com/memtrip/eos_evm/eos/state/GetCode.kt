@@ -12,11 +12,12 @@ class GetCode(
     data class Item(
         val code: String,
         val owner: String,
-        val address: String
+        val address: String,
+        val balance: String
     )
 
     sealed class Record {
-        data class Value(val code: String, val owner: String, val address: String) : Record()
+        data class Value(val item: Item) : Record()
         data class Multiple(val items: List<Item>) : Record()
         object None : Record()
     }
@@ -40,11 +41,12 @@ class GetCode(
             if (!response.isSuccessful) Record.None else {
                 val tableRows = response.body()!!.rows
                 if (tableRows.isEmpty()) Record.None else {
-                    Record.Value(
+                    Record.Value(Item(
                         tableRows[0]["code"].toString(),
                         tableRows[0]["accountIdentifier"].toString(),
-                        tableRows[0]["address"].toString()
-                    )
+                        tableRows[0]["address"].toString(),
+                        tableRows[0]["balance"].toString()
+                    ))
                 }
             }
         }
@@ -73,7 +75,8 @@ class GetCode(
                         Item(
                             tableRows[index]["code"].toString(),
                             tableRows[index]["accountIdentifier"].toString(),
-                            tableRows[index]["address"].toString()
+                            tableRows[index]["address"].toString(),
+                            tableRows[index]["balance"].toString()
                         )
                     })
                 }

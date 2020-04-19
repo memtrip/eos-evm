@@ -6,7 +6,7 @@
 #include <evm/instruction.hpp>
 #include <evm/external.h>
 #include <evm/stack.hpp>
-#include <evm/context.h>
+#include <evm/context.hpp>
 #include <evm/overflow.hpp>
 
 class GasCalculation {

@@ -27,7 +27,7 @@ TEST_CASE("Transaction call", "[transaction)]") {
   CHECK(TransactionActionType::TRANSACTION_CALL ==Transaction::type(rlp));
   CHECK(uint256_t(0) == Transaction::nonce(rlp));
   CHECK(uint256_t(0x01) == Transaction::gasPrice(rlp));
-  CHECK(uint64_t(0x5208) == Transaction::gasLimit(rlp));
+  CHECK(uint64_t(0x5208) == Transaction::gas(rlp));
   CHECK("095e7baea6a6c7c4c2dfeb977efac326af552d87" == 
     TestUtils::bytesToHex(address)
   );
@@ -61,7 +61,7 @@ TEST_CASE("Transaction contract", "[transaction)]") {
   CHECK(TransactionActionType::TRANSACTION_CREATE == Transaction::type(rlp));
   CHECK(uint256_t(156616) == Transaction::nonce(rlp));
   CHECK(uint256_t(0x0879c08c7a) == Transaction::gasPrice(rlp));
-  CHECK(uint256_t(0x033450) == Transaction::gasLimit(rlp));
+  CHECK(uint256_t(0x033450) == Transaction::gas(rlp));
   CHECK(uint256_t(0x0) == Transaction::value(rlp));
   CHECK("6060604052341561000f57600080fd5b6101708061001e6000396000f3006060604052600436106100405763ffffffff7c010000000000000000000000000000000000000000000000000000000060003504166390b98a118114610045575b600080fd5b341561005057600080fd5b61007473ffffffffffffffffffffffffffffffffffffffff60043516602435610086565b60405190815260200160405180910390f35b600073521db06bf657ed1d6c98553a70319a8ddbac75a38373ffffffffffffffffffffffffffffffffffffffff811663a9059cbb83866040517c010000000000000000000000000000000000000000000000000000000063ffffffff851602815273ffffffffffffffffffffffffffffffffffffffff90921660048301526024820152604401600060405180830381600087803b151561012557600080fd5b6102c65a03f1151561013657600080fd5b5060019796505050505050505600a165627a7a723058203f339a2d354208169adb91e00c0cc7ffc9a9f9e67930818df75c3724b686179d0029" == 
     TestUtils::bytesToHex(data)
@@ -95,7 +95,7 @@ TEST_CASE("Transaction call contract", "[transaction)]") {
   CHECK(TransactionActionType::TRANSACTION_CALL == Transaction::type(rlp));
   CHECK(uint256_t(1018) == Transaction::nonce(rlp));
   CHECK(uint256_t(0x028fa6ae00) == Transaction::gasPrice(rlp));
-  CHECK(uint256_t(0x0b5b51) == Transaction::gasLimit(rlp));
+  CHECK(uint256_t(0x0b5b51) == Transaction::gas(rlp));
   CHECK("77598616174a411ae9a1e197640903faab9ac1ae" == 
     TestUtils::bytesToHex(address)
   );
@@ -183,7 +183,7 @@ TEST_CASE("Unsigned transaction", "[transaction)]") {
   CHECK(TransactionActionType::TRANSACTION_CALL == Transaction::type(rlp));
   CHECK(uint256_t(0) == Transaction::nonce(rlp));
   CHECK(uint256_t(0x09184e72a000) == Transaction::gasPrice(rlp));
-  CHECK(uint256_t(0x030000) == Transaction::gasLimit(rlp));
+  CHECK(uint256_t(0x030000) == Transaction::gas(rlp));
   CHECK("b0920c523d582040f2bcb1bd7fb1c7c1ecebdb34" == 
     TestUtils::bytesToHex(address)
   );
@@ -214,7 +214,7 @@ TEST_CASE("Transaction digest", "[transaction)]") {
   CHECK(TransactionActionType::TRANSACTION_CREATE == Transaction::type(rlp));
   CHECK(uint256_t(1) == Transaction::nonce(rlp));
   CHECK(uint256_t(0x03e8) == Transaction::gasPrice(rlp));
-  CHECK(uint256_t(0x07d0) == Transaction::gasLimit(rlp));
+  CHECK(uint256_t(0x07d0) == Transaction::gas(rlp));
   CHECK(uint256_t(0x0) == Transaction::value(rlp));
   CHECK("0000000000000000" == TestUtils::bytesToHex(data));
   CHECK("01" == TestUtils::bytesToHex(v));

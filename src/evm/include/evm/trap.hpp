@@ -4,15 +4,12 @@
 #include <evm/types.h>
 
 enum TrapKind {
-  TRAP_NONE,
   TRAP_STACK_UNDERFLOW,
   TRAP_OUT_OF_STACK,
   TRAP_INVALID_INSTRUCTION,
   TRAP_INVALID_JUMP,
-  TRAP_CODE_EXISTS,
-  TRAP_INVALID_CODE_ADDRESS,
-  TRAP_CALL,
-  TRAP_CREATE
+  TRAP_INSUFFICIENT_FUNDS,
+  TRAP_INVALID_CODE_ADDRESS
 };
 
 struct JumpTrapInfo {
@@ -20,8 +17,8 @@ struct JumpTrapInfo {
 };
 
 typedef std::variant<
-  JumpTrapInfo,
-  uint8_t
+  uint8_t,
+  JumpTrapInfo
 > trap_info_t;
 
 typedef std::pair<TrapKind, trap_info_t> trap_t;
@@ -35,12 +32,12 @@ class Trap {
       return create(TrapKind::TRAP_INVALID_JUMP, info);
     }
 
-    static trap_t codeExists() {
-      return create(TrapKind::TRAP_CODE_EXISTS, 0);
-    }
-
     static trap_t invalidCodeAddress() {
       return create(TrapKind::TRAP_INVALID_CODE_ADDRESS, 0);
+    }
+
+    static trap_t insufficientFunds() {
+      return create(TrapKind::TRAP_INSUFFICIENT_FUNDS, 0);
     }
 
     static trap_t create(TrapKind kind, trap_info_t info) {

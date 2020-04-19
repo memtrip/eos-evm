@@ -6,7 +6,7 @@
 #include <evm/external.h>
 #include <evm/stack.hpp>
 #include <evm/gas_calculation.hpp>
-#include <evm/context.h>
+#include <evm/context.hpp>
 #include <evm/gas_types.h>
 
 class Gasometer {

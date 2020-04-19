@@ -10,6 +10,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.junit.Assert
 import org.junit.Assert.assertEquals
+import org.junit.Assert.fail
 import org.junit.Test
 import java.math.BigInteger
 import java.util.concurrent.TimeUnit
@@ -94,7 +95,7 @@ class NonceTest {
 
         // and when
         val endingNonce = getAccount.getEvmAccount(accountName).blockingGet()
-        if (endingNonce !is GetAccount.Record.Single) Assert.fail("Failed to create account") else {
+        if (endingNonce !is GetAccount.Record.Single) fail("Failed to create account") else {
             assertEquals("2.0", endingNonce.item.nonce)
         }
     }
