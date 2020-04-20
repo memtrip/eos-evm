@@ -100,7 +100,7 @@ class Gasometer {
             mem_gas_t memGas = memGasCost(currentMemorySize, gasMemProvided.memSize);
             gas_t gas = gasMemProvided.gas + memGas.memGasCost;
             // TODO: calculate provided
-            gas_t provided = 0;
+            gas_t provided = gasProvided(gas, gasMemProvided.requested);
             gas_t totalGas = gas + provided;
             GasRequirements gasRequirements = { totalGas, provided, memGas.newMemSize, memGas.newMemGas };
             return std::make_pair(GasometerResult::GASOMETER_RESULT_OK, gasRequirements);
@@ -142,6 +142,25 @@ class Gasometer {
           requiredMemSizeRounded
         };
         return memGas;
+      }
+    }
+
+    gas_t gasProvided(gas_t needed, uint256_t gasRequested) {
+      gas_t requested = Overflow::uint256Cast(gasRequested).first;
+      gas_t provided;
+      if (currentGas >= needed) {
+        gas_t gasRemaining = currentGas - needed;
+        gas_t maxGasProvided;
+        if (SUB_GAS_CAP_DIVISOR == 64) {
+          maxGasProvided = gasRemaining - (gasRemaining >> 6);
+        } else {
+          maxGasProvided = gasRemaining - (gasRemaining / SUB_GAS_CAP_DIVISOR);
+        }
+        return std::min(requested, maxGasProvided);
+      } else {
+        if (requested > 0) return requested;
+        if (currentGas >= needed) return currentGas - needed;
+        return 0;
       }
     }
 };

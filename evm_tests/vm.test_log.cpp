@@ -3,7 +3,7 @@
 #include <evm/utils.hpp>
 #include <evm/vm.h>
 #include <evm/hex.hpp>
-#include <evm/return_data.h>
+
 #include <evm/call.h>
 #include <evm/gasometer.hpp>
 #include <evm/big_int.hpp>
@@ -51,7 +51,7 @@ TEST_CASE("Log empty (LOG0)", "[log]") {
   Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(operation, context, mem, accountState, external, call);
+  exec_result_t result = vm.execute(operation, context, mem, accountState, external);
 
   // then
   CHECK(99619 == Utils::gasLeft(result));
@@ -103,7 +103,7 @@ TEST_CASE("Log sender (LOG1)", "[log]") {
   Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(operation, context, mem, accountState, external, call);
+  exec_result_t result = vm.execute(operation, context, mem, accountState, external);
 
   // then
   CHECK(98974 == Utils::gasLeft(result));
@@ -160,7 +160,7 @@ TEST_CASE("Log origin and sender (LOG2)", "[log]") {
   Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(operation, context, mem, accountState, external, call);
+  exec_result_t result = vm.execute(operation, context, mem, accountState, external);
 
   // then
   CHECK(98977 == Utils::gasLeft(result));
@@ -220,7 +220,7 @@ TEST_CASE("Log caller, origin, sender (LOG3)", "[log]") {
   Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(operation, context, mem, accountState, external, call);
+  exec_result_t result = vm.execute(operation, context, mem, accountState, external);
 
   // then
   CHECK(98977 == Utils::gasLeft(result));
@@ -283,7 +283,7 @@ TEST_CASE("Log number, caller, origin and sender (LOG4)", "[log]") {
   Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(operation, context, mem, accountState, external, call);
+  exec_result_t result = vm.execute(operation, context, mem, accountState, external);
 
   // then
   CHECK(79935 == Utils::gasLeft(result));

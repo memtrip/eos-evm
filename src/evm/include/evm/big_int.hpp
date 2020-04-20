@@ -4,7 +4,6 @@
 #include <vector>
 #include <array>
 #include <evm/types.h>
-#include <evm/hex.hpp>
 
 class BigInt {
   public:
@@ -16,25 +15,18 @@ class BigInt {
       return intx::be::load<uint256_t>(data);
     }
 
+    static uint256_t from32Bytes(std::shared_ptr<bytes_t> bytes, uint64_t offset) {
+      uint8_t data[WORD_SIZE];
+      std::copy(bytes->begin() + offset, bytes->begin() + offset + WORD_SIZE, data);
+      return intx::be::load<uint256_t>(data);
+    }
+
     static uint256_t fromFixed32(const std::array<uint8_t, 32>& bytes) {
       uint8_t data[WORD_SIZE];
       uint8_t offset = WORD_SIZE - bytes.size();
       std::fill_n(data, WORD_SIZE, 0);
       std::copy(bytes.begin(), bytes.end(), data + offset);
       return intx::be::load<uint256_t>(data);
-    }
-
-    static uint256_t fromBytes(const bytes_t& bytes) {
-      uint8_t data[WORD_SIZE];
-      uint8_t offset = WORD_SIZE - bytes.size();
-      std::fill_n(data, WORD_SIZE, 0);
-      std::copy(bytes.begin(), bytes.end(), data + offset);
-      return intx::le::load<uint256_t>(data);
-    }
-
-    static uint256_t fromHex(const std::string& hex) {
-      bytes_t hexBytes = Hex::hexToBytes(hex);
-      return BigInt::fromBigEndianBytes(hexBytes);
     }
 
     static uint256_t fromCompressedKey(const compressed_key_t& compressedKey) {

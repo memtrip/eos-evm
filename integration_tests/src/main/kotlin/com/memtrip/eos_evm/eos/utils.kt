@@ -1,6 +1,7 @@
 package com.memtrip.eos_evm.eos
 
 import com.memtrip.eos.chain.actions.ChainResponse
+import com.memtrip.eos.http.rpc.model.transaction.response.TransactionCommitted
 import com.memtrip.eos_evm.ethereum.EthereumTransaction
 import java.lang.IllegalStateException
 import java.math.BigInteger
@@ -39,4 +40,8 @@ fun stubTransaction(): EthereumTransaction {
 
 fun <T> ChainResponse<T>.containsErrorString(value: String): Boolean {
     return errorBody?.error?.details?.get(0)?.message?.contains(value) ?: false
+}
+
+fun ChainResponse<TransactionCommitted>.containsConsoleString(value: String): Boolean {
+    return isSuccessful && body?.processed?.action_traces?.first()?.console?.contains(value) == true
 }

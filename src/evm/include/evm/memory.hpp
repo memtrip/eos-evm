@@ -4,21 +4,22 @@
 #include <evm/types.h>
 #include <evm/overflow.hpp>
 #include <evm/big_int.hpp>
+#include <evm/hex.hpp>
 
 class Memory {
   private: 
-    std::shared_ptr<bytes_t> memory;
     uint64_t memorySize;
     
     void resize(uint64_t newSize) {
       uint64_t sizeChange = newSize - memorySize;
       memorySize = newSize;
       memory->resize(newSize);
-      std::fill(memory->begin() + sizeChange, memory->end(), 0);
     }
 
   public:
     static constexpr uint64_t capacity = 4 * 1024;
+
+    std::shared_ptr<bytes_t> memory;
 
     uint64_t length() const {
       return memorySize;
@@ -62,6 +63,12 @@ class Memory {
       }
     }
 
+    void writeSlice(uint64_t offset, uint64_t size, std::shared_ptr<bytes_t> bytes) {
+      if (bytes->size() > 0) {
+        std::copy(bytes->begin(), bytes->begin() + size, memory->begin() + offset);
+      }
+    }
+
     void writeSlice(uint64_t offset, const bytes_t& bytes) {
       if (bytes.size() > 0) {
         std::copy(bytes.begin(), bytes.end(), memory->begin() + offset);
@@ -74,6 +81,14 @@ class Memory {
         || size > memorySize
       ) return std::make_shared<bytes_t>(bytes_t());
       return std::make_shared<bytes_t>(bytes_t(memory->begin() + offset, memory->begin() + offset + size));
+    }
+
+    std::string sliceAsString(uint64_t offset, uint64_t size) {
+      if (!isValidRange(offset, size) 
+        || offset > memorySize 
+        || size > memorySize
+      ) return "";
+      return Hex::bytesToHex(bytes_t(memory->begin() + offset, memory->begin() + offset + size));
     }
 
     void copyData(
@@ -112,5 +127,9 @@ class Memory {
     static bool isValidRange(uint64_t offset, uint64_t size) {
       overflow_t overflow = Overflow::add(offset, size);
       return size > 0 && !overflow.second;
+    }
+
+    void printBytes() {
+      printf("memory{%s}\n", Hex::bytesToHex(memory).c_str());
     }
 };

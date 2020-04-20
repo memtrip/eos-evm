@@ -1,13 +1,15 @@
 #include "catch.hpp"
+#include "test_utils.hpp"
+#include "external_mock.hpp"
+
 #include <memory>
+
 #include <evm/utils.hpp>
 #include <evm/vm.h>
 #include <evm/hex.hpp>
-#include <evm/return_data.h>
 #include <evm/call.h>
 #include <evm/gasometer.hpp>
 #include <evm/big_int.hpp>
-#include "external_mock.hpp"
 
 TEST_CASE("Blockhash (stub)", "[env]") {
   // given
@@ -28,7 +30,7 @@ TEST_CASE("Blockhash (stub)", "[env]") {
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
-    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
     100000,
     uint256_t(0),
@@ -52,7 +54,7 @@ TEST_CASE("Blockhash (stub)", "[env]") {
   Operation operation = Operation();
 
   // when
-  vm.execute(operation, context, mem, accountState, external, call);
+  vm.execute(operation, context, mem, accountState, external);
 
   // then
   CHECK("f1250fd89a1c3e517ae92cc1f73865c594bfad34db20f3b3396af4efe19d3bfb" == 
@@ -78,7 +80,7 @@ TEST_CASE("Coinbase (stub)", "[env]") {
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
-    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
     100000,
     uint256_t(0),
@@ -102,7 +104,7 @@ TEST_CASE("Coinbase (stub)", "[env]") {
   Operation operation = Operation();
 
   // when
-  vm.execute(operation, context, mem, accountState, external, call);
+  vm.execute(operation, context, mem, accountState, external);
 
   // then
   CHECK("0000000000000000000000002adc25665018aa1fe0e6bc666dac8fc2697ff9ba" == 
@@ -128,7 +130,7 @@ TEST_CASE("Difficulty (stub)", "[env]") {
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
-    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
     100000,
     uint256_t(0),
@@ -152,7 +154,7 @@ TEST_CASE("Difficulty (stub)", "[env]") {
   Operation operation = Operation();
 
   // when
-  vm.execute(operation, context, mem, accountState, external, call);
+  vm.execute(operation, context, mem, accountState, external);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000100" == 
@@ -178,7 +180,7 @@ TEST_CASE("Timestamp", "[env]") {
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
-    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
     100000,
     uint256_t(0),
@@ -202,7 +204,7 @@ TEST_CASE("Timestamp", "[env]") {
   Operation operation = Operation();
 
   // when
-  vm.execute(operation, context, mem, accountState, external, call);
+  vm.execute(operation, context, mem, accountState, external);
 
   // then
   CHECK(12345 == vm.stack->top());
@@ -226,7 +228,7 @@ TEST_CASE("Number", "[env]") {
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
-    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
     100000,
     uint256_t(0),
@@ -250,7 +252,7 @@ TEST_CASE("Number", "[env]") {
   Operation operation = Operation();
 
   // when
-  vm.execute(operation, context, mem, accountState, external, call);
+  vm.execute(operation, context, mem, accountState, external);
 
   // then
   CHECK(16339169 == vm.stack->top());
@@ -274,7 +276,7 @@ TEST_CASE("Gas limit", "[env]") {
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
-    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
     100000,
     uint256_t(0),
@@ -298,7 +300,7 @@ TEST_CASE("Gas limit", "[env]") {
   Operation operation = Operation();
 
   // when
-  vm.execute(operation, context, mem, accountState, external, call);
+  vm.execute(operation, context, mem, accountState, external);
 
   // then
   CHECK(100000 == vm.stack->top());
@@ -322,7 +324,7 @@ TEST_CASE("Chain id", "[env]") {
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
-    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
     100000,
     uint256_t(0),
@@ -346,7 +348,7 @@ TEST_CASE("Chain id", "[env]") {
   Operation operation = Operation();
 
   // when
-  vm.execute(operation, context, mem, accountState, external, call);
+  vm.execute(operation, context, mem, accountState, external);
 
   // then
   CHECK(1 == vm.stack->top());
@@ -370,7 +372,7 @@ TEST_CASE("Call value", "[env]") {
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
-    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
     100000,
     uint256_t(0),
@@ -394,7 +396,7 @@ TEST_CASE("Call value", "[env]") {
   Operation operation = Operation();
 
   // when
-  vm.execute(operation, context, mem, accountState, external, call);
+  vm.execute(operation, context, mem, accountState, external);
 
   // then
   CHECK(34 == vm.stack->top());

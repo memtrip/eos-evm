@@ -94,6 +94,9 @@ class CreateContractTest {
                 accountIdentifier.pad256().toHexString(),
                 getCodeResult.item.owner
             )
+            assertEquals("1.0", getCodeResult.item.nonce)
+            assertEquals("0.0023 EVM", getCodeResult.item.balance)
+            assertTrue(getCodeResult.item.address.isNotEmpty())
         }
     }
 
@@ -141,6 +144,9 @@ class CreateContractTest {
                 accountIdentifier.pad256().toHexString(),
                 getCodeResult.item.owner
             )
+            assertEquals("1.0", getCodeResult.item.nonce)
+            assertEquals("0.0000 EVM", getCodeResult.item.balance)
+            assertTrue(getCodeResult.item.address.isNotEmpty())
         }
     }
 
@@ -196,6 +202,56 @@ class CreateContractTest {
                 accountIdentifier.pad256().toHexString(),
                 result.items[1].owner
             )
+        }
+    }
+
+    @Test
+    fun `Create a contract via CREATE2`() {
+
+        // given
+        val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+        val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
+
+        // when
+        val transaction = EthereumTransaction(
+            1,
+            BigInteger("5af3107a4000", 16),
+            BigInteger("0186a0", 16),
+            BigInteger.valueOf(0),
+            "0x6080604052348015600f57600080fd5b5060cb8061001e6000396000f3fe608060405260043610601c5760003560e01c806373d98e39146021575b600080fd5b60276029565b005b7fbbbf55a6f5ae8ee75e6fb8f92a93e32841ed3055bf2139469c60bbc79a455da73334604051808373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020018281526020019250505060405180910390a156fea265627a7a7231582069c4265b77ab1bd39221ac01c9f6f1adacb2f5a7beeccf724523846fa4aaf8ba64736f6c63430005100032"
+        )
+
+        val response = rawAction.pushTransaction(
+            newAccountName,
+            transaction.sign(newEthAccount).signedTransaction.toHexString(),
+            accountIdentifier.toHexString(),
+            TransactionContext(
+                newAccountName,
+                newAccountPrivateKey,
+                transactionDefaultExpiry()
+            )
+        ).blockingGet()
+
+        // then
+        assertEquals(response.statusCode, 202)
+
+        // and when
+        val getCodeResult = getCode.getValue(
+            accountIdentifier.pad256().toHexString()
+        ).blockingGet()
+
+        if (getCodeResult !is GetCode.Record.Value) fail("code record not found") else {
+            assertEquals(
+                "608060405260043610601c5760003560e01c806373d98e39146021575b600080fd5b60276029565b005b7fbbbf55a6f5ae8ee75e6fb8f92a93e32841ed3055bf2139469c60bbc79a455da73334604051808373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020018281526020019250505060405180910390a156fea265627a7a7231582069c4265b77ab1bd39221ac01c9f6f1adacb2f5a7beeccf724523846fa4aaf8ba64736f6c63430005100032",
+                getCodeResult.item.code
+            )
+            assertEquals(
+                accountIdentifier.pad256().toHexString(),
+                getCodeResult.item.owner
+            )
+            assertEquals("1.0", getCodeResult.item.nonce)
+            assertEquals("0.0000 EVM", getCodeResult.item.balance)
+            assertTrue(getCodeResult.item.address.isNotEmpty())
         }
     }
 }

@@ -29,11 +29,12 @@ class eos_external: public External {
     }
 
     void log(const std::vector<uint256_t>& topics, std::shared_ptr<bytes_t> data) {
-      std::string output;
+      std::string output = "LOG(topics=[";
       for (int i = 0; i < topics.size(); i++) {
-        output += "[" + Utils::uint256_2str(topics[i]) + "]\n";
+        output += Utils::uint256_2str(topics[i]) + ",";
       }
-      output += "{" + Hex::bytesToHex(data) + "}";
+      if (topics.size() > 0) output.pop_back();
+      output += "], data=" + Hex::bytesToHex(data) + ")";
       eosio::print(output);
     }
 
@@ -67,7 +68,7 @@ class eos_external: public External {
       auto accountItr = accountIdx.find(address);
       if (accountItr == accountIdx.end()) return uint256_t(0);
 
-      uint256_t compositeKey = Hash::keccak256Word(codeAddress, key);
+      uint256_t compositeKey = Hash::keccak256WordPair(codeAddress, key);
       eos_evm::account_state_table _account_state(_contract->get_self(), accountItr->user.value);
       auto idx = _account_state.get_index<name("statekey")>();
       auto itr = idx.find(BigInt::toFixed32(compositeKey));
@@ -93,13 +94,26 @@ class eos_external: public External {
    /*
     * Create a new code entry under the scope of the account associated with the address.
     */
-    emplace_t emplaceCode(const uint256_t& senderAddressWord, uint64_t endowment, std::shared_ptr<bytes_t> code) {
+    emplace_t emplaceCode(
+      const uint256_t& senderAddressWord, 
+      uint64_t endowment, 
+      std::shared_ptr<bytes_t> code,
+      const AddressScheme addressScheme
+    ) {
       address_t senderAddress = BigInt::toFixed32(senderAddressWord);
 
       if (_senderAccountBalance < endowment) return std::make_pair(EmplaceResult::EMPLACE_INSUFFICIENT_FUNDS, endowment);
 
       // TODO: support the CREATE2 address scheme
-      address_t codeAddress = Address::ethereumAddressFrom(senderAddressWord, uint256_t(_senderNonce));
+      address_t codeAddress;
+      switch (addressScheme) {
+        case AddressScheme::LEGACY:
+          codeAddress = Address::ethereumAddressFrom(senderAddressWord, uint256_t(_senderNonce));
+          break;
+        case AddressScheme::EIP_1014:
+          codeAddress = Address::ethereumAddressFrom(senderAddressWord, uint256_t(eosio::tapos_block_num()), code);
+          break;
+      }
 
       // create a new code record
       eos_evm::account_code_table _account_code(_contract->get_self(), _contract->get_self().value);

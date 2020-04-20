@@ -987,7 +987,7 @@ instruction_result_t Operation::selfdestruct(
   switch (result.first) {
     case EmplaceResult::EMPLACE_ADDRESS_NOT_FOUND:
     case EmplaceResult::EMPLACE_INSUFFICIENT_FUNDS:
-      return std::make_pair(InstructionResult::INSTRUCTION_TRAP, Trap::invalidCodeAddress());
+      return std::make_pair(InstructionResult::INSTRUCTION_TRAP, TrapKind::TRAP_INVALID_CODE_ADDRESS);
     case EmplaceResult::EMPLACE_SUCCESS:
       return std::make_pair(InstructionResult::STOP_EXEC, 0);
   }

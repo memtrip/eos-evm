@@ -5,7 +5,7 @@
 #include <evm/types.h>
 #include <evm/utils.hpp>
 #include <evm/hex.hpp>
-#include <evm/return_data.h>
+
 #include <evm/call.h>
 #include <evm/big_int.hpp>
 #include "test_utils.hpp"

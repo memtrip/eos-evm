@@ -1,10 +1,10 @@
+#pragma once
 #include <vector>
 #include <evm/types.h>
-#include <evm/return_data.h>
+
 #include <evm/call.h>
 #include <evm/vm_result.h>
 #include <evm/gasometer.hpp>
-#include <evm/trap.hpp>
 
 enum GasTierPrice: uint8_t {
   ZERO = 0x00,
@@ -76,20 +76,12 @@ class Utils {
     }
 
     static gas_t gasLeft(exec_result_t vm_result) {
-      if (vm_result.first == ExecResult::DONE) {
-        gas_left_t gasLeft = std::get<gas_left_t>(vm_result.second);
-        switch (gasLeft.first) {
-          case GasType::NEEDS_RETURN:
-            {
-              NeedsReturn needsReturn = std::get<NeedsReturn>(gasLeft.second);
-              return needsReturn.gasLeft;
-            }
-          case GasType::KNOWN:
-            {
-              gas_t gas = std::get<gas_t>(gasLeft.second);
-              return gas;
-            }
-        }
+      if (vm_result.first == ExecResult::DONE_VOID) {
+        gas_t gas = std::get<gas_t>(vm_result.second);
+        return gas;
+      } else if (vm_result.first == ExecResult::DONE_RETURN) {
+        NeedsReturn needsReturn = std::get<NeedsReturn>(vm_result.second);
+        return needsReturn.gasLeft;
       }
 
       return 0xFFFF;
@@ -603,7 +595,7 @@ class Utils {
     }
 
     static void printTrap(const trap_t& trap) {
-      switch (trap.first) {
+      switch (trap) {
         case TrapKind::TRAP_STACK_UNDERFLOW:
           printf("trap{stack_underflow}\n");
           break;
@@ -621,8 +613,7 @@ class Utils {
           break;
         case TrapKind::TRAP_INVALID_JUMP:
           {
-            JumpTrapInfo jumpInfo = std::get<JumpTrapInfo>(trap.second);
-            printf("trap{invalid_jump, %llu}\n", jumpInfo.attemptedPosition);
+            printf("trap{invalid_jump}\n");
             break;
           }
       }

@@ -7,6 +7,9 @@
 #include <evm/vm_result.h>
 #include <evm/opcode.h>
 #include <evm/byte_reader.hpp>
+#include <evm/context.hpp>
+#include <evm/account_state.hpp>
+#include <evm/external.h>
 
 class Operation { 
   typedef instruction_result_t (Operation::*operation_t)(

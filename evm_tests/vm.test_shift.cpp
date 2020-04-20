@@ -1,15 +1,16 @@
-#include <stdio.h>
-#include <variant>
 #include "catch.hpp"
+#include "test_utils.hpp"
+#include "external_mock.hpp"
+
+#include <variant>
 #include <memory>
+
 #include <evm/utils.hpp>
 #include <evm/vm.h>
 #include <evm/hex.hpp>
-#include <evm/return_data.h>
 #include <evm/call.h>
 #include <evm/gasometer.hpp>
 #include <evm/big_int.hpp>
-#include "external_mock.hpp"
 
 TEST_CASE("shift left ", "[shift]") {
   std::string bytecode_str = "7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff60ff1b";
@@ -27,7 +28,7 @@ TEST_CASE("shift left ", "[shift]") {
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
-    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
     100000,
     uint256_t(0),
@@ -51,7 +52,7 @@ TEST_CASE("shift left ", "[shift]") {
   Operation operation = Operation();
 
   // when
-  vm.execute(operation, context, mem, accountState, external, call);
+  vm.execute(operation, context, mem, accountState, external);
 
   // then
   REQUIRE("8000000000000000000000000000000000000000000000000000000000000000" == 
@@ -75,7 +76,7 @@ TEST_CASE("shift left (2)", "[shift]") {
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
-    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
     100000,
     uint256_t(0),
@@ -99,7 +100,7 @@ TEST_CASE("shift left (2)", "[shift]") {
   Operation operation = Operation();
 
   // when
-  vm.execute(operation, context, mem, accountState, external, call);
+  vm.execute(operation, context, mem, accountState, external);
 
   // then
   REQUIRE("fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe" 
@@ -123,7 +124,7 @@ TEST_CASE("shift left (3)", "[shift]") {
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
-    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
     100000,
     uint256_t(0),
@@ -147,7 +148,7 @@ TEST_CASE("shift left (3)", "[shift]") {
   Operation operation = Operation();
 
   // when
-  vm.execute(operation, context, mem, accountState, external, call);
+  vm.execute(operation, context, mem, accountState, external);
 
   // then
   REQUIRE("000000000000000000000000000000000000000000000000000000000000000a" ==
@@ -171,7 +172,7 @@ TEST_CASE("shift right ", "[shift]") {
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
-    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
     100000,
     uint256_t(0),
@@ -195,7 +196,7 @@ TEST_CASE("shift right ", "[shift]") {
   Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(operation, context, mem, accountState, external, call);
+  exec_result_t result = vm.execute(operation, context, mem, accountState, external);
 
   // then
   REQUIRE("4000000000000000000000000000000000000000000000000000000000000000" == 
@@ -219,7 +220,7 @@ TEST_CASE("shift right (1)", "[shift]") {
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
-    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
     100000,
     uint256_t(0),
@@ -243,7 +244,7 @@ TEST_CASE("shift right (1)", "[shift]") {
   Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(operation, context, mem, accountState, external, call);
+  exec_result_t result = vm.execute(operation, context, mem, accountState, external);
 
   // then
   REQUIRE("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" == 
@@ -267,7 +268,7 @@ TEST_CASE("shift right (2)", "[shift]") {
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
-    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
     100000,
     uint256_t(0),
@@ -291,7 +292,7 @@ TEST_CASE("shift right (2)", "[shift]") {
   Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(operation, context, mem, accountState, external, call);
+  exec_result_t result = vm.execute(operation, context, mem, accountState, external);
 
   // then
   REQUIRE("0000000000000000000000000000000000000000000000000000000000000002" == 
@@ -315,7 +316,7 @@ TEST_CASE("sar", "[shift]") {
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
-    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
     100000,
     uint256_t(0),
@@ -339,7 +340,7 @@ TEST_CASE("sar", "[shift]") {
   Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(operation, context, mem, accountState, external, call);
+  exec_result_t result = vm.execute(operation, context, mem, accountState, external);
 
   // then
   REQUIRE("c000000000000000000000000000000000000000000000000000000000000000" 
@@ -363,7 +364,7 @@ TEST_CASE("sar (1)", "[shift]") {
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
-    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
     100000,
     uint256_t(0),
@@ -387,7 +388,7 @@ TEST_CASE("sar (1)", "[shift]") {
   Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(operation, context, mem, accountState, external, call);
+  exec_result_t result = vm.execute(operation, context, mem, accountState, external);
 
   // then
   REQUIRE("0000000000000000000000000000000000000000000000000000000000000001" == 
@@ -411,7 +412,7 @@ TEST_CASE("sar (2)", "[shift]") {
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
-    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
     100000,
     uint256_t(0),
@@ -435,7 +436,7 @@ TEST_CASE("sar (2)", "[shift]") {
   Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(operation, context, mem, accountState, external, call);
+  exec_result_t result = vm.execute(operation, context, mem, accountState, external);
 
   // then
   REQUIRE("000000000000000000000000000000000000000000000000000000000000007f" == 
@@ -459,7 +460,7 @@ TEST_CASE("sar (3)", "[shift]") {
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
-    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
     100000,
     uint256_t(0),
@@ -483,7 +484,7 @@ TEST_CASE("sar (3)", "[shift]") {
   Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(operation, context, mem, accountState, external, call);
+  exec_result_t result = vm.execute(operation, context, mem, accountState, external);
 
   // then
   REQUIRE("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" == 

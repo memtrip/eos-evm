@@ -1,5 +1,7 @@
-#include <vector>
 #include "catch.hpp"
+#include "test_utils.hpp"
+
+#include <vector>
 #include <memory>
 #include <evm/hash.hpp>
 #include <evm/big_int.hpp>
@@ -31,9 +33,9 @@ TEST_CASE("keccak256 20 byte", "[hash]" ) {
 }
 
 TEST_CASE("keccak256 wlrd", "[hash]" ) {
-  uint256_t word1 = BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681");
-  uint256_t word2 = BigInt::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6");
-  uint256_t hash = Hash::keccak256Word(word1, word2);
+  uint256_t word1 = TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681");
+  uint256_t word2 = TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6");
+  uint256_t hash = Hash::keccak256WordPair(word1, word2);
   REQUIRE("d4aeab6b14081f43dd4fdf6ac0dc3b289fdd8dff4adf98254993e524e77993ae" == 
     Utils::uint256_2str(hash)
   );

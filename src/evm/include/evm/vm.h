@@ -9,6 +9,7 @@
 #include <evm/gasometer.hpp>
 #include <evm/context.hpp>
 #include <evm/operation.h>
+#include <evm/call.h>
 
 class VM {
   public:
@@ -24,8 +25,7 @@ class VM {
       std::shared_ptr<Context> context,
       std::shared_ptr<Memory> memory,
       std::shared_ptr<AccountState> accountState,
-      std::shared_ptr<External> external,
-      std::shared_ptr<Call> call
+      std::shared_ptr<External> external
     );
     exec_result_t step(
       Operation& operation,
@@ -35,8 +35,7 @@ class VM {
       std::shared_ptr<Memory> memory,
       std::shared_ptr<ByteReader> reader,
       std::shared_ptr<AccountState> accountState,
-      std::shared_ptr<External> external,
-      std::shared_ptr<Call> call
+      std::shared_ptr<External> external
     );
     exec_result_t stepInner(
       Operation& operation,
@@ -46,8 +45,7 @@ class VM {
       std::shared_ptr<Memory> memory,
       std::shared_ptr<ByteReader> reader,
       std::shared_ptr<AccountState> accountState,
-      std::shared_ptr<External> external,
-      std::shared_ptr<Call> call
+      std::shared_ptr<External> external
     );
     instruction_result_t executeCreateInstruction(
       Operation& operation,
@@ -56,8 +54,7 @@ class VM {
       std::shared_ptr<Context> context,
       std::shared_ptr<Memory> memory,
       std::shared_ptr<AccountState> accountState,
-      std::shared_ptr<External> external,
-      std::shared_ptr<Call> call
+      std::shared_ptr<External> external
     );
     instruction_result_t executeCallInstruction(
       Operation& operation,
@@ -66,8 +63,7 @@ class VM {
       std::shared_ptr<Context> context,
       std::shared_ptr<Memory> memory,
       std::shared_ptr<AccountState> accountState,
-      std::shared_ptr<External> external,
-      std::shared_ptr<Call> call
+      std::shared_ptr<External> external
     );
     std::shared_ptr<StackMachine> stack;
   private:

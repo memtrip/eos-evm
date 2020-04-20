@@ -1,13 +1,15 @@
 #include "catch.hpp"
+#include "test_utils.hpp"
+#include "external_mock.hpp"
+
 #include <memory>
+
 #include <evm/utils.hpp>
 #include <evm/vm.h>
 #include <evm/hex.hpp>
-#include <evm/return_data.h>
 #include <evm/call.h>
 #include <evm/gasometer.hpp>
 #include <evm/big_int.hpp>
-#include "external_mock.hpp"
 
 TEST_CASE("Hash zero", "[sha3]") {
   // given
@@ -29,7 +31,7 @@ TEST_CASE("Hash zero", "[sha3]") {
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
-    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
     100000,
     uint256_t(0),
@@ -53,7 +55,7 @@ TEST_CASE("Hash zero", "[sha3]") {
   Operation operation = Operation();
 
   // when
-  vm.execute(operation, context, mem, accountState, external, call);
+  vm.execute(operation, context, mem, accountState, external);
 
   // then
   REQUIRE("c5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470" == 

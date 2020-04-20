@@ -81,4 +81,51 @@ class Address {
 
       return Hex::hexToChecksum256(accountIdentifierBytes);
     }
+
+    static address_t ethereumAddressFrom(
+      const uint256_t& address, 
+      const uint256_t& salt, 
+      std::shared_ptr<bytes_t> code
+    ) {
+
+      bytes_t codeHash = Hash::keccak256(code);
+
+      RLPItem singleByte {
+        RLPType::STRING,
+        bytes_t { 0xFF },
+        std::vector<RLPItem> {}
+      };
+
+      RLPItem addressItem {
+        RLPType::STRING,
+        BigInt::toBytes(address),
+        std::vector<RLPItem> {}
+      };
+
+      RLPItem saltItem {
+        RLPType::STRING,
+        BigInt::toBytes(salt),
+        std::vector<RLPItem> {}
+      };
+
+      RLPItem codeHashItem {
+        RLPType::STRING,
+        codeHash,
+        std::vector<RLPItem> {}
+      };
+
+      RLPItem addressList {
+        RLPType::LIST,
+        bytes_t {},
+        std::vector<RLPItem> { singleByte, addressItem, saltItem, codeHashItem }
+      };
+
+      bytes_t result = RLPEncode::encode(addressList);
+
+      bytes_t hashBytes = Hash::keccak256(result);
+
+      bytes_t accountIdentifierBytes(hashBytes.end() - ADDRESS_SIZE, hashBytes.end());
+
+      return Hex::hexToChecksum256(accountIdentifierBytes);
+    }
 };

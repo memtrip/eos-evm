@@ -1,8 +1,9 @@
 #pragma once
 #include <memory>
 #include <evm/types.h>
-#include <evm/transaction.hpp>
 #include <evm/external.h>
+#include <evm/transaction.hpp>
+#include <evm/hash.hpp>
 
 class Context {
   public:
@@ -97,6 +98,7 @@ class Context {
     static std::shared_ptr<Context> makeCall(
       const env_t& env, 
       const uint256_t& senderAddress, 
+      const uint256_t& toAddress,
       std::shared_ptr<std::vector<RLPItem>> rlp, 
       std::shared_ptr<External> external
     ) {
@@ -108,20 +110,58 @@ class Context {
         env.coinbase,
         env.difficulty,
         env.blockHash,
-        senderAddress, /* codeAddress, TODO: clarify where this comes from */
+        toAddress, /* codeAddress, TODO: clarify where this comes from */
         uint256_t(0), /* codeHash, TODO: clarify where this comes from */
         uint256_t(0), /* codeVersion, TODO: clarify where this comes from */
-        senderAddress, /* address, TODO: clarify where this comes from */
+        toAddress, /* address, TODO: clarify where this comes from */
         senderAddress, /* sender */
         uint256_t(0), /* origin */
         Transaction::gas(rlp),
         Transaction::gasPrice(rlp),
         Transaction::value(rlp),
-        external->code(senderAddress),
+        external->code(toAddress),
         std::make_shared<bytes_t>(bytes_t(
           rlp->at(0).values[Transaction::RLP_DATA].bytes.begin(), 
           rlp->at(0).values[Transaction::RLP_DATA].bytes.end()
         ))
+      );
+    }
+
+    static std::shared_ptr<Context> makeInnerCall(
+      const uint256_t& chainId,
+      const uint256_t& blockNumber,
+      const uint256_t& timestamp,
+      const uint256_t& gasLimit,
+      const uint256_t& coinbase,
+      const uint256_t& difficulty,
+      const uint256_t& blockHash,
+      const uint256_t& codeAddress,
+      const uint256_t& receiveAddress,
+      const uint256_t& senderAddress,
+      const gas_t& gas,
+      const uint256_t& gasPrice,
+      const uint256_t& value,
+      std::shared_ptr<bytes_t> code
+    ) {
+      return std::make_shared<Context>(
+        chainId,
+        blockNumber,
+        timestamp,
+        gasLimit,
+        coinbase,
+        difficulty,
+        blockHash,
+        codeAddress, /* codeAddress, TODO: clarify where this comes from */
+        Hash::keccak256Word(code),
+        uint256_t(0), /* codeVersion, TODO: clarify where this comes from */
+        receiveAddress, /* address, TODO: clarify where this comes from */
+        senderAddress, /* sender */
+        uint256_t(0), /* origin */
+        gas,
+        gasPrice,
+        value,
+        code,
+        std::make_shared<bytes_t>(bytes_t())
       );
     }
 };

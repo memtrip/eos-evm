@@ -14,44 +14,80 @@
 class eos_execute {
   public:
     static call_result_t transaction(
-      uint256_t address,
+      uint256_t senderAddress,
       std::shared_ptr<std::vector<RLPItem>> rlp, 
       std::shared_ptr<bytes_t> data,
       std::shared_ptr<Memory> memory,
       std::shared_ptr<External> external,
-      std::shared_ptr<AccountState> accountState,
-      std::shared_ptr<Call> call
+      std::shared_ptr<AccountState> accountState
     ) {
       env_t env = eos_system::env();
+      Call call = Call(0);
 
-      call_result_t result;
+      call_result_t callResult;
 
       switch (Transaction::type(rlp)) {
         case TransactionActionType::TRANSACTION_CREATE:
           {
-            std::shared_ptr<Context> context = Context::makeCreate(env, address, rlp);
-            result = call->create(
-              true,
+            std::shared_ptr<Context> context = Context::makeCreate(env, senderAddress, rlp);
+
+            callResult = call.call(
               memory,
               context,
               external,
               accountState
             );
+
+            if (callResult.first == MessageCallResult::MESSAGE_CALL_RETURN) {
+              
+              MessageCallReturn messageCallReturn = std::get<MessageCallReturn>(callResult.second);
+
+              std::shared_ptr<bytes_t> code = memory->readSlice(
+                messageCallReturn.offset, 
+                messageCallReturn.size
+              );
+
+              emplace_t emplaceResult = external->emplaceCode(context->sender, 0, code, AddressScheme::EIP_1014);
+
+              switch (emplaceResult.first) {
+                case EmplaceResult::EMPLACE_ADDRESS_NOT_FOUND:
+                  return std::make_pair(
+                    MessageCallResult::MESSAGE_CALL_FAILED,
+                    TrapKind::TRAP_INVALID_CODE_ADDRESS
+                  );
+                case EmplaceResult::EMPLACE_INSUFFICIENT_FUNDS:
+                  return std::make_pair(
+                    MessageCallResult::MESSAGE_CALL_FAILED,
+                    TrapKind::TRAP_INSUFFICIENT_FUNDS
+                  );
+                case EmplaceResult::EMPLACE_SUCCESS:
+                  break;
+              }
+            }
             break;
           }
         case TransactionActionType::TRANSACTION_CALL:
           {
-            std::shared_ptr<Context> context = Context::makeCall(env, address, rlp, external);
-            result = call->call(
-              true,
+            uint256_t toAddress = BigInt::fromBigEndianBytes(Transaction::address(rlp));
+
+            std::shared_ptr<Context> context = Context::makeCall(env, senderAddress, toAddress, rlp, external);
+
+            callResult = call.call(
               memory,
               context,
               external,
               accountState
             );
+
+            if (callResult.first == MessageCallResult::MESSAGE_CALL_RETURN) {
+              MessageCallReturn messageCallReturn = std::get<MessageCallReturn>(callResult.second);
+              if (messageCallReturn.size > 0)
+                eosio::print("return" + Hex::bytesToWordOutput(memory->memory, messageCallReturn.offset, messageCallReturn.size));
+            }
+
             break;
         }
       }
-      return result;
+      return callResult;
     }
 };

@@ -13,7 +13,8 @@ class GetCode(
         val code: String,
         val owner: String,
         val address: String,
-        val balance: String
+        val balance: String,
+        val nonce: String
     )
 
     sealed class Record {
@@ -45,7 +46,8 @@ class GetCode(
                         tableRows[0]["code"].toString(),
                         tableRows[0]["accountIdentifier"].toString(),
                         tableRows[0]["address"].toString(),
-                        tableRows[0]["balance"].toString()
+                        tableRows[0]["balance"].toString(),
+                        tableRows[0]["nonce"].toString()
                     ))
                 }
             }
@@ -76,7 +78,8 @@ class GetCode(
                             tableRows[index]["code"].toString(),
                             tableRows[index]["accountIdentifier"].toString(),
                             tableRows[index]["address"].toString(),
-                            tableRows[index]["balance"].toString()
+                            tableRows[index]["balance"].toString(),
+                            tableRows[index]["nonce"].toString()
                         )
                     })
                 }

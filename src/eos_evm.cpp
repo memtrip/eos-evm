@@ -12,7 +12,6 @@
 #include <evm/rlp_decode.hpp>
 #include <evm/big_int.hpp>
 #include <evm/hash.hpp>
-#include <evm/memory.hpp>
 #include <evm/overflow.hpp>
 
 void eos_evm::raw(name from, string code, string sender) {
@@ -25,10 +24,10 @@ void eos_evm::raw(name from, string code, string sender) {
 
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(cacheItems);
-  std::shared_ptr<Call> call = std::make_unique<Call>(0);
 
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> memory = std::make_shared<Memory>(memoryBytes);
+
   uint64_t transactionNonce = Overflow::uint256Cast(Transaction::nonce(rlp)).first;
 
   if (Transaction::hasSignature(rlp)) {
@@ -48,7 +47,7 @@ void eos_evm::raw(name from, string code, string sender) {
     std::shared_ptr<External> external = std::make_shared<eos_external>(this, itr->user, itr->nonce, itr->balance.amount);
     std::shared_ptr<bytes_t> data = Transaction::data(rlp);
     uint256_t address = BigInt::fromBigEndianBytes(accountIdentifierBytes);
-    call_result_t callResult = eos_execute::transaction(address, rlp, data, memory, external, accountState, call);
+    call_result_t callResult = eos_execute::transaction(address, rlp, data, memory, external, accountState);
     handleCallResult(from, callResult, accountState);
 
     idx.modify(itr, from, [&](auto& account) {
@@ -68,7 +67,7 @@ void eos_evm::raw(name from, string code, string sender) {
     std::shared_ptr<External> external = std::make_shared<eos_external>(this, itr->user, itr->nonce, itr->balance.amount);
     std::shared_ptr<bytes_t> data = Transaction::data(rlp);
     uint256_t address = BigInt::fromBigEndianBytes(accountIdentifier.first);
-    call_result_t callResult = eos_execute::transaction(address, rlp, data, memory, external, accountState, call);
+    call_result_t callResult = eos_execute::transaction(address, rlp, data, memory, external, accountState);
     handleCallResult(from, callResult, accountState);
 
     idx.modify(itr, from, [&](auto& account) {
@@ -81,24 +80,14 @@ void eos_evm::raw(name from, string code, string sender) {
 void eos_evm::handleCallResult(const name& from, call_result_t callResult, std::shared_ptr<AccountState> accountState) {
   switch (callResult.first) {
     case MESSAGE_CALL_SUCCESS:
-    case MESSAGE_CALL_APPLY_CREATE:
+    case MESSAGE_CALL_RETURN:
       {
-        MessageCallReturn callReturn = std::get<MessageCallReturn>(callResult.second);
-        uint256_t gasLeft = callReturn.gasLeft;
         resolveAccountState(from, accountState);
         break;
       }
     case MESSAGE_CALL_REVERTED:
       {
-        MessageCallReturn callReturn = std::get<MessageCallReturn>(callResult.second);
-        uint256_t gasLeft = callReturn.gasLeft;
         check(false, "MESSAGE_CALL_REVERTED");
-        break;
-      }
-    case MESSAGE_CALL_TRACE:
-      {
-        uint8_t position = std::get<uint8_t>(callResult.second);
-        check(false, "MESSAGE_TRACE::" + std::to_string(position));
         break;
       }
     case MESSAGE_CALL_OUT_OF_GAS:
@@ -107,7 +96,7 @@ void eos_evm::handleCallResult(const name& from, call_result_t callResult, std::
     case MESSAGE_CALL_FAILED:
       {
         trap_t trap = std::get<trap_t>(callResult.second);
-        switch (trap.first) {
+        switch (trap) {
           case TrapKind::TRAP_STACK_UNDERFLOW:
             check(false, "STACK_UNDERFLOW");
             break;
@@ -139,7 +128,7 @@ void eos_evm::resolveAccountState(const name& from, std::shared_ptr<AccountState
     // TODO: the scope of account_state should be derived from codeAddress
     account_state_table _account_state(get_self(), from.value);
     for (int i = 0; i < accountState->cacheItems->size(); i++) {
-      checksum256 compositeKey =  BigInt::toFixed32(Hash::keccak256Word(
+      checksum256 compositeKey =  BigInt::toFixed32(Hash::keccak256WordPair(
         accountState->cacheItems->at(i).codeAddress,
         accountState->cacheItems->at(i).key
       ));

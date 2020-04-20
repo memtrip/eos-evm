@@ -1,14 +1,16 @@
 #include "catch.hpp"
+#include "test_utils.hpp"
+#include "external_mock.hpp"
+
 #include <memory>
+
 #include <evm/utils.hpp>
 #include <evm/vm.h>
 #include <evm/hex.hpp>
-#include <evm/return_data.h>
 #include <evm/call.h>
 #include <evm/gasometer.hpp>
 #include <evm/big_int.hpp>
 #include <evm/hash.hpp>
-#include "external_mock.hpp"
 
 TEST_CASE("Add two large numbers, store the result, verify gas", "[gasometer]") {
   // given
@@ -27,7 +29,7 @@ TEST_CASE("Add two large numbers, store the result, verify gas", "[gasometer]") 
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
-    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
     100000,
     uint256_t(0),
@@ -51,7 +53,7 @@ TEST_CASE("Add two large numbers, store the result, verify gas", "[gasometer]") 
   Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(operation, context, mem, accountState, external, call);
+  exec_result_t result = vm.execute(operation, context, mem, accountState, external);
 
   // then
   CHECK(79988 == Utils::gasLeft(result));
@@ -78,7 +80,7 @@ TEST_CASE("Store the result of an SHA3 hash, verify gas", "[gasometer]") {
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
-    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
     100000,
     uint256_t(0),
@@ -102,7 +104,7 @@ TEST_CASE("Store the result of an SHA3 hash, verify gas", "[gasometer]") {
   Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(operation, context, mem, accountState, external, call);
+  exec_result_t result = vm.execute(operation, context, mem, accountState, external);
 
   // then
   CHECK(79961 == Utils::gasLeft(result));
@@ -128,7 +130,7 @@ TEST_CASE("Address, verify gas", "[gasometer]") {
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
-    BigInt::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
+    TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
     uint256_t(0xea0e9a),
     uint256_t(0x1283fe), /* origin */
     100000,
@@ -153,7 +155,7 @@ TEST_CASE("Address, verify gas", "[gasometer]") {
   Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(operation, context, mem, accountState, external, call);
+  exec_result_t result = vm.execute(operation, context, mem, accountState, external);
 
   // then
   CHECK(79995 == Utils::gasLeft(result));
@@ -181,7 +183,7 @@ TEST_CASE("Origin, verify gas", "[gasometer]") {
     uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     uint256_t(0x1283fe),
-    BigInt::fromHex("cd1722f2947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("cd1722f2947def4cf144679da39c4c32bdc35681"), /* origin */
     100000,
     uint256_t(0),
     uint256_t(0),
@@ -204,7 +206,7 @@ TEST_CASE("Origin, verify gas", "[gasometer]") {
   Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(operation, context, mem, accountState, external, call);
+  exec_result_t result = vm.execute(operation, context, mem, accountState, external);
 
   // then
   CHECK(79995 == Utils::gasLeft(result));
@@ -218,7 +220,7 @@ TEST_CASE("Self balance, verify gas", "[gasometer]") {
   // given
   std::string bytecode_str = "4760ff55";
   bytes_t codeBytes = Hex::hexToBytes(bytecode_str);
-  uint256_t address = BigInt::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6");
+  uint256_t address = TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6");
   env_t env = Utils::env();
   std::shared_ptr<Context> context = std::make_shared<Context>(
     env.chainId,
@@ -258,7 +260,7 @@ TEST_CASE("Self balance, verify gas", "[gasometer]") {
   Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(operation, context, mem, accountState, external, call);
+  exec_result_t result = vm.execute(operation, context, mem, accountState, external);
 
   // then
   CHECK(79992 == Utils::gasLeft(result));
@@ -280,8 +282,8 @@ TEST_CASE("Sender, verify gas", "[gasometer]") {
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
-    BigInt::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    BigInt::fromHex("cd1722f2947def4cf144679da39c4c32bdc35681"), /* sender */
+    TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
+    TestUtils::fromHex("cd1722f2947def4cf144679da39c4c32bdc35681"), /* sender */
     uint256_t(0x1283fe), /* origin */
     100000,
     uint256_t(0),
@@ -305,7 +307,7 @@ TEST_CASE("Sender, verify gas", "[gasometer]") {
   Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(operation, context, mem, accountState, external, call);
+  exec_result_t result = vm.execute(operation, context, mem, accountState, external);
 
   // then
   CHECK(79995 == Utils::gasLeft(result));
@@ -332,7 +334,7 @@ TEST_CASE("Chain id, verify gas", "[gasometer]") {
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
-    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
     100000,
     uint256_t(0),
@@ -356,7 +358,7 @@ TEST_CASE("Chain id, verify gas", "[gasometer]") {
   Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(operation, context, mem, accountState, external, call);
+  exec_result_t result = vm.execute(operation, context, mem, accountState, external);
 
   // then
   CHECK(79995 == Utils::gasLeft(result));
@@ -368,8 +370,8 @@ TEST_CASE("Chain id, verify gas", "[gasometer]") {
 
 TEST_CASE("Extcodecopy verify gas", "[gasometer]") {
   // given
-  uint256_t address = BigInt::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6");
-  uint256_t sender = BigInt::fromHex("cd1722f2947def4cf144679da39c4c32bdc35681");
+  uint256_t address = TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6");
+  uint256_t sender = TestUtils::fromHex("cd1722f2947def4cf144679da39c4c32bdc35681");
   std::string bytecode_str = "333b60006000333c600051600055";
   bytes_t codeBytes = Hex::hexToBytes(bytecode_str);
 
@@ -412,7 +414,7 @@ TEST_CASE("Extcodecopy verify gas", "[gasometer]") {
   Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(operation, context, mem, accountState, external, call);
+  exec_result_t result = vm.execute(operation, context, mem, accountState, external);
 
   // then
   CHECK(79935 == Utils::gasLeft(result));
@@ -439,9 +441,9 @@ TEST_CASE("Blockhash, verify gas", "[gasometer]") {
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
-    BigInt::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
+    TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
     uint256_t(0xea0e9e), /* sender */
-    BigInt::fromHex("cd1722f2947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("cd1722f2947def4cf144679da39c4c32bdc35681"), /* origin */
     100000,
     uint256_t(0),
     uint256_t(0),
@@ -464,7 +466,7 @@ TEST_CASE("Blockhash, verify gas", "[gasometer]") {
   Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(operation, context, mem, accountState, external, call);
+  exec_result_t result = vm.execute(operation, context, mem, accountState, external);
 
   // then
   CHECK(79974 == Utils::gasLeft(result));
@@ -476,8 +478,8 @@ TEST_CASE("Blockhash, verify gas", "[gasometer]") {
 
 TEST_CASE("Calldataload verify gas", "[gasometer]") {
   // given
-  uint256_t address = BigInt::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6");
-  uint256_t sender = BigInt::fromHex("cd1722f2947def4cf144679da39c4c32bdc35681");
+  uint256_t address = TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6");
+  uint256_t sender = TestUtils::fromHex("cd1722f2947def4cf144679da39c4c32bdc35681");
 
   bytes_t codeBytes = Hex::hexToBytes("600135600055");
   bytes_t dataBytes = Hex::hexToBytes("0123ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff23");
@@ -494,8 +496,8 @@ TEST_CASE("Calldataload verify gas", "[gasometer]") {
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
-    BigInt::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), 
-    BigInt::fromHex("cd1722f2947def4cf144679da39c4c32bdc35681"),
+    TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), 
+    TestUtils::fromHex("cd1722f2947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
     100000,
     uint256_t(0),
@@ -519,7 +521,7 @@ TEST_CASE("Calldataload verify gas", "[gasometer]") {
   Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(operation, context, mem, accountState, external, call);
+  exec_result_t result = vm.execute(operation, context, mem, accountState, external);
 
   // then
   CHECK(79991 == Utils::gasLeft(result));
@@ -546,7 +548,7 @@ TEST_CASE("Multiply, store the result, verify gas", "[gasometer]") {
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
-    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
     100000,
     uint256_t(0),
@@ -570,7 +572,7 @@ TEST_CASE("Multiply, store the result, verify gas", "[gasometer]") {
   Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(operation, context, mem, accountState, external, call);
+  exec_result_t result = vm.execute(operation, context, mem, accountState, external);
 
   // then
   CHECK(79983 == Utils::gasLeft(result));
@@ -597,7 +599,7 @@ TEST_CASE("Subtract, store the result, verify gas", "[gasometer]") {
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
-    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
     100000,
     uint256_t(0),
@@ -621,7 +623,7 @@ TEST_CASE("Subtract, store the result, verify gas", "[gasometer]") {
   Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(operation, context, mem, accountState, external, call);
+  exec_result_t result = vm.execute(operation, context, mem, accountState, external);
 
   // then
   CHECK(79985 == Utils::gasLeft(result));
@@ -648,7 +650,7 @@ TEST_CASE("Division, store the result, verify gas", "[gasometer]") {
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
-    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
     100000,
     uint256_t(0),
@@ -672,7 +674,7 @@ TEST_CASE("Division, store the result, verify gas", "[gasometer]") {
   Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(operation, context, mem, accountState, external, call);
+  exec_result_t result = vm.execute(operation, context, mem, accountState, external);
 
   // then
   CHECK(79983 == Utils::gasLeft(result));
@@ -699,7 +701,7 @@ TEST_CASE("Div zero, store the result, verify gas", "[gasometer]") {
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
-    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
     100000,
     uint256_t(0),
@@ -723,7 +725,7 @@ TEST_CASE("Div zero, store the result, verify gas", "[gasometer]") {
   Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(operation, context, mem, accountState, external, call);
+  exec_result_t result = vm.execute(operation, context, mem, accountState, external);
 
   // then
   CHECK(94983 == Utils::gasLeft(result));
@@ -750,7 +752,7 @@ TEST_CASE("Mod, store the result, verify gas", "[gasometer]") {
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
-    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
     100000,
     uint256_t(0),
@@ -774,7 +776,7 @@ TEST_CASE("Mod, store the result, verify gas", "[gasometer]") {
   Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(operation, context, mem, accountState, external, call);
+  exec_result_t result = vm.execute(operation, context, mem, accountState, external);
 
   // then
   CHECK(74966 == Utils::gasLeft(result));
@@ -804,7 +806,7 @@ TEST_CASE("SMOD, store the result, verify gas", "[gasometer]") {
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
-    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
     100000,
     uint256_t(0),
@@ -828,7 +830,7 @@ TEST_CASE("SMOD, store the result, verify gas", "[gasometer]") {
   Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(operation, context, mem, accountState, external, call);
+  exec_result_t result = vm.execute(operation, context, mem, accountState, external);
 
   // then
   CHECK(74966 == Utils::gasLeft(result));
@@ -858,7 +860,7 @@ TEST_CASE("SDIV, store the result, verify gas", "[gasometer]") {
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
-    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
     100000,
     uint256_t(0),
@@ -882,7 +884,7 @@ TEST_CASE("SDIV, store the result, verify gas", "[gasometer]") {
   Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(operation, context, mem, accountState, external, call);
+  exec_result_t result = vm.execute(operation, context, mem, accountState, external);
 
   // then
   CHECK(74966 == Utils::gasLeft(result));
@@ -912,7 +914,7 @@ TEST_CASE("Exp, store the result, verify gas", "[gasometer]") {
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
-    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
     100000,
     uint256_t(0),
@@ -936,7 +938,7 @@ TEST_CASE("Exp, store the result, verify gas", "[gasometer]") {
   Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(operation, context, mem, accountState, external, call);
+  exec_result_t result = vm.execute(operation, context, mem, accountState, external);
 
   // then
   CHECK(39923 == Utils::gasLeft(result));
@@ -969,7 +971,7 @@ TEST_CASE("Comparison, store the result, verify gas", "[gasometer]") {
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
-    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
     100000,
     uint256_t(0),
@@ -993,7 +995,7 @@ TEST_CASE("Comparison, store the result, verify gas", "[gasometer]") {
   Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(operation, context, mem, accountState, external, call);
+  exec_result_t result = vm.execute(operation, context, mem, accountState, external);
 
   // then
   CHECK(49952 == Utils::gasLeft(result));
@@ -1029,7 +1031,7 @@ TEST_CASE("Signed comparison, store the result, verify gas", "[gasometer]") {
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
-    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
     100000,
     uint256_t(0),
@@ -1053,7 +1055,7 @@ TEST_CASE("Signed comparison, store the result, verify gas", "[gasometer]") {
   Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(operation, context, mem, accountState, external, call);
+  exec_result_t result = vm.execute(operation, context, mem, accountState, external);
 
   // then
   CHECK(49940 == Utils::gasLeft(result));
@@ -1092,7 +1094,7 @@ TEST_CASE("Bitops, store the result, verify gas", "[gasometer]") {
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
-    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
     150000,
     uint256_t(0),
@@ -1116,7 +1118,7 @@ TEST_CASE("Bitops, store the result, verify gas", "[gasometer]") {
   Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(operation, context, mem, accountState, external, call);
+  exec_result_t result = vm.execute(operation, context, mem, accountState, external);
 
   // then
   CHECK(44937 == Utils::gasLeft(result));
@@ -1158,7 +1160,7 @@ TEST_CASE("Add mod - mul mod, store the result, verify gas", "[gasometer]") {
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
-    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
     100000,
     uint256_t(0),
@@ -1182,7 +1184,7 @@ TEST_CASE("Add mod - mul mod, store the result, verify gas", "[gasometer]") {
   Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(operation, context, mem, accountState, external, call);
+  exec_result_t result = vm.execute(operation, context, mem, accountState, external);
 
   // then
   CHECK(19914 == Utils::gasLeft(result));
@@ -1218,7 +1220,7 @@ TEST_CASE("Byte, store the result, verify gas", "[gasometer]") {
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
-    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
     100000,
     uint256_t(0),
@@ -1242,7 +1244,7 @@ TEST_CASE("Byte, store the result, verify gas", "[gasometer]") {
   Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(operation, context, mem, accountState, external, call);
+  exec_result_t result = vm.execute(operation, context, mem, accountState, external);
 
   // then
   CHECK(74976 == Utils::gasLeft(result));
@@ -1272,7 +1274,7 @@ TEST_CASE("Signextend, store the result, verify gas", "[gasometer]") {
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
-    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
     100000,
     uint256_t(0),
@@ -1296,7 +1298,7 @@ TEST_CASE("Signextend, store the result, verify gas", "[gasometer]") {
   Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(operation, context, mem, accountState, external, call);
+  exec_result_t result = vm.execute(operation, context, mem, accountState, external);
 
   // then
   CHECK(59972 == Utils::gasLeft(result));
@@ -1326,7 +1328,7 @@ TEST_CASE("Pop, store the result, verify gas", "[gasometer]") {
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
-    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
     100000,
     uint256_t(0),
@@ -1350,7 +1352,7 @@ TEST_CASE("Pop, store the result, verify gas", "[gasometer]") {
   Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(operation, context, mem, accountState, external, call);
+  exec_result_t result = vm.execute(operation, context, mem, accountState, external);
 
   // then
   CHECK(79989 == Utils::gasLeft(result));
@@ -1377,8 +1379,8 @@ TEST_CASE("Extops, store the result, verify gas", "[gasometer]") {
     uint256_t(0xea0e9f), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
-    BigInt::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    BigInt::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* sender */
+    TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
+    TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* sender */
     uint256_t(0xea0e9e), /* origin */
     150000, /* gas */
     uint256_t(0x32), /* gasPrice */
@@ -1402,7 +1404,7 @@ TEST_CASE("Extops, store the result, verify gas", "[gasometer]") {
   Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(operation, context, mem, accountState, external, call);
+  exec_result_t result = vm.execute(operation, context, mem, accountState, external);
 
   // then
   CHECK(29898 == Utils::gasLeft(result));
@@ -1458,7 +1460,7 @@ TEST_CASE("Jumps, store the result, verify gas", "[gasometer]") {
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
-    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
     100000,
     uint256_t(0),
@@ -1482,7 +1484,7 @@ TEST_CASE("Jumps, store the result, verify gas", "[gasometer]") {
   Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(operation, context, mem, accountState, external, call);
+  exec_result_t result = vm.execute(operation, context, mem, accountState, external);
 
   // then
   CHECK(54117 == Utils::gasLeft(result));

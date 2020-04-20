@@ -26,6 +26,7 @@ const size_t BLOCK_HASH_GAS = 20;
 const size_t COPY_GAS = 3;
 const size_t MEMORY_GAS = 3;
 const size_t QUAD_COEFF_DIV = 512;
+const size_t SUB_GAS_CAP_DIVISOR = 64;
 
 enum GasometerResult {
   GASOMETER_RESULT_OK,

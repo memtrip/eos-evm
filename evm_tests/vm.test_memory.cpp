@@ -1,13 +1,15 @@
 #include "catch.hpp"
+#include "test_utils.hpp"
+#include "external_mock.hpp"
+
 #include <memory>
+
 #include <evm/utils.hpp>
 #include <evm/vm.h>
 #include <evm/hex.hpp>
-#include <evm/return_data.h>
 #include <evm/call.h>
 #include <evm/gasometer.hpp>
 #include <evm/big_int.hpp>
-#include "external_mock.hpp"
 #include <evm/operation.h>
 
 TEST_CASE("Save to memory", "[memory]") {
@@ -30,7 +32,7 @@ TEST_CASE("Save to memory", "[memory]") {
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
-    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
     100000,
     uint256_t(0),
@@ -54,7 +56,7 @@ TEST_CASE("Save to memory", "[memory]") {
   Operation operation = Operation();
 
   // when
-  vm.execute(operation, context, mem, accountState, external, call);
+  vm.execute(operation, context, mem, accountState, external);
 
   // then
   uint256_t word = mem->read(0x00);
@@ -85,7 +87,7 @@ TEST_CASE("Save to memory, and retreive", "[memory]") {
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
-    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
     100000,
     uint256_t(0),
@@ -109,7 +111,7 @@ TEST_CASE("Save to memory, and retreive", "[memory]") {
   Operation operation = Operation();
 
   // when
-  vm.execute(operation, context, mem, accountState, external, call);
+  vm.execute(operation, context, mem, accountState, external);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000006" == 
@@ -140,7 +142,7 @@ TEST_CASE("Save to memory, retreive, and apply addition", "[memory]") {
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
-    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
     100000,
     uint256_t(0),
@@ -164,7 +166,7 @@ TEST_CASE("Save to memory, retreive, and apply addition", "[memory]") {
   Operation operation = Operation();
 
   // when
-  vm.execute(operation, context, mem, accountState, external, call);
+  vm.execute(operation, context, mem, accountState, external);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000018" == 
@@ -196,7 +198,7 @@ TEST_CASE("Save byte to memory, retreive, and apply addition", "[memory]") {
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
-    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
     100000,
     uint256_t(0),
@@ -220,7 +222,7 @@ TEST_CASE("Save byte to memory, retreive, and apply addition", "[memory]") {
   Operation operation = Operation();
 
   // when
-  vm.execute(operation, context, mem, accountState, external, call);
+  vm.execute(operation, context, mem, accountState, external);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000018" == 
@@ -252,7 +254,7 @@ TEST_CASE("Save byte to memory (1)", "[memory]") {
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
-    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
     100000,
     uint256_t(0),
@@ -276,7 +278,7 @@ TEST_CASE("Save byte to memory (1)", "[memory]") {
   Operation operation = Operation();
 
   // when
-  vm.execute(operation, context, mem, accountState, external, call);
+  vm.execute(operation, context, mem, accountState, external);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000018" == 
@@ -302,7 +304,7 @@ TEST_CASE("Memory size", "[memory]") {
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
-    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
     100000,
     uint256_t(0),
@@ -327,7 +329,7 @@ TEST_CASE("Memory size", "[memory]") {
 
   // when
   mem->expand(32);
-  vm.execute(operation, context, mem, accountState, external, call);
+  vm.execute(operation, context, mem, accountState, external);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000020" /* 32 in hex */ == 

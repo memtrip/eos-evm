@@ -1,24 +1,29 @@
 #pragma once
 #include <variant>
 #include <evm/types.h>
-#include <evm/return_data.h>
-#include <evm/call.h>
-#include <evm/trap.hpp>
+
+struct NeedsReturn {
+  gas_t gasLeft;
+  uint64_t offset;
+  uint64_t size;
+  bool apply;
+};
+typedef NeedsReturn vm_data_t;
 
 enum ExecResult {
   STOPPED,
-  DONE,
+  DONE_VOID,
+  DONE_RETURN,
   CONTINUE,
   VM_TRAP,
-  VM_OUT_OF_GAS,
-  TRACE
+  VM_OUT_OF_GAS
 };
 
 // exec result
 typedef std::variant<
-  gas_left_t,
-  trap_t,
-  uint8_t
+  gas_t,
+  vm_data_t,
+  trap_t
 > exec_result_info_t;
 
 typedef std::pair<ExecResult, exec_result_info_t> exec_result_t;

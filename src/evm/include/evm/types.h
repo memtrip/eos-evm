@@ -89,6 +89,17 @@ struct RLPItem {
 };
 typedef std::vector<RLPItem> rlp_t;
 
+enum TrapKind {
+  TRAP_STACK_UNDERFLOW,
+  TRAP_OUT_OF_STACK,
+  TRAP_INVALID_INSTRUCTION,
+  TRAP_INVALID_JUMP,
+  TRAP_INSUFFICIENT_FUNDS,
+  TRAP_INVALID_CODE_ADDRESS
+};
+
+typedef TrapKind trap_t;
+
 enum EmplaceResult {
   EMPLACE_ADDRESS_NOT_FOUND,
   EMPLACE_INSUFFICIENT_FUNDS,
@@ -101,5 +112,10 @@ typedef std::variant<
 > emplace_result_t;
 
 typedef std::pair<EmplaceResult, emplace_result_t> emplace_t;
+
+enum AddressScheme {
+  LEGACY,
+  EIP_1014
+};
 
 #endif

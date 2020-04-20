@@ -2,9 +2,10 @@
 #include <evm/types.h>
 #include <evm/external.h>
 #include <evm/address.hpp>
+#include <evm/hex.hpp>
 
 typedef std::vector<std::pair<std::vector<uint256_t>, bytes_t>> log_spy_t;
-typedef std::vector<std::pair<uint256_t, bytes_t>> bytes_spy_t;
+typedef std::vector<std::pair<uint256_t, std::string>> string_spy_t;
 typedef std::vector<uint256_t> word_spy_t;
 typedef std::vector<std::pair<uint256_t, double>> balance_responder_t;
 typedef std::vector<std::pair<uint256_t, bytes_t>> bytes_responder_t;
@@ -16,7 +17,7 @@ class ExternalMock: public External {
     log_spy_t logSpy;
     word_spy_t codeSpy;
     word_spy_t selfdestructSpy;
-    bytes_spy_t emplaceSpy;
+    string_spy_t emplaceSpy;
     bytes_responder_t codeResponder;
     balance_responder_t balanceResponder;
     word_responder_t storageResponder;
@@ -25,7 +26,7 @@ class ExternalMock: public External {
       logSpy = log_spy_t();
       codeSpy = word_spy_t();
       selfdestructSpy = word_spy_t();
-      emplaceSpy = bytes_spy_t();
+      emplaceSpy = string_spy_t();
       codeResponder = bytes_responder_t();
       balanceResponder = balance_responder_t();
       storageResponder = word_responder_t();
@@ -69,8 +70,16 @@ class ExternalMock: public External {
       return std::make_pair(EmplaceResult::EMPLACE_SUCCESS, 0);
     }
 
-    emplace_t emplaceCode(const uint256_t& address, uint64_t endowment, std::shared_ptr<bytes_t> code) {
-      emplaceSpy.push_back(std::make_pair(address, bytes_t(code->begin(), code->end())));
-      return std::make_pair(EmplaceResult::EMPLACE_SUCCESS, Address::ethereumAddressFrom(address, uint256_t(0)));
+    emplace_t emplaceCode(
+      const uint256_t& senderAddressWord, 
+      uint64_t endowment, 
+      std::shared_ptr<bytes_t> code,
+      const AddressScheme addressScheme
+    ) {
+      emplaceSpy.push_back(std::make_pair(senderAddressWord, Hex::bytesToHex(code)));
+      return std::make_pair(
+        EmplaceResult::EMPLACE_SUCCESS,
+        Address::ethereumAddressFrom(senderAddressWord, uint256_t(0))
+      );
     }
 };

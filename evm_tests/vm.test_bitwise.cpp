@@ -1,14 +1,16 @@
 #include "catch.hpp"
+#include "test_utils.hpp"
+#include "external_mock.hpp"
+
 #include <memory>
+
 #include <evm/utils.hpp>
 #include <evm/vm.h>
 #include <evm/hex.hpp>
-#include <evm/return_data.h>
 #include <evm/call.h>
 #include <evm/gasometer.hpp>
 #include <evm/hash.hpp>
 #include <evm/big_int.hpp>
-#include "external_mock.hpp"
 
 TEST_CASE("Bitwise AND", "[bitwise]") {
   // (PUSH1 ((60)03))
@@ -29,7 +31,7 @@ TEST_CASE("Bitwise AND", "[bitwise]") {
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
-    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
     100000,
     uint256_t(0),
@@ -53,7 +55,7 @@ TEST_CASE("Bitwise AND", "[bitwise]") {
   Operation operation = Operation();
 
   // when
-  vm.execute(operation, context, mem, accountState, external, call);
+  vm.execute(operation, context, mem, accountState, external);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
@@ -80,7 +82,7 @@ TEST_CASE("Bitwise OR", "[bitwise]") {
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
-    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
     100000,
     uint256_t(0),
@@ -104,7 +106,7 @@ TEST_CASE("Bitwise OR", "[bitwise]") {
   Operation operation = Operation();
 
   // when
-  vm.execute(operation, context, mem, accountState, external, call);
+  vm.execute(operation, context, mem, accountState, external);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000006" == 
@@ -131,7 +133,7 @@ TEST_CASE("Bitwise XOR", "[bitwise]") {
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
-    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
     100000,
     uint256_t(0),
@@ -155,7 +157,7 @@ TEST_CASE("Bitwise XOR", "[bitwise]") {
   Operation operation = Operation();
 
   // when
-  vm.execute(operation, context, mem, accountState, external, call);
+  vm.execute(operation, context, mem, accountState, external);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000005" == 
@@ -179,7 +181,7 @@ TEST_CASE("Bitops", "[bitwise]") {
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
-    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
     100000,
     uint256_t(0),
@@ -203,7 +205,7 @@ TEST_CASE("Bitops", "[bitwise]") {
   Operation operation = Operation();
 
   // when
-  vm.execute(operation, context, mem, accountState, external, call);
+  vm.execute(operation, context, mem, accountState, external);
 
   // then
   CHECK("00000000000000000000000000000000000000000000000000000000000000f0" == Utils::uint256_2str(accountState->get(external, uint256_t(0x00), context->codeAddress)));

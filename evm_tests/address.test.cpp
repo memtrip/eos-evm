@@ -55,3 +55,20 @@ TEST_CASE("Ethereum address from sender and nonce", "[address]" ) {
     Hex::fixedToHex(newAddress)
   );
 }
+
+TEST_CASE("Ethereum address from address, salt, and code hash", "[address]" ) {
+  // given
+  uint256_t address = BigInt::fromBigEndianBytes(Hex::hexToBytes("86a2700da1f451fa70a0dd52225f986d552eda0e"));
+  uint256_t salt = uint256_t(0x3412);
+  std::shared_ptr<bytes_t> codeBytes = std::make_shared<bytes_t>(
+    Hex::hexToBytes("60806040526004361061001e5760003560e01c80635c60da1b14610126575b7f2230ca5690d71a74605e39bd522eea4bff3859bc627abd4ac5e473fcb8c5c3b05a6040518082815260200191505060405180910390a16000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff165a34600036604051808383808284378083019250505092505050600060405180830381858888f193505050503d80600081146100e5576040519150601f19603f3d011682016040523d82523d6000602084013e6100ea565b606091505b5050507f2230ca5690d71a74605e39bd522eea4bff3859bc627abd4ac5e473fcb8c5c3b05a6040518082815260200191505060405180910390a1005b34801561013257600080fd5b5061013b61017d565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff168156fea265627a7a72315820a640f191ec583fbf9eec25b23042882a593697e120f7cea5230f7784081c042364736f6c63430005100032")
+  );
+
+  // when
+  address_t newAddress = Address::ethereumAddressFrom(address, salt, codeBytes);
+
+  // then
+  CHECK("000000000000000000000000977f07e985ea2c0a034119c2f2e2eaa5d085f88d" == 
+    Hex::fixedToHex(newAddress)
+  );
+}

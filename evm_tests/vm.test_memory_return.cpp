@@ -1,16 +1,16 @@
-#include <stdio.h>
-#include <variant>
 #include "catch.hpp"
+#include "test_utils.hpp"
+#include "external_mock.hpp"
+
+#include <variant>
 #include <memory>
+
 #include <evm/utils.hpp>
 #include <evm/vm.h>
 #include <evm/hex.hpp>
-#include <evm/return_data.h>
 #include <evm/call.h>
 #include <evm/gasometer.hpp>
 #include <evm/big_int.hpp>
-#include "external_mock.hpp"
-#include "test_utils.hpp"
 
 TEST_CASE("shift left, write to memory, return", "[return_memory]") {
   std::string bytecode_str = "600560011b6000526001601ff3";
@@ -28,7 +28,7 @@ TEST_CASE("shift left, write to memory, return", "[return_memory]") {
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
-    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
     100000,
     uint256_t(0),
@@ -52,17 +52,14 @@ TEST_CASE("shift left, write to memory, return", "[return_memory]") {
   Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(operation, context, mem, accountState, external, call);
+  exec_result_t result = vm.execute(operation, context, mem, accountState, external);
 
   // then
-  REQUIRE(ExecResult::DONE == result.first);
+  REQUIRE(ExecResult::DONE_RETURN == result.first);
 
-  gas_left_t gasResult = std::get<gas_left_t>(result.second);
-  REQUIRE(GasType::NEEDS_RETURN == gasResult.first);
+  NeedsReturn needsReturn = std::get<NeedsReturn>(result.second);
 
-  NeedsReturn needsReturn = std::get<NeedsReturn>(gasResult.second);
-
-  std::shared_ptr<bytes_t> returnBytes = mem->readSlice(needsReturn.slicePosition.offset, needsReturn.slicePosition.size);
+  std::shared_ptr<bytes_t> returnBytes = mem->readSlice(needsReturn.offset, needsReturn.size);
   CHECK("0a" == TestUtils::bytesToHex(returnBytes));
 }
 
@@ -82,7 +79,7 @@ TEST_CASE("shift right, write to memory, return", "[return_memory]") {
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
-    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
     100000,
     uint256_t(0),
@@ -106,17 +103,14 @@ TEST_CASE("shift right, write to memory, return", "[return_memory]") {
   Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(operation, context, mem, accountState, external, call);
+  exec_result_t result = vm.execute(operation, context, mem, accountState, external);
 
   // then
-  REQUIRE(ExecResult::DONE == result.first);
+  REQUIRE(ExecResult::DONE_RETURN == result.first);
 
-  gas_left_t gasResult = std::get<gas_left_t>(result.second);
-  REQUIRE(GasType::NEEDS_RETURN == gasResult.first);
+  NeedsReturn needsReturn = std::get<NeedsReturn>(result.second);
 
-  NeedsReturn needsReturn = std::get<NeedsReturn>(gasResult.second);
-
-  std::shared_ptr<bytes_t> returnBytes = mem->readSlice(needsReturn.slicePosition.offset, needsReturn.slicePosition.size);
+  std::shared_ptr<bytes_t> returnBytes = mem->readSlice(needsReturn.offset, needsReturn.size);
   CHECK("02" == TestUtils::bytesToHex(returnBytes));
 }
 
@@ -136,7 +130,7 @@ TEST_CASE("sar, write to memory, revert", "[return_memory]") {
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
-    BigInt::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
     100000,
     uint256_t(0),
@@ -160,16 +154,13 @@ TEST_CASE("sar, write to memory, revert", "[return_memory]") {
   Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(operation, context, mem, accountState, external, call);
+  exec_result_t result = vm.execute(operation, context, mem, accountState, external);
 
   // then
-  REQUIRE(ExecResult::DONE == result.first);
+  REQUIRE(ExecResult::DONE_RETURN == result.first);
 
-  gas_left_t gasResult = std::get<gas_left_t>(result.second);
-  REQUIRE(GasType::NEEDS_RETURN == gasResult.first);
+  NeedsReturn needsReturn = std::get<NeedsReturn>(result.second);
 
-  NeedsReturn needsReturn = std::get<NeedsReturn>(gasResult.second);
-
-  std::shared_ptr<bytes_t> returnBytes = mem->readSlice(needsReturn.slicePosition.offset, needsReturn.slicePosition.size);
+  std::shared_ptr<bytes_t> returnBytes = mem->readSlice(needsReturn.offset, needsReturn.size);
   CHECK("ff" == TestUtils::bytesToHex(returnBytes));
 }

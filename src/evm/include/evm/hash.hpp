@@ -7,7 +7,7 @@
 
 class Hash {
   public:
-    static uint256_t keccak256Word(const uint256_t& word1, const uint256_t& word2) {
+    static uint256_t keccak256WordPair(const uint256_t& word1, const uint256_t& word2) {
       bytes_t word1Bytes = BigInt::toBytes(word1);
       bytes_t word2Bytes = BigInt::toBytes(word2);
       word1Bytes.insert(word1Bytes.end(), word2Bytes.begin(), word2Bytes.end());
@@ -25,6 +25,10 @@ class Hash {
       ethash::hash256 result = ethash::keccak256(bytes->data(), bytes->size());
       bytes_t hashBytes(&result.bytes[0], &result.bytes[32]);
       return hashBytes;
+    }
+
+    static uint256_t keccak256Word(const std::shared_ptr<bytes_t> bytes) {
+      return BigInt::fromBigEndianBytes(keccak256(bytes));
     }
 
     static bytes_t keccak256(const std::array<uint8_t, 33>& bytes) {
