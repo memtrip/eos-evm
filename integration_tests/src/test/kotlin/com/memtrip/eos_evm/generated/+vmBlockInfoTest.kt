@@ -22,7 +22,7 @@ import com.memtrip.eos_evm.eos.faultTolerantCreateAccount
 // Auto generated based off the Ethereum tests found here:
 // https://github.com/ethereum/tests/blob/develop/VMTests/
 //
-class vmRandomTest {
+class vmBlockInfoTest {
     private val okHttpClient = OkHttpClient.Builder()
         .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
         .connectTimeout(10, TimeUnit.SECONDS)
@@ -39,7 +39,7 @@ class vmRandomTest {
     private val getAccountState = GetAccountState(chainApi)
 
     @Test
-    fun `201503110206PYTHON______ad34ff6291ab537633ab5e7163537b24617cc4edb2f45eac65bed9d2c009cfc3`() {
+    fun `gaslimit______f1250fd89a1c3e517ae92cc1f73865c594bfad34db20f3b3396af4efe19d3bfb`() {
 
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
@@ -52,7 +52,7 @@ class vmRandomTest {
             val transaction = EthereumTransaction(
                 1 + 0,
                 BigInteger("5af3107a4000", 16),
-                BigInteger("2710", 16),
+                BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
                 "0x"
             )
@@ -63,7 +63,7 @@ class vmRandomTest {
                    newAccountName,
                    signedTransaction,
                    accountIdentifier.toHexString(),
-                   "4045404145454441343987ff3735043055",
+                   "45600055",
                    TransactionContext(
                        newAccountName,
                        newAccountPrivateKey,
@@ -79,9 +79,16 @@ class vmRandomTest {
         assertEquals(202, response.statusCode)
 
         // and then
+        // 0x00
+        val value_0x00 = getAccountState.getValue(
+            accountName,
+            AccountStateKey.create(accountIdentifier.pad256(), 0x00)
+        ).blockingGet()
+        assertEquals("00000000000000000000000000000000000000000000000000000000000f4240", value_0x00)
+
     }
     @Test
-    fun `201503111844PYTHON______a8049871a173837bf8fbfab3352baf9bb9e33d0ffa2bd20ba6246a70d9c1b165`() {
+    fun `number______404caf239c3e0ad4394c1417b728d10e1f68a8eee3963425d9e391f4f3ec023c`() {
 
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
@@ -94,7 +101,7 @@ class vmRandomTest {
             val transaction = EthereumTransaction(
                 1 + 0,
                 BigInteger("5af3107a4000", 16),
-                BigInteger("2710", 16),
+                BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
                 "0x"
             )
@@ -105,7 +112,7 @@ class vmRandomTest {
                    newAccountName,
                    signedTransaction,
                    accountIdentifier.toHexString(),
-                   "65424555",
+                   "43600055",
                    TransactionContext(
                        newAccountName,
                        newAccountPrivateKey,
@@ -121,9 +128,16 @@ class vmRandomTest {
         assertEquals(202, response.statusCode)
 
         // and then
+        // 0x00
+        val value_0x00 = getAccountState.getValue(
+            accountName,
+            AccountStateKey.create(accountIdentifier.pad256(), 0x00)
+        ).blockingGet()
+        assertEquals("0000000000000000000000000000000000000000000000000000000000000001", value_0x00)
+
     }
     @Test
-    fun `201503112218PYTHON______6fc205d30fd7493b6e120e18c91e1e41f6fe334b94abadbac37d2817066ebccb`() {
+    fun `difficulty______30c06d1988994e3f4e738e60b1e0d6b8734fb576e3b2580151251c5f058fa9c6`() {
 
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
@@ -136,7 +150,7 @@ class vmRandomTest {
             val transaction = EthereumTransaction(
                 1 + 0,
                 BigInteger("5af3107a4000", 16),
-                BigInteger("2710", 16),
+                BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
                 "0x"
             )
@@ -147,7 +161,7 @@ class vmRandomTest {
                    newAccountName,
                    signedTransaction,
                    accountIdentifier.toHexString(),
-                   "4041",
+                   "44600055",
                    TransactionContext(
                        newAccountName,
                        newAccountPrivateKey,
@@ -163,9 +177,16 @@ class vmRandomTest {
         assertEquals(202, response.statusCode)
 
         // and then
+        // 0x00
+        val value_0x00 = getAccountState.getValue(
+            accountName,
+            AccountStateKey.create(accountIdentifier.pad256(), 0x00)
+        ).blockingGet()
+        assertEquals("0000000000000000000000000000000000000000000000000000000000000100", value_0x00)
+
     }
     @Test
-    fun `201503110219PYTHON______93dd23cbf213b07ac96a1fdfc826f41475452fea6da2e4f8d3f5d206e9a1adb9`() {
+    fun `coinbase______9f5df0c263c2b48fbf48db70ec64ddf3efa5f1651ced1fedf933ee239e9c851d`() {
 
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
@@ -178,7 +199,7 @@ class vmRandomTest {
             val transaction = EthereumTransaction(
                 1 + 0,
                 BigInteger("5af3107a4000", 16),
-                BigInteger("2710", 16),
+                BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
                 "0x"
             )
@@ -189,7 +210,7 @@ class vmRandomTest {
                    newAccountName,
                    signedTransaction,
                    accountIdentifier.toHexString(),
-                   "4040459143404144809759886d608f",
+                   "41600055",
                    TransactionContext(
                        newAccountName,
                        newAccountPrivateKey,
@@ -205,9 +226,16 @@ class vmRandomTest {
         assertEquals(202, response.statusCode)
 
         // and then
+        // 0x00
+        val value_0x00 = getAccountState.getValue(
+            accountName,
+            AccountStateKey.create(accountIdentifier.pad256(), 0x00)
+        ).blockingGet()
+        assertEquals("0000000000000000000000002adc25665018aa1fe0e6bc666dac8fc2697ff9ba", value_0x00)
+
     }
     @Test
-    fun `201503102320PYTHON______38aa9ba7f7836987852734619b0192d42434bd7106da17663d5fc85d81a1e6cf`() {
+    fun `timestamp______44c8782a2b04af7092f76bfa83b1cb24e590722db220b32a52e4e249e596def4`() {
 
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
@@ -220,7 +248,7 @@ class vmRandomTest {
             val transaction = EthereumTransaction(
                 1 + 0,
                 BigInteger("5af3107a4000", 16),
-                BigInteger("2710", 16),
+                BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
                 "0x"
             )
@@ -231,7 +259,7 @@ class vmRandomTest {
                    newAccountName,
                    signedTransaction,
                    accountIdentifier.toHexString(),
-                   "434342444244454597",
+                   "42600055",
                    TransactionContext(
                        newAccountName,
                        newAccountPrivateKey,
@@ -247,47 +275,12 @@ class vmRandomTest {
         assertEquals(202, response.statusCode)
 
         // and then
-    }
-    @Test
-    fun `201503110346PYTHON_PUSH24______953cb389f468c0d45697c57895679d7675ab43de963ad34a0ee547b8d27d10c8`() {
+        // 0x00
+        val value_0x00 = getAccountState.getValue(
+            accountName,
+            AccountStateKey.create(accountIdentifier.pad256(), 0x00)
+        ).blockingGet()
+        assertEquals("0000000000000000000000000000000000000000000000000000000000000001", value_0x00)
 
-        val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
-            // given
-            val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-
-            // when
-
-            // and when
-            val transaction = EthereumTransaction(
-                1 + 0,
-                BigInteger("5af3107a4000", 16),
-                BigInteger("2710", 16),
-                BigInteger("0de0b6b3a7640000", 16),
-                "0x"
-            )
-
-            val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
-            val response = faultTolerant {
-                executeAction.pushTransaction(
-                   newAccountName,
-                   signedTransaction,
-                   accountIdentifier.toHexString(),
-                   "7745414245403745f31387900a8d55",
-                   TransactionContext(
-                       newAccountName,
-                       newAccountPrivateKey,
-                       transactionDefaultExpiry()
-                   )
-               ).blockingGet()
-           }
-
-            // then
-            TestTransaction(newAccountName, accountIdentifier, response)
-        }
-
-        assertEquals(202, response.statusCode)
-
-        // and then
     }
 }

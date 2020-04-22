@@ -15,81 +15,69 @@
 #include <evm/overflow.hpp>
 
 void eos_evm::raw(name from, string code, string sender) {
+  incomingTransaction(from, code, sender, bytes_t());
+}
+
+void eos_evm::execute(name from, string code, string sender, string bytecode) {
+  #if RELEASE
+  check(false, "execute is only available during development.");
+  #endif
+  incomingTransaction(from, code, sender, Hex::hexToBytes(bytecode));
+}
+
+void eos_evm::incomingTransaction(const name& from, const string& transaction, const string& sender, const bytes_t& bytecode) {
   require_auth(from);
 
-  bytes_t bytes = Hex::hexToBytes(code);
+  bytes_t transactionBytes = Hex::hexToBytes(transaction);
 
   std::shared_ptr<std::vector<RLPItem>> rlp = std::make_shared<std::vector<RLPItem>>();
-  RLPDecode::decode(bytes, rlp);
+  RLPDecode::decode(transactionBytes, rlp);
 
   std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
   std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(cacheItems);
 
-  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
-  std::shared_ptr<Memory> memory = std::make_shared<Memory>(memoryBytes);
-
   uint64_t transactionNonce = Overflow::uint256Cast(Transaction::nonce(rlp)).first;
 
-  if (Transaction::hasSignature(rlp)) {
-    bytes_t accountIdentifierBytes = eos_ecrecover::recover(
-      from.to_string(),
-      rlp
-    );
+  bool hasSignature = Transaction::hasSignature(rlp);
+  bytes_t accountIdentifierBytes = hasSignature ? eos_ecrecover::recover(from.to_string(), rlp) : Hex::hexToBytes(sender);
+  checksum256 accountIdentifier = Hex::hexToChecksum256(accountIdentifierBytes);
+  uint256_t senderAddress = BigInt::fromBigEndianBytes(accountIdentifierBytes);
 
-    checksum256 accountIdentifier = Hex::hexToChecksum256(accountIdentifierBytes);
-    account_table _account(get_self(), get_self().value);
-    auto idx = _account.get_index<name("accountid")>();
-    auto itr = idx.find(accountIdentifier);
+  account_table _account(get_self(), get_self().value);
+  auto idx = _account.get_index<name("accountid")>();
+  auto itr = idx.find(accountIdentifier);
 
-    check(itr != idx.end(), "The account identifier associated with this transaction does not exist.");
-    check((transactionNonce - itr->nonce) == 1, "Transaction nonce invalid.");
+  check(itr != idx.end(), hasSignature ? "The account identifier associated with this transaction does not exist." 
+    : "Could not find sender, did you provide the correct account identifier?");
+  check((transactionNonce - itr->nonce) == 1, "Transaction nonce invalid.");
+  if (!hasSignature) check(has_auth(itr->user), "You do not have permission to execute a transaction for the specified sender.");
 
-    std::shared_ptr<External> external = std::make_shared<eos_external>(this, itr->user, itr->nonce, itr->balance.amount);
-    std::shared_ptr<bytes_t> data = Transaction::data(rlp);
-    uint256_t address = BigInt::fromBigEndianBytes(accountIdentifierBytes);
-    call_result_t callResult = eos_execute::transaction(address, rlp, data, memory, external, accountState);
-    handleCallResult(from, callResult, accountState);
+  std::shared_ptr<External> external = std::make_shared<eos_external>(this, itr->user, itr->nonce, itr->balance.amount);
 
-    idx.modify(itr, from, [&](auto& account) {
-      account.nonce += 1;
-      account.balance.amount = external->senderAccountBalance();
-    });
+  call_result_t callResult;
+  if (bytecode.size() > 0) {
+    callResult = eos_execute::code(senderAddress, bytecode, rlp, external, accountState);
   } else {
-    std::pair<bytes_t, checksum256> accountIdentifier = eos_utils::senderToChecksum256(sender);
-    account_table _account(get_self(), get_self().value);
-    auto idx = _account.get_index<name("accountid")>();
-    auto itr = idx.find(accountIdentifier.second);
-
-    check(itr != idx.end(), "Could not find sender, did you provide the correct account identifier?");
-    check(has_auth(itr->user), "You do not have permission to execute a transaction for the specified sender.");
-    check((transactionNonce - itr->nonce) == 1, "Transaction nonce invalid.");
-
-    std::shared_ptr<External> external = std::make_shared<eos_external>(this, itr->user, itr->nonce, itr->balance.amount);
-    std::shared_ptr<bytes_t> data = Transaction::data(rlp);
-    uint256_t address = BigInt::fromBigEndianBytes(accountIdentifier.first);
-    call_result_t callResult = eos_execute::transaction(address, rlp, data, memory, external, accountState);
-    handleCallResult(from, callResult, accountState);
-
-    idx.modify(itr, from, [&](auto& account) {
-      account.nonce += 1;
-      account.balance.amount = external->senderAccountBalance();
-    });
+    callResult = eos_execute::transaction(senderAddress, rlp, external, accountState);
   }
+
+  checkCallResult(from, callResult);
+  resolveAccountState(from, accountState);
+
+  idx.modify(itr, from, [&](auto& account) {
+    account.nonce += 1;
+    account.balance.amount = external->senderAccountBalance();
+  });
 }
 
-void eos_evm::handleCallResult(const name& from, call_result_t callResult, std::shared_ptr<AccountState> accountState) {
+void eos_evm::checkCallResult(const name& from, call_result_t callResult) {
   switch (callResult.first) {
     case MESSAGE_CALL_SUCCESS:
     case MESSAGE_CALL_RETURN:
-      {
-        resolveAccountState(from, accountState);
-        break;
-      }
+      break;
     case MESSAGE_CALL_REVERTED:
-      {
-        check(false, "MESSAGE_CALL_REVERTED");
-        break;
-      }
+      check(false, "MESSAGE_CALL_REVERTED");
+      break;
     case MESSAGE_CALL_OUT_OF_GAS:
       check(false, "MESSAGE_CALL_OUT_OF_GAS");
       break;
@@ -110,10 +98,8 @@ void eos_evm::handleCallResult(const name& from, call_result_t callResult, std::
             check(false, "INVALID_JUMP");
             break;
           case TrapKind::TRAP_INSUFFICIENT_FUNDS:
-            {
-              check(false, "MESSAGE_CALL_FAILED [Insufficient funds.]");
-              break;
-            }
+            check(false, "MESSAGE_CALL_FAILED [Insufficient funds.]");
+            break;
           case TrapKind::TRAP_INVALID_CODE_ADDRESS:
             check(false, "MESSAGE_CALL_FAILED [An invalid address is attempting to create a contract.]");
             break;

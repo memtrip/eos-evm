@@ -4,6 +4,7 @@ import com.memtrip.eos.chain.actions.transaction.TransactionContext
 import com.memtrip.eos.core.crypto.EosPrivateKey
 import com.memtrip.eos.http.rpc.Api
 import com.memtrip.eos.http.rpc.model.contract.request.GetCurrencyBalance
+import com.memtrip.eos_evm.assertConsoleError
 import com.memtrip.eos_evm.eos.Config.SYMBOL
 import com.memtrip.eos_evm.eos.actions.withdraw.WithdrawAction
 import com.memtrip.eos_evm.eos.state.GetAccount
@@ -155,11 +156,7 @@ class TransferTest {
 
         // then
         assertEquals(500, transferResult.statusCode)
-        assertTrue(
-            transferResult.containsErrorString(
-                "The `from` account is not linked to an Ethereum account."
-            )
-        )
+        transferResult.assertConsoleError("The `from` account is not linked to an Ethereum account.")
     }
 
     @Test
@@ -204,11 +201,7 @@ class TransferTest {
 
         // and then
         assertEquals(500, withdrawResult.statusCode)
-        assertTrue(
-            withdrawResult.containsErrorString(
-                "Please provide a withdraw quantity."
-            )
-        )
+        withdrawResult.assertConsoleError("Please provide a withdraw quantity.")
     }
 
     @Test
@@ -253,11 +246,7 @@ class TransferTest {
 
         // and then
         assertEquals(500, withdrawResult.statusCode)
-        assertTrue(
-            withdrawResult.containsErrorString(
-                "Insufficient funds."
-            )
-        )
+        withdrawResult.assertConsoleError("Insufficient funds.")
     }
 
     @Test
@@ -284,10 +273,6 @@ class TransferTest {
 
         // and then
         assertEquals(500, withdrawResult.statusCode)
-        assertTrue(
-            withdrawResult.containsErrorString(
-                "The `to` account is not linked to an Ethereum account."
-            )
-        )
+        withdrawResult.assertConsoleError("The `to` account is not linked to an Ethereum account.")
     }
 }

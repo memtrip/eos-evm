@@ -22,6 +22,7 @@ data class EthereumTransaction(
                 gasPrice,
                 gasLimit,
                 address,
+                value,
                 data
             )
         } else {

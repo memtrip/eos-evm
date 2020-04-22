@@ -2,9 +2,10 @@ import com.memtrip.eos.chain.actions.transaction.TransactionContext
 import com.memtrip.eos.http.rpc.Api
 import com.memtrip.eos_evm.eos.*
 import com.memtrip.eos_evm.eos.state.GetAccountState
-import com.memtrip.eos_evm.eos.actions.raw.RawAction
+import com.memtrip.eos_evm.eos.actions.execute.ExecuteAction
 import com.memtrip.eos_evm.ethereum.EthereumTransaction
 import com.memtrip.eos_evm.ethereum.toHexString
+import com.memtrip.eos_evm.ethereum.toHexBytes
 import com.memtrip.eos_evm.ethereum.pad256
 import com.memtrip.eos_evm.ethereum.AccountStateKey
 import okhttp3.OkHttpClient
@@ -17,7 +18,7 @@ import com.memtrip.eos_evm.eos.TestTransaction
 import com.memtrip.eos_evm.eos.faultTolerantCreateAccount
 
 //
-// 13.04.2020
+// 21.04.2020
 // Auto generated based off the Ethereum tests found here:
 // https://github.com/ethereum/tests/blob/develop/VMTests/
 //
@@ -33,7 +34,7 @@ class vmSha3Test {
 
     private val setupTransactions = SetupTransactions(chainApi)
 
-    private val rawAction = RawAction(chainApi)
+    private val executeAction = ExecuteAction(chainApi)
 
     private val getAccountState = GetAccountState(chainApi)
 
@@ -43,29 +44,36 @@ class vmSha3Test {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("3b9aca00", 16),
                 BigInteger("174876e800", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x6000600020600055"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "6000600020600055",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -85,29 +93,36 @@ class vmSha3Test {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("01", 16),
                 BigInteger("0100000000", 16),
                 BigInteger("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", 16),
-                "0x60016103c020600055"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "60016103c020600055",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -127,29 +142,36 @@ class vmSha3Test {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("01", 16),
                 BigInteger("0100000000", 16),
                 BigInteger("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", 16),
-                "0x60016107c020600055"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "60016107c020600055",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -169,29 +191,36 @@ class vmSha3Test {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x6005600420600055"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "6005600420600055",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -211,29 +240,36 @@ class vmSha3Test {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("01", 16),
                 BigInteger("0100000000", 16),
                 BigInteger("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", 16),
-                "0x600161080020600055"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "600161080020600055",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -253,29 +289,36 @@ class vmSha3Test {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("01", 16),
                 BigInteger("0100000000", 16),
                 BigInteger("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", 16),
-                "0x60016103e020600055"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "60016103e020600055",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -295,29 +338,36 @@ class vmSha3Test {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("01", 16),
                 BigInteger("010000000000", 16),
                 BigInteger("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", 16),
-                "0x60027e0fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff20600055"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "60027e0fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff20600055",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -330,29 +380,36 @@ class vmSha3Test {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff20600055"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff20600055",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -365,29 +422,36 @@ class vmSha3Test {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("01", 16),
                 BigInteger("0100000000", 16),
                 BigInteger("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", 16),
-                "0x600161040020600055"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "600161040020600055",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -407,29 +471,36 @@ class vmSha3Test {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("01", 16),
                 BigInteger("0100000000", 16),
                 BigInteger("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", 16),
-                "0x60016107e020600055"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "60016107e020600055",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -449,29 +520,36 @@ class vmSha3Test {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("01", 16),
                 BigInteger("0100000000", 16),
                 BigInteger("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", 16),
-                "0x60206107e020600055"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "60206107e020600055",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -491,29 +569,36 @@ class vmSha3Test {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x6064640fffffffff20600055"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "6064640fffffffff20600055",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -526,29 +611,36 @@ class vmSha3Test {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x640fffffffff61271020600055"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "640fffffffff61271020600055",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -561,29 +653,36 @@ class vmSha3Test {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("01", 16),
                 BigInteger("010000000000", 16),
                 BigInteger("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", 16),
-                "0x7effffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7effffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff20600055"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "7effffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7effffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff20600055",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -596,29 +695,36 @@ class vmSha3Test {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x600a600a20600055"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "600a600a20600055",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -638,29 +744,36 @@ class vmSha3Test {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("01", 16),
                 BigInteger("0100000000", 16),
                 BigInteger("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", 16),
-                "0x600061040020600055"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "600061040020600055",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -680,29 +793,36 @@ class vmSha3Test {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x620fffff6103e820600055"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "620fffff6103e820600055",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -715,29 +835,36 @@ class vmSha3Test {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("01", 16),
                 BigInteger("0100000000", 16),
                 BigInteger("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", 16),
-                "0x6002630100000020600055"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "6002630100000020600055",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)

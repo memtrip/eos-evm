@@ -143,7 +143,7 @@ TEST_CASE("Call contract code with delegated internal message call", "[call]") {
     uint256_t(0x1283fe), /* origin */
     100000,
     uint256_t(0),
-    uint256_t(0),
+    uint256_t(2),
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>(dataBytes)
   );
@@ -170,7 +170,9 @@ TEST_CASE("Call contract code with delegated internal message call", "[call]") {
   CHECK(1 == external->logSpy.size());
 
   CHECK(1 == external->logSpy[0].first.size());
-  CHECK("0000000000000000000000000000000000000000000000000000000000018673" ==
+
+  // abi_encoded(address,uint256)
+  CHECK("0000000000000000000000000000000000000000000000000000000000ea0e9e0000000000000000000000000000000000000000000000000000000000000002" ==
     Hex::bytesToHex(external->logSpy[0].second)
   );
 }

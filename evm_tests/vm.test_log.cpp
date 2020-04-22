@@ -163,7 +163,7 @@ TEST_CASE("Log origin and sender (LOG2)", "[log]") {
   exec_result_t result = vm.execute(operation, context, mem, accountState, external);
 
   // then
-  CHECK(98977 == Utils::gasLeft(result));
+  CHECK(98597 == Utils::gasLeft(result));
 
   // then
   CHECK(1 == external->logSpy.size());
@@ -223,7 +223,7 @@ TEST_CASE("Log caller, origin, sender (LOG3)", "[log]") {
   exec_result_t result = vm.execute(operation, context, mem, accountState, external);
 
   // then
-  CHECK(98977 == Utils::gasLeft(result));
+  CHECK(98220 == Utils::gasLeft(result));
 
   // then
   CHECK(1 == external->logSpy.size());
@@ -286,7 +286,7 @@ TEST_CASE("Log number, caller, origin and sender (LOG4)", "[log]") {
   exec_result_t result = vm.execute(operation, context, mem, accountState, external);
 
   // then
-  CHECK(79935 == Utils::gasLeft(result));
+  CHECK(97843 == Utils::gasLeft(result));
 
   // then
   CHECK(1 == external->logSpy.size());

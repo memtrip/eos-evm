@@ -99,7 +99,6 @@ class Gasometer {
             GasMemProvided gasMemProvided = std::get<GasMemProvided>(result.second);
             mem_gas_t memGas = memGasCost(currentMemorySize, gasMemProvided.memSize);
             gas_t gas = gasMemProvided.gas + memGas.memGasCost;
-            // TODO: calculate provided
             gas_t provided = gasProvided(gas, gasMemProvided.requested);
             gas_t totalGas = gas + provided;
             GasRequirements gasRequirements = { totalGas, provided, memGas.newMemSize, memGas.newMemGas };
@@ -156,7 +155,7 @@ class Gasometer {
         } else {
           maxGasProvided = gasRemaining - (gasRemaining / SUB_GAS_CAP_DIVISOR);
         }
-        return std::min(requested, maxGasProvided);
+        return (requested > 0) ? std::min(requested, maxGasProvided) : maxGasProvided;
       } else {
         if (requested > 0) return requested;
         if (currentGas >= needed) return currentGas - needed;

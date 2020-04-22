@@ -9,17 +9,23 @@ import io.reactivex.Single
 import com.memtrip.eos.chain.actions.transaction.account.CreateAccountChain
 import com.memtrip.eos.chain.actions.transaction.transfer.TransferChain
 import com.memtrip.eos_evm.eos.Config.CONTRACT_ACCOUNT_NAME
+import com.memtrip.eos_evm.eos.Config.FAULT_THRESHOLD
 import com.memtrip.eos_evm.eos.Config.SEED_PRIVATE_KEY
 import com.memtrip.eos_evm.eos.Config.SYMBOL
 import com.memtrip.eos_evm.eos.actions.create.CreateAction
+import com.memtrip.eos_evm.eos.actions.execute.ExecuteAction
 import com.memtrip.eos_evm.ethereum.EthAccount
+import com.memtrip.eos_evm.ethereum.EthereumTransaction
+import com.memtrip.eos_evm.ethereum.toHexString
 import java.lang.IllegalStateException
+import java.math.BigInteger
 
 class SetupTransactions(
     private val chainApi: ChainApi,
     private val createAction: CreateAction = CreateAction(chainApi),
     private val createAccountChain: CreateAccountChain = CreateAccountChain(chainApi),
     private val transferChain: TransferChain = TransferChain(chainApi),
+    private val executeAction: ExecuteAction = ExecuteAction(chainApi),
     private val seedPrivateKey: EosPrivateKey = EosPrivateKey(SEED_PRIVATE_KEY)
 ) {
 
@@ -30,21 +36,25 @@ class SetupTransactions(
     )
 
     fun seed(): TestEthAccount {
-        for (i in 0 until 3) {
+        for (i in 0 until FAULT_THRESHOLD) {
             val newAccountName = generateUniqueAccountName()
             val newAccountPrivateKey = EosPrivateKey()
             val newEthAccount = EthAccount.create()
 
-            val createAccountResult = createAccount(
-                newAccountName,
-                newAccountPrivateKey
-            ).blockingGet()
+            val createAccountResult = faultTolerant {
+                createAccount(
+                    newAccountName,
+                    newAccountPrivateKey
+                ).blockingGet()
+            }
 
-            val createEthAccountResult = createEthAccount(
-                newAccountName,
-                newAccountPrivateKey,
-                newEthAccount
-            ).blockingGet()
+            val createEthAccountResult = faultTolerant {
+                createEthAccount(
+                    newAccountName,
+                    newAccountPrivateKey,
+                    newEthAccount
+                ).blockingGet()
+            }
 
             if (createAccountResult.isSuccessful && createEthAccountResult.isSuccessful) {
                 return TestEthAccount(
@@ -59,7 +69,7 @@ class SetupTransactions(
     }
 
     fun seedWithBalance(): TestEthAccount {
-        for (i in 0 until 3) {
+        for (i in 0 until FAULT_THRESHOLD) {
             val newAccountName = generateUniqueAccountName()
             val newAccountPrivateKey = EosPrivateKey()
             val newEthAccount = EthAccount.create()
@@ -153,6 +163,38 @@ class SetupTransactions(
         return createAction.pushTransaction(
             accountName,
             ethAccount.address,
+            TransactionContext(
+                accountName,
+                privateKey,
+                transactionDefaultExpiry()
+            )
+        )
+    }
+
+    fun sstore(
+        accountName: String,
+        privateKey: EosPrivateKey,
+        ethAccount: EthAccount,
+        key: String,
+        value: String
+    ): Single<ChainResponse<TransactionCommitted>> {
+
+        val transaction = EthereumTransaction(
+            1,
+            BigInteger("5af3107a4000", 16),
+            BigInteger("0186a0", 16),
+            BigInteger("0de0b6b3a7640000", 16),
+            "0x"
+        )
+        val signedTransaction = transaction.sign(ethAccount).signedTransaction.toHexString()
+
+        val instruction = "7F${value}60${key}55"
+
+        return executeAction.pushTransaction(
+            accountName,
+            signedTransaction,
+            ethAccount.address,
+            instruction,
             TransactionContext(
                 accountName,
                 privateKey,

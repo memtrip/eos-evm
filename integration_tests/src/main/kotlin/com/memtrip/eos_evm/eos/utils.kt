@@ -21,6 +21,7 @@ object Config {
     const val SEED_PRIVATE_KEY = "5J8TXbmovr4mttQoZd6o7qAfJnvCcwumDJrPtVxbNZLY94UAq6B"
     const val CONTRACT_ACCOUNT_NAME = "eos.evm"
     const val SYMBOL = "EVM"
+    const val FAULT_THRESHOLD = 3
 }
 
 fun transactionDefaultExpiry(): Date = with(Calendar.getInstance()) {

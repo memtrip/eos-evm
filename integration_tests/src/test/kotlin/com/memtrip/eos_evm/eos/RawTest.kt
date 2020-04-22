@@ -2,6 +2,7 @@ package com.memtrip.eos_evm.eos
 
 import com.memtrip.eos.chain.actions.transaction.TransactionContext
 import com.memtrip.eos.http.rpc.Api
+import com.memtrip.eos_evm.assertConsoleError
 import com.memtrip.eos_evm.eos.actions.raw.RawAction
 import com.memtrip.eos_evm.ethereum.EthAccount
 import com.memtrip.eos_evm.ethereum.toHexString
@@ -52,11 +53,7 @@ class RawTest {
         ).blockingGet()
 
         // then
-        assertTrue(
-            response.containsErrorString(
-                "Could not find sender, did you provide the correct account identifier?"
-            )
-        )
+        response.assertConsoleError("Could not find sender, did you provide the correct account identifier?")
     }
 
     @Test
@@ -84,11 +81,7 @@ class RawTest {
         ).blockingGet()
 
         // then
-        assertTrue(
-            response.containsErrorString(
-                "You do not have permission to execute a transaction for the specified sender."
-            )
-        )
+        response.assertConsoleError("You do not have permission to execute a transaction for the specified sender.")
     }
 
 
@@ -114,10 +107,6 @@ class RawTest {
         ).blockingGet()
 
         // then
-        assertTrue(
-            response.containsErrorString(
-                "The account identifier associated with this transaction does not exist."
-            )
-        )
+        response.assertConsoleError("The account identifier associated with this transaction does not exist.")
     }
 }

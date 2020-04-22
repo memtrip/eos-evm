@@ -1434,19 +1434,7 @@ TEST_CASE("Jumps, store the result, verify gas", "[gasometer]") {
   std::string bytecode_str = "600160015560066000555b60016000540380806000551560245760015402600155600a565b";
 
   bytes_t codeBytes = Hex::hexToBytes(bytecode_str);
-  params_t params = {
-    uint256_t(), /* codeAddress*/
-    uint256_t(), /* codeHash */
-    uint256_t(0), /* codeVersion */
-    uint256_t(0), /* address */
-    uint256_t(0), /* sender */
-    uint256_t(0), /* origin */
-    150000, /* gas */
-    uint256_t(0x32), /* gasPrice */
-    uint256_t(0), /* value */
-    codeBytes, /* code */
-    bytes_t() /* data */
-  };
+
   env_t env = Utils::env();
   std::shared_ptr<Context> context = std::make_shared<Context>(
     env.chainId,
@@ -1462,7 +1450,7 @@ TEST_CASE("Jumps, store the result, verify gas", "[gasometer]") {
     uint256_t(0xea0e9a), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
-    100000,
+    150000,
     uint256_t(0),
     uint256_t(0),
     std::make_shared<bytes_t>(codeBytes),

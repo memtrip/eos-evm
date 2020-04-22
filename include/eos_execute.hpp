@@ -6,6 +6,7 @@
 #include <evm/big_int.hpp>
 #include <evm/context.hpp>
 #include <evm/overflow.hpp>
+#include <evm/hex.hpp>
 #include <evm/external.h>
 
 #include <eos_external.hpp>
@@ -16,13 +17,14 @@ class eos_execute {
     static call_result_t transaction(
       uint256_t senderAddress,
       std::shared_ptr<std::vector<RLPItem>> rlp, 
-      std::shared_ptr<bytes_t> data,
-      std::shared_ptr<Memory> memory,
       std::shared_ptr<External> external,
       std::shared_ptr<AccountState> accountState
     ) {
       env_t env = eos_system::env();
       Call call = Call(0);
+
+      std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+      std::shared_ptr<Memory> memory = std::make_shared<Memory>(memoryBytes);
 
       call_result_t callResult;
 
@@ -89,5 +91,29 @@ class eos_execute {
         }
       }
       return callResult;
+    }
+
+    static call_result_t code(
+      uint256_t senderAddress,
+      const bytes_t& code, 
+      std::shared_ptr<std::vector<RLPItem>> rlp, 
+      std::shared_ptr<External> external,
+      std::shared_ptr<AccountState> accountState
+    ) {
+      env_t env = eos_system::env();
+      Call call = Call(0);
+
+      std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+      std::shared_ptr<Memory> memory = std::make_shared<Memory>(memoryBytes);
+
+      uint256_t toAddress = BigInt::fromBigEndianBytes(Transaction::address(rlp));
+      std::shared_ptr<Context> context = Context::makeCodeCall(env, senderAddress, code, rlp, external);
+
+      return call.call(
+        memory,
+        context,
+        external,
+        accountState
+      );
     }
 };

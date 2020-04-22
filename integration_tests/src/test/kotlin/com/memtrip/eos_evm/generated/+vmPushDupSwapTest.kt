@@ -2,7 +2,7 @@ import com.memtrip.eos.chain.actions.transaction.TransactionContext
 import com.memtrip.eos.http.rpc.Api
 import com.memtrip.eos_evm.eos.*
 import com.memtrip.eos_evm.eos.state.GetAccountState
-import com.memtrip.eos_evm.eos.actions.raw.RawAction
+import com.memtrip.eos_evm.eos.actions.execute.ExecuteAction
 import com.memtrip.eos_evm.ethereum.EthereumTransaction
 import com.memtrip.eos_evm.ethereum.toHexString
 import com.memtrip.eos_evm.ethereum.toHexBytes
@@ -18,7 +18,7 @@ import com.memtrip.eos_evm.eos.TestTransaction
 import com.memtrip.eos_evm.eos.faultTolerantCreateAccount
 
 //
-// 13.04.2020
+// 21.04.2020
 // Auto generated based off the Ethereum tests found here:
 // https://github.com/ethereum/tests/blob/develop/VMTests/
 //
@@ -34,7 +34,7 @@ class vmPushDupSwapTest {
 
     private val setupTransactions = SetupTransactions(chainApi)
 
-    private val rawAction = RawAction(chainApi)
+    private val executeAction = ExecuteAction(chainApi)
 
     private val getAccountState = GetAccountState(chainApi)
 
@@ -44,29 +44,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x60036002600182600355"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "60036002600182600355",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -86,29 +93,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x6c33445566778899aabbccddeeff600355"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "6c33445566778899aabbccddeeff600355",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -128,29 +142,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x65aabbccddeeff600355"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "65aabbccddeeff600355",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -170,29 +191,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x600460036002600160039355"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "600460036002600160039355",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -212,29 +240,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x600d600c600b600a6009600860076006600560046003600260018c600355"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "600d600c600b600a6009600860076006600560046003600260018c600355",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -254,29 +289,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x7c33445566778899aabbccddeeff00112233445566778899aabbccddeeff600355"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "7c33445566778899aabbccddeeff00112233445566778899aabbccddeeff600355",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -296,29 +338,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x7f10112233445566778899aabbccddeeff00112233445566778899aabbccddeeff60039155"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "7f10112233445566778899aabbccddeeff00112233445566778899aabbccddeeff60039155",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -331,29 +380,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x6008600760066005600460036002600160039755"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "6008600760066005600460036002600160039755",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -373,29 +429,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("20", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x60656107d26204a0c763026921f4640bc5588eb165372d0f1dca6e661ba1d901961c71670c55f7bc23038e3868056bc75e2d630fffff69021e19e0c9bab24000016a085d1c6e8050f0ea1c71bd6b0688be36543f3c36e638e37a6c03d41f73d55d0d482ae55555376dc76810d0fe03c91964d31c71c6f46e615dd0360c07d931663b14e38e38b16f2da3f99955a3adcf27ebb1caaaaaaa6e7014ccba6a8bb1ed35bd86bf065c71c71c2b7109491c5d4781b79c9009de6bfb8e38e38de8720414a0f6fdec81304d4c563e740bffffffffa573118427b3b4a05bc8a8a4de8459868000000000017406eb15e7331e727940d4ac54b7cdca1c71c71c71bd750567a91c9fefc96ebaa626a22f98c5e638e38e38e37a76032abd16c5b68006e15d5aa307e383f4e55555555555377701a6427bdc4f0d58eab5f48a3ec67f64e21c71c71c71c6f478080dd0a0c9b9ff2c2a0c740b06853a0a980ee38e38e38e38b17903c679cb5e8f2f9cb3b5d6652b0e7334f746faaaaaaaaaaaaa6e7a01b873815917ebb2bf3b890a1af495d6235bae3c71c71c71c71c2b7b07ae4cca96e1a55dfa49c85ad3c3e60e426b92fb8e38e38e38e38de87c036018bf074e292bcc7d6c8bea0f9699443046178bffffffffffffffa57d0e7d34c64a9c85d4460dbbca87196b61618a4bd2168000000000000000017e05b901f48a5b994d6572502bc4ea43140486666416aa1c71c71c71c71c71bd7f047889870c178fc477414ea231d70467a388fffe31b4e638e38e38e38e38e37a"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "60656107d26204a0c763026921f4640bc5588eb165372d0f1dca6e661ba1d901961c71670c55f7bc23038e3868056bc75e2d630fffff69021e19e0c9bab24000016a085d1c6e8050f0ea1c71bd6b0688be36543f3c36e638e37a6c03d41f73d55d0d482ae55555376dc76810d0fe03c91964d31c71c6f46e615dd0360c07d931663b14e38e38b16f2da3f99955a3adcf27ebb1caaaaaaa6e7014ccba6a8bb1ed35bd86bf065c71c71c2b7109491c5d4781b79c9009de6bfb8e38e38de8720414a0f6fdec81304d4c563e740bffffffffa573118427b3b4a05bc8a8a4de8459868000000000017406eb15e7331e727940d4ac54b7cdca1c71c71c71bd750567a91c9fefc96ebaa626a22f98c5e638e38e38e37a76032abd16c5b68006e15d5aa307e383f4e55555555555377701a6427bdc4f0d58eab5f48a3ec67f64e21c71c71c71c6f478080dd0a0c9b9ff2c2a0c740b06853a0a980ee38e38e38e38b17903c679cb5e8f2f9cb3b5d6652b0e7334f746faaaaaaaaaaaaa6e7a01b873815917ebb2bf3b890a1af495d6235bae3c71c71c71c71c2b7b07ae4cca96e1a55dfa49c85ad3c3e60e426b92fb8e38e38e38e38de87c036018bf074e292bcc7d6c8bea0f9699443046178bffffffffffffffa57d0e7d34c64a9c85d4460dbbca87196b61618a4bd2168000000000000000017e05b901f48a5b994d6572502bc4ea43140486666416aa1c71c71c71c71c71bd7f047889870c178fc477414ea231d70467a388fffe31b4e638e38e38e38e38e37a",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -408,29 +471,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x78778899aabbccddeeff00112233445566778899aabbccddeeff600355"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "78778899aabbccddeeff00112233445566778899aabbccddeeff600355",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -450,29 +520,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x600a60096008600760066005600460036002600160039955"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "600a60096008600760066005600460036002600160039955",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -492,29 +569,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x600b600a60096008600760066005600460036002600160039a55"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "600b600a60096008600760066005600460036002600160039a55",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -534,29 +618,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x778899aabbccddeeff00112233445566778899aabbccddeeff600355"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "778899aabbccddeeff00112233445566778899aabbccddeeff600355",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -576,29 +667,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x7f10112233445566778899aabbccddeeff00112233445566778899aabbccddeeff600355"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "7f10112233445566778899aabbccddeeff00112233445566778899aabbccddeeff600355",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -618,29 +716,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x60096008600760066005600460036002600160039855"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "60096008600760066005600460036002600160039855",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -660,29 +765,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x7b445566778899aabbccddeeff00112233445566778899aabbccddeeff600355"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "7b445566778899aabbccddeeff00112233445566778899aabbccddeeff600355",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -702,29 +814,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x6005600460036002600160039455"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "6005600460036002600160039455",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -744,29 +863,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x600c600b600a6009600860076006600560046003600260018b600355"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "600c600b600a6009600860076006600560046003600260018b600355",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -786,29 +912,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x6699aabbccddeeff600355"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "6699aabbccddeeff600355",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -828,29 +961,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x6b445566778899aabbccddeeff600355"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "6b445566778899aabbccddeeff600355",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -870,29 +1010,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x6002600181600355"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "6002600181600355",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -912,29 +1059,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x60096008600760066005600460036002600188600355"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "60096008600760066005600460036002600188600355",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -954,29 +1108,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x72ddeeff00112233445566778899aabbccddeeff600355"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "72ddeeff00112233445566778899aabbccddeeff600355",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -996,29 +1157,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x7699aabbccddeeff00112233445566778899aabbccddeeff600355"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "7699aabbccddeeff00112233445566778899aabbccddeeff600355",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -1038,29 +1206,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x6010600f600e600d600c600b600a60096008600760066005600460036002600160039f55"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "6010600f600e600d600c600b600a60096008600760066005600460036002600160039f55",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -1080,29 +1255,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x6005600460036002600184600355"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "6005600460036002600184600355",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -1122,29 +1304,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x7fff10112233445566778899aabbccddeeff00112233445566778899aabbccddeeff600355"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "7fff10112233445566778899aabbccddeeff00112233445566778899aabbccddeeff600355",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -1157,29 +1346,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x6e112233445566778899aabbccddeeff600355"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "6e112233445566778899aabbccddeeff600355",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -1199,29 +1395,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x7f"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "7f",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -1234,29 +1437,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x600f600e600d600c600b600a6009600860076006600560046003600260018e600355"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "600f600e600d600c600b600a6009600860076006600560046003600260018e600355",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -1276,29 +1486,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x6002600160039155"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "6002600160039155",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -1318,29 +1535,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x7f0102030000000000000000000000000000000000000000000000000000000000600055"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "7f0102030000000000000000000000000000000000000000000000000000000000600055",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -1360,29 +1584,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x600e600d600c600b600a6009600860076006600560046003600260018d600355"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "600e600d600c600b600a6009600860076006600560046003600260018d600355",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -1402,29 +1633,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x60036002600160039255"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "60036002600160039255",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -1444,29 +1682,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x600560026001600c575050005b9060016116575050005b035b0360005260016003611ff3"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "600560026001600c575050005b9060016116575050005b035b0360005260016003611ff3",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -1479,29 +1724,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x60ff600355"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "60ff600355",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -1521,29 +1773,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x6d2233445566778899aabbccddeeff600355"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "6d2233445566778899aabbccddeeff600355",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -1563,29 +1822,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x600460036002600183600355"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "600460036002600183600355",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -1605,29 +1871,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x75aabbccddeeff00112233445566778899aabbccddeeff600355"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "75aabbccddeeff00112233445566778899aabbccddeeff600355",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -1647,29 +1920,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x71eeff00112233445566778899aabbccddeeff600355"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "71eeff00112233445566778899aabbccddeeff600355",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -1689,29 +1969,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x6008600760066005600460036002600187600355"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "6008600760066005600460036002600187600355",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -1731,29 +2018,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x600e600d600c600b600a60096008600760066005600460036002600160039d55"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "600e600d600c600b600a60096008600760066005600460036002600160039d55",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -1773,29 +2067,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x74bbccddeeff00112233445566778899aabbccddeeff600355"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "74bbccddeeff00112233445566778899aabbccddeeff600355",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -1815,29 +2116,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x61eeff600355"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "61eeff600355",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -1857,29 +2165,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x70ff00112233445566778899aabbccddeeff600355"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "70ff00112233445566778899aabbccddeeff600355",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -1899,29 +2214,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x600760066005600460036002600186600355"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "600760066005600460036002600186600355",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -1941,29 +2263,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x7fff10112233445566778899aabbccddeeff00112233445566778899aabbccdd"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "7fff10112233445566778899aabbccddeeff00112233445566778899aabbccdd",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -1976,29 +2305,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x60066005600460036002600185600355"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "60066005600460036002600185600355",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -2018,29 +2354,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x6f10112233445566778899aabbccddeeff600355"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "6f10112233445566778899aabbccddeeff600355",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -2060,29 +2403,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x62ddeeff600355"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "62ddeeff600355",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -2102,29 +2452,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x6010600f600e600d600c600b600a6009600860076006600560046003600260018f600355"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "6010600f600e600d600c600b600a6009600860076006600560046003600260018f600355",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -2144,29 +2501,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x7f10112233445566778899aabbccddeeff00112233445566778899aabbccddeeff60039055"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "7f10112233445566778899aabbccddeeff00112233445566778899aabbccddeeff60039055",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -2186,29 +2550,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x7f010203600055"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "7f010203600055",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -2221,29 +2592,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x73ccddeeff00112233445566778899aabbccddeeff600355"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "73ccddeeff00112233445566778899aabbccddeeff600355",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -2263,29 +2641,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x600f600e600d600c600b600a60096008600760066005600460036002600160039e55"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "600f600e600d600c600b600a60096008600760066005600460036002600160039e55",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -2305,29 +2690,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x60066005600460036002600160039555"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "60066005600460036002600160039555",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -2347,29 +2739,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x600b600a6009600860076006600560046003600260018a600355"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "600b600a6009600860076006600560046003600260018a600355",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -2389,29 +2788,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x63ccddeeff600355"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "63ccddeeff600355",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -2431,29 +2837,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x6a5566778899aabbccddeeff600355"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "6a5566778899aabbccddeeff600355",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -2473,29 +2886,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x7f10112233445566778899aabbccddeeff00112233445566778899aabbccddeeff81600355"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "7f10112233445566778899aabbccddeeff00112233445566778899aabbccddeeff81600355",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -2508,29 +2928,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x7f10112233445566778899aabbccddeeff00112233445566778899aabbccddeeff80600355"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "7f10112233445566778899aabbccddeeff00112233445566778899aabbccddeeff80600355",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -2550,29 +2977,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x600c600b600a60096008600760066005600460036002600160039b55"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "600c600b600a60096008600760066005600460036002600160039b55",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -2592,29 +3026,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x7a5566778899aabbccddeeff00112233445566778899aabbccddeeff600355"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "7a5566778899aabbccddeeff00112233445566778899aabbccddeeff600355",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -2634,29 +3075,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x7e112233445566778899aabbccddeeff00112233445566778899aabbccddeeff600355"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "7e112233445566778899aabbccddeeff00112233445566778899aabbccddeeff600355",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -2676,29 +3124,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x678899aabbccddeeff600355"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "678899aabbccddeeff600355",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -2718,29 +3173,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x68778899aabbccddeeff600355"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "68778899aabbccddeeff600355",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -2760,29 +3222,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x7d2233445566778899aabbccddeeff00112233445566778899aabbccddeeff600355"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "7d2233445566778899aabbccddeeff00112233445566778899aabbccddeeff600355",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -2802,29 +3271,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x7966778899aabbccddeeff00112233445566778899aabbccddeeff600355"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "7966778899aabbccddeeff00112233445566778899aabbccddeeff600355",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -2844,29 +3320,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x600d600c600b600a60096008600760066005600460036002600160039c55"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "600d600c600b600a60096008600760066005600460036002600160039c55",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -2886,29 +3369,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x6966778899aabbccddeeff600355"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "6966778899aabbccddeeff600355",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -2928,29 +3418,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x64bbccddeeff600355"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "64bbccddeeff600355",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -2970,29 +3467,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x600760066005600460036002600160039655"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "600760066005600460036002600160039655",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -3012,29 +3516,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x600a60096008600760066005600460036002600189600355"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "600a60096008600760066005600460036002600189600355",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)
@@ -3054,29 +3565,36 @@ class vmPushDupSwapTest {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + 0,
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x60"
+                "0x"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "60",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)

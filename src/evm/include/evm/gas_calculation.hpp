@@ -256,10 +256,10 @@ class GasCalculation {
     ) {
       gas_t instructionGas = Overflow::uint256Cast(stack->peek(0)).first;
       gas_t memoryNeeded = Overflow::uint256Cast(stack->peek(1)).first;
-      gas_t noOfTopics = Overflow::uint256Cast(Instruction::logTopics(instruction)).first;
+      uint8_t noOfTopics = Instruction::logTopics(instruction);
       gas_t logGas = LOG_GAS + LOG_TOPIC_GAS * noOfTopics;
       gas_t dataGas = memoryNeeded * LOG_DATA_GAS;
-      gas_t gas = dataGas + logGas;
+      gas_t gas = Overflow::add(dataGas, logGas).first;
       return gasMem(gas, memNeeded(instructionGas, memoryNeeded));
     }
 

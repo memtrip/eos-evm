@@ -2,7 +2,7 @@ import com.memtrip.eos.chain.actions.transaction.TransactionContext
 import com.memtrip.eos.http.rpc.Api
 import com.memtrip.eos_evm.eos.*
 import com.memtrip.eos_evm.eos.state.GetAccountState
-import com.memtrip.eos_evm.eos.actions.raw.RawAction
+import com.memtrip.eos_evm.eos.actions.execute.ExecuteAction
 import com.memtrip.eos_evm.ethereum.EthereumTransaction
 import com.memtrip.eos_evm.ethereum.toHexString
 import com.memtrip.eos_evm.ethereum.toHexBytes
@@ -34,7 +34,7 @@ class ${groupName} {
 
     private val setupTransactions = SetupTransactions(chainApi)
 
-    private val rawAction = RawAction(chainApi)
+    private val executeAction = ExecuteAction(chainApi)
 
     private val getAccountState = GetAccountState(chainApi)
 
@@ -45,29 +45,49 @@ class ${groupName} {
         val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
             // given
             val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
             // when
+            <#if test.fixture.pre.accountState.storage?has_content>
+            <#list test.fixture.pre.accountState.storage?keys as key>
+            val store1 = faultTolerant {
+                setupTransactions.sstore(
+                    newAccountName,
+                    newAccountPrivateKey,
+                    newEthAccount,
+                    AccountStateKey.create(accountIdentifier.pad256(), ${key}),
+                    "${test.fixture.pre.accountState.storage[key]}"
+                ).blockingGet()
+            }
+            </#list>
+            </#if>
+
+            // and when
             val transaction = EthereumTransaction(
-                1,
+                1 + ${test.fixture.pre.accountState.storage?size},
                 BigInteger("${test.fixture.exec.gasPrice[2..]}", 16),
                 BigInteger("${test.fixture.exec.gas[2..]}", 16),
                 BigInteger("${test.fixture.exec.value[2..]}", 16),
-                "${test.fixture.exec.code}"
+                "${test.fixture.exec.data}"
             )
+
             val signedTransaction = transaction.sign(newEthAccount).signedTransaction.toHexString()
+            val response = faultTolerant {
+                executeAction.pushTransaction(
+                   newAccountName,
+                   signedTransaction,
+                   accountIdentifier.toHexString(),
+                   "${test.fixture.exec.code[2..]}",
+                   TransactionContext(
+                       newAccountName,
+                       newAccountPrivateKey,
+                       transactionDefaultExpiry()
+                   )
+               ).blockingGet()
+           }
 
             // then
-            val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-            TestTransaction(newAccountName, accountIdentifier, rawAction.pushTransaction(
-                newAccountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    newAccountName,
-                    newAccountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet())
+            TestTransaction(newAccountName, accountIdentifier, response)
         }
 
         assertEquals(202, response.statusCode)

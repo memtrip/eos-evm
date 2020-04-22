@@ -2,6 +2,7 @@ package com.memtrip.eos_evm.eos
 
 import com.memtrip.eos.chain.actions.ChainResponse
 import com.memtrip.eos.http.rpc.model.transaction.response.TransactionCommitted
+import com.memtrip.eos_evm.eos.Config.FAULT_THRESHOLD
 import java.lang.IllegalStateException
 
 data class TestTransaction(
@@ -16,8 +17,8 @@ data class TestTransaction(
  * transaction under test to fail up to the THRESHOLD.
  */
 fun faultTolerantCreateAccount(executor: () -> TestTransaction): TestTransaction {
-    val threshold = 3
-    for (i in 0 until 3) {
+    val threshold = FAULT_THRESHOLD
+    for (i in 0 until threshold) {
         val response = executor()
         if (response.chain.isSuccessful || i >= threshold - 1) return response
     }
@@ -25,8 +26,8 @@ fun faultTolerantCreateAccount(executor: () -> TestTransaction): TestTransaction
 }
 
 fun faultTolerant(executor: () -> ChainResponse<TransactionCommitted>): ChainResponse<TransactionCommitted> {
-    val threshold = 3
-    for (i in 0 until 3) {
+    val threshold = FAULT_THRESHOLD
+    for (i in 0 until threshold) {
         val response = executor()
         if (response.isSuccessful || i >= threshold - 1) return response
     }

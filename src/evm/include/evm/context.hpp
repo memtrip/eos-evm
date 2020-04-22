@@ -127,6 +127,38 @@ class Context {
       );
     }
 
+    static std::shared_ptr<Context> makeCodeCall(
+      const env_t& env, 
+      const uint256_t& senderAddress, 
+      const bytes_t& code,
+      std::shared_ptr<std::vector<RLPItem>> rlp, 
+      std::shared_ptr<External> external
+    ) {
+      return std::make_shared<Context>(
+        env.chainId,
+        env.blockNumber,
+        env.timestamp,
+        env.gasLimit,
+        env.coinbase,
+        env.difficulty,
+        env.blockHash,
+        senderAddress, /* codeAddress, TODO: clarify where this comes from */
+        uint256_t(0), /* codeHash, TODO: clarify where this comes from */
+        uint256_t(0), /* codeVersion, TODO: clarify where this comes from */
+        senderAddress, /* address, TODO: clarify where this comes from */
+        senderAddress, /* sender */
+        uint256_t(0), /* origin */
+        Transaction::gas(rlp),
+        Transaction::gasPrice(rlp),
+        Transaction::value(rlp),
+        std::make_shared<bytes_t>(code),
+        std::make_shared<bytes_t>(bytes_t(
+          rlp->at(0).values[Transaction::RLP_DATA].bytes.begin(), 
+          rlp->at(0).values[Transaction::RLP_DATA].bytes.end()
+        ))
+      );
+    }
+
     static std::shared_ptr<Context> makeInnerCall(
       const uint256_t& chainId,
       const uint256_t& blockNumber,

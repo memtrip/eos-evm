@@ -2,6 +2,7 @@ package com.memtrip.eos_evm.eos
 
 import com.memtrip.eos.chain.actions.transaction.TransactionContext
 import com.memtrip.eos.http.rpc.Api
+import com.memtrip.eos_evm.assertConsoleError
 import com.memtrip.eos_evm.eos.actions.raw.RawAction
 import com.memtrip.eos_evm.eos.state.GetAccount
 import com.memtrip.eos_evm.eos.state.GetCode
@@ -64,11 +65,7 @@ class EndownmentTest {
         // then
         assertEquals(response.statusCode, 500)
 
-        assertTrue(
-            response.containsErrorString(
-                "Insufficient funds."
-            )
-        )
+        response.assertConsoleError("Insufficient funds.")
     }
 
     @Test
@@ -124,7 +121,7 @@ class EndownmentTest {
         // and then
         if (getCodeResult !is GetCode.Record.Value) fail("code record not found") else {
             assertEquals(
-                "601080600c6000396000f3006000355415600957005b60203560003555",
+                "6000355415600957005b602035600035",
                 getCodeResult.item.code
             )
             assertEquals(
