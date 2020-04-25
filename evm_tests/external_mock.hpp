@@ -32,6 +32,10 @@ class ExternalMock: public External {
       storageResponder = word_responder_t();
     }
 
+    uint64_t senderNonce() {
+      return 0;
+    }
+
     uint64_t senderAccountBalance() {
       return 0;
     }

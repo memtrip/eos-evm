@@ -42,15 +42,11 @@ struct EnvInfo {
 };
 typedef EnvInfo env_t;
 
-enum ActionType {
-  ACTION_CREATE,
-  ACTION_CALL,
+enum CallType {
   ACTION_CALL_CODE,
   ACTION_DELEGATE_CALL,
-  ACTION_STATIC_CALL,
-  ACTION_CREATE2
+  ACTION_STATIC_CALL
 };
-typedef ActionType action_type_t;
 
 struct Params {
   uint256_t codeAddress;
@@ -114,8 +110,31 @@ typedef std::variant<
 typedef std::pair<EmplaceResult, emplace_result_t> emplace_t;
 
 enum AddressScheme {
+  SENDER,
   LEGACY,
   EIP_1014
 };
+
+enum MessageCallResult {
+  MESSAGE_CALL_SUCCESS,
+  MESSAGE_CALL_RETURN,
+  MESSAGE_CALL_FAILED,
+  MESSAGE_CALL_REVERTED,
+  MESSAGE_CALL_OUT_OF_GAS
+};
+
+struct MessageCallReturn {
+  gas_t gasLeft;
+  uint64_t offset;
+  uint64_t size;
+};
+
+typedef std::variant<
+  gas_t,
+  trap_t,
+  MessageCallReturn
+> call_result_data_t;
+
+typedef std::pair<MessageCallResult, call_result_data_t> call_result_t;
 
 #endif

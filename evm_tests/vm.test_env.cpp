@@ -7,7 +7,6 @@
 #include <evm/utils.hpp>
 #include <evm/vm.h>
 #include <evm/hex.hpp>
-#include <evm/call.h>
 #include <evm/gasometer.hpp>
 #include <evm/big_int.hpp>
 
@@ -45,16 +44,13 @@ TEST_CASE("Blockhash (stub)", "[env]") {
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
 
-
-  std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(cacheItems);
+  std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
 
   // when
-  vm.execute(operation, context, mem, accountState, external);
+  vm.execute(0, operation, context, mem, pendingState, external);
 
   // then
   CHECK("f1250fd89a1c3e517ae92cc1f73865c594bfad34db20f3b3396af4efe19d3bfb" == 
@@ -95,16 +91,13 @@ TEST_CASE("Coinbase (stub)", "[env]") {
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
 
-
-  std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(cacheItems);
+  std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
 
   // when
-  vm.execute(operation, context, mem, accountState, external);
+  vm.execute(0, operation, context, mem, pendingState, external);
 
   // then
   CHECK("0000000000000000000000002adc25665018aa1fe0e6bc666dac8fc2697ff9ba" == 
@@ -145,16 +138,13 @@ TEST_CASE("Difficulty (stub)", "[env]") {
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
 
-
-  std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(cacheItems);
+  std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
 
   // when
-  vm.execute(operation, context, mem, accountState, external);
+  vm.execute(0, operation, context, mem, pendingState, external);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000100" == 
@@ -195,16 +185,13 @@ TEST_CASE("Timestamp", "[env]") {
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
 
-
-  std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(cacheItems);
+  std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
 
   // when
-  vm.execute(operation, context, mem, accountState, external);
+  vm.execute(0, operation, context, mem, pendingState, external);
 
   // then
   CHECK(12345 == vm.stack->top());
@@ -243,16 +230,13 @@ TEST_CASE("Number", "[env]") {
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
 
-
-  std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(cacheItems);
+  std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
 
   // when
-  vm.execute(operation, context, mem, accountState, external);
+  vm.execute(0, operation, context, mem, pendingState, external);
 
   // then
   CHECK(16339169 == vm.stack->top());
@@ -291,16 +275,13 @@ TEST_CASE("Gas limit", "[env]") {
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
 
-
-  std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(cacheItems);
+  std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
 
   // when
-  vm.execute(operation, context, mem, accountState, external);
+  vm.execute(0, operation, context, mem, pendingState, external);
 
   // then
   CHECK(100000 == vm.stack->top());
@@ -339,16 +320,13 @@ TEST_CASE("Chain id", "[env]") {
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
 
-
-  std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(cacheItems);
+  std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
 
   // when
-  vm.execute(operation, context, mem, accountState, external);
+  vm.execute(0, operation, context, mem, pendingState, external);
 
   // then
   CHECK(1 == vm.stack->top());
@@ -387,16 +365,13 @@ TEST_CASE("Call value", "[env]") {
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
 
-
-  std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(cacheItems);
+  std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
 
   // when
-  vm.execute(operation, context, mem, accountState, external);
+  vm.execute(0, operation, context, mem, pendingState, external);
 
   // then
   CHECK(34 == vm.stack->top());

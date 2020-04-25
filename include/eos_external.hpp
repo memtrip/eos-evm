@@ -24,6 +24,10 @@ class eos_external: public External {
       _senderAccountBalance = senderAccountBalance;
     }
 
+    uint64_t senderNonce() {
+      return _senderNonce;
+    }
+
     uint64_t senderAccountBalance() {
       return _senderAccountBalance;
     }
@@ -50,6 +54,7 @@ class eos_external: public External {
       address_t address = BigInt::toFixed32(addressWord);
 
       // get the account associated with the address
+      // TODO: this can also be a contract address
       eos_evm::account_table _account(_contract->get_self(), _contract->get_self().value);
       auto accountIdx = _account.get_index<name("accountid")>();
       auto accountItr = accountIdx.find(address);
@@ -104,9 +109,13 @@ class eos_external: public External {
 
       if (_senderAccountBalance < endowment) return std::make_pair(EmplaceResult::EMPLACE_INSUFFICIENT_FUNDS, endowment);
 
-      // TODO: support the CREATE2 address scheme
+      _senderNonce += 1;
+      
       address_t codeAddress;
       switch (addressScheme) {
+        case AddressScheme::SENDER:
+          codeAddress = senderAddress;
+          break;
         case AddressScheme::LEGACY:
           codeAddress = Address::ethereumAddressFrom(senderAddressWord, uint256_t(_senderNonce));
           break;

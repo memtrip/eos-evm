@@ -4,7 +4,7 @@
 #include <evm/vm.h>
 #include <evm/hex.hpp>
 
-#include <evm/call.h>
+#include <evm/call.hpp>
 #include <evm/gasometer.hpp>
 #include <evm/big_int.hpp>
 #include "external_mock.hpp"
@@ -42,24 +42,21 @@ TEST_CASE("Log empty (LOG0)", "[log]") {
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
 
-
-  std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(cacheItems);
+  std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(operation, context, mem, accountState, external);
+  exec_result_t result = vm.execute(0, operation, context, mem, pendingState, external);
 
   // then
   CHECK(99619 == Utils::gasLeft(result));
 
   // then
-  CHECK(1 == external->logSpy.size());
-  CHECK(0 == external->logSpy[0].first.size());
-  CHECK(0 == external->logSpy[0].second.size());
+  CHECK(1 == pendingState->logs.size());
+  CHECK(0 == pendingState->logs[0].topics.size());
+  CHECK(0 == pendingState->logs[0].data->size());
 }
 
 TEST_CASE("Log sender (LOG1)", "[log]") {
@@ -94,28 +91,25 @@ TEST_CASE("Log sender (LOG1)", "[log]") {
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
 
-
-  std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(cacheItems);
+  std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(operation, context, mem, accountState, external);
+  exec_result_t result = vm.execute(0, operation, context, mem, pendingState, external);
 
   // then
   CHECK(98974 == Utils::gasLeft(result));
 
   // then
-  CHECK(1 == external->logSpy.size());
-  CHECK(1 == external->logSpy[0].first.size());
+  CHECK(1 == pendingState->logs.size());
+  CHECK(1 == pendingState->logs[0].topics.size());
   CHECK("0000000000000000000000000000000000000000000000000000000000ea0e9e" == 
-    Utils::uint256_2str(external->logSpy[0].first[0])
+    Utils::uint256_2str(pendingState->logs[0].topics[0])
   );
   CHECK("ff00000000000000000000000000000000000000000000000000000000000000" == 
-    TestUtils::bytesToHex(external->logSpy[0].second)
+    Hex::bytesToHex(pendingState->logs[0].data)
   );
 }
 
@@ -151,31 +145,28 @@ TEST_CASE("Log origin and sender (LOG2)", "[log]") {
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
 
-
-  std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(cacheItems);
+  std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(operation, context, mem, accountState, external);
+  exec_result_t result = vm.execute(0, operation, context, mem, pendingState, external);
 
   // then
   CHECK(98597 == Utils::gasLeft(result));
 
   // then
-  CHECK(1 == external->logSpy.size());
-  CHECK(2 == external->logSpy[0].first.size());
+  CHECK(1 == pendingState->logs.size());
+  CHECK(2 == pendingState->logs[0].topics.size());
   CHECK("00000000000000000000000000000000000000000000000000000000001283fe" == 
-    Utils::uint256_2str(external->logSpy[0].first[0])
+    Utils::uint256_2str(pendingState->logs[0].topics[0])
   );
   CHECK("0000000000000000000000000000000000000000000000000000000000ea0e9e" == 
-    Utils::uint256_2str(external->logSpy[0].first[1])
+    Utils::uint256_2str(pendingState->logs[0].topics[1])
   );
   CHECK("ff00000000000000000000000000000000000000000000000000000000000000" == 
-    TestUtils::bytesToHex(external->logSpy[0].second)
+    Hex::bytesToHex(pendingState->logs[0].data)
   );
 }
 
@@ -211,34 +202,31 @@ TEST_CASE("Log caller, origin, sender (LOG3)", "[log]") {
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
 
-
-  std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(cacheItems);
+  std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(operation, context, mem, accountState, external);
+  exec_result_t result = vm.execute(0, operation, context, mem, pendingState, external);
 
   // then
   CHECK(98220 == Utils::gasLeft(result));
 
   // then
-  CHECK(1 == external->logSpy.size());
-  CHECK(3 == external->logSpy[0].first.size());
+  CHECK(1 == pendingState->logs.size());
+  CHECK(3 == pendingState->logs[0].topics.size());
   CHECK("0000000000000000000000000000000000000000000000000000000000ea0e9a" == 
-    Utils::uint256_2str(external->logSpy[0].first[0])
+    Utils::uint256_2str(pendingState->logs[0].topics[0])
   );
   CHECK("00000000000000000000000000000000000000000000000000000000001283fe" == 
-    Utils::uint256_2str(external->logSpy[0].first[1])
+    Utils::uint256_2str(pendingState->logs[0].topics[1])
   );
   CHECK("0000000000000000000000000000000000000000000000000000000000ea0e9e" == 
-    Utils::uint256_2str(external->logSpy[0].first[2])
+    Utils::uint256_2str(pendingState->logs[0].topics[2])
   );
   CHECK("ff00000000000000000000000000000000000000000000000000000000000000" == 
-    TestUtils::bytesToHex(external->logSpy[0].second)
+    Hex::bytesToHex(pendingState->logs[0].data)
   );
 }
 
@@ -274,36 +262,33 @@ TEST_CASE("Log number, caller, origin and sender (LOG4)", "[log]") {
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
 
-
-  std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(cacheItems);
+  std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
 
   // when
-  exec_result_t result = vm.execute(operation, context, mem, accountState, external);
+  exec_result_t result = vm.execute(0, operation, context, mem, pendingState, external);
 
   // then
   CHECK(97843 == Utils::gasLeft(result));
 
   // then
-  CHECK(1 == external->logSpy.size());
-  CHECK(4 == external->logSpy[0].first.size());
+  CHECK(1 == pendingState->logs.size());
+  CHECK(4 == pendingState->logs[0].topics.size());
   CHECK("0000000000000000000000000000000000000000000000000000000000ea0e9a" == 
-    Utils::uint256_2str(external->logSpy[0].first[0])
+    Utils::uint256_2str(pendingState->logs[0].topics[0])
   );
   CHECK("00000000000000000000000000000000000000000000000000000000001283fe" == 
-    Utils::uint256_2str(external->logSpy[0].first[1])
+    Utils::uint256_2str(pendingState->logs[0].topics[1])
   );
   CHECK("0000000000000000000000000000000000000000000000000000000000ea0e9e" == 
-    Utils::uint256_2str(external->logSpy[0].first[2])
+    Utils::uint256_2str(pendingState->logs[0].topics[2])
   );
   CHECK("0000000000000000000000000000000000000000000000000000000000f950e1" == 
-    Utils::uint256_2str(external->logSpy[0].first[3])
+    Utils::uint256_2str(pendingState->logs[0].topics[3])
   );
   CHECK("ff00000000000000000000000000000000000000000000000000000000000000" == 
-    TestUtils::bytesToHex(external->logSpy[0].second)
+    Hex::bytesToHex(pendingState->logs[0].data)
   );
 }

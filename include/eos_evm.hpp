@@ -4,7 +4,7 @@
 #include <eosio/asset.hpp>
 #include <eosio/eosio.hpp>
 
-#include <evm/call.h>
+#include <evm/call.hpp>
 
 using namespace std;
 using namespace eosio;
@@ -86,5 +86,6 @@ class [[eosio::contract("eos_evm")]] eos_evm : public contract {
   private:
     void incomingTransaction(const name& from, const string& transaction, const string& sender, const bytes_t& bytecode);
     void checkCallResult(const name& from, call_result_t callResult);
-    void resolveAccountState(const name& from, std::shared_ptr<AccountState> accountState);
+    void resolveAccountState(const name& from, std::shared_ptr<PendingState> pendingState);
+    void resolveLogs(std::shared_ptr<PendingState> pendingState, std::shared_ptr<External> external);
 };

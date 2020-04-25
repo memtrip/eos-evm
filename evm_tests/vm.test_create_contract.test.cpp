@@ -7,7 +7,6 @@
 #include <evm/utils.hpp>
 #include <evm/vm.h>
 #include <evm/hex.hpp>
-#include <evm/call.h>
 #include <evm/gasometer.hpp>
 #include <evm/big_int.hpp>
 
@@ -41,15 +40,12 @@ TEST_CASE("Create the most basic contract using COPYCODE", "[create]") {
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
-
-  std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(cacheItems);
+  std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
 
-  exec_result_t vm_result = vm.execute(operation, context, mem, accountState, external);
+  exec_result_t vm_result = vm.execute(0, operation, context, mem, pendingState, external);
 
   // then
   REQUIRE(ExecResult::DONE_RETURN == vm_result.first);
@@ -95,16 +91,13 @@ TEST_CASE("Create contract using CODECOPY", "[create]") {
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
-
-  std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(cacheItems);
+  std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
 
   // when
-  exec_result_t vm_result = vm.execute(operation, context, mem, accountState, external);
+  exec_result_t vm_result = vm.execute(0, operation, context, mem, pendingState, external);
 
   // then
   REQUIRE(ExecResult::DONE_RETURN == vm_result.first);
@@ -120,10 +113,10 @@ TEST_CASE("Create contract using CODECOPY", "[create]") {
     code
   );
 
-  REQUIRE(1 == external->logSpy.size());
-  CHECK(1 == external->logSpy[0].first.size());
+  REQUIRE(1 == pendingState->logs.size());
+  CHECK(1 == pendingState->logs[0].topics.size());
   CHECK("b8a00d6d8ca1be30bfec34d8f97e55f0f0fd9eeb7fb46e030516363d4cfe1ad6" == 
-    Utils::uint256_2str(external->logSpy[0].first[0])
+    Utils::uint256_2str(pendingState->logs[0].topics[0])
   );
 
   REQUIRE(0 == external->emplaceSpy.size());
@@ -161,15 +154,12 @@ TEST_CASE("Create contract using CREATE (1)", "[create]") {
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
-
-  std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(cacheItems);
+  std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
 
-  exec_result_t vm_result = vm.execute(operation, context, mem, accountState, external);
+  exec_result_t vm_result = vm.execute(0, operation, context, mem, pendingState, external);
 
   // then
   REQUIRE(ExecResult::DONE_VOID == vm_result.first);
@@ -216,16 +206,13 @@ TEST_CASE("Create main contract using COPYCODE, and a child contract with CREATE
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
-
-  std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(cacheItems);
+  std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
 
   // when
-  exec_result_t vm_result = vm.execute(operation, context, mem, accountState, external);
+  exec_result_t vm_result = vm.execute(0, operation, context, mem, pendingState, external);
 
   // then
   REQUIRE(ExecResult::DONE_RETURN == vm_result.first);
@@ -282,16 +269,13 @@ TEST_CASE("Create contract using CREATE2", "[create]") {
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
-
-  std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(cacheItems);
+  std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
 
   // when
-  exec_result_t vm_result = vm.execute(operation, context, mem, accountState, external);
+  exec_result_t vm_result = vm.execute(0, operation, context, mem, pendingState, external);
 
   // then
   REQUIRE(ExecResult::DONE_RETURN == vm_result.first);
@@ -340,16 +324,13 @@ TEST_CASE("Create contract using CREATE (3)", "[create]") {
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
-
-  std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(cacheItems);
+  std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
 
   // when
-  exec_result_t vm_result = vm.execute(operation, context, mem, accountState, external);
+  exec_result_t vm_result = vm.execute(0, operation, context, mem, pendingState, external);
 
   // then
   REQUIRE(ExecResult::DONE_RETURN == vm_result.first);
@@ -398,16 +379,13 @@ TEST_CASE("Create contract using CREATE (4)", "[create]") {
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
-
-  std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(cacheItems);
+  std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
 
   // when
-  exec_result_t vm_result = vm.execute(operation, context, mem, accountState, external);
+  exec_result_t vm_result = vm.execute(0, operation, context, mem, pendingState, external);
 
   // then
   REQUIRE(ExecResult::DONE_RETURN == vm_result.first);
@@ -432,6 +410,69 @@ TEST_CASE("Create contract using CREATE (4)", "[create]") {
   );
 
   CHECK("6080604052348015600f57600080fd5b506004361060325760003560e01c806365372147146037578063b9d92de8146053575b600080fd5b603d6092565b6040518082815260200191505060405180910390f35b607c60048036036020811015606757600080fd5b81019080803590602001909291905050506098565b6040518082815260200191505060405180910390f35b60005481565b60008082141560ac576000808190555060d0565b60008260005402905082600054828160c057fe5b041460c757fe5b80600081905550505b600054905091905056fea265627a7a723158202ac29398a5a9046490687efd760134796902de10d0f2e515c1275c5fb3dbbb5a64736f6c63430005100032" == 
+    subcontract1
+  );
+}
+
+TEST_CASE("Create contract using CREATE (5)", "[create]") {
+
+  bytes_t codeBytes = Hex::hexToBytes(
+    "608060405234801561001057600080fd5b5060405161001d9061007e565b604051809103906000f080158015610039573d6000803e3d6000fd5b506000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555061008a565b60978061021183390190565b610178806100996000396000f3fe60806040526004361061001e5760003560e01c80635c60da1b146100c7575b7ff2f626cd1d154bd3476dd84f60fcb3df6757a7685cb0afa181f43f6423eaf8cc5a6040518082815260200191505060405180910390a160008060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16905060405136600082376000803683855af450507ff2f626cd1d154bd3476dd84f60fcb3df6757a7685cb0afa181f43f6423eaf8cc5a6040518082815260200191505060405180910390a150005b3480156100d357600080fd5b506100dc61011e565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff168156fea265627a7a7231582097002aaf5c7d7c386595e94c147702364b67536b0ee25c1e935ccb4748a41bf964736f6c634300051000326080604052348015600f57600080fd5b5060798061001e6000396000f3fe60806040527fe1f2fff362a4d171d703cc8eb57b9a51dfaa0c2eb2c706aa8ad32011aabf6d0b5a6040518082815260200191505060405180910390a16000604257fe5b00fea265627a7a7231582032423d6c27d3e2eb9e2afa78c5a73bbc112a163dd8f1d29f6a0b05237bfeac9964736f6c63430005100032"
+  );
+  env_t env = Utils::env();
+
+  std::shared_ptr<Context> context = std::make_shared<Context>(
+    env.chainId,
+    env.blockNumber,
+    env.timestamp,
+    env.gasLimit,
+    env.coinbase,
+    env.difficulty,
+    env.blockHash,
+    uint256_t(0xea0e9a), /* address */
+    uint256_t(0xf9313a), /* codeHash */
+    uint256_t(0x193821), /* codeVersion */
+    uint256_t(0xea0e9a), /* address */
+    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
+    uint256_t(0x1283fe), /* origin */
+    150000,
+    uint256_t(0),
+    uint256_t(0),
+    std::make_shared<bytes_t>(codeBytes),
+    std::make_shared<bytes_t>()
+  );
+
+  std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
+  std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
+  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(stack, gasometer);
+  std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
+  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  Operation operation = Operation();
+
+  // when
+  exec_result_t vm_result = vm.execute(0, operation, context, mem, pendingState, external);
+
+  // then
+  REQUIRE(ExecResult::DONE_RETURN == vm_result.first);
+
+  NeedsReturn needsReturn = std::get<NeedsReturn>(vm_result.second);
+
+  REQUIRE(true == needsReturn.apply);
+
+  std::string code = mem->sliceAsString(needsReturn.offset, needsReturn.size);
+
+  CHECK("60806040526004361061001e5760003560e01c80635c60da1b146100c7575b7ff2f626cd1d154bd3476dd84f60fcb3df6757a7685cb0afa181f43f6423eaf8cc5a6040518082815260200191505060405180910390a160008060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16905060405136600082376000803683855af450507ff2f626cd1d154bd3476dd84f60fcb3df6757a7685cb0afa181f43f6423eaf8cc5a6040518082815260200191505060405180910390a150005b3480156100d357600080fd5b506100dc61011e565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff168156fea265627a7a7231582097002aaf5c7d7c386595e94c147702364b67536b0ee25c1e935ccb4748a41bf964736f6c63430005100032" == 
+    code
+  );
+
+  REQUIRE(1 == external->emplaceSpy.size());
+
+  std::string subcontract1 = external->emplaceSpy[0].second;
+
+  CHECK("60806040527fe1f2fff362a4d171d703cc8eb57b9a51dfaa0c2eb2c706aa8ad32011aabf6d0b5a6040518082815260200191505060405180910390a16000604257fe5b00fea265627a7a7231582032423d6c27d3e2eb9e2afa78c5a73bbc112a163dd8f1d29f6a0b05237bfeac9964736f6c63430005100032" == 
     subcontract1
   );
 }

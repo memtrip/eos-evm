@@ -1,8 +1,8 @@
 #pragma once
 #include <memory>
-#include <evm/call.h>
+#include <evm/call.hpp>
 #include <evm/types.h>
-#include <evm/account_state.hpp>
+#include <evm/pending_state.hpp>
 #include <evm/big_int.hpp>
 #include <evm/context.hpp>
 #include <evm/overflow.hpp>
@@ -18,10 +18,9 @@ class eos_execute {
       uint256_t senderAddress,
       std::shared_ptr<std::vector<RLPItem>> rlp, 
       std::shared_ptr<External> external,
-      std::shared_ptr<AccountState> accountState
+      std::shared_ptr<PendingState> pendingState
     ) {
       env_t env = eos_system::env();
-      Call call = Call(0);
 
       std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
       std::shared_ptr<Memory> memory = std::make_shared<Memory>(memoryBytes);
@@ -33,11 +32,12 @@ class eos_execute {
           {
             std::shared_ptr<Context> context = Context::makeCreate(env, senderAddress, rlp);
 
-            callResult = call.call(
+            callResult = Call::call(
+              0,
               memory,
               context,
               external,
-              accountState
+              pendingState
             );
 
             if (callResult.first == MessageCallResult::MESSAGE_CALL_RETURN) {
@@ -49,7 +49,7 @@ class eos_execute {
                 messageCallReturn.size
               );
 
-              emplace_t emplaceResult = external->emplaceCode(context->sender, 0, code, AddressScheme::EIP_1014);
+              emplace_t emplaceResult = external->emplaceCode(context->sender, 0, code, AddressScheme::SENDER);
 
               switch (emplaceResult.first) {
                 case EmplaceResult::EMPLACE_ADDRESS_NOT_FOUND:
@@ -74,11 +74,12 @@ class eos_execute {
 
             std::shared_ptr<Context> context = Context::makeCall(env, senderAddress, toAddress, rlp, external);
 
-            callResult = call.call(
+            callResult = Call::call(
+              0,
               memory,
               context,
               external,
-              accountState
+              pendingState
             );
 
             if (callResult.first == MessageCallResult::MESSAGE_CALL_RETURN) {
@@ -98,10 +99,9 @@ class eos_execute {
       const bytes_t& code, 
       std::shared_ptr<std::vector<RLPItem>> rlp, 
       std::shared_ptr<External> external,
-      std::shared_ptr<AccountState> accountState
+      std::shared_ptr<PendingState> pendingState
     ) {
       env_t env = eos_system::env();
-      Call call = Call(0);
 
       std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
       std::shared_ptr<Memory> memory = std::make_shared<Memory>(memoryBytes);
@@ -109,11 +109,12 @@ class eos_execute {
       uint256_t toAddress = BigInt::fromBigEndianBytes(Transaction::address(rlp));
       std::shared_ptr<Context> context = Context::makeCodeCall(env, senderAddress, code, rlp, external);
 
-      return call.call(
+      return Call::call(
+        0,
         memory,
         context,
         external,
-        accountState
+        pendingState
       );
     }
 };

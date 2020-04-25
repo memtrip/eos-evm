@@ -5,6 +5,7 @@
 class External {
 public:
   virtual ~External() = default;
+  virtual uint64_t senderNonce() { return 0; }
   virtual uint64_t senderAccountBalance() { return 0; }
   virtual void log(const std::vector<uint256_t>& topics, std::shared_ptr<bytes_t> data) { };
   virtual std::shared_ptr<bytes_t> code(const uint256_t& address) { return std::make_shared<bytes_t>(bytes_t()); };

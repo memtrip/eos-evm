@@ -9,6 +9,7 @@ import io.reactivex.Single
 import com.memtrip.eos.chain.actions.transaction.account.CreateAccountChain
 import com.memtrip.eos.chain.actions.transaction.transfer.TransferChain
 import com.memtrip.eos_evm.eos.Config.CONTRACT_ACCOUNT_NAME
+import com.memtrip.eos_evm.eos.Config.DEFAULT_RAM_ISSUE
 import com.memtrip.eos_evm.eos.Config.FAULT_THRESHOLD
 import com.memtrip.eos_evm.eos.Config.SEED_PRIVATE_KEY
 import com.memtrip.eos_evm.eos.Config.SYMBOL
@@ -35,7 +36,7 @@ class SetupTransactions(
         val ethAccount: EthAccount
     )
 
-    fun seed(): TestEthAccount {
+    fun seed(ramIssued: Long = DEFAULT_RAM_ISSUE): TestEthAccount {
         for (i in 0 until FAULT_THRESHOLD) {
             val newAccountName = generateUniqueAccountName()
             val newAccountPrivateKey = EosPrivateKey()
@@ -44,7 +45,8 @@ class SetupTransactions(
             val createAccountResult = faultTolerant {
                 createAccount(
                     newAccountName,
-                    newAccountPrivateKey
+                    newAccountPrivateKey,
+                    ramIssued
                 ).blockingGet()
             }
 
@@ -108,14 +110,15 @@ class SetupTransactions(
 
     fun createAccount(
         accountName: String,
-        privateKey: EosPrivateKey
+        privateKey: EosPrivateKey,
+        ramIssued: Long = DEFAULT_RAM_ISSUE
     ): Single<ChainResponse<TransactionCommitted>> {
 
         return createAccountChain.createAccount(
             CreateAccountChain.Args(
                 accountName,
                 CreateAccountChain.Args.Quantity(
-                7048,
+                    ramIssued,
                 "0.0100 $SYMBOL",
                 "0.0100 $SYMBOL"),
                 privateKey.publicKey,

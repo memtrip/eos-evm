@@ -1,5 +1,5 @@
 //
-// 20.04.2020
+// 25.04.2020
 // Auto generated based off the Ethereum tests found here:
 // https://github.com/ethereum/tests/blob/develop/VMTests/
 //
@@ -10,27 +10,24 @@
 #include <evm/vm.h>
 #include <evm/hex.hpp>
 
-#include <evm/call.h>
+#include <evm/call.hpp>
 #include <evm/gasometer.hpp>
 #include <evm/big_int.hpp>
 #include "external_mock.hpp"
-#include <evm/operation.h>
+#include <evm/operation.hpp>
 
 TEST_CASE("suicide______4622c577440f9db4b3954a1de60bf2fac55886dcb0ec4ecaf906c25bc77372e7", "[vm]") {
-  env_t env = {
+  bytes_t code_bytes = Hex::hexToBytes("33ff");
+  bytes_t data_bytes = bytes_t();
+
+  std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
     TestUtils::fromHex("00"), /* blockNumber */
     TestUtils::fromHex("01"), /* timestamp */
     TestUtils::fromHex("0f4240"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
     TestUtils::fromHex("0100"), /* difficulty */
-    TestUtils::fromHex("") /* blockHash */
-  };
-
-  std::string bytecode_str = "33ff";
-  bytes_t data_bytes = bytes_t();
-
-  params_t params = {
+    TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
@@ -40,29 +37,8 @@ TEST_CASE("suicide______4622c577440f9db4b3954a1de60bf2fac55886dcb0ec4ecaf906c25b
     gas_t(0x0186a0), /* gas */
     TestUtils::fromHex("5af3107a4000"), /* gasPrice */
     TestUtils::fromHex("0de0b6b3a7640000"), /* value */
-    Hex::hexToBytes(bytecode_str), /* code */
-    data_bytes /* data */
-  };
-
-  std::shared_ptr<Context> context = std::make_shared<Context>(
-    env.chainId,
-    env.blockNumber,
-    env.timestamp,
-    env.gasLimit,
-    env.coinbase,
-    env.difficulty,
-    env.blockHash,
-    params.address,
-    params.codeHash,
-    params.codeVersion,
-    params.address,
-    params.sender,
-    params.origin,
-    params.gas,
-    params.gasPrice,
-    params.value,
-    std::make_shared<bytes_t>(params.code),
-    std::make_shared<bytes_t>(params.data)
+    std::make_shared<bytes_t>(code_bytes),
+    std::make_shared<bytes_t>(data_bytes)
   );
 
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
@@ -71,17 +47,14 @@ TEST_CASE("suicide______4622c577440f9db4b3954a1de60bf2fac55886dcb0ec4ecaf906c25b
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
-
-  std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(cacheItems);
+  std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
 
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
 
   // when
-  vm.execute(operation, context, mem, accountState, external);
+  vm.execute(0, operation, context, mem, pendingState, external);
 
   // then
 }

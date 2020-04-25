@@ -6,7 +6,7 @@
 #include <evm/utils.hpp>
 #include <evm/hex.hpp>
 
-#include <evm/call.h>
+#include <evm/call.hpp>
 #include <evm/big_int.hpp>
 #include "test_utils.hpp"
 

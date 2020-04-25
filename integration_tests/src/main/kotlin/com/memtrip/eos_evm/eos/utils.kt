@@ -22,6 +22,7 @@ object Config {
     const val CONTRACT_ACCOUNT_NAME = "eos.evm"
     const val SYMBOL = "EVM"
     const val FAULT_THRESHOLD = 3
+    const val DEFAULT_RAM_ISSUE: Long = 7048
 }
 
 fun transactionDefaultExpiry(): Date = with(Calendar.getInstance()) {

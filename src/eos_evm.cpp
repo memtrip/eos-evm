@@ -33,8 +33,7 @@ void eos_evm::incomingTransaction(const name& from, const string& transaction, c
   std::shared_ptr<std::vector<RLPItem>> rlp = std::make_shared<std::vector<RLPItem>>();
   RLPDecode::decode(transactionBytes, rlp);
 
-  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(cacheItems);
+  std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
 
   uint64_t transactionNonce = Overflow::uint256Cast(Transaction::nonce(rlp)).first;
 
@@ -52,20 +51,21 @@ void eos_evm::incomingTransaction(const name& from, const string& transaction, c
   check((transactionNonce - itr->nonce) == 1, "Transaction nonce invalid.");
   if (!hasSignature) check(has_auth(itr->user), "You do not have permission to execute a transaction for the specified sender.");
 
-  std::shared_ptr<External> external = std::make_shared<eos_external>(this, itr->user, itr->nonce, itr->balance.amount);
+  std::shared_ptr<External> external = std::make_shared<eos_external>(this, itr->user, itr->nonce + 1, itr->balance.amount);
 
   call_result_t callResult;
   if (bytecode.size() > 0) {
-    callResult = eos_execute::code(senderAddress, bytecode, rlp, external, accountState);
+    callResult = eos_execute::code(senderAddress, bytecode, rlp, external, pendingState);
   } else {
-    callResult = eos_execute::transaction(senderAddress, rlp, external, accountState);
+    callResult = eos_execute::transaction(senderAddress, rlp, external, pendingState);
   }
 
   checkCallResult(from, callResult);
-  resolveAccountState(from, accountState);
+  resolveAccountState(from, pendingState);
+  resolveLogs(pendingState, external);
 
   idx.modify(itr, from, [&](auto& account) {
-    account.nonce += 1;
+    account.nonce = external->senderNonce();
     account.balance.amount = external->senderAccountBalance();
   });
 }
@@ -109,29 +109,37 @@ void eos_evm::checkCallResult(const name& from, call_result_t callResult) {
   }
 }
 
-void eos_evm::resolveAccountState(const name& from, std::shared_ptr<AccountState> accountState) {
-  if (accountState->cacheItems->size() > 0) {
+void eos_evm::resolveAccountState(const name& from, std::shared_ptr<PendingState> pendingState) {
+  if (pendingState->accountState.size() > 0) {
     // TODO: the scope of account_state should be derived from codeAddress
     account_state_table _account_state(get_self(), from.value);
-    for (int i = 0; i < accountState->cacheItems->size(); i++) {
+    for (int i = 0; i < pendingState->accountState.size(); i++) {
       checksum256 compositeKey =  BigInt::toFixed32(Hash::keccak256WordPair(
-        accountState->cacheItems->at(i).codeAddress,
-        accountState->cacheItems->at(i).key
+        pendingState->accountState.at(i).codeAddress,
+        pendingState->accountState.at(i).key
       ));
       auto idx = _account_state.get_index<name("statekey")>();
       auto itr = idx.find(compositeKey);
       if (itr != idx.end()) {
         idx.modify(itr, from, [&](auto& account_state) {
-          account_state.value = BigInt::toFixed32(accountState->cacheItems->at(i).value);
+          account_state.value = BigInt::toFixed32(pendingState->accountState.at(i).value);
         });
       } else {
         _account_state.emplace(from, [&](auto& account_state) {
           account_state.pk = _account_state.available_primary_key();
-          account_state.accountIdentifier = BigInt::toFixed32(accountState->cacheItems->at(i).codeAddress);
+          account_state.accountIdentifier = BigInt::toFixed32(pendingState->accountState.at(i).codeAddress);
           account_state.key = compositeKey;
-          account_state.value = BigInt::toFixed32(accountState->cacheItems->at(i).value);
+          account_state.value = BigInt::toFixed32(pendingState->accountState.at(i).value);
         });
       }
+    }
+  }
+}
+
+void eos_evm::resolveLogs(std::shared_ptr<PendingState> pendingState, std::shared_ptr<External> external) {
+  if (pendingState->logs.size() > 0) {
+    for (int i = 0; i < pendingState->logs.size(); i++) {
+      external->log(pendingState->logs.at(i).topics, pendingState->logs.at(i).data);
     }
   }
 }

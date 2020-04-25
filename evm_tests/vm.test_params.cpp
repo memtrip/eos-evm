@@ -7,7 +7,6 @@
 #include <evm/utils.hpp>
 #include <evm/vm.h>
 #include <evm/hex.hpp>
-#include <evm/call.h>
 #include <evm/gasometer.hpp>
 #include <evm/big_int.hpp>
 
@@ -43,16 +42,13 @@ TEST_CASE("Address", "[params]") {
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
-
-  std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(cacheItems);
+  std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
 
   // when
-  vm.execute(operation, context, mem, accountState, external);
+  vm.execute(0, operation, context, mem, pendingState, external);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000ea0e9a" == Utils::uint256_2str(vm.stack->top()));
@@ -90,16 +86,13 @@ TEST_CASE("Origin", "[params]") {
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
-
-  std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(cacheItems);
+  std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
 
   // when
-  vm.execute(operation, context, mem, accountState, external);
+  vm.execute(0, operation, context, mem, pendingState, external);
 
   // then
   CHECK("00000000000000000000000000000000000000000000000000000000001283fe" == Utils::uint256_2str(vm.stack->top()));
@@ -137,16 +130,13 @@ TEST_CASE("Caller", "[params]") {
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
-
-  std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(cacheItems);
+  std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
 
   // when
-  vm.execute(operation, context, mem, accountState, external);
+  vm.execute(0, operation, context, mem, pendingState, external);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000ea0e9e" == 
@@ -186,16 +176,13 @@ TEST_CASE("calldatasize", "[params]") {
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
-
-  std::shared_ptr<Call> call = std::make_shared<Call>(0);
-  std::shared_ptr<account_store_t> cacheItems = std::make_shared<account_store_t>();
-  std::shared_ptr<AccountState> accountState = std::make_shared<AccountState>(cacheItems);
+  std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
   Operation operation = Operation();
 
   // when
-  vm.execute(operation, context, mem, accountState, external);
+  vm.execute(0, operation, context, mem, pendingState, external);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000004" == 

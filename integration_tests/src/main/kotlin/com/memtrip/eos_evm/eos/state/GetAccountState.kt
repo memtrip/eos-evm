@@ -9,6 +9,48 @@ class GetAccountState(
     private val chainApi: ChainApi
 ) {
 
+    data class Item(
+        val accountIdentifier: String,
+        val key: String,
+        val value: String
+    )
+
+    sealed class Record {
+        data class Multiple(val items: List<Item>) : Record()
+        object None : Record()
+    }
+
+    fun getAll(accountName: String): Single<Record> {
+        return chainApi.getTableRows(
+            GetTableRows(
+                accountName,
+                Config.CONTRACT_ACCOUNT_NAME,
+                "accountstate",
+                "statekey",
+                true,
+                1000,
+                "",
+                "",
+                "sha256",
+                "2",
+                "dec"
+            )
+        ).map { response ->
+            if (!response.isSuccessful) Record.None else {
+                val tableRows = response.body()!!.rows
+                if (tableRows.isEmpty()) Record.None else {
+                    Record.Multiple(tableRows.mapIndexed { index, _ ->
+                        Item(
+                            tableRows[index]["accountIdentifier"].toString(),
+                            tableRows[index]["key"].toString(),
+                            tableRows[index]["value"].toString()
+                        )
+                    })
+                }
+            }
+        }
+    }
+
     fun getValue(accountName: String, key: String): Single<String> {
         return chainApi.getTableRows(
             GetTableRows(
