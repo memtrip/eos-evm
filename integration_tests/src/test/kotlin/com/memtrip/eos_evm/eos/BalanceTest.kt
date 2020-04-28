@@ -82,7 +82,7 @@ class BalanceTest {
     fun `The sender balance of 0_5000 is stored in the account state`() {
 
         // given
-        val (accountName, accountPrivateKey, ethAccount) = setupTransactions.seedWithBalance()
+        val (accountName, accountPrivateKey, ethAccount) = setupTransactions.seedWithSystemBalance()
         val accountIdentifier = AccountIdentifier.create(accountName, ethAccount.address)
 
         // when

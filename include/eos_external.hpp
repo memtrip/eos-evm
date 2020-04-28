@@ -7,7 +7,6 @@
 #include <evm/utils.hpp>
 #include <evm/hex.hpp>
 #include <eos_evm.hpp>
-#include <eos_utils.hpp>
 
 class eos_external: public External {
   private:
@@ -28,6 +27,11 @@ class eos_external: public External {
       return _senderNonce;
     }
 
+    uint64_t incrementNonce() { 
+      _senderNonce += 1;
+      return _senderNonce; 
+    }
+
     uint64_t senderAccountBalance() {
       return _senderAccountBalance;
     }
@@ -46,7 +50,7 @@ class eos_external: public External {
       eos_evm::account_code_table _account_code(_contract->get_self(), _contract->get_self().value);
       auto accountCodeIdx = _account_code.get_index<name("codeaddress")>();
       auto accountCodeItr = accountCodeIdx.find(BigInt::toFixed32(address));
-      if (accountCodeItr == accountCodeIdx.end()) return std::make_shared<bytes_t>(bytes_t());
+      if (accountCodeItr == accountCodeIdx.end()) return std::make_shared<bytes_t>();
       return std::make_shared<bytes_t>(Hex::hexToBytes(accountCodeItr->code));
     }
 
@@ -67,19 +71,13 @@ class eos_external: public External {
 
       address_t address = BigInt::toFixed32(codeAddress);
 
-      // get the account associated with the address
-      eos_evm::account_table _account(_contract->get_self(), _contract->get_self().value);
-      auto accountIdx = _account.get_index<name("accountid")>();
-      auto accountItr = accountIdx.find(address);
-      if (accountItr == accountIdx.end()) return uint256_t(0);
-
       uint256_t compositeKey = Hash::keccak256WordPair(codeAddress, key);
-      eos_evm::account_state_table _account_state(_contract->get_self(), accountItr->user.value);
+      eos_evm::account_state_table _account_state(_contract->get_self(), _contract->get_self().value);
       auto idx = _account_state.get_index<name("statekey")>();
       auto itr = idx.find(BigInt::toFixed32(compositeKey));
       if (itr == idx.end()) return uint256_t(0); 
 
-      return eos_utils::checksum256ToWord(itr->value);
+      return BigInt::fromFixed32(itr->value.extract_as_byte_array());
     }
 
     emplace_t selfdestruct(const uint256_t& addressWord) {
@@ -100,41 +98,29 @@ class eos_external: public External {
     * Create a new code entry under the scope of the account associated with the address.
     */
     emplace_t emplaceCode(
-      const uint256_t& senderAddressWord, 
+      const uint256_t& originWord,
+      const uint256_t& codeAddressWord, 
       uint64_t endowment, 
-      std::shared_ptr<bytes_t> code,
-      const AddressScheme addressScheme
+      std::shared_ptr<bytes_t> code
     ) {
-      address_t senderAddress = BigInt::toFixed32(senderAddressWord);
+      address_t originAddress = BigInt::toFixed32(originWord);
+      address_t codeAddress = BigInt::toFixed32(codeAddressWord);
 
+      // TODO: account balance needs to come from originAddress
       if (_senderAccountBalance < endowment) return std::make_pair(EmplaceResult::EMPLACE_INSUFFICIENT_FUNDS, endowment);
-
-      _senderNonce += 1;
       
-      address_t codeAddress;
-      switch (addressScheme) {
-        case AddressScheme::SENDER:
-          codeAddress = senderAddress;
-          break;
-        case AddressScheme::LEGACY:
-          codeAddress = Address::ethereumAddressFrom(senderAddressWord, uint256_t(_senderNonce));
-          break;
-        case AddressScheme::EIP_1014:
-          codeAddress = Address::ethereumAddressFrom(senderAddressWord, uint256_t(eosio::tapos_block_num()), code);
-          break;
-      }
-
       // create a new code record
       eos_evm::account_code_table _account_code(_contract->get_self(), _contract->get_self().value);
       _account_code.emplace(_sender, [&](auto& account_code) {
         account_code.pk = _account_code.available_primary_key();
-        account_code.accountIdentifier = senderAddress;
+        account_code.accountIdentifier = originAddress;
         account_code.address = codeAddress;
         account_code.nonce = 1;
         account_code.code = Hex::bytesToHex(code);
         account_code.balance = eosio::asset(endowment, eos_evm::CONTRACT_SYMBOL);
       });
 
+      // TODO: account balance needs to come from originAddress
       _senderAccountBalance -= endowment;
 
       return std::make_pair(EmplaceResult::EMPLACE_SUCCESS, codeAddress);

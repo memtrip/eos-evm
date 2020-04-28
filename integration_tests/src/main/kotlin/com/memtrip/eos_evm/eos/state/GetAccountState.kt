@@ -20,19 +20,19 @@ class GetAccountState(
         object None : Record()
     }
 
-    fun getAll(accountName: String): Single<Record> {
+    fun getAll(accountIdentifier: String): Single<Record> {
         return chainApi.getTableRows(
             GetTableRows(
-                accountName,
+                Config.CONTRACT_ACCOUNT_NAME,
                 Config.CONTRACT_ACCOUNT_NAME,
                 "accountstate",
-                "statekey",
+                "stateid",
                 true,
                 1000,
-                "",
-                "",
+                accountIdentifier,
+                accountIdentifier,
                 "sha256",
-                "2",
+                "3",
                 "dec"
             )
         ).map { response ->
@@ -54,7 +54,7 @@ class GetAccountState(
     fun getValue(accountName: String, key: String): Single<String> {
         return chainApi.getTableRows(
             GetTableRows(
-                accountName,
+                Config.CONTRACT_ACCOUNT_NAME,
                 Config.CONTRACT_ACCOUNT_NAME,
                 "accountstate",
                 "statekey",

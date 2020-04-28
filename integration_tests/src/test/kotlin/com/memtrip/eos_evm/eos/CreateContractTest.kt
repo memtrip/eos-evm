@@ -3,7 +3,6 @@ package com.memtrip.eos_evm.eos
 import com.memtrip.eos.chain.actions.transaction.TransactionContext
 import com.memtrip.eos.http.rpc.Api
 import com.memtrip.eos_evm.eos.actions.raw.RawAction
-import com.memtrip.eos_evm.eos.state.GetAccount
 import com.memtrip.eos_evm.eos.state.GetAccountState
 import com.memtrip.eos_evm.eos.state.GetCode
 import com.memtrip.eos_evm.ethereum.EthereumTransaction
@@ -39,7 +38,7 @@ class CreateContractTest {
     fun `Create a contract via CREATE`() {
 
         // given
-        val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seedWithBalance()
+        val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seedWithSystemBalance()
         val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
         // when
@@ -159,7 +158,7 @@ class CreateContractTest {
     fun `Create a contract via CREATE with a CODECOPY child contract that contains a CALL`() {
         // given
         val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
-        val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
+        val newAccountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
         // when
         val transaction = EthereumTransaction(
@@ -174,7 +173,7 @@ class CreateContractTest {
             rawAction.pushTransaction(
                 newAccountName,
                 transaction.sign(newEthAccount).signedTransaction.toHexString(),
-                accountIdentifier.toHexString(),
+                newAccountIdentifier.toHexString(),
                 TransactionContext(
                     newAccountName,
                     newAccountPrivateKey,
@@ -187,7 +186,7 @@ class CreateContractTest {
 
         // and when
         val result = getCode.getAll(
-            accountIdentifier.pad256().toHexString()
+            newAccountIdentifier.pad256().toHexString()
         ).blockingGet()
 
         if (result !is GetCode.Record.Multiple) fail("account_code record not found") else {
@@ -196,7 +195,7 @@ class CreateContractTest {
                 result.items[0].code
             )
             assertEquals(
-                accountIdentifier.pad256().toHexString(),
+                newAccountIdentifier.pad256().toHexString(),
                 result.items[0].owner
             )
 
@@ -205,7 +204,7 @@ class CreateContractTest {
                 result.items[1].code
             )
             assertEquals(
-                accountIdentifier.pad256().toHexString(),
+                newAccountIdentifier.pad256().toHexString(),
                 result.items[1].owner
             )
 
@@ -213,8 +212,8 @@ class CreateContractTest {
         }
 
         // and then CALL address is saved
-        val accountStateResult = getAccountState.getAll(newAccountName).blockingGet()
-        if (accountStateResult !is GetAccountState.Record.Multiple) fail("no state saved") else {
+        val accountStateResult = getAccountState.getAll(newAccountIdentifier.pad256().toHexString()).blockingGet()
+        if (accountStateResult !is GetAccountState.Record.Multiple) fail("no account states") else {
             assertEquals(1, accountStateResult.items.size)
         }
     }
@@ -277,7 +276,7 @@ class CreateContractTest {
 
         // given
         val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed(17000)
-        val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
+        val newAccountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
         // when
         val transaction = EthereumTransaction(
@@ -292,7 +291,7 @@ class CreateContractTest {
             rawAction.pushTransaction(
                 newAccountName,
                 transaction.sign(newEthAccount).signedTransaction.toHexString(),
-                accountIdentifier.toHexString(),
+                newAccountIdentifier.toHexString(),
                 TransactionContext(
                     newAccountName,
                     newAccountPrivateKey,
@@ -306,7 +305,7 @@ class CreateContractTest {
 
         // and when
         val getCodeResult = getCode.getAll(
-            accountIdentifier.pad256().toHexString()
+            newAccountIdentifier.pad256().toHexString()
         ).blockingGet()
 
         if (getCodeResult !is GetCode.Record.Multiple) fail("code record not found") else {
@@ -329,8 +328,8 @@ class CreateContractTest {
         }
 
         // and then the delegate call addresses are saved
-        val accountStateResult = getAccountState.getAll(newAccountName).blockingGet()
-        if (accountStateResult !is GetAccountState.Record.Multiple) fail("no state saved") else {
+        val accountStateResult = getAccountState.getAll(newAccountIdentifier.pad256().toHexString()).blockingGet()
+        if (accountStateResult !is GetAccountState.Record.Multiple) fail("no account states") else {
             assertNotEquals(accountStateResult.items[0].value, accountStateResult.items[1].value)
         }
     }

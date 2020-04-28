@@ -70,7 +70,7 @@ class SetupTransactions(
         throw IllegalStateException("Failed to seed the test accounts")
     }
 
-    fun seedWithBalance(): TestEthAccount {
+    fun seedWithSystemBalance(): TestEthAccount {
         for (i in 0 until FAULT_THRESHOLD) {
             val newAccountName = generateUniqueAccountName()
             val newAccountPrivateKey = EosPrivateKey()
@@ -107,6 +107,55 @@ class SetupTransactions(
 
         throw IllegalStateException("Failed to seed the test accounts")
     }
+
+    fun seedWithEvmBalance(ramIssued: Long = DEFAULT_RAM_ISSUE): TestEthAccount {
+        for (i in 0 until FAULT_THRESHOLD) {
+            val newAccountName = generateUniqueAccountName()
+            val newAccountPrivateKey = EosPrivateKey()
+            val newEthAccount = EthAccount.create()
+
+            val createAccountResult = createAccount(
+                newAccountName,
+                newAccountPrivateKey,
+                ramIssued
+            ).blockingGet()
+
+            val createEthAccountResult = createEthAccount(
+                newAccountName,
+                newAccountPrivateKey,
+                newEthAccount
+            ).blockingGet()
+
+            val transferResult = transfer(
+                newAccountName,
+                "1.0000 $SYMBOL",
+                "seed",
+                CONTRACT_ACCOUNT_NAME,
+                seedPrivateKey,
+                "eosio.token"
+            ).blockingGet()
+
+            val evmTransferResult = transfer(
+                "eos.evm",
+                "1.0000 ${Config.SYMBOL}",
+                "evm funds",
+                newAccountName,
+                newAccountPrivateKey,
+                "eosio.token"
+            ).blockingGet()
+
+            if (createAccountResult.isSuccessful && createEthAccountResult.isSuccessful && transferResult.isSuccessful && evmTransferResult.isSuccessful) {
+                return TestEthAccount(
+                    newAccountName,
+                    newAccountPrivateKey,
+                    newEthAccount
+                )
+            }
+        }
+
+        throw IllegalStateException("Failed to seed the test accounts")
+    }
+
 
     fun createAccount(
         accountName: String,

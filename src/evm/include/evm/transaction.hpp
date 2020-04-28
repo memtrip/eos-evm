@@ -19,7 +19,7 @@ class Transaction {
     }
 
     static std::shared_ptr<bytes_t> data(std::shared_ptr<std::vector<RLPItem>> rlp) {
-      return std::make_shared<bytes_t>(bytes_t(rlp->at(0).values[RLP_DATA].bytes.begin(), rlp->at(0).values[RLP_DATA].bytes.end()));
+      return std::make_shared<bytes_t>(rlp->at(0).values[RLP_DATA].bytes.begin(), rlp->at(0).values[RLP_DATA].bytes.end());
     }
 
     static TransactionActionType type(std::shared_ptr<std::vector<RLPItem>> rlp) {

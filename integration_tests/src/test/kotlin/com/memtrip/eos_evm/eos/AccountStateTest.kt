@@ -35,7 +35,7 @@ class AccountStateTest {
     @Test
     fun `State is retrieved by SLOAD, used in an operation, and stored under another key`() {
         // given
-        val (accountName, accountPrivateKey, ethAccount) = setupTransactions.seedWithBalance()
+        val (accountName, accountPrivateKey, ethAccount) = setupTransactions.seedWithSystemBalance()
         val accountIdentifier = AccountIdentifier.create(accountName, ethAccount.address)
 
         // when

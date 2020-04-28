@@ -48,11 +48,11 @@ TEST_CASE("Ethereum address from sender and nonce", "[address]" ) {
   uint256_t nonce = uint256_t(0x3412);
 
   // when
-  address_t newAddress = Address::ethereumAddressFrom(senderAddress, nonce);
+  uint256_t newAddress = Address::ethereumAddressFrom(senderAddress, nonce);
 
   // then
   CHECK("0000000000000000000000002c4cdf1918aea0508ed789d8c81828ab44dd475b" == 
-    Hex::fixedToHex(newAddress)
+    Utils::uint256_2str(newAddress)
   );
 }
 
@@ -65,10 +65,10 @@ TEST_CASE("Ethereum address from address, salt, and code hash", "[address]" ) {
   );
 
   // when
-  address_t newAddress = Address::ethereumAddressFrom(address, salt, codeBytes);
+  uint256_t newAddress = Address::ethereumAddressFrom(address, salt, codeBytes);
 
   // then
   CHECK("000000000000000000000000977f07e985ea2c0a034119c2f2e2eaa5d085f88d" == 
-    Hex::fixedToHex(newAddress)
+    Utils::uint256_2str(newAddress)
   );
 }

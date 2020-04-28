@@ -12,6 +12,14 @@ fun ChainResponse<TransactionCommitted>.assertConsoleString(value: String) {
     }
 }
 
+fun ChainResponse<TransactionCommitted>.assertNotConsoleString(value: String) {
+    if (!isSuccessful) fail("transaction failed")
+    val console = body?.processed?.action_traces?.first()?.console
+    if (console == null) fail("no console output") else {
+        if (console.contains(value)) fail("[$value] not found in console string: [$console]")
+    }
+}
+
 fun ChainResponse<TransactionCommitted>.assertConsoleError(value: String) {
     if (isSuccessful) fail("transaction was successful")
     val message = errorBody?.error?.details?.get(0)?.message

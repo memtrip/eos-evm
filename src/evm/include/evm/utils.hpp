@@ -2,9 +2,9 @@
 #include <vector>
 #include <evm/types.h>
 
-#include <evm/call.hpp>
 #include <evm/vm_result.h>
 #include <evm/gasometer.hpp>
+#include <evm/hex.hpp>
 
 enum GasTierPrice: uint8_t {
   ZERO = 0x00,
@@ -612,10 +612,11 @@ class Utils {
           printf("trap{insufficient_funds}\n");
           break;
         case TrapKind::TRAP_INVALID_JUMP:
-          {
-            printf("trap{invalid_jump}\n");
-            break;
-          }
+          printf("trap{invalid_jump}\n");
+          break;
+        case TrapKind::TRAP_OVERFLOW:
+          printf("trap{overflow}\n");
+          break;
       }
     }
 };

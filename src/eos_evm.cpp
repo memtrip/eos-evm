@@ -3,7 +3,6 @@
 #include <eos_evm.hpp>
 #include <eos_system.hpp>
 #include <eos_ecrecover.hpp>
-#include <eos_utils.hpp>
 #include <eos_execute.hpp>
 
 #include <evm/address.hpp>
@@ -103,6 +102,9 @@ void eos_evm::checkCallResult(const name& from, call_result_t callResult) {
           case TrapKind::TRAP_INVALID_CODE_ADDRESS:
             check(false, "MESSAGE_CALL_FAILED [An invalid address is attempting to create a contract.]");
             break;
+          case TrapKind::TRAP_OVERFLOW:
+            check(false, "MESSAGE_CALL_FAILED [An integer overflow ocurred.]");
+            break;
         }
         break;
       }
@@ -111,8 +113,7 @@ void eos_evm::checkCallResult(const name& from, call_result_t callResult) {
 
 void eos_evm::resolveAccountState(const name& from, std::shared_ptr<PendingState> pendingState) {
   if (pendingState->accountState.size() > 0) {
-    // TODO: the scope of account_state should be derived from codeAddress
-    account_state_table _account_state(get_self(), from.value);
+    account_state_table _account_state(get_self(), get_self().value);
     for (int i = 0; i < pendingState->accountState.size(); i++) {
       checksum256 compositeKey =  BigInt::toFixed32(Hash::keccak256WordPair(
         pendingState->accountState.at(i).codeAddress,

@@ -32,7 +32,7 @@ TEST_CASE("Create the most basic contract using COPYCODE", "[create]") {
     uint256_t(0),
     uint256_t(0),
     std::make_shared<bytes_t>(codeBytes),
-    std::make_shared<bytes_t>(bytes_t())
+    std::make_shared<bytes_t>()
   );
 
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();

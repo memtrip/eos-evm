@@ -27,6 +27,10 @@ class Hash {
       return hashBytes;
     }
 
+    static uint256_t keccak256Word(const bytes_t& bytes) {
+      return BigInt::fromBigEndianBytes(keccak256(bytes));
+    }
+
     static uint256_t keccak256Word(const std::shared_ptr<bytes_t> bytes) {
       return BigInt::fromBigEndianBytes(keccak256(bytes));
     }

@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <evm/vm.h>
 #include <evm/opcode.h>
+#include <evm/address.hpp>
 #include <evm/instruction.hpp>
 #include <evm/jumps.hpp>
 #include <evm/big_int.hpp>
@@ -142,13 +143,28 @@ exec_result_t VM::stepInner(
   switch (opcode) {
     case Opcode::RETURNDATASIZE:
       {
-        stack->push(uint256_t(0));
+        stack->push(uint256_t(returnData->size()));
         result = std::make_pair(InstructionResult::OK, 0);
         break;
       }
     case Opcode::RETURNDATACOPY:
       {
-        result = std::make_pair(InstructionResult::OK, 0);
+        uint64_t sourceOffset = Overflow::uint256Cast(stack->peek(1)).first;
+        uint64_t sizeItem = Overflow::uint256Cast(stack->peek(2)).first;
+
+        uint64_t returnDataLength = returnData->size();
+
+        if (Overflow::add(sourceOffset, sizeItem).first > returnDataLength) {
+          result = std::make_pair(InstructionResult::INSTRUCTION_TRAP, TrapKind::TRAP_OVERFLOW);
+        } else {
+          memory->copyData(
+            Overflow::uint256Cast(stack->peek(0)).first, 
+            sourceOffset, 
+            sizeItem, 
+            returnData
+          );
+          result = std::make_pair(InstructionResult::OK, 0);
+        }
         break;
       }
     case Opcode::CREATE:
@@ -259,17 +275,17 @@ instruction_result_t VM::executeCreateInstruction(
   uint64_t initOff;
   uint64_t initSize;
 
-  uint256_t address;
   AddressScheme addressScheme; 
+  uint256_t salt;
 
   switch (opcode) {
     case Opcode::CREATE:
       {
-        address = context->sender;
         addressScheme = AddressScheme::LEGACY;
         endowment = stack->peek(0);
         initOff = Overflow::uint256Cast(stack->peek(1)).first;
         initSize = Overflow::uint256Cast(stack->peek(2)).first;
+        salt = external->incrementNonce();
         stack->pop(3);
         break;
       }
@@ -278,25 +294,36 @@ instruction_result_t VM::executeCreateInstruction(
         endowment = stack->peek(0);
         initOff = Overflow::uint256Cast(stack->peek(1)).first;
         initSize = Overflow::uint256Cast(stack->peek(2)).first;
-        address = stack->peek(3);
+        salt = stack->peek(3); 
         addressScheme = AddressScheme::EIP_1014;
         stack->pop(4);
         break;
       }
   }
 
-  std::shared_ptr<bytes_t> createCode = memory->readSlice(initOff, initSize);
-  
   gas_t createGas = providedGas;
+
+  returnData->clear();
+
+  if (stackDepth > STACK_LIMIT) {
+    stack->push(UINT256_ZERO);
+    return std::make_pair(InstructionResult::UNUSED_GAS, createGas);
+  }
+
+  std::shared_ptr<bytes_t> createCode = memory->readSlice(initOff, initSize);
+
+  uint256_t codeAddress = Address::makeCreateAddress(
+    addressScheme,
+    context->sender,
+    salt,
+    createCode
+  );
 
   std::shared_ptr<Context> createContext = Context::makeInnerCreate(
     context,
-    address, 
-    address, 
-    context->sender, 
+    codeAddress, 
     createGas, 
-    context->gasPrice, 
-    endowment, 
+    endowment,  
     createCode
   );
 
@@ -327,10 +354,10 @@ instruction_result_t VM::executeCreateInstruction(
         std::shared_ptr<bytes_t> returnDataBytes = createMemory->readSlice(callReturn.offset, callReturn.size);
 
         emplace_t emplaceResult = external->emplaceCode(
-          address, 
+          context->origin, 
+          codeAddress,
           Overflow::uint256Cast(endowment).first, 
-          returnDataBytes, 
-          addressScheme
+          returnDataBytes
         );
 
         switch (emplaceResult.first) {
@@ -338,20 +365,13 @@ instruction_result_t VM::executeCreateInstruction(
             {
               address_t address = std::get<address_t>(emplaceResult.second);
               stack->push(BigInt::fromFixed32(address));
-
-              // TODO: minus the gasLeft from the above gasCalcuation,
-              // or perform the gasCalculation within call / execute and return in "gasLeft"
-
               return std::make_pair(
                 InstructionResult::UNUSED_GAS,
-                providedGas // TODO: calculate gas
+                callReturn.gasLeft
               );
             }
           case EmplaceResult::EMPLACE_ADDRESS_NOT_FOUND:
-            {
-              stack->push(UINT256_ZERO);
-              return std::make_pair(InstructionResult::INSTRUCTION_TRAP, TrapKind::TRAP_INVALID_CODE_ADDRESS);
-            }
+            return std::make_pair(InstructionResult::INSTRUCTION_TRAP, TrapKind::TRAP_INVALID_CODE_ADDRESS);
           case EmplaceResult::EMPLACE_INSUFFICIENT_FUNDS:
             {
               stack->push(UINT256_ZERO);
@@ -361,10 +381,13 @@ instruction_result_t VM::executeCreateInstruction(
       }
     case MESSAGE_CALL_REVERTED:
       {
-        // TODO: handle return data and gas left properly
+        MessageCallReturn callReturn = std::get<MessageCallReturn>(callResult.second);
         stack->push(UINT256_ZERO);
-        StopExecutionResult stopExecutionResult { providedGas, 0, 0, false }; // TODO: where should the gas come from for here?
-        return std::make_pair(InstructionResult::STOP_EXEC_RETURN, stopExecutionResult);
+        returnData = createMemory->readSlice(callReturn.offset, callReturn.size);
+        return std::make_pair(
+          InstructionResult::UNUSED_GAS,
+          callReturn.gasLeft
+        );
       }
     case MESSAGE_CALL_OUT_OF_GAS:
     {
@@ -471,6 +494,8 @@ instruction_result_t VM::executeCallInstruction(
       }
   }
 
+  returnData->clear();
+
   uint64_t stipend = (value > 0) ? CALL_STIPEND : 0;
   gas_t callGas = providedGas;
   callGas = Overflow::add(callGas, stipend).first;
@@ -481,6 +506,7 @@ instruction_result_t VM::executeCallInstruction(
   }
 
   std::shared_ptr<bytes_t> callData = memory->readSlice(inOffset, inSize);
+  printf("callData{%s}\n", Hex::bytesToHex(callData).c_str());
 
   std::shared_ptr<Context> callContext = Context::makeInnerCall(
     context,
@@ -517,14 +543,8 @@ instruction_result_t VM::executeCallInstruction(
       {
         printf("MESSAGE_CALL_RETURN\n");
         MessageCallReturn callReturn = std::get<MessageCallReturn>(callResult.second);
-    
-        std::shared_ptr<bytes_t> returnDataBytes = callMemory->readSlice(callReturn.offset, callReturn.size);
-
-        // TODO: handle return data properly 
-        //memory->writeSlice(outOffset, outSize, returnDataBytes);
-
         stack->push(UINT256_ONE);
-
+        returnData = callMemory->readSlice(callReturn.offset, callReturn.size);
         return std::make_pair(
           InstructionResult::UNUSED_GAS,
           callReturn.gasLeft
@@ -532,12 +552,14 @@ instruction_result_t VM::executeCallInstruction(
       }
     case MESSAGE_CALL_REVERTED:
       {
-        // TODO: handle the return data and gasLeft properly
         printf("MESSAGE_CALL_REVERTED\n");
         MessageCallReturn callReturn = std::get<MessageCallReturn>(callResult.second);
         stack->push(UINT256_ZERO);
-        StopExecutionResult stopExecutionResult { providedGas, 0, 0, false }; // TODO: where should the gas come from for here?
-        return std::make_pair(InstructionResult::STOP_EXEC_RETURN, stopExecutionResult);
+        returnData = callMemory->readSlice(callReturn.offset, callReturn.size);
+        return std::make_pair(
+          InstructionResult::UNUSED_GAS,
+          callReturn.gasLeft
+        );
       }
     case MESSAGE_CALL_OUT_OF_GAS:
     {

@@ -2,6 +2,7 @@
 #include <evm/hash.hpp>
 #include <evm/rlp_encode.hpp>
 #include <evm/hex.hpp>
+#include <evm/big_int.hpp>
 #include <evm/types.h>
 
 class Address {
@@ -53,7 +54,7 @@ class Address {
       return address;
     }
 
-    static address_t ethereumAddressFrom(const uint256_t& address, const uint256_t& nonce) {
+    static uint256_t ethereumAddressFrom(const uint256_t& address, const uint256_t& nonce) {
 
       RLPItem addressItem {
         RLPType::STRING,
@@ -79,10 +80,10 @@ class Address {
 
       bytes_t accountIdentifierBytes(hashBytes.end() - ADDRESS_SIZE, hashBytes.end());
 
-      return Hex::hexToChecksum256(accountIdentifierBytes);
+      return BigInt::fromBigEndianBytes(accountIdentifierBytes);
     }
 
-    static address_t ethereumAddressFrom(
+    static uint256_t ethereumAddressFrom(
       const uint256_t& address, 
       const uint256_t& salt, 
       std::shared_ptr<bytes_t> code
@@ -126,6 +127,25 @@ class Address {
 
       bytes_t accountIdentifierBytes(hashBytes.end() - ADDRESS_SIZE, hashBytes.end());
 
-      return Hex::hexToChecksum256(accountIdentifierBytes);
+      return BigInt::fromBigEndianBytes(accountIdentifierBytes);
+    }
+
+    static uint256_t makeCreateAddress(
+      const AddressScheme addressScheme,
+      const uint256_t& senderAddress,
+      const uint256_t& salt,
+      std::shared_ptr<bytes_t> code
+    ) {
+
+      uint256_t codeAddress;
+
+      switch (addressScheme) {
+        case AddressScheme::SENDER:
+          return senderAddress;
+        case AddressScheme::LEGACY:
+          return Address::ethereumAddressFrom(senderAddress, salt);
+        case AddressScheme::EIP_1014:
+          return Address::ethereumAddressFrom(senderAddress, salt, code);
+      }
     }
 };

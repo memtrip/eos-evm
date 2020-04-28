@@ -38,12 +38,14 @@ class [[eosio::contract("eos_evm")]] eos_evm : public contract {
 
       uint64_t primary_key() const { return pk; }
       checksum256 secondary_key() const { return key; }
+      checksum256 tertiary_key() const { return accountIdentifier; }
     };
 
     typedef multi_index<
       name("accountstate"), 
       account_state, 
-      indexed_by<name("statekey"), const_mem_fun<account_state, checksum256, &account_state::secondary_key>>
+      indexed_by<name("statekey"), const_mem_fun<account_state, checksum256, &account_state::secondary_key>>,
+      indexed_by<name("stateid"), const_mem_fun<account_state, checksum256, &account_state::tertiary_key>>
     > account_state_table;
 
     struct [[eosio::table]] account_code {

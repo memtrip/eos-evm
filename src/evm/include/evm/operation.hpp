@@ -10,6 +10,7 @@
 #include <evm/context.hpp>
 #include <evm/pending_state.hpp>
 #include <evm/external.h>
+#include <evm/utils.hpp>
 
 class Operation { 
   typedef instruction_result_t (Operation::*operation_t)(

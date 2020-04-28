@@ -2,6 +2,7 @@
 #include <evm/types.h>
 #include <evm/external.h>
 #include <evm/address.hpp>
+#include <evm/big_int.hpp>
 #include <evm/hex.hpp>
 
 typedef std::vector<std::pair<std::vector<uint256_t>, bytes_t>> log_spy_t;
@@ -36,6 +37,10 @@ class ExternalMock: public External {
       return 0;
     }
 
+    uint64_t incrementNonce() { 
+      return 1; 
+    }
+
     uint64_t senderAccountBalance() {
       return 0;
     }
@@ -50,7 +55,7 @@ class ExternalMock: public External {
         if (codeResponder[i].first == address)
           return  std::make_shared<bytes_t>(codeResponder[i].second);
       }
-      return std::make_shared<bytes_t>(bytes_t());
+      return std::make_shared<bytes_t>();
     }
 
     double balance(const uint256_t& addressWord) {
@@ -75,15 +80,15 @@ class ExternalMock: public External {
     }
 
     emplace_t emplaceCode(
-      const uint256_t& senderAddressWord, 
+      const uint256_t& originWord,
+      const uint256_t& codeAddressWord, 
       uint64_t endowment, 
-      std::shared_ptr<bytes_t> code,
-      const AddressScheme addressScheme
+      std::shared_ptr<bytes_t> code
     ) {
-      emplaceSpy.push_back(std::make_pair(senderAddressWord, Hex::bytesToHex(code)));
+      emplaceSpy.push_back(std::make_pair(codeAddressWord, Hex::bytesToHex(code)));
       return std::make_pair(
         EmplaceResult::EMPLACE_SUCCESS,
-        Address::ethereumAddressFrom(senderAddressWord, uint256_t(0))
+        BigInt::toFixed32(Address::ethereumAddressFrom(codeAddressWord, uint256_t(0)))
       );
     }
 };

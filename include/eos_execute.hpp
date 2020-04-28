@@ -7,6 +7,7 @@
 #include <evm/context.hpp>
 #include <evm/overflow.hpp>
 #include <evm/hex.hpp>
+#include <evm/utils.hpp>
 #include <evm/external.h>
 
 #include <eos_external.hpp>
@@ -49,7 +50,14 @@ class eos_execute {
                 messageCallReturn.size
               );
 
-              emplace_t emplaceResult = external->emplaceCode(context->sender, 0, code, AddressScheme::SENDER);
+              external->incrementNonce();
+
+              emplace_t emplaceResult = external->emplaceCode(
+                context->sender, 
+                context->sender,
+                0, // TODO: where does the endowment for parent addresses come from?
+                code
+              );
 
               switch (emplaceResult.first) {
                 case EmplaceResult::EMPLACE_ADDRESS_NOT_FOUND:
@@ -71,6 +79,7 @@ class eos_execute {
         case TransactionActionType::TRANSACTION_CALL:
           {
             uint256_t toAddress = BigInt::fromBigEndianBytes(Transaction::address(rlp));
+            printf("toAddress{%s}\n", Utils::uint256_2str(toAddress).c_str());
 
             std::shared_ptr<Context> context = Context::makeCall(env, senderAddress, toAddress, rlp, external);
 
@@ -86,6 +95,10 @@ class eos_execute {
               MessageCallReturn messageCallReturn = std::get<MessageCallReturn>(callResult.second);
               if (messageCallReturn.size > 0)
                 eosio::print("return" + Hex::bytesToWordOutput(memory->memory, messageCallReturn.offset, messageCallReturn.size));
+            } else if (callResult.first == MessageCallResult::MESSAGE_CALL_REVERTED) {
+              MessageCallReturn messageCallReturn = std::get<MessageCallReturn>(callResult.second);
+              if (messageCallReturn.size > 0)
+                eosio::print("revert" + Hex::bytesToWordOutput(memory->memory, messageCallReturn.offset, messageCallReturn.size));
             }
 
             break;

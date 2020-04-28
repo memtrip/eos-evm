@@ -35,7 +35,7 @@ class TransferTest {
     fun `Successfully transfer tokens from an EOS account to an EVM account`() {
 
         // given
-        val (accountName, privateKey) = setupTransactions.seedWithBalance()
+        val (accountName, privateKey) = setupTransactions.seedWithSystemBalance()
 
         val startingBalance = getAccount.getEvmAccount(accountName).blockingGet()
         if (startingBalance !is GetAccount.Record.Single) fail("Failed to create account") else {
@@ -65,7 +65,7 @@ class TransferTest {
     fun `Successfully transfer tokens from an EOS account to an EVM account, and withdraw the tokens`() {
 
         // given
-        val (accountName, privateKey) = setupTransactions.seedWithBalance()
+        val (accountName, privateKey) = setupTransactions.seedWithSystemBalance()
 
         val startingBalance = getAccount.getEvmAccount(accountName).blockingGet()
         if (startingBalance !is GetAccount.Record.Single) fail("Failed to create account") else {
@@ -163,7 +163,7 @@ class TransferTest {
     fun `A positive value is required to trigger a withdraw transfer`() {
 
         // given
-        val (accountName, privateKey) = setupTransactions.seedWithBalance()
+        val (accountName, privateKey) = setupTransactions.seedWithSystemBalance()
 
         val startingBalance = getAccount.getEvmAccount(accountName).blockingGet()
         if (startingBalance !is GetAccount.Record.Single) fail("Failed to create account") else {
@@ -208,7 +208,7 @@ class TransferTest {
     fun `The EVM account associated with the withdraw must have sufficient balance`() {
 
         // given
-        val (accountName, privateKey) = setupTransactions.seedWithBalance()
+        val (accountName, privateKey) = setupTransactions.seedWithSystemBalance()
 
         val startingBalance = getAccount.getEvmAccount(accountName).blockingGet()
         if (startingBalance !is GetAccount.Record.Single) fail("Failed to create account") else {

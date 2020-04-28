@@ -2,7 +2,6 @@ package com.memtrip.eos_evm.eos
 
 import com.memtrip.eos.chain.actions.transaction.TransactionContext
 import com.memtrip.eos.http.rpc.Api
-import com.memtrip.eos_evm.assertConsoleError
 import com.memtrip.eos_evm.eos.actions.raw.RawAction
 import com.memtrip.eos_evm.eos.state.GetAccount
 import com.memtrip.eos_evm.eos.state.GetCode
@@ -63,16 +62,21 @@ class EndownmentTest {
         ).blockingGet()
 
         // then
-        assertEquals(response.statusCode, 500)
+        assertEquals(response.statusCode, 202)
 
-        response.assertConsoleError("Insufficient funds.")
+        // and when
+        val getCodeResult = getCode.getValue(
+            accountIdentifier.pad256().toHexString()
+        ).blockingGet()
+
+        assertTrue(getCodeResult is GetCode.Record.None)
     }
 
     @Test
     fun `The EVM account transfers the endowment value to the virtual code address`() {
 
         // given
-        val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seedWithBalance()
+        val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seedWithSystemBalance()
         val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
         // when

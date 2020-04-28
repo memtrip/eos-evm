@@ -10,7 +10,7 @@
 #include <evm/gasometer.hpp>
 #include <evm/big_int.hpp>
 
-TEST_CASE("Revert contract creation", "[create_revert]") {
+TEST_CASE("Malformed CREATE statement will not create a contract", "[create_revert]") {
   bytes_t codeBytes = Hex::hexToBytes("6460016000fd6000526005601b6017f0600055");
 
   env_t env = Utils::env();
@@ -49,15 +49,10 @@ TEST_CASE("Revert contract creation", "[create_revert]") {
   exec_result_t vm_result = vm.execute(0, operation, context, mem, pendingState, external);
 
   // then
-  REQUIRE(ExecResult::DONE_RETURN == vm_result.first);
-
-  NeedsReturn needsReturn = std::get<NeedsReturn>(vm_result.second);
-
-  // and then
-  REQUIRE(false == needsReturn.apply);
+  REQUIRE(ExecResult::DONE_VOID == vm_result.first);
 }
 
-TEST_CASE("Impossible contract will be reverted", "[create_revert]") {
+TEST_CASE("Impossible contract will not be created", "[create_revert]") {
   bytes_t codeBytes = Hex::hexToBytes("608060405234801561001057600080fd5b5061001f61002560201b60201c565b5061002e565b60006002905090565b60878061003c6000396000f3fe6080604052348015600f57600080fd5b506004361060285760003560e01c8063f8a8fd6d14602d575b600080fd5b60336049565b6040518082815260200191505060405180910390f35b6000600290509056fea265627a7a7231582003c2456a626113d11698de55a5189c27adf9ccd53c696f3295e40a77d843d5b264736f6c63430005100032");
   env_t env = Utils::env();
   std::shared_ptr<Context> context = std::make_shared<Context>(

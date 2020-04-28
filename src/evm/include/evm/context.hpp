@@ -70,6 +70,12 @@ class Context {
       const uint256_t& senderAddress, 
       std::shared_ptr<std::vector<RLPItem>> rlp
     ) {
+
+      std::shared_ptr<bytes_t> code = std::make_shared<bytes_t>(
+        rlp->at(0).values[Transaction::RLP_DATA].bytes.begin(), 
+        rlp->at(0).values[Transaction::RLP_DATA].bytes.end()
+      );
+
       return std::make_shared<Context>(
         env.chainId,
         env.blockNumber,
@@ -78,20 +84,17 @@ class Context {
         env.coinbase,
         env.difficulty,
         env.blockHash,
-        senderAddress, /* codeAddress, TODO: clarify where this comes from */
-        uint256_t(0), /* codeHash, TODO: clarify where this comes from */
+        senderAddress, /* codeAddress */
+        Hash::keccak256Word(code), /* codeHash */
         uint256_t(0), /* codeVersion, TODO: clarify where this comes from */
-        senderAddress, /* address, TODO: clarify where this comes from */
+        senderAddress, /* address */
         senderAddress, /* sender */
-        uint256_t(0), /* origin */
+        senderAddress, /* origin */
         Transaction::gas(rlp),
         Transaction::gasPrice(rlp),
         Transaction::value(rlp),
-        std::make_shared<bytes_t>(bytes_t(
-          rlp->at(0).values[Transaction::RLP_DATA].bytes.begin(), 
-          rlp->at(0).values[Transaction::RLP_DATA].bytes.end()
-        )),
-        std::make_shared<bytes_t>(bytes_t())
+        code,
+        std::make_shared<bytes_t>()
       );
     }
 
@@ -111,20 +114,20 @@ class Context {
         env.coinbase,
         env.difficulty,
         env.blockHash,
-        toAddress, /* codeAddress, TODO: clarify where this comes from */
-        Hash::keccak256Word(code), /* codeHash, TODO: clarify where this comes from */
+        toAddress, /* codeAddress */
+        Hash::keccak256Word(code), 
         uint256_t(0), /* codeVersion, TODO: clarify where this comes from */
-        toAddress, /* address, TODO: clarify where this comes from */
+        toAddress, /* address */
         senderAddress, /* sender */
-        uint256_t(0), /* origin */
+        senderAddress, /* origin */
         Transaction::gas(rlp),
         Transaction::gasPrice(rlp),
         Transaction::value(rlp),
         code,
-        std::make_shared<bytes_t>(bytes_t(
+        std::make_shared<bytes_t>(
           rlp->at(0).values[Transaction::RLP_DATA].bytes.begin(), 
           rlp->at(0).values[Transaction::RLP_DATA].bytes.end()
-        ))
+        )
       );
     }
 
@@ -153,7 +156,7 @@ class Context {
         uint256_t(0), /* codeVersion, TODO: clarify where this comes from */
         receiveAddress, /* address, TODO: clarify where this comes from */
         senderAddress, /* sender */
-        uint256_t(0), /* origin */
+        parentContext->origin, /* origin */
         gas,
         gasPrice,
         value,
@@ -165,10 +168,7 @@ class Context {
     static std::shared_ptr<Context> makeInnerCreate(
       std::shared_ptr<Context> parentContext,
       const uint256_t& codeAddress,
-      const uint256_t& receiveAddress,
-      const uint256_t& senderAddress,
       const gas_t& gas,
-      const uint256_t& gasPrice,
       const uint256_t& value,
       std::shared_ptr<bytes_t> code
     ) {
@@ -180,17 +180,17 @@ class Context {
         parentContext->coinbase,
         parentContext->difficulty,
         parentContext->blockHash,
-        codeAddress, /* codeAddress, TODO: clarify where this comes from */
+        codeAddress, /* codeAddress */
         Hash::keccak256Word(code),
         uint256_t(0), /* codeVersion, TODO: clarify where this comes from */
-        receiveAddress, /* address, TODO: clarify where this comes from */
-        senderAddress, /* sender */
-        uint256_t(0), /* origin */
+        codeAddress, /* address */
+        codeAddress, /* sender */
+        parentContext->origin, /* origin */
         gas,
-        gasPrice,
+        parentContext->gasPrice,
         value,
         code,
-        std::make_shared<bytes_t>(bytes_t())
+        std::make_shared<bytes_t>()
       );
     } 
 
@@ -209,20 +209,20 @@ class Context {
         env.coinbase,
         env.difficulty,
         env.blockHash,
-        senderAddress, /* codeAddress, TODO: clarify where this comes from */
-        uint256_t(0), /* codeHash, TODO: clarify where this comes from */
+        senderAddress, /* codeAddress */
+        Hash::keccak256Word(code), /* codeHash */
         uint256_t(0), /* codeVersion, TODO: clarify where this comes from */
-        senderAddress, /* address, TODO: clarify where this comes from */
+        senderAddress, /* address */
         senderAddress, /* sender */
-        uint256_t(0), /* origin */
+        senderAddress, /* origin */
         Transaction::gas(rlp),
         Transaction::gasPrice(rlp),
         Transaction::value(rlp),
         std::make_shared<bytes_t>(code),
-        std::make_shared<bytes_t>(bytes_t(
+        std::make_shared<bytes_t>(
           rlp->at(0).values[Transaction::RLP_DATA].bytes.begin(), 
           rlp->at(0).values[Transaction::RLP_DATA].bytes.end()
-        ))
+        )
       );
     }
 };
