@@ -35,6 +35,7 @@ class eos_execute {
 
             callResult = Call::call(
               0,
+              CallType::ACTION_CREATE,
               memory,
               context,
               external,
@@ -79,12 +80,12 @@ class eos_execute {
         case TransactionActionType::TRANSACTION_CALL:
           {
             uint256_t toAddress = BigInt::fromBigEndianBytes(Transaction::address(rlp));
-            printf("toAddress{%s}\n", Utils::uint256_2str(toAddress).c_str());
 
             std::shared_ptr<Context> context = Context::makeCall(env, senderAddress, toAddress, rlp, external);
 
             callResult = Call::call(
               0,
+              CallType::ACTION_CALL,
               memory,
               context,
               external,
@@ -124,6 +125,7 @@ class eos_execute {
 
       return Call::call(
         0,
+        CallType::ACTION_STATIC_CALL,
         memory,
         context,
         external,

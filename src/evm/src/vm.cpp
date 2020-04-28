@@ -332,6 +332,7 @@ instruction_result_t VM::executeCreateInstruction(
 
   call_result_t callResult = Call::call(
     stackDepth,
+    CallType::ACTION_CREATE,
     createMemory,
     createContext,
     external,
@@ -465,7 +466,7 @@ instruction_result_t VM::executeCallInstruction(
         senderAddress = context->address;
         receiveAddress = codeAddress;
         hasBalance = external->balance(context->address) >= value;
-        callType = CallType::ACTION_CALL_CODE;
+        callType = CallType::ACTION_CALL;
         break;
       }
     case Opcode::CALLCODE:
@@ -473,7 +474,7 @@ instruction_result_t VM::executeCallInstruction(
         senderAddress = context->address;
         receiveAddress = context->address;
         hasBalance = external->balance(context->address) >= value;
-        callType = CallType::ACTION_CALL_CODE;
+        callType = CallType::ACTION_CALL;
         break;
       }
     case Opcode::DELEGATECALL:
@@ -481,7 +482,7 @@ instruction_result_t VM::executeCallInstruction(
         senderAddress = context->sender;
         receiveAddress = context->address;
         hasBalance = true;
-        callType = CallType::ACTION_DELEGATE_CALL;
+        callType = CallType::ACTION_CALL;
         break;
       }
     case Opcode::STATICCALL:
@@ -525,6 +526,7 @@ instruction_result_t VM::executeCallInstruction(
 
   call_result_t callResult = Call::call(
     stackDepth,
+    callType,
     callMemory,
     callContext,
     external,
@@ -570,8 +572,6 @@ instruction_result_t VM::executeCallInstruction(
     case MESSAGE_CALL_FAILED:
       {
         printf("MESSAGE_CALL_FAILED\n");
-        trap_t trap = std::get<trap_t>(callResult.second);
-        Utils::printTrap(trap);
         stack->push(UINT256_ZERO);
         return std::make_pair(InstructionResult::OK, 0);
       }

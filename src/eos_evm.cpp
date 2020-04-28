@@ -50,7 +50,7 @@ void eos_evm::incomingTransaction(const name& from, const string& transaction, c
   check((transactionNonce - itr->nonce) == 1, "Transaction nonce invalid.");
   if (!hasSignature) check(has_auth(itr->user), "You do not have permission to execute a transaction for the specified sender.");
 
-  std::shared_ptr<External> external = std::make_shared<eos_external>(this, itr->user, itr->nonce + 1, itr->balance.amount);
+  std::shared_ptr<External> external = std::make_shared<eos_external>(this, senderAddress, itr->user, itr->nonce + 1, itr->balance.amount);
 
   call_result_t callResult;
   if (bytecode.size() > 0) {

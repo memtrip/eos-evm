@@ -79,6 +79,10 @@ class ExternalMock: public External {
       return std::make_pair(EmplaceResult::EMPLACE_SUCCESS, 0);
     }
 
+    emplace_t transfer(const uint256_t& senderAddress, const uint256_t& toAddressWord, const uint256_t& value) { 
+      return std::make_pair(EmplaceResult::EMPLACE_SUCCESS, 0);
+    };
+
     emplace_t emplaceCode(
       const uint256_t& originWord,
       const uint256_t& codeAddressWord, 

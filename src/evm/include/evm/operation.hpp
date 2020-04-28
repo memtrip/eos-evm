@@ -262,7 +262,7 @@ class Operation {
       uint256_t b = stack->peek(1);
       uint256_t result = b != 0 ? intx::sdivrem(a, b).quot : 0;
       stack->pop(2);
-      stack->push(result);
+      stack->push(b != 0 ? intx::sdivrem(a, b).quot : 0);
       return std::make_pair(InstructionResult::OK, 0);
     }
 
@@ -736,7 +736,6 @@ class Operation {
       } else {
         size_t begin = Overflow::uint256Cast(index).first;
         uint256_t value = BigInt::load32(begin, context->data);
-        // printf("calldataload{%s}", Utils::uint256_2str(value).c_str());
         stack->push(value);
       }
       return std::make_pair(InstructionResult::OK, 0);

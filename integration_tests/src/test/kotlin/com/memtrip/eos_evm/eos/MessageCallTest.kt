@@ -39,7 +39,7 @@ class MessageCallTest {
     fun `external message call that creates an event`() {
 
         // given
-        val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+        val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seedWithEvmBalance()
         val accountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
 
         // when

@@ -6,18 +6,27 @@
 #include <evm/hash.hpp>
 #include <evm/utils.hpp>
 #include <evm/hex.hpp>
+#include <evm/overflow.hpp>
 #include <eos_evm.hpp>
 
 class eos_external: public External {
   private:
     eos_evm* _contract;
+    uint256_t _senderAddress;
     name _sender;
     uint64_t _senderNonce;
     uint64_t _senderAccountBalance;
 
   public:
-    eos_external(eos_evm* contract, const name& sender, uint64_t senderNonce, uint64_t senderAccountBalance) {
+    eos_external(
+      eos_evm* contract, 
+      const uint256_t& senderAddress,
+      const name& sender, 
+      uint64_t senderNonce, 
+      uint64_t senderAccountBalance
+    ) {
       _contract = contract;
+      _senderAddress = senderAddress;
       _sender = sender;
       _senderNonce = senderNonce;
       _senderAccountBalance = senderAccountBalance;
@@ -93,6 +102,30 @@ class eos_external: public External {
 
       return std::make_pair(EmplaceResult::EMPLACE_SUCCESS, 0);
     }
+
+    emplace_t transfer(const uint256_t& senderAddress, const uint256_t& toAddressWord, const uint256_t& value) {
+      bool outgoing = _senderAddress == senderAddress;
+      address_t targetAddress = BigInt::toFixed32(toAddressWord);
+      uint64_t transferValue = Overflow::uint256Cast(value).first;
+
+      if (_senderAccountBalance < value) return std::make_pair(EmplaceResult::EMPLACE_INSUFFICIENT_FUNDS, 0);
+
+      eos_evm::account_table _account(_contract->get_self(), _contract->get_self().value);
+      auto accountIdx = _account.get_index<name("accountid")>();
+      auto accountItr = accountIdx.find(targetAddress);
+      
+      if (accountItr == accountIdx.end()) {
+        return std::make_pair(EmplaceResult::EMPLACE_ADDRESS_NOT_FOUND, 0);
+      } else {
+        accountIdx.modify(accountItr, _sender, [&](auto& account) {
+          account.balance.amount = outgoing ? (account.balance.amount + transferValue) : (account.balance.amount - transferValue);
+        });
+
+        _senderAccountBalance = outgoing ? (_senderAccountBalance - transferValue) : (_senderAccountBalance + transferValue);
+
+        return std::make_pair(EmplaceResult::EMPLACE_SUCCESS, 0);
+      }
+    };
 
    /*
     * Create a new code entry under the scope of the account associated with the address.

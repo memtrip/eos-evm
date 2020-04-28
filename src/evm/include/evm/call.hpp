@@ -12,6 +12,7 @@ class Call {
   public:
     static call_result_t call(
       uint16_t stackDepth,
+      CallType callType,
       std::shared_ptr<Memory> memory,
       std::shared_ptr<Context> context,
       std::shared_ptr<External> external,
@@ -28,6 +29,19 @@ class Call {
       std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
 
       VM vm(stack, gasometer);
+
+      if (Overflow::uint256Cast(context->value).first > 0 && callType == CallType::ACTION_CALL) {
+        emplace_t result = external->transfer(context->sender, context->address, context->value);
+        switch (result.first) {
+          case EmplaceResult::EMPLACE_ADDRESS_NOT_FOUND:
+            return std::make_pair(MessageCallResult::MESSAGE_CALL_FAILED, TrapKind::TRAP_INVALID_CODE_ADDRESS);
+          case EmplaceResult::EMPLACE_INSUFFICIENT_FUNDS:
+            // TODO: in the parent call, should funds be checked before it's even possible to get here?
+            return std::make_pair(MessageCallResult::MESSAGE_CALL_FAILED, TrapKind::TRAP_INSUFFICIENT_FUNDS);
+          case EmplaceResult::EMPLACE_SUCCESS:
+            break;
+        }
+      }
 
       printf("nextStackDepth{%d}[", nextStackDepth);
       exec_result_t vm_result = vm.execute(

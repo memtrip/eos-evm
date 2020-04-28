@@ -67,7 +67,7 @@ abstract class EvmContract(
     fun executeMethod(
         name: String,
         inputParameters: List<Type<*>>,
-        outputParameters: List<TypeReference<Type<*>>>,
+        outputParameters: List<TypeReference<*>>,
         sender: EvmSender
     ): Single<ChainResponse<TransactionCommitted>> {
         val abiEncodedBytes = encodeFunctionArgs(name, inputParameters, outputParameters)
@@ -92,7 +92,7 @@ abstract class EvmContract(
     private fun encodeFunctionArgs(
         name: String,
         inputParameters: List<Type<*>>,
-        outputParameters: List<TypeReference<Type<*>>>
+        outputParameters: List<TypeReference<*>>
     ): String {
         return FunctionEncoder.encode(
             Function(

@@ -43,8 +43,8 @@ struct EnvInfo {
 typedef EnvInfo env_t;
 
 enum CallType {
-  ACTION_CALL_CODE,
-  ACTION_DELEGATE_CALL,
+  ACTION_CALL,
+  ACTION_CREATE,
   ACTION_STATIC_CALL
 };
 

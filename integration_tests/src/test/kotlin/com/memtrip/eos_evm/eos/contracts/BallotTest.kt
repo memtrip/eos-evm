@@ -1,4 +1,4 @@
-package com.memtrip.eos_evm.eos.contracts.ballot
+package com.memtrip.eos_evm.eos.contracts
 
 import com.memtrip.eos.http.rpc.Api
 import com.memtrip.eos_evm.assertConsoleError
