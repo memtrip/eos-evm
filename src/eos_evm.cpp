@@ -11,26 +11,25 @@
 #include <evm/rlp_decode.hpp>
 #include <evm/big_int.hpp>
 #include <evm/hash.hpp>
+#include <evm/hex.hpp>
 #include <evm/overflow.hpp>
 
-void eos_evm::raw(name from, string code, string sender) {
+void eos_evm::raw(name from, bytes_t code, string sender) {
   incomingTransaction(from, code, sender, bytes_t());
 }
 
-void eos_evm::execute(name from, string code, string sender, string bytecode) {
+void eos_evm::execute(name from, bytes_t code, string sender, bytes_t bytecode) {
   #if RELEASE
   check(false, "execute is only available during development.");
   #endif
-  incomingTransaction(from, code, sender, Hex::hexToBytes(bytecode));
+  incomingTransaction(from, code, sender, bytecode);
 }
 
-void eos_evm::incomingTransaction(const name& from, const string& transaction, const string& sender, const bytes_t& bytecode) {
+void eos_evm::incomingTransaction(const name& from, const bytes_t& transaction, const string& sender, const bytes_t& bytecode) {
   require_auth(from);
 
-  bytes_t transactionBytes = Hex::hexToBytes(transaction);
-
   std::shared_ptr<std::vector<RLPItem>> rlp = std::make_shared<std::vector<RLPItem>>();
-  RLPDecode::decode(transactionBytes, rlp);
+  RLPDecode::decode(transaction, rlp);
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
 

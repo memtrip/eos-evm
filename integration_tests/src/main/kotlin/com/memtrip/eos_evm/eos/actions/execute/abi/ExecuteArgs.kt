@@ -2,6 +2,7 @@ package com.memtrip.eos_evm.eos.actions.execute.abi
 
 import com.memtrip.eos.abi.writer.Abi
 import com.memtrip.eos.abi.writer.AccountNameCompress
+import com.memtrip.eos.abi.writer.DataCompress
 import com.memtrip.eos.abi.writer.StringCompress
 
 @Abi
@@ -16,11 +17,11 @@ data class ExecuteArgs(
         @AccountNameCompress get() = from
 
     val getCode: String
-        @StringCompress get() = code
+        @DataCompress get() = code
 
     val getSender: String
         @StringCompress get() = sender
 
     val getBytecode: String
-        @StringCompress get() = bytecode
+        @DataCompress get() = bytecode
 }

@@ -27,7 +27,7 @@ abstract class EvmContract(
     private val contractEthAccount: EthAccount,
     private val data: String,
     private val gasPrice: BigInteger = BigInteger("5af3107a4000", 16),
-    private val gasLimit: BigInteger = BigInteger("0186a00", 16)
+    private val gasLimit: BigInteger = BigInteger("5186a00", 16)
 ) {
 
     private val okHttpClient = OkHttpClient.Builder()
@@ -59,7 +59,7 @@ abstract class EvmContract(
         return rawAction.pushTransaction(
             contractAccountName,
             transaction.sign(contractEthAccount).signedTransaction.toHexString(),
-            contractAccountIdentifier,
+            accountIdentifier.toHexString(),
             TransactionContext(contractAccountName, contractPrivateKey, transactionDefaultExpiry())
         )
     }

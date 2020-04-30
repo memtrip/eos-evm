@@ -13,7 +13,7 @@ data class RawArgs(
         @AccountNameCompress get() = from
 
     val getCode: String
-        @StringCompress get() = code
+        @DataCompress get() = code
 
     val getSender: String
         @StringCompress get() = sender

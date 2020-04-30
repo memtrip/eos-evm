@@ -68,7 +68,7 @@ class DelegateCallTest {
 
 
         // then
-        assertEquals(createContractResponse.statusCode, 202)
+        assertEquals(202, createContractResponse.statusCode)
 
         // and when
         val getCodeResult = getCode.getAll(
@@ -164,7 +164,7 @@ class DelegateCallTest {
 //
 //
 //        // then
-//        assertEquals(createContractResponse.statusCode, 202)
+//        assertEquals(202, createContractResponse.statusCode)
 //
 //        // and when
 //        val getCodeResult = getCode.getAll(

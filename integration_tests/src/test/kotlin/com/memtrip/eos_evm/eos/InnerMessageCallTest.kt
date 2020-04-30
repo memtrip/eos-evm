@@ -67,7 +67,7 @@ class InnerMessageCallTest {
         }
 
         // then
-        assertEquals(createContractResponse.statusCode, 202)
+        assertEquals(202, createContractResponse.statusCode)
 
         // and when
         val contractCode = getCode.getAll(

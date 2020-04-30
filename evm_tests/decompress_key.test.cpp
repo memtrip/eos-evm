@@ -14,9 +14,7 @@ TEST_CASE("Decompress a compressed secp256k1 public key", "[decompress_key]" ) {
   }
 
   // when
-  uint256_t p = DecompressKey::p();
-
-  bytes_t decompressedKey = DecompressKey::decompress(p, compressedKey);
+  bytes_t decompressedKey = DecompressKey::decompress(compressedKey);
 
   // then
   

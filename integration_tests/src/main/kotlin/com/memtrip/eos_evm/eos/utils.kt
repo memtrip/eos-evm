@@ -39,11 +39,3 @@ fun stubTransaction(): EthereumTransaction {
         "0x000000000000000"
     )
 }
-
-fun <T> ChainResponse<T>.containsErrorString(value: String): Boolean {
-    return errorBody?.error?.details?.get(0)?.message?.contains(value) ?: false
-}
-
-fun ChainResponse<TransactionCommitted>.containsConsoleString(value: String): Boolean {
-    return isSuccessful && body?.processed?.action_traces?.first()?.console?.contains(value) == true
-}

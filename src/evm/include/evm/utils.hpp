@@ -96,19 +96,18 @@ class Utils {
 
     static void printInstructionList() {
       for (int i = 0; i < 255; i++) {
-        unsigned int instruction = Instruction::values[i];
+        instruct_t instruction = Instruction::values[i];
         printInstruction(instruction);
       }
     }
 
-    static void printInstruction(unsigned int value) {
-      if (value == 255) return;
+    static void printInstruction(instruct_t value) {
       printf("(");
-      printOpcode(Instruction::byteAt(value, 3));
-      printOpcodeHex(Instruction::byteAt(value, 3));
+      printOpcode(value.opcode);
+      printOpcodeHex(value.opcode);
       printf(")");
-      printf(", %d, %d, ", Instruction::byteAt(value, 2), Instruction::byteAt(value, 1));
-      printTier(Instruction::byteAt(value, 0));
+      printf(", %d, %d, ", value.args, value.ret);
+      printTier(value.tier);
       printf(")");
       printf(" ");
       printf("\n");

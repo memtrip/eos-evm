@@ -29,8 +29,7 @@ class eos_ecrecover {
       eosio::signature signatureBytes(std::in_place_index<0>, signatureData);
 
       std::array<char, 33> compressedPubKey = std::get<0>(eosio::recover_key(digestBytes, signatureBytes));
-      uint256_t p = DecompressKey::p();
-      bytes_t uncompressedPubKey = DecompressKey::decompress(p, compressedPubKey);
+      bytes_t uncompressedPubKey = DecompressKey::decompress(compressedPubKey);
       bytes_t ethereumAddress = Address::ethereumAddress(uncompressedPubKey);
 
       return Address::accountIdentifierFromBytes(

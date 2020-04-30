@@ -40,17 +40,6 @@ class VM {
       std::shared_ptr<PendingState> pendingState,
       std::shared_ptr<External> external
     );
-    exec_result_t stepInner(
-      uint16_t stackDepth,
-      Operation& operation,
-      jump_set_t& jumps, 
-      std::shared_ptr<Context> context,
-      std::shared_ptr<GasCalculation> gasCalculation,
-      std::shared_ptr<Memory> memory,
-      std::shared_ptr<ByteReader> reader,
-      std::shared_ptr<PendingState> pendingState,
-      std::shared_ptr<External> external
-    );
     instruction_result_t executeCreateInstruction(
       uint16_t stackDepth,
       Operation& operation,

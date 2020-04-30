@@ -17,8 +17,7 @@ std::vector<instruct_t> parse(std::string bytecode_str) {
 
   while (position < bytes.size()) {
     uint8_t index = bytes[position];
-    int instruction = Instruction::values[index];
-    values.push_back(instruction);
+    values.push_back(Instruction::values[index]);
     position++;
   }
 

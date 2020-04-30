@@ -45,7 +45,7 @@ class Address {
     static bytes_t ethereumAddress(const bytes_t& uncompressedPubKey) {
       bytes_t hash = Hash::keccak256(uncompressedPubKey);
 
-      std::vector<uint8_t> address;
+      bytes_t address;
 
       for (int i = hash.size() - 20; i < hash.size(); i++) {
         address.push_back(hash[i]);

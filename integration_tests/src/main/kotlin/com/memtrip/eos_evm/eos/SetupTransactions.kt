@@ -108,7 +108,7 @@ class SetupTransactions(
         throw IllegalStateException("Failed to seed the test accounts")
     }
 
-    fun seedWithEvmBalance(ramIssued: Long = DEFAULT_RAM_ISSUE): TestEthAccount {
+    fun seedWithEvmBalance(ramIssued: Long = DEFAULT_RAM_ISSUE, amount: String = "1.0000"): TestEthAccount {
         for (i in 0 until FAULT_THRESHOLD) {
             val newAccountName = generateUniqueAccountName()
             val newAccountPrivateKey = EosPrivateKey()
@@ -128,7 +128,7 @@ class SetupTransactions(
 
             val transferResult = transfer(
                 newAccountName,
-                "1.0000 $SYMBOL",
+                "$amount $SYMBOL",
                 "seed",
                 CONTRACT_ACCOUNT_NAME,
                 seedPrivateKey,
@@ -137,7 +137,7 @@ class SetupTransactions(
 
             val evmTransferResult = transfer(
                 "eos.evm",
-                "1.0000 ${Config.SYMBOL}",
+                "$amount $SYMBOL",
                 "evm funds",
                 newAccountName,
                 newAccountPrivateKey,

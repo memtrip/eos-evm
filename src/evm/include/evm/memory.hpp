@@ -82,7 +82,7 @@ class Memory {
       ) return std::make_shared<bytes_t>();
       return std::make_shared<bytes_t>(memory->begin() + offset, memory->begin() + offset + size);
     }
-
+ 
     std::string sliceAsString(uint64_t offset, uint64_t size) {
       if (!isValidRange(offset, size) 
         || offset > memorySize 

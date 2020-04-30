@@ -63,202 +63,177 @@ exec_result_t VM::step(
   } else if (context->code->size() == 0) {
     return std::make_pair(ExecResult::DONE_VOID, gasometer->currentGas);
   } else {
-    return VM::stepInner(
-      stackDepth,
-      operation,
-      jumps, 
-      context,
+    uint8_t opcode = reader->currentOp(context->code);
+    instruct_t instruction = Instruction::values[opcode];
+    reader->next();
+
+    // Utils::printInstruction(instruction);
+
+    instruction_verify_t verifyResult = Instruction::verify(instruction, stack->size());
+    switch (verifyResult) {
+      case InstructionVerifyResult::INSTRUCTION_ERROR_UNDER_FLOW:
+        return std::make_pair(ExecResult::VM_TRAP, TrapKind::TRAP_STACK_UNDERFLOW);
+      case InstructionVerifyResult::INSTRUCTION_ERROR_OUT_OF_STACK:
+        return std::make_pair(ExecResult::VM_TRAP, TrapKind::TRAP_OUT_OF_STACK);
+      case InstructionVerifyResult::INSTRUCTION_NOT_DEFINED:
+        return std::make_pair(ExecResult::VM_TRAP, TrapKind::TRAP_INVALID_INSTRUCTION);
+      case InstructionVerifyResult::INSTRUCTION_VALID:
+        break;
+    }
+
+    uint64_t memoryLength = memory->length();
+    instruction_requirements_t calculateRequirements = gasometer->requirements(
+      opcode,
+      instruction, 
+      memoryLength,
       gasCalculation,
-      memory, 
-      reader, 
-      pendingState, 
+      context,
+      stack, 
       external
     );
-  }
-}
 
-exec_result_t VM::stepInner(
-  uint16_t stackDepth,
-  Operation& operation,
-  jump_set_t& jumps,
-  std::shared_ptr<Context> context,
-  std::shared_ptr<GasCalculation> gasCalculation,
-  std::shared_ptr<Memory> memory,
-  std::shared_ptr<ByteReader> reader, 
-  std::shared_ptr<PendingState> pendingState,
-  std::shared_ptr<External> external
-) {
-  uint8_t opcode = reader->currentOp(context->code);
-  unsigned int instruction = Instruction::values[opcode];
-  reader->next();
-
-  // Utils::printInstruction(instruction);
-
-  instruction_verify_t verifyResult = Instruction::verify(instruction, stack->size());
-  switch (verifyResult) {
-    case InstructionVerifyResult::INSTRUCTION_ERROR_UNDER_FLOW:
-      return std::make_pair(ExecResult::VM_TRAP, TrapKind::TRAP_STACK_UNDERFLOW);
-    case InstructionVerifyResult::INSTRUCTION_ERROR_OUT_OF_STACK:
-      return std::make_pair(ExecResult::VM_TRAP, TrapKind::TRAP_OUT_OF_STACK);
-    case InstructionVerifyResult::INSTRUCTION_NOT_DEFINED:
-      return std::make_pair(ExecResult::VM_TRAP, TrapKind::TRAP_INVALID_INSTRUCTION);
-    case InstructionVerifyResult::INSTRUCTION_VALID:
-      break;
-  }
-
-  uint64_t memoryLength = memory->length();
-  instruction_requirements_t calculateRequirements = gasometer->requirements(
-    opcode,
-    instruction, 
-    memoryLength,
-    gasCalculation,
-    context,
-    stack, 
-    external
-  );
-
-  GasRequirements requirements;
-  switch (calculateRequirements.first) {
-    case GasometerResult::GASOMETER_RESULT_OK:
-      requirements = std::get<GasRequirements>(calculateRequirements.second);
-      //Utils::printInstructionRequirements(requirements);
-      break;
-    case GasometerResult::GASOMETER_RESULT_OUT_OF_GAS:
-      return std::make_pair(ExecResult::VM_OUT_OF_GAS, 0);
-  }
-
-  // expand memory
-  gas_t memoryRequiredSize = requirements.memoryRequiredSize;
-  memory->expand(memoryRequiredSize);
-  
-  gas_t currentGas = Overflow::sub(gasometer->currentGas, requirements.gasCost).first;
-  gasometer->currentGas = currentGas;
-
-  gas_t memoryTotalGas = requirements.memoryTotalGas;
-  gasometer->currentMemGas = memoryTotalGas;
-
-  gas_t provideGas = requirements.provideGas;
-
-  instruction_result_t result;
-  switch (opcode) {
-    case Opcode::RETURNDATASIZE:
-      {
-        stack->push(uint256_t(returnData->size()));
-        result = std::make_pair(InstructionResult::OK, 0);
+    GasRequirements requirements;
+    switch (calculateRequirements.first) {
+      case GasometerResult::GASOMETER_RESULT_OK:
+        requirements = std::get<GasRequirements>(calculateRequirements.second);
+        //Utils::printInstructionRequirements(requirements);
         break;
-      }
-    case Opcode::RETURNDATACOPY:
-      {
-        uint64_t sourceOffset = Overflow::uint256Cast(stack->peek(1)).first;
-        uint64_t sizeItem = Overflow::uint256Cast(stack->peek(2)).first;
+      case GasometerResult::GASOMETER_RESULT_OUT_OF_GAS:
+        return std::make_pair(ExecResult::VM_OUT_OF_GAS, 0);
+    }
 
-        uint64_t returnDataLength = returnData->size();
+    // expand memory
+    gas_t memoryRequiredSize = requirements.memoryRequiredSize;
+    memory->expand(memoryRequiredSize);
+    
+    gas_t currentGas = Overflow::sub(gasometer->currentGas, requirements.gasCost).first;
+    gasometer->currentGas = currentGas;
 
-        if (Overflow::add(sourceOffset, sizeItem).first > returnDataLength) {
-          result = std::make_pair(InstructionResult::INSTRUCTION_TRAP, TrapKind::TRAP_OVERFLOW);
-        } else {
-          memory->copyData(
-            Overflow::uint256Cast(stack->peek(0)).first, 
-            sourceOffset, 
-            sizeItem, 
-            returnData
-          );
+    gas_t memoryTotalGas = requirements.memoryTotalGas;
+    gasometer->currentMemGas = memoryTotalGas;
+
+    gas_t provideGas = requirements.provideGas;
+
+    instruction_result_t result;
+    switch (opcode) {
+      case Opcode::RETURNDATASIZE:
+        {
+          stack->push(uint256_t(returnData->size()));
           result = std::make_pair(InstructionResult::OK, 0);
+          break;
         }
-        break;
-      }
-    case Opcode::CREATE:
-    case Opcode::CREATE2:
-      {
-        result = executeCreateInstruction(
-          stackDepth,
-          operation,
-          opcode,
-          requirements.provideGas,
-          context,
-          memory,
-          pendingState,
-          external
-        );
-        break;
-      }
-    case Opcode::CALL:
-    case Opcode::CALLCODE:
-    case Opcode::DELEGATECALL:
-    case Opcode::STATICCALL:
-      {
-        result = executeCallInstruction(
-          stackDepth,
-          operation,
-          opcode,
-          requirements.provideGas,
-          context,
-          memory,
-          pendingState,
-          external
-        );
-        break;
-      }
-    default:
-      result = std::invoke(
-        operation.values[opcode], 
-        operation, 
-        currentGas,
-        instruction, 
-        context, 
-        reader, 
-        pendingState,
-        external, 
-        memory, 
-        stack
-      );
-  }
+      case Opcode::RETURNDATACOPY:
+        {
+          uint64_t sourceOffset = Overflow::uint256Cast(stack->peek(1)).first;
+          uint64_t sizeItem = Overflow::uint256Cast(stack->peek(2)).first;
 
-  switch (result.first) {
-    case InstructionResult::OK:
-      break;
-    case InstructionResult::UNUSED_GAS:
-      {
-        gas_t gasLeft = std::get<gas_t>(result.second);
-        gasometer->currentGas = gasometer->currentGas + gasLeft;
-        // printf("\n>> currentGas{%llu}\n", gasometer->currentGas);
-        break;
-      }
-    case InstructionResult::JUMP_POSITION:
-      {
-        uint64_t position = std::get<uint64_t>(result.second);
-        uint64_t pos = Jumps::verifyJump(position, jumps);
-        if (pos == INVALID_ARGUMENT) return std::make_pair(ExecResult::VM_TRAP, TrapKind::TRAP_INVALID_JUMP);
-        reader->move(pos);
-        break;
-      }
-    case InstructionResult::STOP_EXEC_RETURN:
-      {
-        // TODO: clear memory
-        StopExecutionResult stop = std::get<StopExecutionResult>(result.second);
-        
-        NeedsReturn needsReturn {
-          stop.gas,
-          stop.initOff,
-          stop.initSize,
-          stop.apply
-        };
-        
-        return std::make_pair(ExecResult::DONE_RETURN, needsReturn);
-      }
-    case InstructionResult::STOP_EXEC:
-      return std::make_pair(ExecResult::DONE_VOID, gasometer->currentGas);
-    case InstructionResult::INSTRUCTION_TRAP:
-      {
-        trap_t trap = std::get<trap_t>(result.second);
-        return std::make_pair(ExecResult::VM_TRAP, trap);
-      }
-  }
-  
-  if (reader->atEnd(context->code))
-    return std::make_pair(ExecResult::DONE_VOID, gasometer->currentGas);
+          uint64_t returnDataLength = returnData->size();
 
-  return std::make_pair(ExecResult::CONTINUE, 0);
+          if (Overflow::add(sourceOffset, sizeItem).first > returnDataLength) {
+            result = std::make_pair(InstructionResult::INSTRUCTION_TRAP, TrapKind::TRAP_OVERFLOW);
+          } else {
+            memory->copyData(
+              Overflow::uint256Cast(stack->peek(0)).first, 
+              sourceOffset, 
+              sizeItem, 
+              returnData
+            );
+            result = std::make_pair(InstructionResult::OK, 0);
+          }
+          break;
+        }
+      case Opcode::CREATE:
+      case Opcode::CREATE2:
+        {
+          result = executeCreateInstruction(
+            stackDepth,
+            operation,
+            opcode,
+            requirements.provideGas,
+            context,
+            memory,
+            pendingState,
+            external
+          );
+          break;
+        }
+      case Opcode::CALL:
+      case Opcode::CALLCODE:
+      case Opcode::DELEGATECALL:
+      case Opcode::STATICCALL:
+        {
+          result = executeCallInstruction(
+            stackDepth,
+            operation,
+            opcode,
+            requirements.provideGas,
+            context,
+            memory,
+            pendingState,
+            external
+          );
+          break;
+        }
+      default:
+        result = std::invoke(
+          operation.values[opcode], 
+          operation, 
+          currentGas,
+          instruction, 
+          context, 
+          reader, 
+          pendingState,
+          external, 
+          memory, 
+          stack
+        );
+    }
+
+    switch (result.first) {
+      case InstructionResult::OK:
+        break;
+      case InstructionResult::UNUSED_GAS:
+        {
+          gas_t gasLeft = std::get<gas_t>(result.second);
+          gasometer->currentGas = gasometer->currentGas + gasLeft;
+          // printf("\n>> currentGas{%llu}\n", gasometer->currentGas);
+          break;
+        }
+      case InstructionResult::JUMP_POSITION:
+        {
+          uint64_t position = std::get<uint64_t>(result.second);
+          uint64_t pos = Jumps::verifyJump(position, jumps);
+          if (pos == INVALID_ARGUMENT) return std::make_pair(ExecResult::VM_TRAP, TrapKind::TRAP_INVALID_JUMP);
+          reader->move(pos);
+          break;
+        }
+      case InstructionResult::STOP_EXEC_RETURN:
+        {
+          // TODO: clear memory
+          StopExecutionResult stop = std::get<StopExecutionResult>(result.second);
+          
+          NeedsReturn needsReturn {
+            stop.gas,
+            stop.initOff,
+            stop.initSize,
+            stop.apply
+          };
+          
+          return std::make_pair(ExecResult::DONE_RETURN, needsReturn);
+        }
+      case InstructionResult::STOP_EXEC:
+        return std::make_pair(ExecResult::DONE_VOID, gasometer->currentGas);
+      case InstructionResult::INSTRUCTION_TRAP:
+        {
+          trap_t trap = std::get<trap_t>(result.second);
+          return std::make_pair(ExecResult::VM_TRAP, trap);
+        }
+    }
+    
+    if (reader->atEnd(context->code)) return std::make_pair(ExecResult::DONE_VOID, gasometer->currentGas);
+
+    return std::make_pair(ExecResult::CONTINUE, 0);
+  }
 }
 
 instruction_result_t VM::executeCreateInstruction(

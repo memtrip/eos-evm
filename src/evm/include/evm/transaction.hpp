@@ -146,7 +146,7 @@ class Transaction {
 
     static bytes_t prefixedBytes(const bytes_t& hash) {
       std::string prefix = "\u0019Ethereum Signed Message:\n" + std::to_string(hash.size());
-      std::vector<uint8_t> messagePrefix(prefix.begin(), prefix.end());
+      bytes_t messagePrefix(prefix.begin(), prefix.end());
       messagePrefix.insert(messagePrefix.end(), hash.begin(), hash.end());
       return Hash::keccak256(messagePrefix);
     }

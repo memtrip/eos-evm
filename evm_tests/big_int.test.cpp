@@ -118,19 +118,6 @@ TEST_CASE("Instantiate char* from uint256_t (7)", "[big_int]") {
   );
 }
 
-TEST_CASE("From compressed key", "[big_int]") {
-  bytes_t output = Hex::hexToBytes("034005a4ab6b6eca2d03053038b8ea5f9b9e06c0d50092e0a15418524bb2c8b38e");
-
-  compressed_key_t compressedKey;
-  for (int i = 0; i < output.size(); i++) {
-    compressedKey[i] = output[i];
-  }
-
-  CHECK("4005a4ab6b6eca2d03053038b8ea5f9b9e06c0d50092e0a15418524bb2c8b38e" == 
-    Utils::uint256_2str(BigInt::fromCompressedKey(compressedKey))
-  );
-}
-
 TEST_CASE("toFixed32", "[big_int]") {
   // given
   uint256_t value = BigInt::fromBigEndianBytes(Hex::hexToBytes("b8ea5f9b9e06c0d50092e0a15418524bb2c8b38e"));

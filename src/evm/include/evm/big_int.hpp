@@ -23,13 +23,6 @@ class BigInt {
       return intx::be::load<uint256_t>(data);
     }
 
-    static uint256_t fromCompressedKey(const compressed_key_t& compressedKey) {
-      uint8_t data[WORD_SIZE];
-      std::fill_n(data, WORD_SIZE, 0);
-      std::copy(compressedKey.begin() + 1, compressedKey.end(), data);
-      return intx::be::load<uint256_t>(data);
-    }
-
     static bytes_t toBytes(const uint256_t& input) {
       bytes_t data;
       uint8_t bytes[32]; 

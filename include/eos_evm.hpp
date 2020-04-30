@@ -71,10 +71,10 @@ class [[eosio::contract("eos_evm")]] eos_evm : public contract {
     eos_evm(name receiver, name code, datastream<const char *> ds): contract(receiver, code, ds) { }
 
     [[eosio::action]]
-    void raw(name from, string code, string sender);
+    void raw(name from, bytes_t code, string sender);
 
     [[eosio::action]]
-    void execute(name from, string code, string sender, string bytecode);
+    void execute(name from, bytes_t code, string sender, bytes_t bytecode);
 
     [[eosio::action]]
     void create(name from, string message);
@@ -86,7 +86,7 @@ class [[eosio::contract("eos_evm")]] eos_evm : public contract {
     void transfer(name from, name to, asset quantity, string memo);
 
   private:
-    void incomingTransaction(const name& from, const string& transaction, const string& sender, const bytes_t& bytecode);
+    void incomingTransaction(const name& from, const bytes_t& transaction, const string& sender, const bytes_t& bytecode);
     void checkCallResult(const name& from, call_result_t callResult);
     void resolveAccountState(const name& from, std::shared_ptr<PendingState> pendingState);
     void resolveLogs(std::shared_ptr<PendingState> pendingState, std::shared_ptr<External> external);

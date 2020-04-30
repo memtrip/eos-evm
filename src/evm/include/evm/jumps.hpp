@@ -15,7 +15,7 @@ class Jumps {
         uint8_t index = bytes->at(position);
         instruct_t instruction = Instruction::values[index];
 
-        if (Instruction::opcode(instruction) == Opcode::JUMPDEST) {
+        if (instruction.opcode == Opcode::JUMPDEST) {
           jumps.insert(position);
         } else {
           position += Instruction::pushBytes(instruction);

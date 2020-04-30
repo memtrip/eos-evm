@@ -9,7 +9,14 @@
 
 typedef intx::uint256 uint256_t;
 
-typedef unsigned int instruct_t; 
+struct InstructionValue {
+  uint8_t opcode;
+  uint8_t args;
+  uint8_t ret;
+  uint8_t tier;
+};
+
+typedef InstructionValue instruct_t; 
 typedef std::set<uint64_t> jump_set_t;
 
 typedef ethash::hash256 keccak256_t;
