@@ -45,8 +45,8 @@ class ExternalMock: public External {
       return 0;
     }
 
-    void log(const std::vector<uint256_t>& topics, std::shared_ptr<bytes_t> data) {
-      logSpy.push_back(std::make_pair(topics, bytes_t(data->begin(), data->end())));
+    void log(const std::vector<uint256_t>& topics, const bytes_t& data) {
+      logSpy.push_back(std::make_pair(topics, data));
     }
 
     std::shared_ptr<bytes_t> code(const uint256_t& address) {

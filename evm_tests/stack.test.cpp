@@ -7,8 +7,7 @@
 TEST_CASE("pop", "[stack]") {
 
   // given 
-  std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
-  StackMachine sm(stackItems);
+  StackMachine sm {};
 
   sm.push(1);
 
@@ -22,8 +21,7 @@ TEST_CASE("pop", "[stack]") {
 TEST_CASE("peek", "[stack]") {
 
   // given 
-  std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
-  StackMachine sm(stackItems);
+  StackMachine sm {};
 
   // when
   sm.push(uint256_t(1));

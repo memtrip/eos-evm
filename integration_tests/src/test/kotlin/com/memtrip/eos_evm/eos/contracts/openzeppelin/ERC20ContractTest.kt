@@ -1,11 +1,8 @@
 package com.memtrip.eos_evm.eos.contracts.openzeppelin
 
 import com.memtrip.eos.http.rpc.Api
-import com.memtrip.eos_evm.assertConsoleString
 import com.memtrip.eos_evm.eos.Config
 import com.memtrip.eos_evm.eos.SetupTransactions
-import com.memtrip.eos_evm.eos.evm.EvmSender
-import com.memtrip.eos_evm.eos.evm.contracts.misc.TupleContract
 import com.memtrip.eos_evm.eos.evm.contracts.openzeppelin.ERC20Contract
 import com.memtrip.eos_evm.eos.faultTolerant
 import com.memtrip.eos_evm.eos.state.GetCode

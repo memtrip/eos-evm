@@ -19,7 +19,7 @@ class VM {
     ) {
       stack = stackArg;
       gasometer = gasometerArg;
-      returnData = std::make_shared<bytes_t>();
+      returnData = bytes_t();
     };
     exec_result_t execute(
       uint16_t stackDepth,
@@ -63,5 +63,5 @@ class VM {
     std::shared_ptr<StackMachine> stack;
   private:
     std::shared_ptr<Gasometer> gasometer;
-    std::shared_ptr<bytes_t> returnData;
+    bytes_t returnData;
 };

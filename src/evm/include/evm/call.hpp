@@ -24,8 +24,7 @@ class Call {
 
       Operation operation = Operation();
 
-      std::shared_ptr<std::vector<uint256_t>> stackVector = std::make_shared<std::vector<uint256_t>>();
-      std::shared_ptr<StackMachine> stack =  std::make_shared<StackMachine>(stackVector);
+      std::shared_ptr<StackMachine> stack =  std::make_shared<StackMachine>();
       std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
 
       VM vm(stack, gasometer);

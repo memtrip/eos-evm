@@ -37,14 +37,12 @@ TEST_CASE("shift left, write to memory, return", "[return_memory]") {
   );
 
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
-  std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
-  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
+  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>();
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
-  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
   Operation operation = Operation();
 
   // when
@@ -55,7 +53,7 @@ TEST_CASE("shift left, write to memory, return", "[return_memory]") {
 
   NeedsReturn needsReturn = std::get<NeedsReturn>(result.second);
 
-  std::shared_ptr<bytes_t> returnBytes = mem->readSlice(needsReturn.offset, needsReturn.size);
+  bytes_t returnBytes = mem->readSlice(needsReturn.offset, needsReturn.size);
   CHECK("0a" == TestUtils::bytesToHex(returnBytes));
 }
 
@@ -85,14 +83,12 @@ TEST_CASE("shift right, write to memory, return", "[return_memory]") {
   );
 
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
-  std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
-  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
+  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>();
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
-  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
   Operation operation = Operation();
 
   // when
@@ -103,7 +99,7 @@ TEST_CASE("shift right, write to memory, return", "[return_memory]") {
 
   NeedsReturn needsReturn = std::get<NeedsReturn>(result.second);
 
-  std::shared_ptr<bytes_t> returnBytes = mem->readSlice(needsReturn.offset, needsReturn.size);
+  bytes_t returnBytes = mem->readSlice(needsReturn.offset, needsReturn.size);
   CHECK("02" == TestUtils::bytesToHex(returnBytes));
 }
 
@@ -133,14 +129,12 @@ TEST_CASE("sar, write to memory, revert", "[return_memory]") {
   );
 
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
-  std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
-  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
+  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>();
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
-  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
   Operation operation = Operation();
 
   // when
@@ -151,6 +145,6 @@ TEST_CASE("sar, write to memory, revert", "[return_memory]") {
 
   NeedsReturn needsReturn = std::get<NeedsReturn>(result.second);
 
-  std::shared_ptr<bytes_t> returnBytes = mem->readSlice(needsReturn.offset, needsReturn.size);
+  bytes_t returnBytes = mem->readSlice(needsReturn.offset, needsReturn.size);
   CHECK("ff" == TestUtils::bytesToHex(returnBytes));
 }

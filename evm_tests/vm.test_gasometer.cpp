@@ -38,14 +38,12 @@ TEST_CASE("Add two large numbers, store the result, verify gas", "[gasometer]") 
   );
 
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
-  std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
-  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
+  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>();
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
-  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
   Operation operation = Operation();
 
   // when
@@ -86,14 +84,12 @@ TEST_CASE("Store the result of an SHA3 hash, verify gas", "[gasometer]") {
   );
 
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
-  std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
-  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
+  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>();
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
-  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
   Operation operation = Operation();
 
   // when
@@ -134,14 +130,12 @@ TEST_CASE("Address, verify gas", "[gasometer]") {
   );
 
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
-  std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
-  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
+  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>();
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
-  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
   Operation operation = Operation();
 
   // when
@@ -182,14 +176,12 @@ TEST_CASE("Origin, verify gas", "[gasometer]") {
   );
 
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
-  std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
-  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
+  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>();
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
-  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
   Operation operation = Operation();
 
   // when
@@ -233,14 +225,12 @@ TEST_CASE("Self balance, verify gas", "[gasometer]") {
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   external->balanceResponder.push_back(std::make_pair(address, 1025));
 
-  std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
-  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
+  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>();
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
-  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
   Operation operation = Operation();
 
   // when
@@ -277,14 +267,12 @@ TEST_CASE("Sender, verify gas", "[gasometer]") {
   );
 
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
-  std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
-  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
+  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>();
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
-  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
   Operation operation = Operation();
 
   // when
@@ -325,14 +313,12 @@ TEST_CASE("Chain id, verify gas", "[gasometer]") {
   );
 
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
-  std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
-  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
+  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>();
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
-  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
   Operation operation = Operation();
 
   // when
@@ -378,14 +364,12 @@ TEST_CASE("Extcodecopy verify gas", "[gasometer]") {
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
   external->codeResponder.push_back(std::make_pair(sender, Hex::hexToBytes("6005600055")));
 
-  std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
-  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
+  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>();
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
-  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
   Operation operation = Operation();
 
   // when
@@ -427,14 +411,12 @@ TEST_CASE("Blockhash, verify gas", "[gasometer]") {
   );
 
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
-  std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
-  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
+  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>();
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
-  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
   Operation operation = Operation();
 
   // when
@@ -479,14 +461,12 @@ TEST_CASE("Calldataload verify gas", "[gasometer]") {
   );
 
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
-  std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
-  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
+  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>();
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
-  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
   Operation operation = Operation();
 
   // when
@@ -527,14 +507,12 @@ TEST_CASE("Multiply, store the result, verify gas", "[gasometer]") {
   );
 
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
-  std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
-  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
+  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>();
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
-  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
   Operation operation = Operation();
 
   // when
@@ -575,14 +553,12 @@ TEST_CASE("Subtract, store the result, verify gas", "[gasometer]") {
   );
 
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
-  std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
-  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
+  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>();
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
-  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
   Operation operation = Operation();
 
   // when
@@ -623,14 +599,12 @@ TEST_CASE("Division, store the result, verify gas", "[gasometer]") {
   );
 
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
-  std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
-  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
+  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>();
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
-  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
   Operation operation = Operation();
 
   // when
@@ -671,14 +645,12 @@ TEST_CASE("Div zero, store the result, verify gas", "[gasometer]") {
   );
 
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
-  std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
-  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
+  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>();
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
-  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
   Operation operation = Operation();
 
   // when
@@ -719,14 +691,12 @@ TEST_CASE("Mod, store the result, verify gas", "[gasometer]") {
   );
 
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
-  std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
-  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
+  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>();
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
-  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
   Operation operation = Operation();
 
   // when
@@ -770,14 +740,12 @@ TEST_CASE("SMOD, store the result, verify gas", "[gasometer]") {
   );
 
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
-  std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
-  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
+  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>();
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
-  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
   Operation operation = Operation();
 
   // when
@@ -821,14 +789,12 @@ TEST_CASE("SDIV, store the result, verify gas", "[gasometer]") {
   );
 
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
-  std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
-  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
+  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>();
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
-  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
   Operation operation = Operation();
 
   // when
@@ -872,14 +838,12 @@ TEST_CASE("Exp, store the result, verify gas", "[gasometer]") {
   );
 
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
-  std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
-  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
+  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>();
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
-  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
   Operation operation = Operation();
 
   // when
@@ -926,14 +890,12 @@ TEST_CASE("Comparison, store the result, verify gas", "[gasometer]") {
   );
 
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
-  std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
-  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
+  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>();
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
-  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
   Operation operation = Operation();
 
   // when
@@ -983,14 +945,12 @@ TEST_CASE("Signed comparison, store the result, verify gas", "[gasometer]") {
   );
 
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
-  std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
-  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
+  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>();
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
-  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
   Operation operation = Operation();
 
   // when
@@ -1043,14 +1003,12 @@ TEST_CASE("Bitops, store the result, verify gas", "[gasometer]") {
   );
 
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
-  std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
-  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
+  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>();
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
-  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
   Operation operation = Operation();
 
   // when
@@ -1106,14 +1064,12 @@ TEST_CASE("Add mod - mul mod, store the result, verify gas", "[gasometer]") {
   );
 
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
-  std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
-  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
+  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>();
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
-  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
   Operation operation = Operation();
 
   // when
@@ -1163,14 +1119,12 @@ TEST_CASE("Byte, store the result, verify gas", "[gasometer]") {
   );
 
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
-  std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
-  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
+  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>();
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
-  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
   Operation operation = Operation();
 
   // when
@@ -1214,14 +1168,12 @@ TEST_CASE("Signextend, store the result, verify gas", "[gasometer]") {
   );
 
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
-  std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
-  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
+  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>();
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
-  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
   Operation operation = Operation();
 
   // when
@@ -1265,14 +1217,12 @@ TEST_CASE("Pop, store the result, verify gas", "[gasometer]") {
   );
 
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
-  std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
-  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
+  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>();
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
-  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
   Operation operation = Operation();
 
   // when
@@ -1314,14 +1264,12 @@ TEST_CASE("Extops, store the result, verify gas", "[gasometer]") {
   );
 
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
-  std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
-  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
+  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>();
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
-  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
   Operation operation = Operation();
 
   // when
@@ -1379,14 +1327,12 @@ TEST_CASE("Jumps, store the result, verify gas", "[gasometer]") {
   );
 
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
-  std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
-  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
+  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>();
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
-  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
   Operation operation = Operation();
 
   // when

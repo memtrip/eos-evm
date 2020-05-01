@@ -651,15 +651,10 @@ class Operation {
       std::shared_ptr<Memory> memory, 
       std::shared_ptr<StackMachine> stack
     ) {
-      uint256_t offset = stack->peek(0);
-      uint256_t size = stack->peek(1);
-      std::shared_ptr<bytes_t> bytes = memory->readSlice(
-        Overflow::uint256Cast(offset).first, 
-        Overflow::uint256Cast(size).first
-      );
+      uint64_t offset = Overflow::uint256Cast(stack->peek(0)).first;
+      uint64_t size = Overflow::uint256Cast(stack->peek(1)).first;
       stack->pop(2);
-      bytes_t hashBytes = Hash::keccak256(bytes);
-      stack->push(BigInt::fromBigEndianBytes(hashBytes));
+      stack->push(memory->hashSlice(offset, size));
       return std::make_pair(InstructionResult::OK, 0);
     }
 
@@ -735,8 +730,11 @@ class Operation {
         stack->push(UINT256_ZERO);
       } else {
         size_t begin = Overflow::uint256Cast(index).first;
-        uint256_t value = BigInt::load32(begin, context->data);
-        stack->push(value);
+        size_t end = std::min(begin + WORD_SIZE, context->data->size());
+        uint8_t data[WORD_SIZE] = {};
+        for (size_t i = begin; i < end; i++)
+          data[i - begin] = context->data->at(i);
+        stack->push(intx::be::load<uint256_t>(data));
       }
       return std::make_pair(InstructionResult::OK, 0);
     }
@@ -916,10 +914,9 @@ class Operation {
       std::shared_ptr<Memory> memory, 
       std::shared_ptr<StackMachine> stack
     ) {
-      uint256_t offset = stack->peek(0);
-      uint256_t word = memory->read(Overflow::uint256Cast(offset).first);
+      uint64_t offset = Overflow::uint256Cast(stack->peek(0)).first;
       stack->pop(1);
-      stack->push(word);
+      stack->push(memory->read(offset));
       return std::make_pair(InstructionResult::OK, 0);
     }
 
@@ -1366,8 +1363,7 @@ class Operation {
       uint256_t address = stack->peek(0);
       stack->pop(1);
       std::shared_ptr<bytes_t> codeBytes = external->code(address);
-      bytes_t hashBytes = Hash::keccak256(codeBytes);
-      stack->push(BigInt::fromBigEndianBytes(hashBytes));
+      stack->push(Hash::keccak256Word(codeBytes));
       return std::make_pair(InstructionResult::OK, 0);
     }
 };

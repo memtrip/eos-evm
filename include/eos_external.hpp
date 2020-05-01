@@ -45,7 +45,7 @@ class eos_external: public External {
       return _senderAccountBalance;
     }
 
-    void log(const std::vector<uint256_t>& topics, std::shared_ptr<bytes_t> data) {
+    void log(const std::vector<uint256_t>& topics, const bytes_t& data) {
       std::string output = "LOG(topics=[";
       for (int i = 0; i < topics.size(); i++) {
         output += Utils::uint256_2str(topics[i]) + ",";

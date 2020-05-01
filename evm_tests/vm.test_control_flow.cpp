@@ -50,14 +50,12 @@ TEST_CASE("Conditional jump to destination truthy", "[jumps]") {
   );
 
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
-  std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
-  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
+  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>();
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
-  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
   Operation operation = Operation();
 
   // when
@@ -109,14 +107,12 @@ TEST_CASE("Conditional jump to destination not true", "[jumps]") {
   );
 
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
-  std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
-  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
+  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>();
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
-  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
   Operation operation = Operation();
 
   // when
@@ -162,14 +158,12 @@ TEST_CASE("Unconditional jump to destination", "[jumps]") {
   );
 
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
-  std::shared_ptr<std::vector<uint256_t>> stackItems = std::make_shared<std::vector<uint256_t>>();
-  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>(stackItems);
+  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>();
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
   VM vm(stack, gasometer);
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
-  std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>(memoryBytes);
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
   Operation operation = Operation();
 
   // when

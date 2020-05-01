@@ -15,11 +15,11 @@ class Hex {
       return result;
     }
 
-    static std::string bytesWordToHex(std::shared_ptr<bytes_t> bytes, uint64_t offset) {
+    static std::string bytesWordToHex(const bytes_t& bytes, uint64_t offset) {
       std::string result;
       for (uint16_t i = 0; i < WORD_SIZE; i++) {
-        result += HEX_VALUES[bytes->at(i + offset) >> 4];
-        result += HEX_VALUES[bytes->at(i + offset) & 0xf];
+        result += HEX_VALUES[bytes.at(i + offset) >> 4];
+        result += HEX_VALUES[bytes.at(i + offset) & 0xf];
       }
       return result;
     }
@@ -63,9 +63,9 @@ class Hex {
       return checksum256;
     }
 
-    static std::string bytesToWordOutput(std::shared_ptr<bytes_t> bytes, uint64_t offset, uint64_t size) {
+    static std::string bytesToWordOutput(const bytes_t& bytes, uint64_t offset, uint64_t size) {
       uint64_t totalBytes = offset + size;
-      if (totalBytes % WORD_SIZE != 0 || totalBytes > bytes->size() || size == 0) return "[]";
+      if (totalBytes % WORD_SIZE != 0 || totalBytes > bytes.size() || size == 0) return "[]";
       std::string result = "[";
       for (uint16_t i = offset; i < totalBytes; i += WORD_SIZE) {
         result += bytesWordToHex(bytes, i);

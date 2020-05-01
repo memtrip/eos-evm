@@ -19,9 +19,6 @@ struct InstructionValue {
 typedef InstructionValue instruct_t; 
 typedef std::set<uint64_t> jump_set_t;
 
-typedef ethash::hash256 keccak256_t;
-typedef ethash::hash512 keccak512_t;
-
 typedef std::array<uint8_t, 32> address_t;
 typedef std::vector<uint8_t> bytes_t;
 typedef std::array<char, 33> compressed_key_t;

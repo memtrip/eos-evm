@@ -118,7 +118,7 @@ exec_result_t VM::step(
     switch (opcode) {
       case Opcode::RETURNDATASIZE:
         {
-          stack->push(uint256_t(returnData->size()));
+          stack->push(uint256_t(returnData.size()));
           result = std::make_pair(InstructionResult::OK, 0);
           break;
         }
@@ -127,7 +127,7 @@ exec_result_t VM::step(
           uint64_t sourceOffset = Overflow::uint256Cast(stack->peek(1)).first;
           uint64_t sizeItem = Overflow::uint256Cast(stack->peek(2)).first;
 
-          uint64_t returnDataLength = returnData->size();
+          uint64_t returnDataLength = returnData.size();
 
           if (Overflow::add(sourceOffset, sizeItem).first > returnDataLength) {
             result = std::make_pair(InstructionResult::INSTRUCTION_TRAP, TrapKind::TRAP_OVERFLOW);
@@ -278,14 +278,14 @@ instruction_result_t VM::executeCreateInstruction(
 
   gas_t createGas = providedGas;
 
-  returnData->clear();
+  returnData.clear();
 
   if (stackDepth > STACK_LIMIT) {
     stack->push(UINT256_ZERO);
     return std::make_pair(InstructionResult::UNUSED_GAS, createGas);
   }
 
-  std::shared_ptr<bytes_t> createCode = memory->readSlice(initOff, initSize);
+  std::shared_ptr<bytes_t> createCode = std::make_shared<bytes_t>(memory->readSlice(initOff, initSize));
 
   uint256_t codeAddress = Address::makeCreateAddress(
     addressScheme,
@@ -302,8 +302,7 @@ instruction_result_t VM::executeCreateInstruction(
     createCode
   );
 
-  std::shared_ptr<bytes_t> createMemoryBytes = std::make_shared<bytes_t>();
-  std::shared_ptr<Memory> createMemory = std::make_shared<Memory>(createMemoryBytes);
+  std::shared_ptr<Memory> createMemory = std::make_shared<Memory>();
 
   call_result_t callResult = Call::call(
     stackDepth,
@@ -327,7 +326,7 @@ instruction_result_t VM::executeCreateInstruction(
         printf("MESSAGE_CALL_RETURN");
         MessageCallReturn callReturn = std::get<MessageCallReturn>(callResult.second);
     
-        std::shared_ptr<bytes_t> returnDataBytes = createMemory->readSlice(callReturn.offset, callReturn.size);
+        std::shared_ptr<bytes_t> returnDataBytes = std::make_shared<bytes_t>(createMemory->readSlice(callReturn.offset, callReturn.size));
 
         emplace_t emplaceResult = external->emplaceCode(
           context->origin, 
@@ -470,7 +469,7 @@ instruction_result_t VM::executeCallInstruction(
       }
   }
 
-  returnData->clear();
+  returnData.clear();
 
   uint64_t stipend = (value > 0) ? CALL_STIPEND : 0;
   gas_t callGas = providedGas;
@@ -481,8 +480,8 @@ instruction_result_t VM::executeCallInstruction(
     return std::make_pair(InstructionResult::UNUSED_GAS, callGas);
   }
 
-  std::shared_ptr<bytes_t> callData = memory->readSlice(inOffset, inSize);
-  printf("callData{%s}\n", Hex::bytesToHex(callData).c_str());
+  std::shared_ptr<bytes_t> callData = std::make_shared<bytes_t>(memory->readSlice(inOffset, inSize));
+  // printf("callData{%s}\n", Hex::bytesToHex(callData).c_str());
 
   std::shared_ptr<Context> callContext = Context::makeInnerCall(
     context,
@@ -496,8 +495,7 @@ instruction_result_t VM::executeCallInstruction(
     external
   ); 
 
-  std::shared_ptr<bytes_t> callMemoryBytes = std::make_shared<bytes_t>();
-  std::shared_ptr<Memory> callMemory = std::make_shared<Memory>(callMemoryBytes);
+  std::shared_ptr<Memory> callMemory = std::make_shared<Memory>();
 
   call_result_t callResult = Call::call(
     stackDepth,

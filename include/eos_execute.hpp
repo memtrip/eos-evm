@@ -23,8 +23,7 @@ class eos_execute {
     ) {
       env_t env = eos_system::env();
 
-      std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
-      std::shared_ptr<Memory> memory = std::make_shared<Memory>(memoryBytes);
+      std::shared_ptr<Memory> memory = std::make_shared<Memory>();
 
       call_result_t callResult;
 
@@ -46,10 +45,10 @@ class eos_execute {
               
               MessageCallReturn messageCallReturn = std::get<MessageCallReturn>(callResult.second);
 
-              std::shared_ptr<bytes_t> code = memory->readSlice(
+              std::shared_ptr<bytes_t> code = std::make_shared<bytes_t>(memory->readSlice(
                 messageCallReturn.offset, 
                 messageCallReturn.size
-              );
+              ));
 
               external->incrementNonce();
 
@@ -117,8 +116,7 @@ class eos_execute {
     ) {
       env_t env = eos_system::env();
 
-      std::shared_ptr<bytes_t> memoryBytes = std::make_shared<bytes_t>();
-      std::shared_ptr<Memory> memory = std::make_shared<Memory>(memoryBytes);
+      std::shared_ptr<Memory> memory = std::make_shared<Memory>();
 
       uint256_t toAddress = BigInt::fromBigEndianBytes(Transaction::address(rlp));
       std::shared_ptr<Context> context = Context::makeCodeCall(env, senderAddress, code, rlp, external);

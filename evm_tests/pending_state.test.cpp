@@ -148,13 +148,13 @@ TEST_CASE("Revert logs at the deepest depth", "[pending_state]") {
   PendingState pendingState {};
 
   pendingState.currentStackDepth = 1;
-  pendingState.log(std::vector<uint256_t>(), std::make_shared<bytes_t>(bytes_t { 1, 0 }));
-  pendingState.log(std::vector<uint256_t>(), std::make_shared<bytes_t>(bytes_t { 1, 1 }));
+  pendingState.log(std::vector<uint256_t>(), bytes_t { 1, 0 });
+  pendingState.log(std::vector<uint256_t>(), bytes_t { 1, 1 });
   pendingState.currentStackDepth = 2;
-  pendingState.log(std::vector<uint256_t>(), std::make_shared<bytes_t>(bytes_t { 2, 0 }));
-  pendingState.log(std::vector<uint256_t>(), std::make_shared<bytes_t>(bytes_t { 2, 1 }));
+  pendingState.log(std::vector<uint256_t>(), bytes_t { 2, 0 });
+  pendingState.log(std::vector<uint256_t>(), bytes_t { 2, 1 });
   pendingState.currentStackDepth = 3;
-  pendingState.log(std::vector<uint256_t>(), std::make_shared<bytes_t>(bytes_t { 3, 0 }));
+  pendingState.log(std::vector<uint256_t>(), bytes_t { 3, 0 });
 
   // when
   pendingState.revert(3);
@@ -178,13 +178,13 @@ TEST_CASE("Revert logs at a middle depth", "[pending_state]") {
   PendingState pendingState {};
 
   pendingState.currentStackDepth = 1;
-  pendingState.log(std::vector<uint256_t>(), std::make_shared<bytes_t>(bytes_t { 1, 0 }));
-  pendingState.log(std::vector<uint256_t>(), std::make_shared<bytes_t>(bytes_t { 1, 1 }));
+  pendingState.log(std::vector<uint256_t>(), bytes_t { 1, 0 });
+  pendingState.log(std::vector<uint256_t>(), bytes_t { 1, 1 });
   pendingState.currentStackDepth = 2;
-  pendingState.log(std::vector<uint256_t>(), std::make_shared<bytes_t>(bytes_t { 2, 0 }));
-  pendingState.log(std::vector<uint256_t>(), std::make_shared<bytes_t>(bytes_t { 2, 1 }));
+  pendingState.log(std::vector<uint256_t>(), bytes_t { 2, 0 });
+  pendingState.log(std::vector<uint256_t>(), bytes_t { 2, 1 });
   pendingState.currentStackDepth = 3;
-  pendingState.log(std::vector<uint256_t>(), std::make_shared<bytes_t>(bytes_t { 3, 0 }));
+  pendingState.log(std::vector<uint256_t>(), bytes_t { 3, 0 });
 
   // when
   pendingState.revert(2);
@@ -201,13 +201,13 @@ TEST_CASE("Revert logs at the top", "[pending_state]") {
   PendingState pendingState {};
 
   pendingState.currentStackDepth = 1;
-  pendingState.log(std::vector<uint256_t>(), std::make_shared<bytes_t>(bytes_t { 1, 0 }));
-  pendingState.log(std::vector<uint256_t>(), std::make_shared<bytes_t>(bytes_t { 1, 1 }));
+  pendingState.log(std::vector<uint256_t>(), bytes_t { 1, 0 });
+  pendingState.log(std::vector<uint256_t>(), bytes_t { 1, 1 });
   pendingState.currentStackDepth = 2;
-  pendingState.log(std::vector<uint256_t>(), std::make_shared<bytes_t>(bytes_t { 2, 0 }));
-  pendingState.log(std::vector<uint256_t>(), std::make_shared<bytes_t>(bytes_t { 2, 1 }));
+  pendingState.log(std::vector<uint256_t>(), bytes_t { 2, 0 });
+  pendingState.log(std::vector<uint256_t>(), bytes_t { 2, 1 });
   pendingState.currentStackDepth = 3;
-  pendingState.log(std::vector<uint256_t>(), std::make_shared<bytes_t>(bytes_t { 3, 0 }));
+  pendingState.log(std::vector<uint256_t>(), bytes_t { 3, 0 });
 
   // when
   pendingState.revert(1);

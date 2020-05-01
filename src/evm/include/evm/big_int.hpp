@@ -10,16 +10,18 @@ class BigInt {
     static uint256_t fromBigEndianBytes(const bytes_t& bytes) {
       uint8_t data[WORD_SIZE];
       uint8_t offset = WORD_SIZE - bytes.size();
-      std::fill_n(data, WORD_SIZE, 0);
-      std::copy(bytes.begin(), bytes.end(), data + offset);
+      for (uint8_t i = 0; i < WORD_SIZE; i++) {
+        data[i] = (i < offset) ? 0 : bytes[i - offset];
+      }
       return intx::be::load<uint256_t>(data);
     }
 
     static uint256_t fromFixed32(const std::array<uint8_t, 32>& bytes) {
       uint8_t data[WORD_SIZE];
       uint8_t offset = WORD_SIZE - bytes.size();
-      std::fill_n(data, WORD_SIZE, 0);
-      std::copy(bytes.begin(), bytes.end(), data + offset);
+      for (uint8_t i = 0; i < WORD_SIZE; i++) {
+        data[i] = (i < offset) ? 0 : bytes[i - offset];
+      }
       return intx::be::load<uint256_t>(data);
     }
 
@@ -39,11 +41,33 @@ class BigInt {
       return data;
     }
 
+    static uint256_t load(size_t start, size_t size, std::shared_ptr<bytes_t> bytes) {
+      uint8_t data[WORD_SIZE];
+      uint8_t pad = (WORD_SIZE - size);
+
+      size_t sliceSize = start + size;
+      if (sliceSize > bytes->size())
+        pad += (sliceSize - bytes->size());
+
+      for (uint8_t i = 0; i < WORD_SIZE; i++) {
+        data[i] = (i < pad) ? 0 : bytes->at(start + (i - pad));
+      }
+      return intx::be::load<uint256_t>(data);
+    }
+
     static uint256_t load32(size_t begin, std::shared_ptr<bytes_t> bytes) {
-      size_t end = std::min(begin + 32, bytes->size());
-      uint8_t data[32] = {};
+      size_t end = std::min(begin + WORD_SIZE, bytes->size());
+      uint8_t data[WORD_SIZE] = {};
       for (size_t i = begin; i < end; i++)
         data[i - begin] = bytes->at(i);
+      return intx::be::load<uint256_t>(data);
+    }
+
+    static uint256_t load32(size_t begin, const bytes_t& bytes) {
+      size_t end = std::min(begin + WORD_SIZE, bytes.size());
+      uint8_t data[WORD_SIZE] = {};
+      for (size_t i = begin; i < end; i++)
+        data[i - begin] = bytes[i];
       return intx::be::load<uint256_t>(data);
     }
 };

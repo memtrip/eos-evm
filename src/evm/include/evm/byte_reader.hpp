@@ -15,9 +15,7 @@ class ByteReader {
     uint256_t read(uint64_t size, std::shared_ptr<bytes_t> bytes) {
       uint64_t startPos = position;
       position += size; // move the ByteReader position forward
-      bytes_t code = bytes_t(bytes->begin() + startPos, bytes->begin() + startPos + size);
-      uint256_t word = BigInt::fromBigEndianBytes(code);
-      return word;
+      return BigInt::load(startPos, size, bytes);
     }
 
     void next() {

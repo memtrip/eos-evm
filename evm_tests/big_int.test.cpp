@@ -12,7 +12,7 @@
   These tests assume little-endian byte ordering
 */
 
-TEST_CASE("Instantiate uint256_t from big endian string", "[fromBigEndianBytes]") {
+TEST_CASE("Instantiate uint256_t from big endian string", "[big_int]") {
   CHECK("0100000000000000000000000000000000000000000000000000000000000000" == 
     Utils::uint256_2str(TestUtils::fromHex("0100000000000000000000000000000000000000000000000000000000000000"))
   );
@@ -207,6 +207,39 @@ TEST_CASE("load32 from slice [31..32]", "[big_int]") {
 
   uint256_t word1 = BigInt::load32(31, std::make_shared<bytes_t>(data));
   CHECK("1600000000000000000000000000000000000000000000000000000000000000" == 
+    Utils::uint256_2str(word1)
+  );
+}
+
+TEST_CASE("load from slice [5..7]", "[big_int]") {
+
+  // given
+  bytes_t data = Hex::hexToBytes("4cfe1ad630604051808273ffffffffffffffffffffffffffffffffffffffff16"); 
+
+  uint256_t word1 = BigInt::load(5, 2, std::make_shared<bytes_t>(data));
+  CHECK("0000000000000000000000000000000000000000000000000000000000006040" == 
+    Utils::uint256_2str(word1)
+  );
+}
+
+TEST_CASE("load from slice [1..31]", "[big_int]") {
+
+  // given
+  bytes_t data = Hex::hexToBytes("4cfe1ad630604051808273ffffffffffffffffffffffffffffffffffffffff16"); 
+
+  uint256_t word1 = BigInt::load(1, 31, std::make_shared<bytes_t>(data));
+  CHECK("00fe1ad630604051808273ffffffffffffffffffffffffffffffffffffffff16" == 
+    Utils::uint256_2str(word1)
+  );
+}
+
+TEST_CASE("load from slice [1..32]", "[big_int]") {
+
+  // given
+  bytes_t data = Hex::hexToBytes("4cfe1ad630604051808273ffffffffffffffffffffffffffffffffffffffff16"); 
+
+  uint256_t word1 = BigInt::load(1, 32, std::make_shared<bytes_t>(data));
+  CHECK("00fe1ad630604051808273ffffffffffffffffffffffffffffffffffffffff16" == 
     Utils::uint256_2str(word1)
   );
 }

@@ -7,7 +7,7 @@
 struct Log {
   uint64_t stackDepth;
   std::vector<uint256_t> topics;
-  std::shared_ptr<bytes_t> data;
+  bytes_t data;
 }; 
 typedef Log log_t;
 
@@ -48,7 +48,7 @@ class PendingState {
       ), accountState.end());
     }
 
-    void log(const std::vector<uint256_t>& topics, std::shared_ptr<bytes_t> data) {
+    void log(const std::vector<uint256_t>& topics, bytes_t data) {
       logs.push_back({currentStackDepth, topics, data});
     }
 
