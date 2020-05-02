@@ -73,7 +73,8 @@ class SimpleAuctionTest {
         val accountStateResult = getAccountState.getAll(simpleAuctionContract.accountIdentifier.pad256().toHexString()).blockingGet()
         if (accountStateResult !is GetAccountState.Record.Multiple) fail("no state saved") else {
             assertEquals(2, accountStateResult.items.size)
-            assertEquals(accountStateResult.items[0].value, "0000000000000000000000000000000000000000000000000000000000000005")
+            assertEquals(contractAccountIdentifier.pad256().toHexString(), accountStateResult.items[0].value)
+            // items[1] is (now + bidding_time) in seconds
         }
     }
 
@@ -83,25 +84,14 @@ class SimpleAuctionTest {
         // given
         val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seedWithEvmBalance(17000)
         val contractAccountIdentifier = AccountIdentifier.create(newAccountName, newEthAccount.address)
-
-        val simpleAuctionContract = SimpleAuctionContract(
-            newAccountName,
-            newAccountPrivateKey,
-            newEthAccount
-        )
-
-        val createContractResponse = faultTolerant {
-            simpleAuctionContract.createSimpleAuction(5, contractAccountIdentifier.toHexString()).blockingGet()
-        }
-
-        // then
+        val simpleAuctionContract = SimpleAuctionContract(newAccountName, newAccountPrivateKey, newEthAccount)
+        val createContractResponse = faultTolerant { simpleAuctionContract.createSimpleAuction(5, contractAccountIdentifier.toHexString()).blockingGet() }
         assertEquals(202, createContractResponse.statusCode)
 
-        // and given
         val (senderAccountName, senderPrivateKey, senderEthAccount) = setupTransactions.seedWithEvmBalance()
         val senderAccountIdentifier = AccountIdentifier.create(senderAccountName, senderEthAccount.address)
 
-        // and when
+        // when
         val bidResponse = simpleAuctionContract.bid(EvmSender(
             1,
             senderEthAccount,
@@ -111,14 +101,17 @@ class SimpleAuctionTest {
             BigInteger.valueOf(10)
         )).blockingGet()
 
-        // and then
+        // then
         assertEquals(bidResponse.statusCode, 202)
 
         // and when
         val accountStateResult = getAccountState.getAll(simpleAuctionContract.accountIdentifier.pad256().toHexString()).blockingGet()
+
+        // and then
         if (accountStateResult !is GetAccountState.Record.Multiple) fail("no state saved") else {
             assertEquals(4, accountStateResult.items.size)
-            assertEquals(accountStateResult.items[0].value, "0000000000000000000000000000000000000000000000000000000000000005")
+            assertEquals(accountStateResult.items[0].value, simpleAuctionContract.accountIdentifier.pad256().toHexString())
+            // items[1] is (now + bidding_time) in seconds
             assertEquals(accountStateResult.items[2].value, senderAccountIdentifier.pad256().toHexString())
             assertEquals(accountStateResult.items[3].value, "000000000000000000000000000000000000000000000000000000000000000a")
         }
@@ -129,26 +122,20 @@ class SimpleAuctionTest {
 
         // given
         val (beneficiaryAccountName, beneficiaryPrivateKey, beneficiaryEthAccount) = setupTransactions.seedWithEvmBalance(17000)
-        val contractAccountIdentifier = AccountIdentifier.create(beneficiaryAccountName, beneficiaryEthAccount.address)
+        val beneficiaryAccountIdentifier = AccountIdentifier.create(beneficiaryAccountName, beneficiaryEthAccount.address)
 
-        val simpleAuctionContract = SimpleAuctionContract(
-            beneficiaryAccountName,
-            beneficiaryPrivateKey,
-            beneficiaryEthAccount
-        )
-
-        val createContractResponse = faultTolerant {
-            simpleAuctionContract.createSimpleAuction(5, contractAccountIdentifier.toHexString()).blockingGet()
-        }
-
-        // then
+        val (contractAccountName, contractPrivateKey, contractEthAccount) = setupTransactions.seedWithEvmBalance(17000)
+        val simpleAuctionContract = SimpleAuctionContract(contractAccountName, contractPrivateKey, contractEthAccount)
+        val createContractResponse = faultTolerant { simpleAuctionContract.createSimpleAuction(5, beneficiaryAccountIdentifier.toHexString()).blockingGet() }
         assertEquals(202, createContractResponse.statusCode)
 
-        // and given
         val (addressXAccountName, addressXPrivateKey, addressXEthAccount) = setupTransactions.seedWithEvmBalance()
         val addressXAccountIdentifier = AccountIdentifier.create(addressXAccountName, addressXEthAccount.address)
 
-        // and when
+        val (addressYAccountName, addressYPrivateKey, addressYEthAccount) = setupTransactions.seedWithEvmBalance()
+        val addressYAccountIdentifier = AccountIdentifier.create(addressYAccountName, addressYEthAccount.address)
+
+        // when
         val addressXBidResponse = faultTolerant {
             simpleAuctionContract.bid(EvmSender(
                 1,
@@ -164,25 +151,12 @@ class SimpleAuctionTest {
         assertEquals(addressXBidResponse.statusCode, 202)
 
         // and when
-        val balanceAfterBid = getAccount.getEvmAccount(addressXAccountName).blockingGet()
+        val addressXBalanceAfterBid = getAccount.getEvmAccount(addressXAccountName).blockingGet()
 
         // and then
-        if (balanceAfterBid !is GetAccount.Record.Single) fail("Failed to check bid balance") else {
-            assertEquals("0.9990 EVM", balanceAfterBid.item.balance)
+        if (addressXBalanceAfterBid !is GetAccount.Record.Single) fail("Failed to check bid balance") else {
+            assertEquals("0.9990 EVM", addressXBalanceAfterBid.item.balance)
         }
-
-        // and when
-        val accountStateResult = getAccountState.getAll(simpleAuctionContract.accountIdentifier.pad256().toHexString()).blockingGet()
-        if (accountStateResult !is GetAccountState.Record.Multiple) fail("no state saved") else {
-            assertEquals(4, accountStateResult.items.size)
-            assertEquals(accountStateResult.items[0].value, "0000000000000000000000000000000000000000000000000000000000000005")
-            assertEquals(accountStateResult.items[2].value, addressXAccountIdentifier.pad256().toHexString())
-            assertEquals(accountStateResult.items[3].value, "000000000000000000000000000000000000000000000000000000000000000a")
-        }
-
-        // and given
-        val (addressYAccountName, addressYPrivateKey, addressYEthAccount) = setupTransactions.seedWithEvmBalance()
-        val addressYAccountIdentifier = AccountIdentifier.create(addressYAccountName, addressYEthAccount.address)
 
         // and when
         val addressYBidResponse = faultTolerant {
@@ -200,11 +174,22 @@ class SimpleAuctionTest {
         assertEquals(addressYBidResponse.statusCode, 202)
 
         // and when
+        val addressYBalanceAfterBid = getAccount.getEvmAccount(addressYAccountName).blockingGet()
+
+        // and then
+        if (addressYBalanceAfterBid !is GetAccount.Record.Single) fail("Failed to check bid balance") else {
+            assertEquals("0.9985 EVM", addressYBalanceAfterBid.item.balance)
+        }
+
+        // and when
         val accountStateAfterBid2 = getAccountState.getAll(simpleAuctionContract.accountIdentifier.pad256().toHexString()).blockingGet()
+
+        // and then
         if (accountStateAfterBid2 !is GetAccountState.Record.Multiple) fail("no state saved") else {
             assertEquals(5, accountStateAfterBid2.items.size)
-            assertEquals(accountStateAfterBid2.items[0].value, "0000000000000000000000000000000000000000000000000000000000000005")
-            assertEquals(accountStateAfterBid2.items[2].value, addressYAccountIdentifier.pad256().toHexString())
+            assertEquals(accountStateAfterBid2.items[0].value, beneficiaryAccountIdentifier.pad256().toHexString())
+            // items[1] is (now + bidding_time) in seconds
+            assertEquals(accountStateAfterBid2.items[2].value, addressYAccountIdentifier.pad256().toHexString()) // highest bidder
             assertEquals(accountStateAfterBid2.items[3].value, "000000000000000000000000000000000000000000000000000000000000000f")
             assertEquals(accountStateAfterBid2.items[4].value, "000000000000000000000000000000000000000000000000000000000000000a")
         }
@@ -221,39 +206,41 @@ class SimpleAuctionTest {
         }
 
         // and then
+        val addressXString = addressXAccountIdentifier.toHexString()
+        val contractString = simpleAuctionContract.accountIdentifier.toHexString()
         assertEquals(addressXWithdrawResponse.statusCode, 202)
 
         // and when
-        val balanceAfterWithdraw = getAccount.getEvmAccount(addressXAccountName).blockingGet()
+        val addressXBalanceAfterWithdraw = getAccount.getEvmAccount(addressXAccountName).blockingGet()
 
         // and then
-        if (balanceAfterWithdraw !is GetAccount.Record.Single) fail("Failed to check withdrawal balance") else {
-            assertEquals("1.0000 EVM", balanceAfterWithdraw.item.balance)
+        if (addressXBalanceAfterWithdraw !is GetAccount.Record.Single) fail("Failed to check withdrawal balance") else {
+            assertEquals("1.0000 EVM", addressXBalanceAfterWithdraw.item.balance)
         }
 
         // and when
-        val balanceBeforeAuctionEnd = getAccount.getEvmAccount(beneficiaryAccountName).blockingGet()
+        val contractBalanceBeforeAuctionEnd = getAccount.getEvmAccount(contractAccountName).blockingGet()
 
         // and then
-        if (balanceBeforeAuctionEnd !is GetAccount.Record.Single) fail("Failed to check beneficiary balance") else {
-            assertEquals("1.0015 EVM", balanceBeforeAuctionEnd.item.balance)
+        if (contractBalanceBeforeAuctionEnd !is GetAccount.Record.Single) fail("Failed to check beneficiary balance") else {
+            assertEquals("1.0015 EVM", contractBalanceBeforeAuctionEnd.item.balance)
         }
 
         // and when
         val auctionEndResponse = faultTolerant {
             simpleAuctionContract.auctionEnd(EvmSender(
-                3,
+                1,
                 beneficiaryEthAccount,
                 beneficiaryAccountName,
                 beneficiaryPrivateKey,
-                contractAccountIdentifier.toHexString()
+                beneficiaryAccountIdentifier.toHexString()
             )).blockingGet()
         }
 
         // and then
         Thread.sleep(7000) // wait at least 5 seconds for the auction to end
 
-        assertEquals(auctionEndResponse.statusCode, 202)
+        assertEquals(202, auctionEndResponse.statusCode)
 
         // and when
         val balanceAfterAuctionEnd =getAccount.getEvmAccount(beneficiaryAccountName).blockingGet()

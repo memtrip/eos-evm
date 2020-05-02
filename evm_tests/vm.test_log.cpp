@@ -32,6 +32,7 @@ TEST_CASE("Log empty (LOG0)", "[log]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -79,6 +80,7 @@ TEST_CASE("Log sender (LOG1)", "[log]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -131,6 +133,7 @@ TEST_CASE("Log origin and sender (LOG2)", "[log]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -186,6 +189,7 @@ TEST_CASE("Log caller, origin, sender (LOG3)", "[log]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -244,6 +248,7 @@ TEST_CASE("Log number, caller, origin and sender (LOG4)", "[log]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );

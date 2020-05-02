@@ -1,5 +1,5 @@
 //
-// 25.04.2020
+// 01.05.2020
 // Auto generated based off the Ethereum tests found here:
 // https://github.com/ethereum/tests/blob/develop/VMTests/
 //
@@ -37,6 +37,7 @@ TEST_CASE("suicide______4622c577440f9db4b3954a1de60bf2fac55886dcb0ec4ecaf906c25b
     gas_t(0x0186a0), /* gas */
     TestUtils::fromHex("5af3107a4000"), /* gasPrice */
     TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
   );

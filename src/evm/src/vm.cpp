@@ -67,7 +67,7 @@ exec_result_t VM::step(
     instruct_t instruction = Instruction::values[opcode];
     reader->next();
 
-    // Utils::printInstruction(instruction);
+    Utils::printInstruction(instruction);
 
     instruction_verify_t verifyResult = Instruction::verify(instruction, stack->size());
     switch (verifyResult) {
@@ -118,7 +118,9 @@ exec_result_t VM::step(
     switch (opcode) {
       case Opcode::RETURNDATASIZE:
         {
-          stack->push(uint256_t(returnData.size()));
+          uint256_t returnDataSize = uint256_t(returnData.size());
+          Utils::print256(returnDataSize, "returnDataSize");
+          stack->push(returnDataSize);
           result = std::make_pair(InstructionResult::OK, 0);
           break;
         }
@@ -285,6 +287,8 @@ instruction_result_t VM::executeCreateInstruction(
     return std::make_pair(InstructionResult::UNUSED_GAS, createGas);
   }
 
+  if (context->isStatic) return std::make_pair(InstructionResult::INSTRUCTION_TRAP, TrapKind::TRAP_MUTATE_STATIC);
+
   std::shared_ptr<bytes_t> createCode = std::make_shared<bytes_t>(memory->readSlice(initOff, initSize));
 
   uint256_t codeAddress = Address::makeCreateAddress(
@@ -323,7 +327,7 @@ instruction_result_t VM::executeCreateInstruction(
       }
     case MESSAGE_CALL_RETURN:
       {
-        printf("MESSAGE_CALL_RETURN");
+        printf("MESSAGE_CALL_RETURN\n");
         MessageCallReturn callReturn = std::get<MessageCallReturn>(callResult.second);
     
         std::shared_ptr<bytes_t> returnDataBytes = std::make_shared<bytes_t>(createMemory->readSlice(callReturn.offset, callReturn.size));
@@ -393,6 +397,7 @@ instruction_result_t VM::executeCallInstruction(
 ) {
   uint256_t codeAddress = stack->peek(1);
   uint256_t value = 0; /* TODO: clarify, context->value */
+  bool isStatic = context->isStatic;
   uint64_t inOffset;
   uint64_t inSize;
   uint64_t outOffset;
@@ -410,6 +415,7 @@ instruction_result_t VM::executeCallInstruction(
       }
     case Opcode::STATICCALL:
       {
+        isStatic = true;
         inOffset = Overflow::uint256Cast(stack->peek(2)).first;
         inSize = Overflow::uint256Cast(stack->peek(3)).first;
         outOffset = Overflow::uint256Cast(stack->peek(4)).first;
@@ -437,6 +443,7 @@ instruction_result_t VM::executeCallInstruction(
   switch (opcode) {
     case Opcode::CALL:
       {
+        if (isStatic && value > 0) return std::make_pair(InstructionResult::INSTRUCTION_TRAP, TrapKind::TRAP_MUTATE_STATIC);
         senderAddress = context->address;
         receiveAddress = codeAddress;
         hasBalance = external->balance(context->address) >= value;
@@ -462,7 +469,7 @@ instruction_result_t VM::executeCallInstruction(
     case Opcode::STATICCALL:
       {
         senderAddress = context->address;
-        receiveAddress = context->address;
+        receiveAddress = codeAddress;
         hasBalance = true;
         callType = CallType::ACTION_STATIC_CALL;
         break;
@@ -491,6 +498,7 @@ instruction_result_t VM::executeCallInstruction(
     callGas, 
     context->gasPrice, 
     value, 
+    isStatic,
     callData,
     external
   ); 
@@ -518,8 +526,11 @@ instruction_result_t VM::executeCallInstruction(
       {
         printf("MESSAGE_CALL_RETURN\n");
         MessageCallReturn callReturn = std::get<MessageCallReturn>(callResult.second);
+        Utils::printLong(callReturn.offset, "offset");
+        Utils::printLong(callReturn.size, "size");
         stack->push(UINT256_ONE);
         returnData = callMemory->readSlice(callReturn.offset, callReturn.size);
+        Utils::printBytes(returnData, "returnData");
         return std::make_pair(
           InstructionResult::UNUSED_GAS,
           callReturn.gasLeft

@@ -33,6 +33,7 @@ TEST_CASE("Add two large numbers, store the result, verify gas", "[gasometer]") 
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -79,6 +80,7 @@ TEST_CASE("Store the result of an SHA3 hash, verify gas", "[gasometer]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -125,6 +127,7 @@ TEST_CASE("Address, verify gas", "[gasometer]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -171,6 +174,7 @@ TEST_CASE("Origin, verify gas", "[gasometer]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -218,6 +222,7 @@ TEST_CASE("Self balance, verify gas", "[gasometer]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -262,6 +267,7 @@ TEST_CASE("Sender, verify gas", "[gasometer]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -308,6 +314,7 @@ TEST_CASE("Chain id, verify gas", "[gasometer]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -357,6 +364,7 @@ TEST_CASE("Extcodecopy verify gas", "[gasometer]") {
     100000, /* gas */
     uint256_t(0), /* gasPrice */
     uint256_t(0), /* value */
+    false,
     std::make_shared<bytes_t>(codeBytes), /* code */
     std::make_shared<bytes_t>() /* data */
   );
@@ -406,6 +414,7 @@ TEST_CASE("Blockhash, verify gas", "[gasometer]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -456,6 +465,7 @@ TEST_CASE("Calldataload verify gas", "[gasometer]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>(dataBytes)
   );
@@ -502,6 +512,7 @@ TEST_CASE("Multiply, store the result, verify gas", "[gasometer]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -548,6 +559,7 @@ TEST_CASE("Subtract, store the result, verify gas", "[gasometer]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -594,6 +606,7 @@ TEST_CASE("Division, store the result, verify gas", "[gasometer]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -640,6 +653,7 @@ TEST_CASE("Div zero, store the result, verify gas", "[gasometer]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -686,6 +700,7 @@ TEST_CASE("Mod, store the result, verify gas", "[gasometer]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -735,6 +750,7 @@ TEST_CASE("SMOD, store the result, verify gas", "[gasometer]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -784,6 +800,7 @@ TEST_CASE("SDIV, store the result, verify gas", "[gasometer]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -833,6 +850,7 @@ TEST_CASE("Exp, store the result, verify gas", "[gasometer]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -885,6 +903,7 @@ TEST_CASE("Comparison, store the result, verify gas", "[gasometer]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -940,6 +959,7 @@ TEST_CASE("Signed comparison, store the result, verify gas", "[gasometer]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -998,6 +1018,7 @@ TEST_CASE("Bitops, store the result, verify gas", "[gasometer]") {
     150000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -1059,6 +1080,7 @@ TEST_CASE("Add mod - mul mod, store the result, verify gas", "[gasometer]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -1114,6 +1136,7 @@ TEST_CASE("Byte, store the result, verify gas", "[gasometer]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -1163,6 +1186,7 @@ TEST_CASE("Signextend, store the result, verify gas", "[gasometer]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -1212,6 +1236,7 @@ TEST_CASE("Pop, store the result, verify gas", "[gasometer]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -1259,6 +1284,7 @@ TEST_CASE("Extops, store the result, verify gas", "[gasometer]") {
     150000, /* gas */
     uint256_t(0x32), /* gasPrice */
     uint256_t(0x99), /* value */
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -1322,6 +1348,7 @@ TEST_CASE("Jumps, store the result, verify gas", "[gasometer]") {
     150000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );

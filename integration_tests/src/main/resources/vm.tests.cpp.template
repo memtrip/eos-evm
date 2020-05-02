@@ -42,6 +42,7 @@ TEST_CASE("${test.name}______${test.fixture._info.sourceHash}", "[vm]") {
     gas_t(${test.fixture.exec.gas}), /* gas */
     TestUtils::fromHex("${test.fixture.exec.gasPrice[2..]}"), /* gasPrice */
     TestUtils::fromHex("${test.fixture.exec.value[2..]}"), /* value */
+    false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
   );

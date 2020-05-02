@@ -87,6 +87,18 @@ class Utils {
       return 0xFFFF;
     }
 
+    static void printLong(uint64_t value, std::string key) {
+      printf("%s{%llu}\n", key.c_str(), value);
+    }
+
+    static void print256(const uint256_t& value, std::string key) {
+      printf("%s{%s}\n", key.c_str(), Utils::uint256_2str(value).c_str());
+    }
+
+    static void printBytes(const bytes_t& value, std::string key) {
+      printf("%s{%s}\n", key.c_str(), Hex::bytesToHex(value).c_str());
+    }
+
     static void printJumps(const jump_set_t& jumps) {
       printf("jumpsize{%zu}\n", jumps.size());
       for(uint64_t jump : jumps) {
@@ -615,7 +627,10 @@ class Utils {
           break;
         case TrapKind::TRAP_OVERFLOW:
           printf("trap{overflow}\n");
+        case TrapKind::TRAP_MUTATE_STATIC:
+          printf("trap{mutate_static}\n");
           break;
       }
     }
+    
 };

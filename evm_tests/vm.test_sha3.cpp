@@ -35,6 +35,7 @@ TEST_CASE("Hash zero", "[sha3]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );

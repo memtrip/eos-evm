@@ -2,6 +2,7 @@ package com.memtrip.eos_evm.eos.contracts.misc
 
 import com.memtrip.eos.http.rpc.Api
 import com.memtrip.eos_evm.assertConsoleError
+import com.memtrip.eos_evm.assertConsoleString
 import com.memtrip.eos_evm.eos.*
 import com.memtrip.eos_evm.eos.evm.EvmSender
 import com.memtrip.eos_evm.eos.evm.contracts.misc.BallotContract
@@ -69,9 +70,12 @@ class BallotTest {
 
         val accountStateResult = getAccountState.getAll(ballotContract.accountIdentifier.pad256().toHexString()).blockingGet()
         if (accountStateResult !is GetAccountState.Record.Multiple) Assert.fail("no state saved") else {
-            assertEquals(2, accountStateResult.items.size)
+            assertEquals(5, accountStateResult.items.size)
             assertEquals(accountStateResult.items[0].value, ballotContract.contractAccountIdentifier)
             assertEquals(accountStateResult.items[1].value, "0000000000000000000000000000000000000000000000000000000000000001")
+            assertEquals(accountStateResult.items[2].value, "0000000000000000000000000000000000000000000000000000000000000001")
+            assertEquals(accountStateResult.items[3].value, "6f7074696f6e3100000000000000000000000000000000000000000000000000") // "option1"
+            assertEquals(accountStateResult.items[4].value, "0000000000000000000000000000000000000000000000000000000000000000")
         }
     }
 
@@ -81,26 +85,14 @@ class BallotTest {
         // given
         val (chairAccountName, chairPrivateKey, chairEthAccount) = setupTransactions.seed(17000)
         val contractAccountIdentifier = AccountIdentifier.create(chairAccountName, chairEthAccount.address)
-
-        val ballotContract = BallotContract(
-            chairAccountName,
-            chairPrivateKey,
-            chairEthAccount
-        )
-
-        // when
-        val createContractResponse = faultTolerant {
-            ballotContract.createBallet(listOf("option1")).blockingGet()
-        }
-
-        // then
+        val ballotContract = BallotContract(chairAccountName, chairPrivateKey, chairEthAccount)
+        val createContractResponse = faultTolerant { ballotContract.createBallet(listOf("option1")).blockingGet() }
         assertEquals(202, createContractResponse.statusCode)
 
-        // and given
         val (senderAccountName, senderPrivateKey, senderEthAccount) = setupTransactions.seedWithSystemBalance()
         val senderAccountIdentifier = AccountIdentifier.create(senderAccountName, senderEthAccount.address)
 
-        // and when
+        // when
         val giveRightToVoteResponse = ballotContract.giveRightToVote(senderAccountIdentifier.toHexString(), EvmSender(
             3,
             chairEthAccount,
@@ -109,7 +101,7 @@ class BallotTest {
             contractAccountIdentifier.toHexString()
         )).blockingGet()
 
-        // and then
+        // then
         assertEquals(202, giveRightToVoteResponse.statusCode)
 
         // and when
@@ -117,7 +109,7 @@ class BallotTest {
 
         // and then
         if (accountStateResult !is GetAccountState.Record.Multiple) Assert.fail("no state saved") else {
-            assertEquals(3, accountStateResult.items.size)
+            assertEquals(6, accountStateResult.items.size)
         }
 
         // and when
@@ -137,7 +129,7 @@ class BallotTest {
 
         // and then
         if (accountStateAfterDelegate !is GetAccountState.Record.Multiple) Assert.fail("no state saved") else {
-            assertEquals(4, accountStateAfterDelegate.items.size)
+            assertEquals(7, accountStateAfterDelegate.items.size)
         }
 
         // and then
@@ -151,6 +143,19 @@ class BallotTest {
 
         // and then
         assertEquals(202, voteResponse.statusCode)
+
+        // and then
+        val winnerNameResponse = ballotContract.winnerName(EvmSender(
+            5,
+            chairEthAccount,
+            chairAccountName,
+            chairPrivateKey,
+            contractAccountIdentifier.toHexString()
+        )).blockingGet()
+
+        // and then
+        assertEquals(202, winnerNameResponse.statusCode)
+        winnerNameResponse.assertConsoleString("return[6f7074696f6e3100000000000000000000000000000000000000000000000000]") // "option1"
     }
 
     @Test

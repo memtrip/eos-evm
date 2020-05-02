@@ -32,6 +32,7 @@ TEST_CASE("Call contract code (1)", "[call]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>(dataBytes)
   );
@@ -55,7 +56,7 @@ TEST_CASE("Call contract code (1)", "[call]") {
   CHECK(true == needsReturn.apply);
 
   CHECK("[0000000000000000000000000000000000000000000000000000000000000003]" == 
-    Hex::bytesToWordOutput(mem.memory, needsReturn.offset, needsReturn.size)
+    Hex::bytesToWordOutput(mem->memory, needsReturn.offset, needsReturn.size)
   );
 }
 
@@ -81,6 +82,7 @@ TEST_CASE("Call contract code (2)", "[call]") {
     100000,
     uint256_t(0),
     uint256_t(2),
+    false,
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>(dataBytes)
   );

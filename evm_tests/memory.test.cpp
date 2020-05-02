@@ -55,6 +55,25 @@ TEST_CASE("Memory write and read (2)", "[memory]") {
   REQUIRE("0000000000000000000000000000000000000000000000000000000000000006" == Utils::uint256_2str(slice1)); 
 }
 
+TEST_CASE("Write word at index 32, write word at index 0, read word at index 32", "[memory]") {
+  // given
+  std::shared_ptr<Memory> memory = std::make_shared<Memory>();
+  
+  // when
+  memory->expand(64);
+  Utils::printBytes(memory->memory, "empty_memory");
+
+  uint256_t writeWord = uint256_t(0x06);
+  memory->write(0x20, writeWord);
+
+  uint256_t writeSecondWord = uint256_t(0x01);
+  memory->write(0x00, writeSecondWord);
+
+  // then
+  uint256_t slice1 = memory->read(0x20);
+  REQUIRE("0000000000000000000000000000000000000000000000000000000000000006" == Utils::uint256_2str(slice1)); 
+}
+
 TEST_CASE("Memory write by byte and read", "[memory]") {
   // given
   std::shared_ptr<Memory> memory = std::make_shared<Memory>();

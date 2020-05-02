@@ -33,6 +33,7 @@ TEST_CASE("extcodesize and extcodecopy", "[code]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -86,6 +87,7 @@ TEST_CASE("codesize", "[code]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -131,6 +133,7 @@ TEST_CASE("calldataload", "[code]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>(dataBytes)
   );

@@ -36,6 +36,7 @@ TEST_CASE("Save to memory", "[memory]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -86,6 +87,7 @@ TEST_CASE("Save to memory, and retreive", "[memory]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -136,6 +138,7 @@ TEST_CASE("Save to memory, retreive, and apply addition", "[memory]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -187,6 +190,7 @@ TEST_CASE("Save byte to memory, retreive, and apply addition", "[memory]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -238,6 +242,7 @@ TEST_CASE("Save byte to memory (1)", "[memory]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -283,6 +288,7 @@ TEST_CASE("Memory size", "[memory]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );

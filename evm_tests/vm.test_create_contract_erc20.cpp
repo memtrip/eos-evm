@@ -34,6 +34,7 @@ TEST_CASE("Create ERC20 contract", "[create]") {
     1000000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );

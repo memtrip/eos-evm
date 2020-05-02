@@ -36,6 +36,7 @@ TEST_CASE("Add two large numbers", "[arithmetic]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -83,6 +84,7 @@ TEST_CASE("Multiply two numbers", "[arithmetic]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -130,6 +132,7 @@ TEST_CASE("Multiply two larger numbers", "[arithmetic]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -180,6 +183,7 @@ TEST_CASE("Multiply and store", "[arithmetic]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -227,6 +231,7 @@ TEST_CASE("Subtract two numbers", "[arithmetic]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -277,6 +282,7 @@ TEST_CASE("Subtract and store", "[arithmetic]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -324,6 +330,7 @@ TEST_CASE("Divide two numbers", "[arithmetic]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -371,6 +378,7 @@ TEST_CASE("Divide 2 / 0", "[arithmetic]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -421,6 +429,7 @@ TEST_CASE("Divide and store", "[arithmetic]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -471,6 +480,7 @@ TEST_CASE("Divide by zero and store", "[arithmetic]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -514,6 +524,7 @@ TEST_CASE("Mod and store", "[arithmetic]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -566,6 +577,7 @@ TEST_CASE("Modulus 8 % 2", "[arithmetic]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -613,6 +625,7 @@ TEST_CASE("Modulus 5 % 2", "[arithmetic]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -660,6 +673,7 @@ TEST_CASE("Modulus 2 % 0", "[arithmetic]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -703,6 +717,7 @@ TEST_CASE("Byte", "[arithmetic]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );

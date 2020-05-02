@@ -653,6 +653,8 @@ class Operation {
     ) {
       uint64_t offset = Overflow::uint256Cast(stack->peek(0)).first;
       uint64_t size = Overflow::uint256Cast(stack->peek(1)).first;
+      // Utils::printLong(offset, "offset");
+      // Utils::printLong(size, "size");
       stack->pop(2);
       stack->push(memory->hashSlice(offset, size));
       return std::make_pair(InstructionResult::OK, 0);
@@ -914,9 +916,12 @@ class Operation {
       std::shared_ptr<Memory> memory, 
       std::shared_ptr<StackMachine> stack
     ) {
-      uint64_t offset = Overflow::uint256Cast(stack->peek(0)).first;
+      uint256_t offset = stack->peek(0);
+      uint256_t word = memory->read(Overflow::uint256Cast(offset).first);
+      Utils::print256(offset, "offset");
+      Utils::print256(word, "word");
       stack->pop(1);
-      stack->push(memory->read(offset));
+      stack->push(word);
       return std::make_pair(InstructionResult::OK, 0);
     }
 
@@ -932,6 +937,8 @@ class Operation {
     ) {
       uint256_t offset = stack->peek(0);
       uint256_t word = stack->peek(1);
+      Utils::print256(offset, "offset");
+      Utils::print256(word, "word");
       memory->write(Overflow::uint256Cast(offset).first, word);
       stack->pop(2);
       return std::make_pair(InstructionResult::OK, 0);
@@ -1116,6 +1123,8 @@ class Operation {
 
       stack->pop(2 + numberOfTopics);
 
+      if (context->isStatic) return std::make_pair(InstructionResult::INSTRUCTION_TRAP, TrapKind::TRAP_MUTATE_STATIC);
+
       pendingState->log(topics, memory->readSlice(offset, size));
       
       return std::make_pair(InstructionResult::OK, 0);
@@ -1133,6 +1142,9 @@ class Operation {
     ) {
       uint256_t address = stack->peek(0);
       stack->pop(1);
+
+      if (context->isStatic) return std::make_pair(InstructionResult::INSTRUCTION_TRAP, TrapKind::TRAP_MUTATE_STATIC);
+
       emplace_t result = external->selfdestruct(address);
 
       switch (result.first) {
@@ -1251,9 +1263,9 @@ class Operation {
       uint256_t key = stack->peek(0);
       uint256_t word = pendingState->getState(key, context->codeAddress, external);
 
-      // printf("key{%s}\n", Utils::uint256_2str(key).c_str());
-      // printf("word{%s}\n", Utils::uint256_2str(word).c_str());
-      // printf("context->codeAddress{%s}\n", Utils::uint256_2str(context->codeAddress).c_str());
+      printf("key{%s}\n", Utils::uint256_2str(key).c_str());
+      printf("word{%s}\n", Utils::uint256_2str(word).c_str());
+      printf("context->codeAddress{%s}\n", Utils::uint256_2str(context->codeAddress).c_str());
 
       stack->pop(1);
       stack->push(word);
@@ -1272,12 +1284,13 @@ class Operation {
     ) {
       uint256_t key = stack->peek(0);
       uint256_t value = stack->peek(1);  
-
       // printf("key{%s}\n", Utils::uint256_2str(key).c_str());
       // printf("word{%s}\n", Utils::uint256_2str(value).c_str());
       // printf("codeAddress{%s}\n", Utils::uint256_2str(context->codeAddress).c_str());
-
       stack->pop(2);
+
+      if (context->isStatic) return std::make_pair(InstructionResult::INSTRUCTION_TRAP, TrapKind::TRAP_MUTATE_STATIC);
+
       pendingState->putState(key, value, context->codeAddress);
       return std::make_pair(InstructionResult::OK, 0);
     }

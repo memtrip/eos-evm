@@ -1,5 +1,5 @@
 //
-// 25.04.2020
+// 01.05.2020
 // Auto generated based off the Ethereum tests found here:
 // https://github.com/ethereum/tests/blob/develop/VMTests/
 //
@@ -37,6 +37,7 @@ TEST_CASE("201503110206PYTHON______ad34ff6291ab537633ab5e7163537b24617cc4edb2f45
     gas_t(0x2710), /* gas */
     TestUtils::fromHex("5af3107a4000"), /* gasPrice */
     TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
   );
@@ -78,6 +79,7 @@ TEST_CASE("201503111844PYTHON______a8049871a173837bf8fbfab3352baf9bb9e33d0ffa2bd
     gas_t(0x2710), /* gas */
     TestUtils::fromHex("5af3107a4000"), /* gasPrice */
     TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
   );
@@ -119,6 +121,7 @@ TEST_CASE("201503112218PYTHON______6fc205d30fd7493b6e120e18c91e1e41f6fe334b94aba
     gas_t(0x2710), /* gas */
     TestUtils::fromHex("5af3107a4000"), /* gasPrice */
     TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
   );
@@ -160,6 +163,7 @@ TEST_CASE("201503110219PYTHON______93dd23cbf213b07ac96a1fdfc826f41475452fea6da2e
     gas_t(0x2710), /* gas */
     TestUtils::fromHex("5af3107a4000"), /* gasPrice */
     TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
   );
@@ -201,6 +205,7 @@ TEST_CASE("201503102320PYTHON______38aa9ba7f7836987852734619b0192d42434bd7106da1
     gas_t(0x2710), /* gas */
     TestUtils::fromHex("5af3107a4000"), /* gasPrice */
     TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
   );
@@ -242,6 +247,7 @@ TEST_CASE("201503110346PYTHON_PUSH24______953cb389f468c0d45697c57895679d7675ab43
     gas_t(0x2710), /* gas */
     TestUtils::fromHex("5af3107a4000"), /* gasPrice */
     TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
   );

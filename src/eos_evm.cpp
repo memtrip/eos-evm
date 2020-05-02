@@ -104,6 +104,9 @@ void eos_evm::checkCallResult(const name& from, call_result_t callResult) {
           case TrapKind::TRAP_OVERFLOW:
             check(false, "MESSAGE_CALL_FAILED [An integer overflow ocurred.]");
             break;
+          case TrapKind::TRAP_MUTATE_STATIC:
+            check(false, "MESSAGE_CALL_FAILED [A mutation occurred in a static context.]");
+            break;
         }
         break;
       }

@@ -17,6 +17,16 @@ class eos_external: public External {
     uint64_t _senderNonce;
     uint64_t _senderAccountBalance;
 
+    TransferType determineTransferType(const uint256_t& senderAddress, const uint256_t& toAddressWord) {
+      if (_senderAddress == senderAddress) return TransferType::TRANSFER_PARENT_OUTGOING;
+      if (_senderAddress == toAddressWord) return TransferType::TRANSFER_PARENT_INCOMING;
+      return TransferType::TRANSFER_ADHOC;
+    }
+
+    emplace_t transferAdhoc(const uint256_t& senderAddress, const uint256_t& toAddressWord, const uint256_t& value) {
+      return std::make_pair(EmplaceResult::EMPLACE_ADDRESS_NOT_FOUND, 0);
+    }
+
   public:
     eos_external(
       eos_evm* contract, 
@@ -104,8 +114,14 @@ class eos_external: public External {
     }
 
     emplace_t transfer(const uint256_t& senderAddress, const uint256_t& toAddressWord, const uint256_t& value) {
-      bool outgoing = _senderAddress == senderAddress;
-      address_t targetAddress = BigInt::toFixed32(toAddressWord);
+      TransferType transferType = determineTransferType(senderAddress, toAddressWord);
+      if (transferType == TransferType::TRANSFER_ADHOC)
+        return transferAdhoc(senderAddress, toAddressWord, value);
+
+      address_t targetAddress = (transferType == TransferType::TRANSFER_PARENT_OUTGOING) 
+        ? BigInt::toFixed32(toAddressWord)
+        : BigInt::toFixed32(senderAddress);
+
       uint64_t transferValue = Overflow::uint256Cast(value).first;
 
       if (_senderAccountBalance < value) return std::make_pair(EmplaceResult::EMPLACE_INSUFFICIENT_FUNDS, 0);
@@ -113,18 +129,19 @@ class eos_external: public External {
       eos_evm::account_table _account(_contract->get_self(), _contract->get_self().value);
       auto accountIdx = _account.get_index<name("accountid")>();
       auto accountItr = accountIdx.find(targetAddress);
-      
-      if (accountItr == accountIdx.end()) {
-        return std::make_pair(EmplaceResult::EMPLACE_ADDRESS_NOT_FOUND, 0);
-      } else {
-        accountIdx.modify(accountItr, _sender, [&](auto& account) {
-          account.balance.amount = outgoing ? (account.balance.amount + transferValue) : (account.balance.amount - transferValue);
-        });
+      if (accountItr == accountIdx.end()) return std::make_pair(EmplaceResult::EMPLACE_ADDRESS_NOT_FOUND, 0);
+   
+      accountIdx.modify(accountItr, _sender, [&](auto& account) {
+        account.balance.amount = (transferType == TransferType::TRANSFER_PARENT_OUTGOING) 
+          ? (account.balance.amount + transferValue) 
+          : (account.balance.amount - transferValue);
+      });
 
-        _senderAccountBalance = outgoing ? (_senderAccountBalance - transferValue) : (_senderAccountBalance + transferValue);
+      _senderAccountBalance = (transferType == TransferType::TRANSFER_PARENT_OUTGOING) 
+        ? (_senderAccountBalance - transferValue) 
+        : (_senderAccountBalance + transferValue);
 
-        return std::make_pair(EmplaceResult::EMPLACE_SUCCESS, 0);
-      }
+      return std::make_pair(EmplaceResult::EMPLACE_SUCCESS, 0);
     };
 
    /*

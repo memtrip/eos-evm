@@ -6,6 +6,7 @@
 #include <evm/big_int.hpp>
 #include <evm/hex.hpp>
 #include <evm/hash.hpp>
+#include <evm/utils.hpp>
 
 class Memory {
   private: 
@@ -46,7 +47,7 @@ class Memory {
       bytes_t bytes = BigInt::toBytes(word);
       uint64_t position = offset + (WORD_SIZE - bytes.size());
       if (position >= length()) return;
-      memory.insert(memory.begin() + position, bytes.begin(), bytes.end());
+      std::copy(bytes.begin(), bytes.end(), memory.begin() + offset);
     }
 
     uint256_t read(uint64_t offset) {

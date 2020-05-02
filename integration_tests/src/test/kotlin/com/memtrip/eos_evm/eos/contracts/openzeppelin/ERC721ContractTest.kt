@@ -5,7 +5,6 @@ import com.memtrip.eos_evm.eos.evm.contracts.openzeppelin.ERC721Contract
 import com.memtrip.eos.http.rpc.Api
 import com.memtrip.eos_evm.eos.Config
 import com.memtrip.eos_evm.eos.SetupTransactions
-import com.memtrip.eos_evm.eos.faultTolerant
 import com.memtrip.eos_evm.eos.state.GetCode
 import com.memtrip.eos_evm.ethereum.pad256
 import com.memtrip.eos_evm.ethereum.toHexString
@@ -44,9 +43,7 @@ class ERC721ContractTest {
         )
 
         // when
-        val createContractResponse = faultTolerant {
-            contract.createContract("eosio", "EOS").blockingGet()
-        }
+        val createContractResponse = contract.createContract("eosio", "EOS").blockingGet()
 
         // then
         assertEquals(202, createContractResponse.statusCode)

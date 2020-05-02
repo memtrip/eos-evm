@@ -32,6 +32,7 @@ TEST_CASE("Malformed CREATE statement will not create a contract", "[create_reve
     150000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -70,6 +71,7 @@ TEST_CASE("Impossible contract will not be created", "[create_revert]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );

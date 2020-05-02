@@ -13,6 +13,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.junit.Assert
 import org.junit.Assert.assertEquals
+import org.junit.Assert.fail
 import org.junit.Test
 import org.web3j.crypto.Hash
 import java.math.BigInteger
@@ -78,8 +79,8 @@ class BigIntArrayContractTest {
         val accountState = getAccountState.getAll(contract.accountIdentifier.pad256().toHexString()).blockingGet()
 
         // and then
-        if (accountState !is GetAccountState.Record.Multiple) Assert.fail("no state saved") else {
-            assertEquals(3, accountState.items.size)
+        if (accountState !is GetAccountState.Record.Multiple) fail("no state saved") else {
+            assertEquals(4, accountState.items.size)
         }
     }
 }

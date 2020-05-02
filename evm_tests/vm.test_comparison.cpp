@@ -36,6 +36,7 @@ TEST_CASE("Less than comparison truthy", "[LT]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -83,6 +84,7 @@ TEST_CASE("Less than comparison not true", "[LT]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -130,6 +132,7 @@ TEST_CASE("Greater than comparison truthy", "[GT]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -177,6 +180,7 @@ TEST_CASE("Greater than comparison not true", "[GT]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -224,6 +228,7 @@ TEST_CASE("Equal comparison truthy", "[EQ]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -271,6 +276,7 @@ TEST_CASE("Equal comparison not true", "[EQ]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -317,6 +323,7 @@ TEST_CASE("Is zero comparison truthy", "[ISZERO]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -363,6 +370,7 @@ TEST_CASE("Is zero comparison not true", "[ISZERO]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -406,6 +414,7 @@ TEST_CASE("Comparison with many instructions", "[comparison]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );

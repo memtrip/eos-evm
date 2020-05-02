@@ -32,6 +32,7 @@ TEST_CASE("shift left, write to memory, return", "[return_memory]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -78,6 +79,7 @@ TEST_CASE("shift right, write to memory, return", "[return_memory]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -124,6 +126,7 @@ TEST_CASE("sar, write to memory, revert", "[return_memory]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );

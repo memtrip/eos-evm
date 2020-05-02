@@ -74,7 +74,7 @@ class FactoryContractTest {
     fun `Create a new instance of child using the Factory contract`() {
 
         // given
-        val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+        val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed(17000)
         val contract = FactoryContract(
             newAccountName,
             newAccountPrivateKey,

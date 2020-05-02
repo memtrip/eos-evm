@@ -24,6 +24,7 @@ class Context {
       gas_t gasArg,
       uint256_t gasPriceArg,
       uint256_t valueArg,
+      bool isStaticArg,
       std::shared_ptr<bytes_t> codeArg,
       std::shared_ptr<bytes_t> dataArg
     ): 
@@ -43,6 +44,7 @@ class Context {
       gas(gasArg),
       gasPrice(gasPriceArg),
       value(valueArg),
+      isStatic(isStaticArg),
       code(codeArg),
       data(dataArg) { 
       };
@@ -62,6 +64,7 @@ class Context {
     gas_t gas;
     uint256_t gasPrice;
     uint256_t value;
+    bool isStatic;
     std::shared_ptr<bytes_t> code;
     std::shared_ptr<bytes_t> data;
 
@@ -93,6 +96,7 @@ class Context {
         Transaction::gas(rlp),
         Transaction::gasPrice(rlp),
         Transaction::value(rlp),
+        false,
         code,
         std::make_shared<bytes_t>()
       );
@@ -123,6 +127,7 @@ class Context {
         Transaction::gas(rlp),
         Transaction::gasPrice(rlp),
         Transaction::value(rlp),
+        false,
         code,
         std::make_shared<bytes_t>(
           rlp->at(0).values[Transaction::RLP_DATA].bytes.begin(), 
@@ -139,6 +144,7 @@ class Context {
       const gas_t& gas,
       const uint256_t& gasPrice,
       const uint256_t& value,
+      bool isStatic,
       std::shared_ptr<bytes_t> data,
       std::shared_ptr<External> external
     ) {
@@ -160,6 +166,7 @@ class Context {
         gas,
         gasPrice,
         value,
+        isStatic,
         code,
         data
       );
@@ -189,6 +196,7 @@ class Context {
         gas,
         parentContext->gasPrice,
         value,
+        false,
         code,
         std::make_shared<bytes_t>()
       );
@@ -218,6 +226,7 @@ class Context {
         Transaction::gas(rlp),
         Transaction::gasPrice(rlp),
         Transaction::value(rlp),
+        false,
         std::make_shared<bytes_t>(code),
         std::make_shared<bytes_t>(
           rlp->at(0).values[Transaction::RLP_DATA].bytes.begin(), 

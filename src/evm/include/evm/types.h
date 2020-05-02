@@ -96,7 +96,8 @@ enum TrapKind {
   TRAP_INVALID_JUMP,
   TRAP_INSUFFICIENT_FUNDS,
   TRAP_INVALID_CODE_ADDRESS,
-  TRAP_OVERFLOW
+  TRAP_OVERFLOW,
+  TRAP_MUTATE_STATIC
 };
 
 typedef TrapKind trap_t;
@@ -141,5 +142,11 @@ typedef std::variant<
 > call_result_data_t;
 
 typedef std::pair<MessageCallResult, call_result_data_t> call_result_t;
+
+enum TransferType {
+  TRANSFER_PARENT_OUTGOING, // Transfer senderAddress is the parent context senderAddress
+  TRANSFER_PARENT_INCOMING, // Transfer toAddress is the parent context senderAddress
+  TRANSFER_ADHOC // Transfer is unrelated to the parent context senderAddress
+};
 
 #endif

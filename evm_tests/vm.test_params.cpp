@@ -33,6 +33,7 @@ TEST_CASE("Address", "[params]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -75,6 +76,7 @@ TEST_CASE("Origin", "[params]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -117,6 +119,7 @@ TEST_CASE("Caller", "[params]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -161,6 +164,7 @@ TEST_CASE("calldatasize", "[params]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>(dataBytes)
   );

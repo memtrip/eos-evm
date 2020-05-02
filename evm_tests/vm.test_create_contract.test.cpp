@@ -31,6 +31,7 @@ TEST_CASE("Create the most basic contract using COPYCODE", "[create]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -80,6 +81,7 @@ TEST_CASE("Create contract using CODECOPY", "[create]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -141,6 +143,7 @@ TEST_CASE("Create contract using CREATE (1)", "[create]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -191,6 +194,7 @@ TEST_CASE("Create main contract using COPYCODE, and a child contract with CREATE
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -252,6 +256,7 @@ TEST_CASE("Create contract using CREATE2", "[create]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -305,6 +310,7 @@ TEST_CASE("Create contract using CREATE (3)", "[create]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -358,6 +364,7 @@ TEST_CASE("Create contract using CREATE (4)", "[create]") {
     150000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -424,6 +431,7 @@ TEST_CASE("Create contract using CREATE (5)", "[create]") {
     150000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );

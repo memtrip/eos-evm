@@ -7,8 +7,10 @@ import com.memtrip.eos_evm.eos.evm.EvmContract
 import com.memtrip.eos_evm.eos.evm.EvmSender
 import com.memtrip.eos_evm.ethereum.*
 import io.reactivex.Single
+import org.web3j.abi.TypeReference
 import org.web3j.abi.datatypes.Address
 import org.web3j.abi.datatypes.DynamicArray
+import org.web3j.abi.datatypes.Type
 import org.web3j.abi.datatypes.Uint
 import org.web3j.abi.datatypes.generated.Bytes32
 import java.math.BigInteger
@@ -204,6 +206,15 @@ class BallotContract(
             "vote",
             listOf(Uint(BigInteger.valueOf(proposal))),
             emptyList(),
+            sender
+        )
+    }
+
+    fun winnerName(sender: EvmSender): Single<ChainResponse<TransactionCommitted>> {
+        return executeMethod(
+            "winnerName",
+            listOf(),
+            listOf(object : TypeReference<Bytes32>() { }),
             sender
         )
     }

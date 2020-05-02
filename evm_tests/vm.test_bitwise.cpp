@@ -36,6 +36,7 @@ TEST_CASE("Bitwise AND", "[bitwise]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -82,6 +83,7 @@ TEST_CASE("Bitwise OR", "[bitwise]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -128,6 +130,7 @@ TEST_CASE("Bitwise XOR", "[bitwise]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -171,6 +174,7 @@ TEST_CASE("Bitops", "[bitwise]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );

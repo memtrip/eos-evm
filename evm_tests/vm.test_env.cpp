@@ -34,6 +34,7 @@ TEST_CASE("Blockhash (stub)", "[env]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -79,6 +80,7 @@ TEST_CASE("Coinbase (stub)", "[env]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -124,6 +126,7 @@ TEST_CASE("Difficulty (stub)", "[env]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -169,6 +172,7 @@ TEST_CASE("Timestamp", "[env]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -212,6 +216,7 @@ TEST_CASE("Number", "[env]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -255,6 +260,7 @@ TEST_CASE("Gas limit", "[env]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -298,6 +304,7 @@ TEST_CASE("Chain id", "[env]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -341,6 +348,7 @@ TEST_CASE("Call value", "[env]") {
     100000,
     uint256_t(0),
     uint256_t(34),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );

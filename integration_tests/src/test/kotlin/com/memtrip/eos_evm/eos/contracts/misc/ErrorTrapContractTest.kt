@@ -105,7 +105,7 @@ class ErrorTrapContractTest {
             )).blockingGet()
         }
 
-        assertEquals(fooResponse.statusCode, 500)
+        assertEquals(500, fooResponse.statusCode)
     }
 
     @Test

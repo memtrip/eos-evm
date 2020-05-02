@@ -45,6 +45,7 @@ TEST_CASE("Conditional jump to destination truthy", "[jumps]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -102,6 +103,7 @@ TEST_CASE("Conditional jump to destination not true", "[jumps]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
@@ -153,6 +155,7 @@ TEST_CASE("Unconditional jump to destination", "[jumps]") {
     100000,
     uint256_t(0),
     uint256_t(0),
+    false,  
     std::make_shared<bytes_t>(codeBytes),
     std::make_shared<bytes_t>()
   );
