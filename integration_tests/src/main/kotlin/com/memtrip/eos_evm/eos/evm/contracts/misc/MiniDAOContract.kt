@@ -44,10 +44,10 @@ class MiniDAOContract(
         )
     }
 
-    fun withdraw(amount: Long, sender: EvmSender): Single<ChainResponse<TransactionCommitted>> {
+    fun withdraw(amount: BigInteger, sender: EvmSender): Single<ChainResponse<TransactionCommitted>> {
         return executeMethod(
             "withdraw",
-            listOf(Uint(BigInteger.valueOf(amount))),
+            listOf(Uint(amount)),
             listOf(),
             sender
         )

@@ -1,7 +1,9 @@
 package com.memtrip.eos_evm.eos.contracts.misc
 
 import com.memtrip.eos.http.rpc.Api
+import com.memtrip.eos_evm.assertConsoleString
 import com.memtrip.eos_evm.eos.*
+import com.memtrip.eos_evm.ethereum.EthAsset
 import com.memtrip.eos_evm.eos.evm.EvmSender
 import com.memtrip.eos_evm.eos.evm.contracts.misc.SimpleAuctionContract
 import com.memtrip.eos_evm.eos.state.GetAccount
@@ -126,7 +128,7 @@ class SimpleAuctionTest {
 
         val (contractAccountName, contractPrivateKey, contractEthAccount) = setupTransactions.seedWithEvmBalance(17000)
         val simpleAuctionContract = SimpleAuctionContract(contractAccountName, contractPrivateKey, contractEthAccount)
-        val createContractResponse = faultTolerant { simpleAuctionContract.createSimpleAuction(5, beneficiaryAccountIdentifier.toHexString()).blockingGet() }
+        val createContractResponse = faultTolerant { simpleAuctionContract.createSimpleAuction(3, beneficiaryAccountIdentifier.toHexString()).blockingGet() }
         assertEquals(202, createContractResponse.statusCode)
 
         val (addressXAccountName, addressXPrivateKey, addressXEthAccount) = setupTransactions.seedWithEvmBalance()
@@ -143,7 +145,7 @@ class SimpleAuctionTest {
                 addressXAccountName,
                 addressXPrivateKey,
                 addressXAccountIdentifier.toHexString(),
-                BigInteger.valueOf(10)
+                EthAsset.milliether(1)
             )).blockingGet()
         }
 
@@ -155,7 +157,7 @@ class SimpleAuctionTest {
 
         // and then
         if (addressXBalanceAfterBid !is GetAccount.Record.Single) fail("Failed to check bid balance") else {
-            assertEquals("0.9990 EVM", addressXBalanceAfterBid.item.balance)
+            assertEquals("0.9990 EVM", addressXBalanceAfterBid.item.balance.toString())
         }
 
         // and when
@@ -166,7 +168,7 @@ class SimpleAuctionTest {
                 addressYAccountName,
                 addressYPrivateKey,
                 addressYAccountIdentifier.toHexString(),
-                BigInteger.valueOf(15)
+                EthAsset.milliether(2)
             )).blockingGet()
         }
 
@@ -178,7 +180,7 @@ class SimpleAuctionTest {
 
         // and then
         if (addressYBalanceAfterBid !is GetAccount.Record.Single) fail("Failed to check bid balance") else {
-            assertEquals("0.9985 EVM", addressYBalanceAfterBid.item.balance)
+            assertEquals("0.9980 EVM", addressYBalanceAfterBid.item.balance.toString())
         }
 
         // and when
@@ -190,8 +192,8 @@ class SimpleAuctionTest {
             assertEquals(accountStateAfterBid2.items[0].value, beneficiaryAccountIdentifier.pad256().toHexString())
             // items[1] is (now + bidding_time) in seconds
             assertEquals(accountStateAfterBid2.items[2].value, addressYAccountIdentifier.pad256().toHexString()) // highest bidder
-            assertEquals(accountStateAfterBid2.items[3].value, "000000000000000000000000000000000000000000000000000000000000000f")
-            assertEquals(accountStateAfterBid2.items[4].value, "000000000000000000000000000000000000000000000000000000000000000a")
+            assertEquals(accountStateAfterBid2.items[3].value, "00000000000000000000000000000000000000000000000000071afd498d0000") // bid 2
+            assertEquals(accountStateAfterBid2.items[4].value, "00000000000000000000000000000000000000000000000000038d7ea4c68000") // bid 1
         }
 
         // and when
@@ -206,8 +208,6 @@ class SimpleAuctionTest {
         }
 
         // and then
-        val addressXString = addressXAccountIdentifier.toHexString()
-        val contractString = simpleAuctionContract.accountIdentifier.toHexString()
         assertEquals(addressXWithdrawResponse.statusCode, 202)
 
         // and when
@@ -215,7 +215,7 @@ class SimpleAuctionTest {
 
         // and then
         if (addressXBalanceAfterWithdraw !is GetAccount.Record.Single) fail("Failed to check withdrawal balance") else {
-            assertEquals("1.0000 EVM", addressXBalanceAfterWithdraw.item.balance)
+            assertEquals("1.0000 EVM", addressXBalanceAfterWithdraw.item.balance.toString())
         }
 
         // and when
@@ -223,10 +223,12 @@ class SimpleAuctionTest {
 
         // and then
         if (contractBalanceBeforeAuctionEnd !is GetAccount.Record.Single) fail("Failed to check beneficiary balance") else {
-            assertEquals("1.0015 EVM", contractBalanceBeforeAuctionEnd.item.balance)
+            assertEquals("1.0020 EVM", contractBalanceBeforeAuctionEnd.item.balance.toString())
         }
 
         // and when
+        Thread.sleep(3000) // wait at least 5 seconds for the auction to end
+
         val auctionEndResponse = faultTolerant {
             simpleAuctionContract.auctionEnd(EvmSender(
                 1,
@@ -238,16 +240,26 @@ class SimpleAuctionTest {
         }
 
         // and then
-        Thread.sleep(7000) // wait at least 5 seconds for the auction to end
-
         assertEquals(202, auctionEndResponse.statusCode)
+        auctionEndResponse.assertConsoleString(
+            // abi containing winning address and bid amount (15)
+            "${addressYAccountIdentifier.pad256().toHexString()}00000000000000000000000000000000000000000000000000071afd498d0000"
+        )
 
         // and when
-        val balanceAfterAuctionEnd =getAccount.getEvmAccount(beneficiaryAccountName).blockingGet()
+        val beneficiaryBalanceAfterAuctionEnd = getAccount.getEvmAccount(beneficiaryAccountName).blockingGet()
 
         // and then
-        if (balanceAfterAuctionEnd !is GetAccount.Record.Single) fail("Failed to check beneficiary balance") else {
-            assertEquals("0.9985 EVM", balanceAfterAuctionEnd.item.balance)
+        if (beneficiaryBalanceAfterAuctionEnd !is GetAccount.Record.Single) fail("Failed to check beneficiary balance") else {
+            assertEquals("1.0020 EVM", beneficiaryBalanceAfterAuctionEnd.item.balance.toString())
+        }
+
+        // and when
+        val addressYAfterAuctionEnd = getAccount.getEvmAccount(addressYAccountName).blockingGet()
+
+        // and then
+        if (addressYAfterAuctionEnd !is GetAccount.Record.Single) fail("Failed to check addressY balance") else {
+            assertEquals("0.9980 EVM", addressYAfterAuctionEnd.item.balance.toString())
         }
     }
 }

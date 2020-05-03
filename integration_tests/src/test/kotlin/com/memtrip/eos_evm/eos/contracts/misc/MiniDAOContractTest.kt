@@ -5,6 +5,7 @@ import com.memtrip.eos_evm.assertConsoleString
 import com.memtrip.eos_evm.eos.AccountIdentifier
 import com.memtrip.eos_evm.eos.Config
 import com.memtrip.eos_evm.eos.SetupTransactions
+import com.memtrip.eos_evm.ethereum.EthAsset
 import com.memtrip.eos_evm.eos.evm.EvmSender
 import com.memtrip.eos_evm.eos.evm.contracts.misc.MiniDAOContract
 import com.memtrip.eos_evm.eos.faultTolerant
@@ -94,7 +95,7 @@ class MiniDAOContractTest {
                     senderAccountName,
                     senderPrivateKey,
                     senderAccountIdentifier.toHexString(),
-                    BigInteger.valueOf(100)
+                    EthAsset.milliether(10)
                 )
             ).blockingGet()
         }
@@ -117,14 +118,14 @@ class MiniDAOContractTest {
 
         // and then
         assertEquals(202, balanceResponse.statusCode)
-        balanceResponse.assertConsoleString("return[0000000000000000000000000000000000000000000000000000000000000064]")
+        balanceResponse.assertConsoleString("return[000000000000000000000000000000000000000000000000002386f26fc10000]")
 
         // and when
         val balanceAfterDeposit = getAccount.getEvmAccount(senderAccountName).blockingGet()
 
         // and then
         if (balanceAfterDeposit !is GetAccount.Record.Single) Assert.fail("Failed to check balance after deposit") else {
-            assertEquals("0.9900 EVM", balanceAfterDeposit.item.balance)
+            assertEquals("0.9900 EVM", balanceAfterDeposit.item.balance.toString())
         }
     }
 
@@ -147,7 +148,7 @@ class MiniDAOContractTest {
                     senderAccountName,
                     senderPrivateKey,
                     senderAccountIdentifier.toHexString(),
-                    BigInteger.valueOf(1000)
+                    EthAsset.milliether(100)
                 )
             ).blockingGet()
         }
@@ -160,13 +161,13 @@ class MiniDAOContractTest {
 
         // and then
         if (balanceAfterDeposit !is GetAccount.Record.Single) fail("Failed to check balance after deposit") else {
-            assertEquals("0.9000 EVM", balanceAfterDeposit.item.balance)
+            assertEquals("0.9000 EVM", balanceAfterDeposit.item.balance.toString())
         }
 
         // when
         val withdrawResponse = faultTolerant {
             contract.withdraw(
-                250,
+                EthAsset.milliether(25),
                 EvmSender(2,
                     senderEthAccount,
                     senderAccountName,
@@ -184,7 +185,7 @@ class MiniDAOContractTest {
 
         // and then
         if (balanceAfterWithdraw !is GetAccount.Record.Single) fail("Failed to check balance after deposit") else {
-            assertEquals("0.9250 EVM", balanceAfterWithdraw.item.balance)
+            assertEquals("0.9250 EVM", balanceAfterWithdraw.item.balance.toString())
         }
 
         // and when
@@ -202,7 +203,7 @@ class MiniDAOContractTest {
 
         // and then
         assertEquals(202, balanceResponse.statusCode)
-        balanceResponse.assertConsoleString("return[00000000000000000000000000000000000000000000000000000000000002ee]")
+        balanceResponse.assertConsoleString("return[000000000000000000000000000000000000000000000000010a741a46278000]")
     }
 
     @Test
@@ -224,7 +225,7 @@ class MiniDAOContractTest {
                     senderAccountName,
                     senderPrivateKey,
                     senderAccountIdentifier.toHexString(),
-                    BigInteger.valueOf(1000)
+                    EthAsset.milliether(100)
                 )
             ).blockingGet()
         }
@@ -237,13 +238,13 @@ class MiniDAOContractTest {
 
         // and then
         if (balanceAfterDeposit !is GetAccount.Record.Single) fail("Failed to check balance after deposit") else {
-            assertEquals("0.9000 EVM", balanceAfterDeposit.item.balance)
+            assertEquals("0.9000 EVM", balanceAfterDeposit.item.balance.toString())
         }
 
         // when
         val withdrawResponse = faultTolerant {
             contract.withdraw(
-                1100,
+                EthAsset.milliether(110),
                 EvmSender(2,
                     senderEthAccount,
                     senderAccountName,

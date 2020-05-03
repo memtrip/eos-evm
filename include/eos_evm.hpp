@@ -17,7 +17,7 @@ class [[eosio::contract("eos_evm")]] eos_evm : public contract {
     struct [[eosio::table]] account {
       name user;
       uint64_t nonce;
-      asset balance;
+      checksum256 balance;
       checksum256 accountIdentifier;
 
       auto primary_key() const { return user.value; }
@@ -54,7 +54,7 @@ class [[eosio::contract("eos_evm")]] eos_evm : public contract {
       checksum256 address;
       uint64_t nonce;
       string code;
-      asset balance;
+      checksum256 balance;
 
       auto primary_key() const { return pk; }
       checksum256 secondary_key() const { return accountIdentifier; }

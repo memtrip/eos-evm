@@ -100,7 +100,7 @@ class EndownmentTest {
             BigInteger("5af3107a4000", 16),
             BigInteger("0186a0", 16),
             BigInteger("0de0b6b3a7640000", 16),
-            "0x7c601080600c6000396000f3006000355415600957005b60203560003555600052601d60036017f0600055"
+            "0x7c601080600c6000396000f3006000355415600957005b60203560003555600052601d600367016345785D8A0000f0600055"
         )
 
         val response = rawAction.pushTransaction(
@@ -133,8 +133,8 @@ class EndownmentTest {
                 getCodeResult.item.owner
             )
             assertEquals(
-                "0.0023 EVM",
-                getCodeResult.item.balance
+                "0.1000 EVM",
+                getCodeResult.item.balance.toString()
             )
         }
 
@@ -144,8 +144,8 @@ class EndownmentTest {
         // and then
         if (getAccountResult !is GetAccount.Record.Single) fail("account not found") else {
             assertEquals(
-                "0.4977 EVM",
-                getAccountResult.item.balance
+                "0.4000 EVM",
+                getAccountResult.item.balance.toString()
             )
         }
     }

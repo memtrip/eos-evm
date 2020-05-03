@@ -117,10 +117,44 @@ class ProposalContractTest {
         assertEquals(202, senderApprovalResponse.statusCode)
 
         // and when
-        val isApprovedResponse = faultTolerant {
+        val isPartiallyApprovedResponse = faultTolerant {
             contract.isApproved(
                 EvmSender(
                     2,
+                    thirdPartyEthAccount,
+                    thirdPartyAccountName,
+                    thirdPartyPrivateKey,
+                    thirdPartyAccountIdentifier.toHexString()
+                )
+            ).blockingGet()
+        }
+
+        // and then
+        assertEquals(202, isPartiallyApprovedResponse.statusCode)
+        isPartiallyApprovedResponse.assertConsoleString("return[0000000000000000000000000000000000000000000000000000000000000000]")
+
+        // and when
+        val thirdPartyApprovalResponse = faultTolerant {
+            contract.approve(
+                thirdPartyAccountIdentifier.toHexString(),
+                EvmSender(
+                    3,
+                    thirdPartyEthAccount,
+                    thirdPartyAccountName,
+                    thirdPartyPrivateKey,
+                    thirdPartyAccountIdentifier.toHexString()
+                )
+            ).blockingGet()
+        }
+
+        // and then
+        assertEquals(202, thirdPartyApprovalResponse.statusCode)
+
+        // and when
+        val isApprovedResponse = faultTolerant {
+            contract.isApproved(
+                EvmSender(
+                    4,
                     thirdPartyEthAccount,
                     thirdPartyAccountName,
                     thirdPartyPrivateKey,
@@ -194,6 +228,6 @@ class ProposalContractTest {
 
         // and then
         assertEquals(202, isApprovedResponse.statusCode)
-        isApprovedResponse.assertConsoleString("return[0000000000000000000000000000000000000000000000000000000000000001]")
+        isApprovedResponse.assertConsoleString("return[0000000000000000000000000000000000000000000000000000000000000000]")
     }
 }

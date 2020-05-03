@@ -8,7 +8,7 @@
 typedef std::vector<std::pair<std::vector<uint256_t>, bytes_t>> log_spy_t;
 typedef std::vector<std::pair<uint256_t, std::string>> string_spy_t;
 typedef std::vector<uint256_t> word_spy_t;
-typedef std::vector<std::pair<uint256_t, double>> balance_responder_t;
+typedef std::vector<std::pair<uint256_t, uint256_t>> balance_responder_t;
 typedef std::vector<std::pair<uint256_t, bytes_t>> bytes_responder_t;
 typedef std::vector<std::pair<uint256_t, uint256_t>> word_responder_t;
 
@@ -41,8 +41,8 @@ class ExternalMock: public External {
       return 1; 
     }
 
-    uint64_t senderAccountBalance() {
-      return 0;
+    uint256_t senderAccountBalance() {
+      return uint256_t(0);
     }
 
     void log(const std::vector<uint256_t>& topics, const bytes_t& data) {
@@ -58,12 +58,12 @@ class ExternalMock: public External {
       return std::make_shared<bytes_t>();
     }
 
-    double balance(const uint256_t& addressWord) {
+    uint256_t balance(const uint256_t& addressWord) {
       for (int i = 0; i < balanceResponder.size(); i++) {
         if (balanceResponder[i].first == addressWord)
           return balanceResponder[i].second;
       }
-      return 0.0;
+      return uint256_t(0);
     }
 
     uint256_t storageAt(const uint256_t& key, const uint256_t& codeAddress) {
@@ -86,7 +86,7 @@ class ExternalMock: public External {
     emplace_t emplaceCode(
       const uint256_t& originWord,
       const uint256_t& codeAddressWord, 
-      uint64_t endowment, 
+      const uint256_t& endowment, 
       std::shared_ptr<bytes_t> code
     ) {
       emplaceSpy.push_back(std::make_pair(codeAddressWord, Hex::bytesToHex(code)));

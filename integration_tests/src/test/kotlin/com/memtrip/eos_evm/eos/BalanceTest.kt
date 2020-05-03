@@ -3,6 +3,7 @@ package com.memtrip.eos_evm.eos
 import com.memtrip.eos.chain.actions.transaction.TransactionContext
 import com.memtrip.eos.http.rpc.Api
 import com.memtrip.eos_evm.eos.actions.raw.RawAction
+import com.memtrip.eos_evm.ethereum.EthAsset.Companion.WEI
 import com.memtrip.eos_evm.eos.state.GetAccountState
 import com.memtrip.eos_evm.ethereum.AccountStateKey
 import com.memtrip.eos_evm.ethereum.EthereumTransaction
@@ -130,6 +131,8 @@ class BalanceTest {
             accountName,
             AccountStateKey.create(accountIdentifier.pad256(), 0x00)
         ).blockingGet()
-        assertEquals("0000000000000000000000000000000000000000000000000000000000001388", balance)
+
+        val expected = BigInteger("1388", 16) * WEI
+        assertEquals(expected.toByteArray().pad256().toHexString(), balance)
     }
 }

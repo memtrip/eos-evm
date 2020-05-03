@@ -17,6 +17,7 @@ import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Assert.fail
 import org.junit.Test
+import java.math.BigInteger
 import java.util.concurrent.TimeUnit
 
 class SendEthContractTest {
@@ -112,7 +113,7 @@ class SendEthContractTest {
         if (getAccountResult !is GetAccount.Record.Single) fail("account not found") else {
             assertEquals(
                 "9.0000 EVM",
-                getAccountResult.item.balance
+                getAccountResult.item.balance.toString()
             )
         }
     }
@@ -158,7 +159,7 @@ class SendEthContractTest {
         if (getAccountResult !is GetAccount.Record.Single) fail("account not found") else {
             assertEquals(
                 "9.0000 EVM",
-                getAccountResult.item.balance
+                getAccountResult.item.balance.toString()
             )
         }
     }
@@ -203,7 +204,7 @@ class SendEthContractTest {
         if (getAccountResult !is GetAccount.Record.Single) fail("account not found") else {
             assertEquals(
                 "9.0000 EVM",
-                getAccountResult.item.balance
+                getAccountResult.item.balance.toString()
             )
         }
     }

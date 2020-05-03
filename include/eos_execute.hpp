@@ -16,12 +16,12 @@
 class eos_execute {
   public:
     static call_result_t transaction(
-      uint256_t senderAddress,
+      const uint256_t& senderAddress,
+      const env_t& env,
       std::shared_ptr<std::vector<RLPItem>> rlp, 
       std::shared_ptr<External> external,
       std::shared_ptr<PendingState> pendingState
     ) {
-      env_t env = eos_system::env();
 
       std::shared_ptr<Memory> memory = std::make_shared<Memory>();
 
@@ -108,13 +108,13 @@ class eos_execute {
     }
 
     static call_result_t code(
-      uint256_t senderAddress,
+      const uint256_t& senderAddress,
+      const env_t& env,
       const bytes_t& code, 
       std::shared_ptr<std::vector<RLPItem>> rlp, 
       std::shared_ptr<External> external,
       std::shared_ptr<PendingState> pendingState
     ) {
-      env_t env = eos_system::env();
 
       std::shared_ptr<Memory> memory = std::make_shared<Memory>();
 

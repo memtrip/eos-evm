@@ -12,7 +12,7 @@
 
 class eos_ecrecover {
   public:
-    static bytes_t recover(std::string accountName, std::shared_ptr<std::vector<RLPItem>> rlp) {
+    static bytes_t recover(std::string accountName, std::shared_ptr<std::vector<RLPItem>> rlp, const env_t& env) {
 
       bytes_t digest = Transaction::digest(rlp, 0x01);
       std::array<uint8_t, 32> digestData;
@@ -21,7 +21,7 @@ class eos_ecrecover {
       }
       eosio::fixed_bytes<32> digestBytes(digestData);
 
-      bytes_t signature = Transaction::signature(rlp);
+      bytes_t signature = Transaction::signature(rlp, env.chainId);
       std::array<char, 65> signatureData;
       for (int i = 0; i < signature.size(); i++) {
         signatureData[i] = signature[i];

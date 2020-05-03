@@ -4,7 +4,6 @@
 #include <eos_system.hpp>
 #include <eos_ecrecover.hpp>
 #include <eos_execute.hpp>
-
 #include <evm/address.hpp>
 #include <evm/transaction.hpp>
 #include <evm/hex.hpp>
@@ -28,6 +27,8 @@ void eos_evm::execute(name from, bytes_t code, string sender, bytes_t bytecode) 
 void eos_evm::incomingTransaction(const name& from, const bytes_t& transaction, const string& sender, const bytes_t& bytecode) {
   require_auth(from);
 
+  env_t env = eos_system::env();
+
   std::shared_ptr<std::vector<RLPItem>> rlp = std::make_shared<std::vector<RLPItem>>();
   RLPDecode::decode(transaction, rlp);
 
@@ -36,7 +37,7 @@ void eos_evm::incomingTransaction(const name& from, const bytes_t& transaction, 
   uint64_t transactionNonce = Overflow::uint256Cast(Transaction::nonce(rlp)).first;
 
   bool hasSignature = Transaction::hasSignature(rlp);
-  bytes_t accountIdentifierBytes = hasSignature ? eos_ecrecover::recover(from.to_string(), rlp) : Hex::hexToBytes(sender);
+  bytes_t accountIdentifierBytes = hasSignature ? eos_ecrecover::recover(from.to_string(), rlp, env) : Hex::hexToBytes(sender);
   checksum256 accountIdentifier = Hex::hexToChecksum256(accountIdentifierBytes);
   uint256_t senderAddress = BigInt::fromBigEndianBytes(accountIdentifierBytes);
 
@@ -49,13 +50,14 @@ void eos_evm::incomingTransaction(const name& from, const bytes_t& transaction, 
   check((transactionNonce - itr->nonce) == 1, "Transaction nonce invalid.");
   if (!hasSignature) check(has_auth(itr->user), "You do not have permission to execute a transaction for the specified sender.");
 
-  std::shared_ptr<External> external = std::make_shared<eos_external>(this, senderAddress, itr->user, itr->nonce + 1, itr->balance.amount);
+  std::shared_ptr<External> external = std::make_shared<eos_external>(
+    this, senderAddress, itr->user, itr->nonce + 1, BigInt::fromFixed32(itr->balance.extract_as_byte_array()));
 
   call_result_t callResult;
   if (bytecode.size() > 0) {
-    callResult = eos_execute::code(senderAddress, bytecode, rlp, external, pendingState);
+    callResult = eos_execute::code(senderAddress, env, bytecode, rlp, external, pendingState);
   } else {
-    callResult = eos_execute::transaction(senderAddress, rlp, external, pendingState);
+    callResult = eos_execute::transaction(senderAddress, env, rlp, external, pendingState);
   }
 
   checkCallResult(from, callResult);
@@ -64,7 +66,7 @@ void eos_evm::incomingTransaction(const name& from, const bytes_t& transaction, 
 
   idx.modify(itr, from, [&](auto& account) {
     account.nonce = external->senderNonce();
-    account.balance.amount = external->senderAccountBalance();
+    account.balance = BigInt::toFixed32(external->senderAccountBalance());
   });
 }
 
@@ -163,7 +165,7 @@ void eos_evm::create(name from, string message) {
   _account.emplace(from, [&](auto& account) {
     account.user = from;
     account.nonce = 0;
-    account.balance = asset(0, CONTRACT_SYMBOL);
+    account.balance = std::array<uint8_t, 32>{};
     account.accountIdentifier = Hex::hexToChecksum256(accountIdentifier);
   });
 }
@@ -176,10 +178,13 @@ void eos_evm::withdraw(name to, asset quantity) {
   account_table _account(get_self(), get_self().value);
   auto iterator = _account.find(to.value);
   check(iterator != _account.end(), "The `to` account is not linked to an Ethereum account.");
-  check(iterator->balance.amount >= quantity.amount, "Insufficient funds.");
+
+  uint256_t quantityValue = (quantity.amount * BigInt::wei());
+  uint256_t currentBalance = BigInt::fromFixed32(iterator->balance.extract_as_byte_array());
+  check(currentBalance >= quantityValue, "Insufficient funds.");
 
   _account.modify(iterator, same_payer, [&](auto& account) {
-    account.balance.amount -= quantity.amount;
+    account.balance = BigInt::toFixed32(currentBalance - quantityValue); 
   });
 
   action{
@@ -204,6 +209,7 @@ void eos_evm::transfer(name from, name to, asset quantity, string memo) {
   check(iterator != _account.end(), "The `from` account is not linked to an Ethereum account.");
 
   _account.modify(iterator, same_payer, [&](auto& account) {
-    account.balance.amount += quantity.amount;
+    uint256_t newBalance = BigInt::fromFixed32(account.balance.extract_as_byte_array()) + (quantity.amount * BigInt::wei());
+    account.balance = BigInt::toFixed32(newBalance);
   });
 }

@@ -63,6 +63,14 @@ class Hex {
       return checksum256;
     }
 
+    static void padWordSize(bytes_t& bytes) {
+      if (bytes.size() >= WORD_SIZE) return;
+      size_t diff = WORD_SIZE - bytes.size();
+      for (int i = 0; i < diff; i++) {
+        bytes.insert(bytes.begin(), 0);
+      }
+    }
+
     static std::string bytesToWordOutput(const bytes_t& bytes, uint64_t offset, uint64_t size) {
       uint64_t totalBytes = offset + size;
       if (totalBytes % WORD_SIZE != 0 || totalBytes > bytes.size() || size == 0) return "[]";

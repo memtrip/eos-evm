@@ -123,7 +123,7 @@ TEST_CASE("Transaction create (1)", "[transaction)]") {
   RLPDecode::decode(transactionBytes, rlp);
 
   // then
-  bytes_t signatureBytes = Transaction::signature(rlp);
+  bytes_t signatureBytes = Transaction::signature(rlp, 1);
   uint8_t v = static_cast<uint8_t>(signatureBytes[0]);
 
   bytes_t digest = Transaction::digest(rlp, 0x01);
@@ -149,7 +149,7 @@ TEST_CASE("Transaction create (2)", "[transaction)]") {
   RLPDecode::decode(transactionBytes, rlp);
 
   // then
-  bytes_t signatureBytes = Transaction::signature(rlp);
+  bytes_t signatureBytes = Transaction::signature(rlp, 1);
   uint8_t v = static_cast<uint8_t>(signatureBytes[0]);
 
   bytes_t digest = Transaction::digest(rlp, 0x01);
@@ -241,5 +241,34 @@ TEST_CASE("Transaction message prefix", "[transaction)]") {
   // then
   CHECK("4f92172f1dfe85393316b4655808578b12882443614025a19d726ce8c0a6212f" == 
     TestUtils::bytesToHex(digestWithPrefix)
+  );
+}
+
+TEST_CASE("Signature bytes with leading 0's in R component", "[transaction)]") {
+
+  // given
+  std::string hex = "f9014b01865af3107a40008405186a008080b8f86080604052348015600f57600080fd5b5060da8061001e6000396000f3fe6080604052348015600f57600080fd5b506004361060285760003560e01c8063ab5ed15014602d575b600080fd5b60336049565b6040518082815260200191505060405180910390f35b6000806052605e565b50809150508091505090565b6000606060018090506040518060400160405280600281526020017f486900000000000000000000000000000000000000000000000000000000000081525091509150909156fea265627a7a7231582014e7a484ae72de63d610eee5700f82beb654743f08478ca0c91c5147159df3c764736f6c63430005100032259f18790bbd7b0a9598fca2d9ab2f7031659aeec59b00f1f5928516d05b44681da002a5fe8f5a3b764248683a745b5a46d44aa0470c045ec97f9e609540b20c7c0b";
+  bytes_t transactionBytes = Hex::hexToBytes(hex);;
+  std::shared_ptr<std::vector<RLPItem>> rlp = std::make_shared<std::vector<RLPItem>>();
+  RLPDecode::decode(transactionBytes, rlp);
+
+  // when
+  bytes_t signatureBytes = Transaction::signature(rlp, 1);
+
+  // then
+  CHECK("25" ==
+    TestUtils::bytesToHex(Transaction::v(rlp))
+  );
+
+  CHECK("0018790bbd7b0a9598fca2d9ab2f7031659aeec59b00f1f5928516d05b44681d" ==
+    TestUtils::bytesToHex(Transaction::r(rlp))
+  );
+
+  CHECK("02a5fe8f5a3b764248683a745b5a46d44aa0470c045ec97f9e609540b20c7c0b" ==
+    TestUtils::bytesToHex(Transaction::s(rlp))
+  );
+
+  CHECK("1b0018790bbd7b0a9598fca2d9ab2f7031659aeec59b00f1f5928516d05b44681d02a5fe8f5a3b764248683a745b5a46d44aa0470c045ec97f9e609540b20c7c0b" == 
+    TestUtils::bytesToHex(signatureBytes)
   );
 }

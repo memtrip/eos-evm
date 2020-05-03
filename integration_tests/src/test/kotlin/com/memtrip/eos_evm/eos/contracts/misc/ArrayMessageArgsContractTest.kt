@@ -1,6 +1,7 @@
 package com.memtrip.eos_evm.eos.contracts.misc
 
 import com.memtrip.eos.http.rpc.Api
+import com.memtrip.eos_evm.assertConsoleString
 import com.memtrip.eos_evm.eos.AccountIdentifier
 import com.memtrip.eos_evm.eos.Config
 import com.memtrip.eos_evm.eos.SetupTransactions
@@ -85,13 +86,16 @@ class ArrayMessageArgsContractTest {
 
         // and then
         assertEquals(202, response.statusCode)
+        response.assertConsoleString("return[000000000000000000000000000000000000000000000000000000000000000a]")
 
         // and when
         val accountState = getAccountState.getAll(contract.accountIdentifier.pad256().toHexString()).blockingGet()
 
         // and then
         if (accountState !is GetAccountState.Record.Multiple) fail("no state saved") else {
-            assertEquals(3, accountState.items.size)
+            assertEquals(2, accountState.items.size)
+            assertEquals("0000000000000000000000000000000000000000000000000000000000000001", accountState.items[0].value)
+            assertEquals("000000000000000000000000000000000000000000000000000000000000000a", accountState.items[1].value)
         }
     }
 }

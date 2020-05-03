@@ -5,6 +5,7 @@
 #include <evm/rlp_encode.hpp>
 #include <evm/hash.hpp>
 #include <evm/overflow.hpp>
+#include <evm/hex.hpp>
 
 class Transaction {
   public:
@@ -60,13 +61,16 @@ class Transaction {
       return rlp->at(0).values[RLP_ADDRESS].bytes;
     }
 
-    static bytes_t signature(std::shared_ptr<std::vector<RLPItem>> rlp) {
+    static bytes_t signature(std::shared_ptr<std::vector<RLPItem>> rlp, uint256_t chainId) {
       bytes_t signatureBytes;
       if (rlp->at(0).values[RLP_R].bytes.size() != 0 && rlp->at(0).values[RLP_S].bytes.size() != 0) {
         signatureBytes.reserve(1 + rlp->at(0).values[RLP_R].bytes.size() + rlp->at(0).values[RLP_S].bytes.size());
 
         uint8_t v = eip155Compat(rlp->at(0).values[RLP_V].bytes);
         v += 27;
+
+        Hex::padWordSize(rlp->at(0).values[RLP_R].bytes);
+        Hex::padWordSize(rlp->at(0).values[RLP_S].bytes);
 
         signatureBytes.push_back(v);
         signatureBytes.insert(signatureBytes.end(), rlp->at(0).values[RLP_R].bytes.begin(), rlp->at(0).values[RLP_R].bytes.end());

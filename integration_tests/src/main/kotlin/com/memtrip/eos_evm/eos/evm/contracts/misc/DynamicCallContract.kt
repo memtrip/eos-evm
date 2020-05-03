@@ -26,7 +26,7 @@ contract DynamicCall {
 
     function bar() public returns(uint) {
         (bool a, bytes memory result) = address(this).call(abi.encode(bytes4(keccak256('foo(uint256)')), 1));
-        return x; // returns 11
+        return x;
     }
 }
 */

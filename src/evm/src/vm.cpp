@@ -67,7 +67,7 @@ exec_result_t VM::step(
     instruct_t instruction = Instruction::values[opcode];
     reader->next();
 
-    Utils::printInstruction(instruction);
+    // Utils::printInstruction(instruction);
 
     instruction_verify_t verifyResult = Instruction::verify(instruction, stack->size());
     switch (verifyResult) {
@@ -335,7 +335,7 @@ instruction_result_t VM::executeCreateInstruction(
         emplace_t emplaceResult = external->emplaceCode(
           context->origin, 
           codeAddress,
-          Overflow::uint256Cast(endowment).first, 
+          endowment, 
           returnDataBytes
         );
 
@@ -446,6 +446,7 @@ instruction_result_t VM::executeCallInstruction(
         if (isStatic && value > 0) return std::make_pair(InstructionResult::INSTRUCTION_TRAP, TrapKind::TRAP_MUTATE_STATIC);
         senderAddress = context->address;
         receiveAddress = codeAddress;
+        Utils::print256(value, "call->value");
         hasBalance = external->balance(context->address) >= value;
         callType = CallType::ACTION_CALL;
         break;
@@ -483,6 +484,7 @@ instruction_result_t VM::executeCallInstruction(
   callGas = Overflow::add(callGas, stipend).first;
 
   if (!hasBalance || stackDepth > STACK_LIMIT) {
+    printf("no balance");
     stack->push(UINT256_ZERO);
     return std::make_pair(InstructionResult::UNUSED_GAS, callGas);
   }

@@ -3,6 +3,7 @@ package com.memtrip.eos_evm.eos.state
 import com.memtrip.eos.http.rpc.ChainApi
 import com.memtrip.eos.http.rpc.model.contract.request.GetTableRows
 import com.memtrip.eos_evm.eos.Config
+import com.memtrip.eos_evm.ethereum.EthAsset
 import io.reactivex.Single
 
 class GetCode(
@@ -13,7 +14,7 @@ class GetCode(
         val code: String,
         val owner: String,
         val address: String,
-        val balance: String,
+        val balance: EthAsset,
         val nonce: String
     )
 
@@ -46,7 +47,7 @@ class GetCode(
                         tableRows[0]["code"].toString(),
                         tableRows[0]["accountIdentifier"].toString(),
                         tableRows[0]["address"].toString(),
-                        tableRows[0]["balance"].toString(),
+                        EthAsset.create(tableRows[0]["balance"].toString()),
                         tableRows[0]["nonce"].toString()
                     ))
                 }
@@ -78,7 +79,7 @@ class GetCode(
                             tableRows[index]["code"].toString(),
                             tableRows[index]["accountIdentifier"].toString(),
                             tableRows[index]["address"].toString(),
-                            tableRows[index]["balance"].toString(),
+                            EthAsset.create(tableRows[index]["balance"].toString()),
                             tableRows[index]["nonce"].toString()
                         )
                     })

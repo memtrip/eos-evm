@@ -97,7 +97,7 @@ class CreateContractTest {
                 getCodeResult.item.owner
             )
             assertEquals("1.0", getCodeResult.item.nonce)
-            assertEquals("0.0023 EVM", getCodeResult.item.balance)
+            assertEquals("17", getCodeResult.item.balance.toString()) // 23 WEI
             assertTrue(getCodeResult.item.address.isNotEmpty())
         }
     }
@@ -149,7 +149,7 @@ class CreateContractTest {
                 getCodeResult.item.owner
             )
             assertEquals("1.0", getCodeResult.item.nonce)
-            assertEquals("0.0000 EVM", getCodeResult.item.balance)
+            assertEquals("0.0000 EVM", getCodeResult.item.balance.toString())
             assertTrue(getCodeResult.item.address.isNotEmpty())
         }
     }
@@ -266,7 +266,7 @@ class CreateContractTest {
                 getCodeResult.items[0].owner
             )
             assertEquals("1.0", getCodeResult.items[0].nonce)
-            assertEquals("0.0000 EVM", getCodeResult.items[0].balance)
+            assertEquals("0.0000 EVM", getCodeResult.items[0].balance.toString())
             assertTrue(getCodeResult.items[0].address.isNotEmpty())
         }
     }

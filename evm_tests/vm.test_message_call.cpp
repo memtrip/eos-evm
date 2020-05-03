@@ -51,7 +51,7 @@ TEST_CASE("Call the code of another contract using CALL", "[message_call]") {
   uint256_t childContractAddress = uint256_t(0x1283ae);
   pendingState->putState(uint256_t(0), childContractAddress, codeAddress);
   external->codeResponder.push_back(std::make_pair(childContractAddress, childCodeBytes));
-  external->balanceResponder.push_back(std::make_pair(address, 100));
+  external->balanceResponder.push_back(std::make_pair(address, uint256_t(100)));
 
   // when
   exec_result_t vm_result = vm.execute(0, operation, context, mem, pendingState, external);
@@ -177,7 +177,7 @@ TEST_CASE("Call the code of another contract using DELEGATECALL", "[message_call
   pendingState->putState(uint256_t(0), childContractAddress, codeAddress);
   external->codeResponder.push_back(std::make_pair(childContractAddress, childCodeBytes));
 
-  external->balanceResponder.push_back(std::make_pair(codeAddress, 100));
+  external->balanceResponder.push_back(std::make_pair(codeAddress, uint256_t(100)));
 
   // when
   exec_result_t vm_result = vm.execute(0, operation, context, mem, pendingState, external);

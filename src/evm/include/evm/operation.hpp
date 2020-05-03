@@ -1098,7 +1098,7 @@ class Operation {
       std::shared_ptr<Memory> memory, 
       std::shared_ptr<StackMachine> stack
     ) {
-      stack->push(uint256_t(external->balance(context->address)));
+      stack->push(external->balance(context->address));
       return std::make_pair(InstructionResult::OK, 0);
     }
 
@@ -1246,7 +1246,7 @@ class Operation {
       std::shared_ptr<StackMachine> stack
     ) {
       uint256_t address = stack->peek(0);
-      stack->push(uint256_t(external->balance(address)));
+      stack->push(external->balance(address));
       return std::make_pair(InstructionResult::OK, 0);
     }
 

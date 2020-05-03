@@ -39,7 +39,7 @@ class TransferTest {
 
         val startingBalance = getAccount.getEvmAccount(accountName).blockingGet()
         if (startingBalance !is GetAccount.Record.Single) fail("Failed to create account") else {
-            assertEquals("0.0000 EVM", startingBalance.item.balance)
+            assertEquals("0.0000 EVM", startingBalance.item.balance.toString())
         }
 
         // when
@@ -57,7 +57,7 @@ class TransferTest {
 
         val endingBalance = getAccount.getEvmAccount(accountName).blockingGet()
         if (endingBalance !is GetAccount.Record.Single) fail("Failed to create account") else {
-            assertEquals("0.0010 EVM", endingBalance.item.balance)
+            assertEquals("0.0010 EVM", endingBalance.item.balance.toString())
         }
     }
 
@@ -69,7 +69,7 @@ class TransferTest {
 
         val startingBalance = getAccount.getEvmAccount(accountName).blockingGet()
         if (startingBalance !is GetAccount.Record.Single) fail("Failed to create account") else {
-            assertEquals("0.0000 EVM", startingBalance.item.balance)
+            assertEquals("0.0000 EVM", startingBalance.item.balance.toString())
         }
 
         // when
@@ -87,7 +87,7 @@ class TransferTest {
 
         val endingBalance = getAccount.getEvmAccount(accountName).blockingGet()
         if (endingBalance !is GetAccount.Record.Single) fail("Failed to create account") else {
-            assertEquals("0.0010 EVM", endingBalance.item.balance)
+            assertEquals("0.0010 EVM", endingBalance.item.balance.toString())
         }
 
         // and when
@@ -106,7 +106,7 @@ class TransferTest {
 
         val finalBalance = getAccount.getEvmAccount(accountName).blockingGet()
         if (finalBalance !is GetAccount.Record.Single) fail("Failed to create account") else {
-            assertEquals("0.0000 EVM", finalBalance.item.balance)
+            assertEquals("0.0000 EVM", finalBalance.item.balance.toString())
         }
 
         // and when
@@ -167,7 +167,7 @@ class TransferTest {
 
         val startingBalance = getAccount.getEvmAccount(accountName).blockingGet()
         if (startingBalance !is GetAccount.Record.Single) fail("Failed to create account") else {
-            assertEquals("0.0000 EVM", startingBalance.item.balance)
+            assertEquals("0.0000 EVM", startingBalance.item.balance.toString())
         }
 
         // when
@@ -185,7 +185,7 @@ class TransferTest {
 
         val endingBalance = getAccount.getEvmAccount(accountName).blockingGet()
         if (endingBalance !is GetAccount.Record.Single) fail("Failed to create account") else {
-            assertEquals("0.0010 EVM", endingBalance.item.balance)
+            assertEquals("0.0010 EVM", endingBalance.item.balance.toString())
         }
 
         // and when
@@ -212,7 +212,7 @@ class TransferTest {
 
         val startingBalance = getAccount.getEvmAccount(accountName).blockingGet()
         if (startingBalance !is GetAccount.Record.Single) fail("Failed to create account") else {
-            assertEquals("0.0000 EVM", startingBalance.item.balance)
+            assertEquals("0.0000 EVM", startingBalance.item.balance.toString())
         }
 
         // when
@@ -230,7 +230,7 @@ class TransferTest {
 
         val endingBalance = getAccount.getEvmAccount(accountName).blockingGet()
         if (endingBalance !is GetAccount.Record.Single) fail("Failed to create account") else {
-            assertEquals("0.0010 EVM", endingBalance.item.balance)
+            assertEquals("0.0010 EVM", endingBalance.item.balance.toString())
         }
 
         // and when

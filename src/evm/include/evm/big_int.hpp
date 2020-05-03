@@ -70,4 +70,10 @@ class BigInt {
         data[i - begin] = bytes[i];
       return intx::be::load<uint256_t>(data);
     }
+
+    static uint256_t wei() {
+      return intx::be::load<uint256_t>({ // wei / 10000 (i.e; .0000 precision) 
+        0x00, 0x00, 0x5A, 0xF3, 0x10, 0x7A, 0x40, 0x00 
+      });
+    }
 };

@@ -7,7 +7,7 @@ class eos_system {
   public:
     static env_t env() {
       return {
-        uint256_t(0),
+        uint256_t(1),
         uint256_t(eosio::tapos_block_num()), /* blockNumber */
         uint256_t(eosio::current_time_point().sec_since_epoch()), /* timestamp */
         uint256_t(10000000), /* gasLimit */

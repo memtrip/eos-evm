@@ -228,7 +228,7 @@ TEST_CASE("Self balance, verify gas", "[gasometer]") {
   );
 
   std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
-  external->balanceResponder.push_back(std::make_pair(address, 1025));
+  external->balanceResponder.push_back(std::make_pair(address, uint256_t(1025)));
 
   std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>();
   std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);

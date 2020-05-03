@@ -243,3 +243,9 @@ TEST_CASE("load from slice [1..32]", "[big_int]") {
     Utils::uint256_2str(word1)
   );
 }
+
+TEST_CASE("wei", "[big_int]") {
+  REQUIRE("00000000000000000000000000000000000000000000000000005af3107a4000" == 
+    Utils::uint256_2str(BigInt::wei())
+  );
+}

@@ -1,10 +1,10 @@
 package com.memtrip.eos_evm.eos.state
 
 import com.memtrip.eos.http.rpc.ChainApi
-import com.memtrip.eos.http.rpc.model.contract.request.GetCurrencyBalance
 import com.memtrip.eos.http.rpc.model.contract.request.GetTableRows
 import com.memtrip.eos_evm.eos.Config
 import com.memtrip.eos_evm.eos.EosName
+import com.memtrip.eos_evm.ethereum.EthAsset
 import io.reactivex.Single
 
 class GetAccount(
@@ -14,7 +14,7 @@ class GetAccount(
     data class Item(
         val user: String,
         val nonce: String,
-        val balance: String,
+        val balance: EthAsset,
         val accountIdentifier: String
     )
 
@@ -47,10 +47,42 @@ class GetAccount(
                         Item(
                             tableRows[index]["user"].toString(),
                             tableRows[index]["nonce"].toString(),
-                            tableRows[index]["balance"].toString(),
+                            EthAsset.create(tableRows[index]["balance"].toString()),
                             tableRows[index]["accountIdentifier"].toString()
                         )
                     })
+                }
+            }
+        }
+    }
+
+    fun getAccountIdentifier(accountIdentifier: String): Single<Record> {
+        return chainApi.getTableRows(
+            GetTableRows(
+                Config.CONTRACT_ACCOUNT_NAME,
+                Config.CONTRACT_ACCOUNT_NAME,
+                "account",
+                "accountid",
+                true,
+                1,
+                accountIdentifier,
+                accountIdentifier,
+                "sha256",
+                "2",
+                "dec"
+            )
+        ).map { response ->
+            if (!response.isSuccessful) Record.None else {
+                val tableRows = response.body()!!.rows
+                if (tableRows.isEmpty()) Record.None else {
+                    Record.Single(
+                        Item(
+                            tableRows[0]["user"].toString(),
+                            tableRows[0]["nonce"].toString(),
+                            EthAsset.create(tableRows[0]["balance"].toString()),
+                            tableRows[0]["accountIdentifier"].toString()
+                        )
+                    )
                 }
             }
         }
@@ -79,7 +111,7 @@ class GetAccount(
                         Item(
                             tableRows[0]["user"].toString(),
                             tableRows[0]["nonce"].toString(),
-                            tableRows[0]["balance"].toString(),
+                            EthAsset.create(tableRows[0]["balance"].toString()),
                             tableRows[0]["accountIdentifier"].toString()
                         )
                     )

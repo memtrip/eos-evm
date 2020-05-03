@@ -1,13 +1,13 @@
 #include <vector>
 #include <memory>
 #include <eosio/eosio.hpp>
+#include <eos_evm.hpp>
 #include <evm/types.h>
 #include <evm/external.h>
 #include <evm/hash.hpp>
 #include <evm/utils.hpp>
 #include <evm/hex.hpp>
 #include <evm/overflow.hpp>
-#include <eos_evm.hpp>
 
 class eos_external: public External {
   private:
@@ -15,7 +15,7 @@ class eos_external: public External {
     uint256_t _senderAddress;
     name _sender;
     uint64_t _senderNonce;
-    uint64_t _senderAccountBalance;
+    uint256_t _senderAccountBalance;
 
     TransferType determineTransferType(const uint256_t& senderAddress, const uint256_t& toAddressWord) {
       if (_senderAddress == senderAddress) return TransferType::TRANSFER_PARENT_OUTGOING;
@@ -23,8 +23,30 @@ class eos_external: public External {
       return TransferType::TRANSFER_ADHOC;
     }
 
-    emplace_t transferAdhoc(const uint256_t& senderAddress, const uint256_t& toAddressWord, const uint256_t& value) {
-      return std::make_pair(EmplaceResult::EMPLACE_ADDRESS_NOT_FOUND, 0);
+    emplace_t transferAdhoc(const uint256_t& senderAddressWord, const uint256_t& toAddressWord, const uint256_t& value) {
+
+      eos_evm::account_table _account(_contract->get_self(), _contract->get_self().value);
+
+      address_t senderAddress = BigInt::toFixed32(senderAddressWord);
+      address_t toAddress = BigInt::toFixed32(toAddressWord);
+
+      auto senderAccountIdx = _account.get_index<name("accountid")>();
+      auto senderAccountItr = senderAccountIdx.find(senderAddress);
+      if (senderAccountItr == senderAccountIdx.end()) return std::make_pair(EmplaceResult::EMPLACE_ADDRESS_NOT_FOUND, 0);
+      senderAccountIdx.modify(senderAccountItr, _sender, [&](auto& account) {
+        uint256_t newBalance = BigInt::fromFixed32(account.balance.extract_as_byte_array()) + value;
+        account.balance = BigInt::toFixed32(newBalance);
+      });
+
+      auto toAccountIdx = _account.get_index<name("accountid")>();
+      auto toAccountItr = toAccountIdx.find(toAddress);
+      if (toAccountItr == toAccountIdx.end()) return std::make_pair(EmplaceResult::EMPLACE_ADDRESS_NOT_FOUND, 0);
+      toAccountIdx.modify(toAccountItr, _sender, [&](auto& account) {
+        uint256_t newBalance = BigInt::fromFixed32(account.balance.extract_as_byte_array()) + value;
+        account.balance = BigInt::toFixed32(newBalance);
+      });
+
+      return std::make_pair(EmplaceResult::EMPLACE_SUCCESS, 0);
     }
 
   public:
@@ -33,7 +55,7 @@ class eos_external: public External {
       const uint256_t& senderAddress,
       const name& sender, 
       uint64_t senderNonce, 
-      uint64_t senderAccountBalance
+      const uint256_t& senderAccountBalance
     ) {
       _contract = contract;
       _senderAddress = senderAddress;
@@ -51,7 +73,7 @@ class eos_external: public External {
       return _senderNonce; 
     }
 
-    uint64_t senderAccountBalance() {
+    uint256_t senderAccountBalance() {
       return _senderAccountBalance;
     }
 
@@ -73,17 +95,18 @@ class eos_external: public External {
       return std::make_shared<bytes_t>(Hex::hexToBytes(accountCodeItr->code));
     }
 
-    double balance(const uint256_t& addressWord) {
-      address_t address = BigInt::toFixed32(addressWord);
-
-      // get the account associated with the address
-      // TODO: this can also be a contract address
-      eos_evm::account_table _account(_contract->get_self(), _contract->get_self().value);
-      auto accountIdx = _account.get_index<name("accountid")>();
-      auto accountItr = accountIdx.find(address);
-      if (accountItr == accountIdx.end()) return 0; // TODO: handle this with an address not found
-
-      return accountItr->balance.amount;
+    uint256_t balance(const uint256_t& addressWord) {
+      if (addressWord == _senderAddress) {
+        return _senderAccountBalance;
+      } else {
+        address_t address = BigInt::toFixed32(addressWord);
+        // TODO: this can also be a contract address
+        eos_evm::account_table _account(_contract->get_self(), _contract->get_self().value);
+        auto accountIdx = _account.get_index<name("accountid")>();
+        auto accountItr = accountIdx.find(address);
+        if (accountItr == accountIdx.end()) return uint256_t(0); // TODO: handle this with an address not found
+        return BigInt::fromFixed32(accountItr->balance.extract_as_byte_array());
+      }
     }
 
     uint256_t storageAt(const uint256_t& key, const uint256_t& codeAddress) {
@@ -106,7 +129,7 @@ class eos_external: public External {
       auto accountCodeItr = accountCodeIdx.find(address);
       if (accountCodeItr == accountCodeIdx.end()) return std::make_pair(EmplaceResult::EMPLACE_ADDRESS_NOT_FOUND, 0);
 
-      _senderAccountBalance += accountCodeItr->balance.amount;
+      _senderAccountBalance += BigInt::fromFixed32(accountCodeItr->balance.extract_as_byte_array());
 
       accountCodeIdx.erase(accountCodeItr);
 
@@ -114,15 +137,17 @@ class eos_external: public External {
     }
 
     emplace_t transfer(const uint256_t& senderAddress, const uint256_t& toAddressWord, const uint256_t& value) {
+
+      Utils::print256(senderAddress, "senderAddress");
+      Utils::print256(toAddressWord, "toAddressWord");
+      Utils::print256(_senderAccountBalance, "_senderAccountBalance");
+
       TransferType transferType = determineTransferType(senderAddress, toAddressWord);
-      if (transferType == TransferType::TRANSFER_ADHOC)
-        return transferAdhoc(senderAddress, toAddressWord, value);
+      if (transferType == TransferType::TRANSFER_ADHOC) return transferAdhoc(senderAddress, toAddressWord, value);
 
       address_t targetAddress = (transferType == TransferType::TRANSFER_PARENT_OUTGOING) 
         ? BigInt::toFixed32(toAddressWord)
         : BigInt::toFixed32(senderAddress);
-
-      uint64_t transferValue = Overflow::uint256Cast(value).first;
 
       if (_senderAccountBalance < value) return std::make_pair(EmplaceResult::EMPLACE_INSUFFICIENT_FUNDS, 0);
 
@@ -132,14 +157,15 @@ class eos_external: public External {
       if (accountItr == accountIdx.end()) return std::make_pair(EmplaceResult::EMPLACE_ADDRESS_NOT_FOUND, 0);
    
       accountIdx.modify(accountItr, _sender, [&](auto& account) {
-        account.balance.amount = (transferType == TransferType::TRANSFER_PARENT_OUTGOING) 
-          ? (account.balance.amount + transferValue) 
-          : (account.balance.amount - transferValue);
+        uint256_t newBalance = (transferType == TransferType::TRANSFER_PARENT_OUTGOING) 
+          ? (BigInt::fromFixed32(account.balance.extract_as_byte_array()) + value) 
+          : (BigInt::fromFixed32(account.balance.extract_as_byte_array()) - value);
+        account.balance = BigInt::toFixed32(newBalance);
       });
 
       _senderAccountBalance = (transferType == TransferType::TRANSFER_PARENT_OUTGOING) 
-        ? (_senderAccountBalance - transferValue) 
-        : (_senderAccountBalance + transferValue);
+        ? (_senderAccountBalance - value) 
+        : (_senderAccountBalance + value);
 
       return std::make_pair(EmplaceResult::EMPLACE_SUCCESS, 0);
     };
@@ -150,14 +176,14 @@ class eos_external: public External {
     emplace_t emplaceCode(
       const uint256_t& originWord,
       const uint256_t& codeAddressWord, 
-      uint64_t endowment, 
+      const uint256_t& endowment, 
       std::shared_ptr<bytes_t> code
     ) {
       address_t originAddress = BigInt::toFixed32(originWord);
       address_t codeAddress = BigInt::toFixed32(codeAddressWord);
 
       // TODO: account balance needs to come from originAddress
-      if (_senderAccountBalance < endowment) return std::make_pair(EmplaceResult::EMPLACE_INSUFFICIENT_FUNDS, endowment);
+      if (_senderAccountBalance < endowment) return std::make_pair(EmplaceResult::EMPLACE_INSUFFICIENT_FUNDS, 0);
       
       // create a new code record
       eos_evm::account_code_table _account_code(_contract->get_self(), _contract->get_self().value);
@@ -167,7 +193,7 @@ class eos_external: public External {
         account_code.address = codeAddress;
         account_code.nonce = 1;
         account_code.code = Hex::bytesToHex(code);
-        account_code.balance = eosio::asset(endowment, eos_evm::CONTRACT_SYMBOL);
+        account_code.balance = BigInt::toFixed32(endowment);
       });
 
       // TODO: account balance needs to come from originAddress

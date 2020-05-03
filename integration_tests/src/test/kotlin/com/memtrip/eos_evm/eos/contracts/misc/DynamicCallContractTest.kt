@@ -33,8 +33,6 @@ class DynamicCallContractTest {
 
     private val getCode = GetCode(chainApi)
 
-    private val getAccountState = GetAccountState(chainApi)
-
     @Test
     fun `The DynamicCall contract is created`() {
 
@@ -91,7 +89,7 @@ class DynamicCallContractTest {
             ).blockingGet()
         }
 
-        assertEquals(response.statusCode, 202)
+        assertEquals(202, response.statusCode)
         response.assertConsoleString("return[000000000000000000000000000000000000000000000000000000000000000b]")
     }
 }
