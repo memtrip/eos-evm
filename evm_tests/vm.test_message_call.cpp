@@ -92,7 +92,7 @@ TEST_CASE("Call the code of another contract using STATICCALL", "[create]") {
     env.coinbase,
     env.difficulty,
     env.blockHash,
-    uint256_t(0xea0e9a), /* address */
+    codeAddress, /* senderAddress */
     uint256_t(0xf9313a), /* codeHash */
     uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
@@ -115,7 +115,16 @@ TEST_CASE("Call the code of another contract using STATICCALL", "[create]") {
   Operation operation = Operation();
 
   uint256_t childContractAddress = uint256_t(0x1283ae);
+
   pendingState->putState(uint256_t(0), childContractAddress, codeAddress);
+
+  pendingState->putState(uint256_t(0), uint256_t(0x5), childContractAddress);
+  pendingState->putState(uint256_t(1), uint256_t(0xa), childContractAddress);
+  pendingState->putState(uint256_t(2), uint256_t(0x14), childContractAddress);
+  pendingState->putState(uint256_t(3), uint256_t(0x1e), childContractAddress);
+  pendingState->putState(uint256_t(4), uint256_t(0x28), childContractAddress);
+  pendingState->putState(uint256_t(5), uint256_t(0x32), childContractAddress);
+
   external->codeResponder.push_back(std::make_pair(childContractAddress, childCodeBytes));
 
   // when
@@ -183,17 +192,69 @@ TEST_CASE("Call the code of another contract using DELEGATECALL", "[message_call
   exec_result_t vm_result = vm.execute(0, operation, context, mem, pendingState, external);
 
   // then
-  // REQUIRE(ExecResult::DONE_VOID == vm_result.first);
+  REQUIRE(ExecResult::DONE_VOID == vm_result.first);
 
-  // CHECK(2 == pendingState->logs.size());
+  CHECK(1 == pendingState->logs.size());
 
-  // CHECK(1 == pendingState->logs[0].topics.size());
-  // CHECK("0000000000000000000000000000000000000000000000000000000000463093" ==
-  //   Hex::bytesToHex(pendingState->logs[0].data)
-  // );
+  CHECK(1 == pendingState->logs[0].topics.size());
+  CHECK("0000000000000000000000000000000000000000000000000000000000ea0e9e0000000000000000000000000000000000000000000000000000000000000000" ==
+    Hex::bytesToHex(pendingState->logs[0].data)
+  );
+}
 
-  // CHECK(1 == pendingState->logs[1].topics.size());
-  // CHECK("00000000000000000000000000000000000000000000000000000000000117e6" ==
-  //   Hex::bytesToHex(pendingState->logs[1].data)
-  // );
+TEST_CASE("Call the code of the same contract using CALL", "[message_call]") {
+  bytes_t codeBytes = Hex::hexToBytes("608060405234801561001057600080fd5b50600436106100365760003560e01c80632fbebd381461003b578063febb0f7e14610069575b600080fd5b6100676004803603602081101561005157600080fd5b8101908080359060200190929190505050610087565b005b610071610094565b6040518082815260200191505060405180910390f35b80600a0160008190555050565b60008060603073ffffffffffffffffffffffffffffffffffffffff1660405180807f666f6f2875696e74323536290000000000000000000000000000000000000000815250600c0190506040518091039020600160405160200180837bffffffffffffffffffffffffffffffffffffffffffffffffffffffff19167bffffffffffffffffffffffffffffffffffffffffffffffffffffffff191681526020018260ff168152602001925050506040516020818303038152906040526040518082805190602001908083835b60208310610182578051825260208201915060208101905060208303925061015f565b6001836020036101000a0380198251168184511680821785525050505050509050019150506000604051808303816000865af19150503d80600081146101e4576040519150601f19603f3d011682016040523d82523d6000602084013e6101e9565b606091505b5091509150600054925050509056fea265627a7a7231582073b60d229026f9e49ad9d300e07e48201a07c72d29fa0695b1252f7cb2927b7b64736f6c63430005100032");
+  bytes_t dataBytes = Hex::hexToBytes("febb0f7e");
+  env_t env = Utils::env();
+  uint256_t codeAddress = uint256_t(0xea0e9b);
+
+  std::shared_ptr<Context> context = std::make_shared<Context>(
+    env.chainId,
+    env.blockNumber,
+    env.timestamp,
+    env.gasLimit,
+    env.coinbase,
+    env.difficulty,
+    env.blockHash,
+    codeAddress, /* codeAddress */
+    uint256_t(0xf9313a), /* codeHash */
+    uint256_t(0x193821), /* codeVersion */
+    codeAddress, /* address */
+    uint256_t(0xea0e9e), /* sender */
+    uint256_t(0x1283fe), /* origin */
+    4600000,
+    uint256_t(0),
+    uint256_t(0), /* value */
+    false,
+    std::make_shared<bytes_t>(codeBytes),
+    std::make_shared<bytes_t>(dataBytes)
+  );
+
+  std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
+  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>();
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(stack, gasometer);
+  std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  Operation operation = Operation();
+
+  external->codeResponder.push_back(std::make_pair(codeAddress, codeBytes));
+
+  external->balanceResponder.push_back(std::make_pair(codeAddress, uint256_t(100)));
+
+  // when
+  exec_result_t vm_result = vm.execute(0, operation, context, mem, pendingState, external);
+
+  // then
+  REQUIRE(ExecResult::DONE_RETURN == vm_result.first);
+
+  NeedsReturn needsReturn = std::get<NeedsReturn>(vm_result.second);
+
+  REQUIRE(true == needsReturn.apply);
+
+  std::string code = mem->sliceAsString(needsReturn.offset, needsReturn.size);
+
+  CHECK("000000000000000000000000000000000000000000000000000000000000000a" == 
+    code
+  );
 }

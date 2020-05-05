@@ -3,6 +3,7 @@ package com.memtrip.eos_evm.eos.state
 import com.memtrip.eos.http.rpc.ChainApi
 import com.memtrip.eos.http.rpc.model.contract.request.GetTableRows
 import com.memtrip.eos_evm.eos.Config
+import com.memtrip.eos_evm.eos.unit8ArrayToHex
 import com.memtrip.eos_evm.ethereum.EthAsset
 import io.reactivex.Single
 
@@ -44,7 +45,7 @@ class GetCode(
                 val tableRows = response.body()!!.rows
                 if (tableRows.isEmpty()) Record.None else {
                     Record.Value(Item(
-                        tableRows[0]["code"].toString(),
+                        unit8ArrayToHex(tableRows[0]["code"].toString()),
                         tableRows[0]["accountIdentifier"].toString(),
                         tableRows[0]["address"].toString(),
                         EthAsset.create(tableRows[0]["balance"].toString()),
@@ -76,7 +77,7 @@ class GetCode(
                 if (tableRows.isEmpty()) Record.None else {
                     Record.Multiple(tableRows.mapIndexed { index, _ ->
                         Item(
-                            tableRows[index]["code"].toString(),
+                            unit8ArrayToHex(tableRows[index]["code"].toString()),
                             tableRows[index]["accountIdentifier"].toString(),
                             tableRows[index]["address"].toString(),
                             EthAsset.create(tableRows[index]["balance"].toString()),

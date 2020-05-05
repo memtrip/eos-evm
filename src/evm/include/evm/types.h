@@ -48,8 +48,8 @@ typedef EnvInfo env_t;
 
 enum CallType {
   ACTION_CALL,
-  ACTION_CREATE,
-  ACTION_STATIC_CALL
+  ACTION_STATIC_CALL,
+  ACTION_CREATE
 };
 
 struct Params {
@@ -109,8 +109,7 @@ enum EmplaceResult {
 };
 
 typedef std::variant<
-  uint8_t,
-  address_t
+  uint8_t
 > emplace_result_t;
 
 typedef std::pair<EmplaceResult, emplace_result_t> emplace_t;

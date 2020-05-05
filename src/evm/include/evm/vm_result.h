@@ -11,7 +11,6 @@ struct NeedsReturn {
 typedef NeedsReturn vm_data_t;
 
 enum ExecResult {
-  STOPPED,
   DONE_VOID,
   DONE_RETURN,
   CONTINUE,

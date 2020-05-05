@@ -45,17 +45,17 @@ class eos_execute {
               
               MessageCallReturn messageCallReturn = std::get<MessageCallReturn>(callResult.second);
 
-              std::shared_ptr<bytes_t> code = std::make_shared<bytes_t>(memory->readSlice(
+              bytes_t code = memory->readSlice(
                 messageCallReturn.offset, 
                 messageCallReturn.size
-              ));
+              );
 
               external->incrementNonce();
 
               emplace_t emplaceResult = external->emplaceCode(
                 context->sender, 
                 context->sender,
-                0, // TODO: where does the endowment for parent addresses come from?
+                context->value,
                 code
               );
 
@@ -93,7 +93,7 @@ class eos_execute {
 
             if (callResult.first == MessageCallResult::MESSAGE_CALL_RETURN) {
               MessageCallReturn messageCallReturn = std::get<MessageCallReturn>(callResult.second);
-              if (messageCallReturn.size > 0)
+              if (messageCallReturn.size > 0) 
                 eosio::print("return" + Hex::bytesToWordOutput(memory->memory, messageCallReturn.offset, messageCallReturn.size));
             } else if (callResult.first == MessageCallResult::MESSAGE_CALL_REVERTED) {
               MessageCallReturn messageCallReturn = std::get<MessageCallReturn>(callResult.second);

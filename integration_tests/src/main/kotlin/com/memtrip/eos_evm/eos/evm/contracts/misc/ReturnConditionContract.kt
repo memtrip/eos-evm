@@ -16,7 +16,7 @@ import java.math.BigInteger
 /**
 pragma solidity ^0.5.11;
 
-contract ErrorTrap {
+contract ReturnCondition {
     function foo(uint a) public pure returns(string memory, uint) {
         uint nullReturn;
         if(a < 100) {
@@ -27,7 +27,7 @@ contract ErrorTrap {
     }
 }
 */
-class ErrorTrapContract(
+class ReturnConditionContract(
     contractAccountName: String,
     contractPrivateKey: EosPrivateKey,
     contractEthAccount: EthAccount

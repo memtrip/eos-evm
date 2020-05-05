@@ -49,13 +49,13 @@ class ExternalMock: public External {
       logSpy.push_back(std::make_pair(topics, data));
     }
 
-    std::shared_ptr<bytes_t> code(const uint256_t& address) {
+    bytes_t code(const uint256_t& address) {
       codeSpy.push_back(address);
       for (int i = 0; i < codeResponder.size(); i++) {
         if (codeResponder[i].first == address)
-          return  std::make_shared<bytes_t>(codeResponder[i].second);
+          return codeResponder[i].second;
       }
-      return std::make_shared<bytes_t>();
+      return bytes_t();
     }
 
     uint256_t balance(const uint256_t& addressWord) {
@@ -87,12 +87,9 @@ class ExternalMock: public External {
       const uint256_t& originWord,
       const uint256_t& codeAddressWord, 
       const uint256_t& endowment, 
-      std::shared_ptr<bytes_t> code
+      const bytes_t& code
     ) {
       emplaceSpy.push_back(std::make_pair(codeAddressWord, Hex::bytesToHex(code)));
-      return std::make_pair(
-        EmplaceResult::EMPLACE_SUCCESS,
-        BigInt::toFixed32(Address::ethereumAddressFrom(codeAddressWord, uint256_t(0)))
-      );
+      return std::make_pair(EmplaceResult::EMPLACE_SUCCESS, 0);
     }
 };

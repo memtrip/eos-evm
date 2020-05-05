@@ -154,7 +154,7 @@ class Keccak256ContractTest {
 
         // then
         assertEquals(202, response.statusCode)
-        response.assertConsoleString("return[f7c2889e894e71cac9a445259deff1fcfebaa551fdf47627aabb6a9aa2f9e9c5]")
+        response.assertConsoleString("return[229327de236bd04ccac2efc445f1a2b63afddf438b35874b9f6fd1e6c38b0198]")
     }
 
     @Test
@@ -278,11 +278,7 @@ class Keccak256ContractTest {
 
         // given
         val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed(14000)
-        val contract = Keccak256Contract(
-            newAccountName,
-            newAccountPrivateKey,
-            newEthAccount
-        )
+        val contract = Keccak256Contract(newAccountName, newAccountPrivateKey, newEthAccount)
         val createContractResponse = faultTolerant { contract.createContract().blockingGet() }
         assertEquals(202, createContractResponse.statusCode)
 
@@ -299,7 +295,7 @@ class Keccak256ContractTest {
 
         // then
         assertEquals(202, response.statusCode)
-        response.assertConsoleString("return[b10e2d527612073b26eecdfd717e6a320cf44b4afac2b0732d9fcbe2b7fa0cf6]")
+        response.assertConsoleString("return[5fe7f977e71dba2ea1a68e21057beebb9be2ac30c6410aa38d4f3fbe41dcffd2]")
     }
 
     @Test
@@ -307,11 +303,7 @@ class Keccak256ContractTest {
 
         // given
         val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed(14000)
-        val contract = Keccak256Contract(
-            newAccountName,
-            newAccountPrivateKey,
-            newEthAccount
-        )
+        val contract = Keccak256Contract(newAccountName, newAccountPrivateKey, newEthAccount)
         val createContractResponse = faultTolerant { contract.createContract().blockingGet() }
         assertEquals(202, createContractResponse.statusCode)
 
@@ -328,7 +320,7 @@ class Keccak256ContractTest {
 
         // then
         assertEquals(202, response.statusCode)
-        response.assertConsoleString("return[b10e2d527612073b26eecdfd717e6a320cf44b4afac2b0732d9fcbe2b7fa0cf6]")
+        response.assertConsoleString("return[51f81bcdfc324a0dff2b5bec9d92e21cbebc4d5e29d3a3d30de3e03fbeab8d7f]")
     }
 
     @Test
@@ -336,11 +328,7 @@ class Keccak256ContractTest {
 
         // given
         val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed(14000)
-        val contract = Keccak256Contract(
-            newAccountName,
-            newAccountPrivateKey,
-            newEthAccount
-        )
+        val contract = Keccak256Contract(newAccountName, newAccountPrivateKey, newEthAccount)
         val createContractResponse = faultTolerant { contract.createContract().blockingGet() }
         assertEquals(202, createContractResponse.statusCode)
 
@@ -365,11 +353,7 @@ class Keccak256ContractTest {
 
         // given
         val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed(14000)
-        val contract = Keccak256Contract(
-            newAccountName,
-            newAccountPrivateKey,
-            newEthAccount
-        )
+        val contract = Keccak256Contract(newAccountName, newAccountPrivateKey, newEthAccount)
         val createContractResponse = faultTolerant { contract.createContract().blockingGet() }
         assertEquals(202, createContractResponse.statusCode)
 
@@ -394,11 +378,7 @@ class Keccak256ContractTest {
 
         // given
         val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed(14000)
-        val contract = Keccak256Contract(
-            newAccountName,
-            newAccountPrivateKey,
-            newEthAccount
-        )
+        val contract = Keccak256Contract(newAccountName, newAccountPrivateKey, newEthAccount)
         val createContractResponse = faultTolerant { contract.createContract().blockingGet() }
         assertEquals(202, createContractResponse.statusCode)
 
@@ -444,7 +424,7 @@ class Keccak256ContractTest {
 
         // then
         assertEquals(202, response.statusCode)
-        response.assertConsoleString("return[abc89f3c9b8891b50ea496d210d90f155f8be28bada0e41dda2b3817372f68b1]")
+        response.assertConsoleString("return[b5cafab5b83d18303877bb912b2d66ca18ab7390cfd9be8a2e66cc5096e0ea02]")
     }
 
     @Test

@@ -53,7 +53,7 @@ class [[eosio::contract("eos_evm")]] eos_evm : public contract {
       checksum256 accountIdentifier;
       checksum256 address;
       uint64_t nonce;
-      string code;
+      bytes_t code;
       checksum256 balance;
 
       auto primary_key() const { return pk; }

@@ -6,6 +6,7 @@ import com.memtrip.eos_evm.eos.Config
 import com.memtrip.eos_evm.eos.SetupTransactions
 import com.memtrip.eos_evm.eos.evm.EvmSender
 import com.memtrip.eos_evm.eos.evm.contracts.misc.PublicLengthContract
+import com.memtrip.eos_evm.eos.evm.contracts.misc.PublicLengthPersistContract
 import com.memtrip.eos_evm.eos.faultTolerant
 import com.memtrip.eos_evm.eos.state.GetAccountState
 import com.memtrip.eos_evm.eos.state.GetCode
@@ -18,7 +19,7 @@ import org.junit.Assert.fail
 import org.junit.Test
 import java.util.concurrent.TimeUnit
 
-class PublicLengthContractTest {
+class PublicLengthPersistContractTest {
 
     private val okHttpClient = OkHttpClient.Builder()
         .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
@@ -36,12 +37,12 @@ class PublicLengthContractTest {
     private val getAccountState = GetAccountState(chainApi)
 
     @Test
-    fun `The PublicLength contract is created`() {
+    fun `The PublicLengthPersist contract is created`() {
 
         // given
         val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed(17000)
 
-        val contract = PublicLengthContract(
+        val contract = PublicLengthPersistContract(
             newAccountName,
             newAccountPrivateKey,
             newEthAccount
@@ -67,7 +68,7 @@ class PublicLengthContractTest {
                 getCodeResult.items[0].code
             )
             assertEquals(
-                "6080604052348015600f57600080fd5b506004361060285760003560e01c8063f8a8fd6d14602d575b600080fd5b60336049565b6040518082815260200191505060405180910390f35b60008060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff166333b779556040518163ffffffff1660e01b815260040160206040518083038186803b15801560b157600080fd5b505afa15801560c4573d6000803e3d6000fd5b505050506040513d602081101560d957600080fd5b810190808051906020019092919050505090509056fea265627a7a72315820fa05caa2f43753e3f959dc20ebab902ec875dfe544613f33ab6a5b1fcdeb9a7764736f6c63430005100032",
+                "6080604052348015600f57600080fd5b506004361060285760003560e01c8063f8a8fd6d14602d575b600080fd5b60336035565b005b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff166333b779556040518163ffffffff1660e01b815260040160206040518083038186803b158015609b57600080fd5b505afa15801560ae573d6000803e3d6000fd5b505050506040513d602081101560c357600080fd5b810190808051906020019092919050505060018190555056fea265627a7a723158200e960649fe3724b502d61cf2ef520c42976bd9810bb24e705f35a98b66da3e2f64736f6c63430005100032",
                 getCodeResult.items[1].code
             )
             assertEquals(getCodeResult.items[1].address, contract.accountIdentifier.pad256().toHexString())
@@ -102,7 +103,7 @@ class PublicLengthContractTest {
     fun `Call the test method`() {
         // given
         val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seedWithEvmBalance(17000)
-        val contract = PublicLengthContract(newAccountName, newAccountPrivateKey, newEthAccount)
+        val contract = PublicLengthPersistContract(newAccountName, newAccountPrivateKey, newEthAccount)
         val createContractResponse = faultTolerant { contract.createContract().blockingGet() }
         assertEquals(202, createContractResponse.statusCode)
 
@@ -121,6 +122,18 @@ class PublicLengthContractTest {
 
         // then
         assertEquals(202, response.statusCode)
-        response.assertConsoleString("return[0000000000000000000000000000000000000000000000000000000000000005]")
+
+        // and when
+        val contractAccountState = getAccountState.getAll(contract.accountIdentifier.pad256().toHexString()).blockingGet()
+
+        // and then
+        if (contractAccountState !is GetAccountState.Record.Multiple) fail("no state saved") else {
+            assertEquals(2, contractAccountState.items.size)
+            // first item is the child contract address
+            assertEquals(
+                "0000000000000000000000000000000000000000000000000000000000000005",
+                contractAccountState.items[1].value
+            )
+        }
     }
 }

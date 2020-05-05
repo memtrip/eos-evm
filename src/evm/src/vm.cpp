@@ -67,7 +67,7 @@ exec_result_t VM::step(
     instruct_t instruction = Instruction::values[opcode];
     reader->next();
 
-    // Utils::printInstruction(instruction);
+    Utils::printInstruction(instruction);
 
     instruction_verify_t verifyResult = Instruction::verify(instruction, stack->size());
     switch (verifyResult) {
@@ -330,10 +330,10 @@ instruction_result_t VM::executeCreateInstruction(
         printf("MESSAGE_CALL_RETURN\n");
         MessageCallReturn callReturn = std::get<MessageCallReturn>(callResult.second);
     
-        std::shared_ptr<bytes_t> returnDataBytes = std::make_shared<bytes_t>(createMemory->readSlice(callReturn.offset, callReturn.size));
+        bytes_t returnDataBytes = createMemory->readSlice(callReturn.offset, callReturn.size);
 
         emplace_t emplaceResult = external->emplaceCode(
-          context->origin, 
+          context->address, 
           codeAddress,
           endowment, 
           returnDataBytes
@@ -342,17 +342,21 @@ instruction_result_t VM::executeCreateInstruction(
         switch (emplaceResult.first) {
           case EmplaceResult::EMPLACE_SUCCESS:
             {
-              address_t address = std::get<address_t>(emplaceResult.second);
-              stack->push(BigInt::fromFixed32(address));
+              printf("EMPLACE_SUCCESS");
+              stack->push(codeAddress);
               return std::make_pair(
                 InstructionResult::UNUSED_GAS,
                 callReturn.gasLeft
               );
             }
           case EmplaceResult::EMPLACE_ADDRESS_NOT_FOUND:
-            return std::make_pair(InstructionResult::INSTRUCTION_TRAP, TrapKind::TRAP_INVALID_CODE_ADDRESS);
+            {
+              printf("EMPLACE_ADDRESS_NOT_FOUND");
+              return std::make_pair(InstructionResult::INSTRUCTION_TRAP, TrapKind::TRAP_INVALID_CODE_ADDRESS);
+            }
           case EmplaceResult::EMPLACE_INSUFFICIENT_FUNDS:
             {
+              printf("EMPLACE_INSUFFICIENT_FUNDS");
               stack->push(UINT256_ZERO);
               return std::make_pair(InstructionResult::UNUSED_GAS, createGas);
             }
@@ -396,7 +400,7 @@ instruction_result_t VM::executeCallInstruction(
   std::shared_ptr<External> external
 ) {
   uint256_t codeAddress = stack->peek(1);
-  uint256_t value = 0; /* TODO: clarify, context->value */
+  uint256_t value = 0; /* TODO: clarify, should context->value be used in the absense of a stack value? */
   bool isStatic = context->isStatic;
   uint64_t inOffset;
   uint64_t inSize;
@@ -492,6 +496,8 @@ instruction_result_t VM::executeCallInstruction(
   std::shared_ptr<bytes_t> callData = std::make_shared<bytes_t>(memory->readSlice(inOffset, inSize));
   // printf("callData{%s}\n", Hex::bytesToHex(callData).c_str());
 
+  Utils::print256(codeAddress, "context->codeAddress");
+
   std::shared_ptr<Context> callContext = Context::makeInnerCall(
     context,
     codeAddress, 
@@ -528,11 +534,13 @@ instruction_result_t VM::executeCallInstruction(
       {
         printf("MESSAGE_CALL_RETURN\n");
         MessageCallReturn callReturn = std::get<MessageCallReturn>(callResult.second);
+        returnData = callMemory->readSlice(callReturn.offset, callReturn.size);
+        memory->writeSlice(outOffset, outSize, returnData);
         Utils::printLong(callReturn.offset, "offset");
         Utils::printLong(callReturn.size, "size");
-        stack->push(UINT256_ONE);
-        returnData = callMemory->readSlice(callReturn.offset, callReturn.size);
+        Utils::printBytes(callMemory->memory, "callMemory->memory");
         Utils::printBytes(returnData, "returnData");
+        stack->push(UINT256_ONE);
         return std::make_pair(
           InstructionResult::UNUSED_GAS,
           callReturn.gasLeft
@@ -544,6 +552,7 @@ instruction_result_t VM::executeCallInstruction(
         MessageCallReturn callReturn = std::get<MessageCallReturn>(callResult.second);
         stack->push(UINT256_ZERO);
         returnData = callMemory->readSlice(callReturn.offset, callReturn.size);
+        memory->writeSlice(outOffset, outSize, returnData);
         return std::make_pair(
           InstructionResult::UNUSED_GAS,
           callReturn.gasLeft

@@ -101,7 +101,7 @@ void eos_evm::checkCallResult(const name& from, call_result_t callResult) {
             check(false, "MESSAGE_CALL_FAILED [Insufficient funds.]");
             break;
           case TrapKind::TRAP_INVALID_CODE_ADDRESS:
-            check(false, "MESSAGE_CALL_FAILED [An invalid address is attempting to create a contract.]");
+            check(false, "MESSAGE_CALL_FAILED [An invalid address is attempting to modify a contract.]");
             break;
           case TrapKind::TRAP_OVERFLOW:
             check(false, "MESSAGE_CALL_FAILED [An integer overflow ocurred.]");

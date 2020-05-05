@@ -54,6 +54,11 @@ class Memory {
       return BigInt::load32(offset, memory);
     }
 
+    void writeSlice(uint64_t offset, uint64_t size, const bytes_t& bytes) {
+      if (!isValidRange(offset, size)) return;
+      std::copy(bytes.begin(), bytes.begin() + size, memory.begin() + offset);
+    }
+
     bytes_t readSlice(uint64_t offset, uint64_t size) {
       if (!isValidRange(offset, size) 
         || offset > memorySize 

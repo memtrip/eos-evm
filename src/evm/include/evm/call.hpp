@@ -35,7 +35,6 @@ class Call {
           case EmplaceResult::EMPLACE_ADDRESS_NOT_FOUND:
             return std::make_pair(MessageCallResult::MESSAGE_CALL_FAILED, TrapKind::TRAP_INVALID_CODE_ADDRESS);
           case EmplaceResult::EMPLACE_INSUFFICIENT_FUNDS:
-            // TODO: in the parent call, should funds be checked before it's even possible to get here?
             return std::make_pair(MessageCallResult::MESSAGE_CALL_FAILED, TrapKind::TRAP_INSUFFICIENT_FUNDS);
           case EmplaceResult::EMPLACE_SUCCESS:
             break;
@@ -54,13 +53,11 @@ class Call {
       printf("]");
 
       switch (vm_result.first) {
-        case ExecResult::STOPPED:
-          return std::make_pair(MessageCallResult::MESSAGE_CALL_SUCCESS, 0);
         case ExecResult::DONE_VOID:
-        {
-          gas_t gasLeft = std::get<gas_t>(vm_result.second);
-          return std::make_pair(MessageCallResult::MESSAGE_CALL_SUCCESS, gasLeft);
-        }
+          {
+            gas_t gasLeft = std::get<gas_t>(vm_result.second);
+            return std::make_pair(MessageCallResult::MESSAGE_CALL_SUCCESS, gasLeft);
+          }
         case ExecResult::DONE_RETURN:
           {
             vm_data_t vmData = std::get<vm_data_t>(vm_result.second);
@@ -89,6 +86,7 @@ class Call {
           }
         case ExecResult::CONTINUE:
           {
+            // in reality this is never called
             pendingState->revert(nextStackDepth);
             return std::make_pair(MessageCallResult::MESSAGE_CALL_FAILED, 0);
           }

@@ -3,6 +3,23 @@
 #include <evm/types.h>
 #include <evm/pending_state.hpp>
 
+TEST_CASE("Put two items under different codeAddress, but the same key, retrieve the item for the first codeAddress", "[pending_state]") {
+
+  // given
+  std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
+
+  PendingState pendingState {};
+
+  // when
+  pendingState.currentStackDepth = 1;
+  pendingState.putState(uint256_t(0x00), uint256_t(0xB1), uint256_t(0xA1));
+  pendingState.putState(uint256_t(0x00), uint256_t(0xB2), uint256_t(0xA2));
+
+  // then
+  CHECK(uint256_t(0xB1) == pendingState.getState(uint256_t(0x00), uint256_t(0xA1), external));
+  CHECK(uint256_t(0xB2) == pendingState.getState(uint256_t(0x00), uint256_t(0xA2), external));
+}
+
 TEST_CASE("Get an item for a given key, when there are multiple items for the same key across different depths", "[pending_state]") {
 
   // given

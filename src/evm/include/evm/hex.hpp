@@ -72,10 +72,10 @@ class Hex {
     }
 
     static std::string bytesToWordOutput(const bytes_t& bytes, uint64_t offset, uint64_t size) {
-      uint64_t totalBytes = offset + size;
-      if (totalBytes % WORD_SIZE != 0 || totalBytes > bytes.size() || size == 0) return "[]";
+      uint64_t endIndex = offset + size;
+      if (size % WORD_SIZE != 0 || endIndex > bytes.size() || size == 0) return "[]";
       std::string result = "[";
-      for (uint16_t i = offset; i < totalBytes; i += WORD_SIZE) {
+      for (uint16_t i = offset; i < endIndex; i += WORD_SIZE) {
         result += bytesWordToHex(bytes, i);
         result += ",";
       }

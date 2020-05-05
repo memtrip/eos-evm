@@ -47,13 +47,16 @@ abstract class EvmContract(
 
     val contractAccountIdentifier = accountIdentifier.pad256().toHexString()
 
-    protected fun create(parameters: List<Type<*>> = listOf()): Single<ChainResponse<TransactionCommitted>> {
+    protected fun create(
+        parameters: List<Type<*>> = listOf(),
+        value: BigInteger = BigInteger.valueOf(0)
+    ): Single<ChainResponse<TransactionCommitted>> {
         val abiEncodedBytes = if (parameters.isNotEmpty()) FunctionEncoder.encodeConstructor(parameters) else ""
         val transaction = EthereumTransaction(
             1,
             gasPrice,
             gasLimit,
-            BigInteger.valueOf(0),
+            value,
             data + abiEncodedBytes
         )
         return rawAction.pushTransaction(

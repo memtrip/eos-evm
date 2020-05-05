@@ -37,7 +37,6 @@ class MiniDAOContractTest {
 
     private val getCode = GetCode(chainApi)
 
-
     private val getAccount = GetAccount(chainApi)
 
     @Test

@@ -1,11 +1,12 @@
 package com.memtrip.eos_evm.eos.contracts.misc
 
 import com.memtrip.eos.http.rpc.Api
+import com.memtrip.eos_evm.assertConsoleString
 import com.memtrip.eos_evm.eos.AccountIdentifier
 import com.memtrip.eos_evm.eos.Config
 import com.memtrip.eos_evm.eos.SetupTransactions
 import com.memtrip.eos_evm.eos.evm.EvmSender
-import com.memtrip.eos_evm.eos.evm.contracts.misc.ErrorTrapContract
+import com.memtrip.eos_evm.eos.evm.contracts.misc.ReturnConditionContract
 import com.memtrip.eos_evm.eos.faultTolerant
 import com.memtrip.eos_evm.eos.state.GetAccountState
 import com.memtrip.eos_evm.eos.state.GetCode
@@ -18,7 +19,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.util.concurrent.TimeUnit
 
-class ErrorTrapContractTest {
+class ReturnConditionContractTest {
 
     private val okHttpClient = OkHttpClient.Builder()
         .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
@@ -41,7 +42,7 @@ class ErrorTrapContractTest {
         // given
         val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
 
-        val contract = ErrorTrapContract(
+        val contract = ReturnConditionContract(
             newAccountName,
             newAccountPrivateKey,
             newEthAccount
@@ -76,7 +77,7 @@ class ErrorTrapContractTest {
         // given
         val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
 
-        val contract = ErrorTrapContract(
+        val contract = ReturnConditionContract(
             newAccountName,
             newAccountPrivateKey,
             newEthAccount
@@ -105,7 +106,8 @@ class ErrorTrapContractTest {
             )).blockingGet()
         }
 
-        assertEquals(500, fooResponse.statusCode)
+        assertEquals(202, fooResponse.statusCode)
+        fooResponse.assertConsoleString("return[0000000000000000000000000000000000000000000000000000000000000040,0000000000000000000000000000000000000000000000000000000000000000,0000000000000000000000000000000000000000000000000000000000000009,546f6f20736d616c6c0000000000000000000000000000000000000000000000]")
     }
 
     @Test
@@ -114,7 +116,7 @@ class ErrorTrapContractTest {
         // given
         val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
 
-        val contract = ErrorTrapContract(
+        val contract = ReturnConditionContract(
             newAccountName,
             newAccountPrivateKey,
             newEthAccount

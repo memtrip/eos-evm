@@ -109,7 +109,7 @@ class Context {
       std::shared_ptr<std::vector<RLPItem>> rlp, 
       std::shared_ptr<External> external
     ) {
-      std::shared_ptr<bytes_t> code = external->code(toAddress);
+      bytes_t code = external->code(toAddress);
       return std::make_shared<Context>(
         env.chainId,
         env.blockNumber,
@@ -128,7 +128,7 @@ class Context {
         Transaction::gasPrice(rlp),
         Transaction::value(rlp),
         false,
-        code,
+        std::make_shared<bytes_t>(code),
         std::make_shared<bytes_t>(
           rlp->at(0).values[Transaction::RLP_DATA].bytes.begin(), 
           rlp->at(0).values[Transaction::RLP_DATA].bytes.end()
@@ -148,7 +148,7 @@ class Context {
       std::shared_ptr<bytes_t> data,
       std::shared_ptr<External> external
     ) {
-      std::shared_ptr<bytes_t> code = external->code(codeAddress);
+      bytes_t code = external->code(codeAddress);
       return std::make_shared<Context>(
         parentContext->chainId,
         parentContext->blockNumber,
@@ -167,7 +167,7 @@ class Context {
         gasPrice,
         value,
         isStatic,
-        code,
+        std::make_shared<bytes_t>(code),
         data
       );
     } 

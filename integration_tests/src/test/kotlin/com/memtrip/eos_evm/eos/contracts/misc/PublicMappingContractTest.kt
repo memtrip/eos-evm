@@ -15,6 +15,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.junit.Assert
 import org.junit.Assert.assertEquals
+import org.junit.Assert.fail
 import org.junit.Test
 import java.util.concurrent.TimeUnit
 
@@ -58,7 +59,7 @@ class PublicMappingContractTest {
             contract.accountIdentifier.pad256().toHexString()
         ).blockingGet()
 
-        if (getCodeResult !is GetCode.Record.Multiple) Assert.fail("code record not found") else {
+        if (getCodeResult !is GetCode.Record.Multiple) fail("code record not found") else {
             assertEquals(2, getCodeResult.items.size)
             assertEquals(
                 "6080604052348015600f57600080fd5b506004361060285760003560e01c8063ed17585014602d575b600080fd5b605660048036036020811015604157600080fd5b8101908080359060200190929190505050606c565b6040518082815260200191505060405180910390f35b6000602052806000526040600020600091509050548156fea265627a7a72315820e42322782734d761aba70a6907d7fb967e28211b423341f82ada9db18e1d4aa364736f6c63430005100032",
@@ -95,6 +96,6 @@ class PublicMappingContractTest {
 
         // then
         assertEquals(202, response.statusCode)
-        response.assertConsoleString("return[000000000000000000000000000000000000000000000000000000000000002A]")
+        response.assertConsoleString("return[000000000000000000000000000000000000000000000000000000000000002a]")
     }
 }

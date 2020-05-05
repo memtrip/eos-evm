@@ -1,11 +1,16 @@
 package com.memtrip.eos_evm.eos.contracts.ethereum_org
 
 import com.memtrip.eos.http.rpc.Api
+import com.memtrip.eos_evm.assertConsoleString
+import com.memtrip.eos_evm.eos.AccountIdentifier
 import com.memtrip.eos_evm.eos.Config
 import com.memtrip.eos_evm.eos.SetupTransactions
+import com.memtrip.eos_evm.eos.evm.EvmSender
 import com.memtrip.eos_evm.eos.evm.contracts.ethereum_org.TokenERC20Contract
 import com.memtrip.eos_evm.eos.faultTolerant
+import com.memtrip.eos_evm.eos.state.GetAccountState
 import com.memtrip.eos_evm.eos.state.GetCode
+import com.memtrip.eos_evm.ethereum.EthAsset
 import com.memtrip.eos_evm.ethereum.pad256
 import com.memtrip.eos_evm.ethereum.toHexString
 import okhttp3.OkHttpClient
@@ -13,6 +18,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Test
+import java.math.BigInteger
 import java.util.concurrent.TimeUnit
 
 class TokenERC20ContractTest {
@@ -30,22 +36,19 @@ class TokenERC20ContractTest {
 
     private val getCode = GetCode(chainApi)
 
+    private val getAccountState = GetAccountState(chainApi)
+
     @Test
     fun `The TokenERC20 contract is created`() {
 
         // given
         val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seedWithEvmBalance(30000)
-
-        val contract = TokenERC20Contract(
-            newAccountName,
-            newAccountPrivateKey,
-            newEthAccount
-        )
+        val contract = TokenERC20Contract(newAccountName, newAccountPrivateKey, newEthAccount)
 
         // when
-        val createContractResponse = faultTolerant {
-            contract.createContract(100,"eos", "EOS").blockingGet()
-        }
+        val createContractResponse = contract.createContract(
+            BigInteger.valueOf(1000) ,"eos", "EOS").blockingGet()
+
 
         // then
         assertEquals(202, createContractResponse.statusCode)
@@ -62,6 +65,200 @@ class TokenERC20ContractTest {
                 getCodeResult.items[0].code
             )
             assertEquals(getCodeResult.items[0].address, contract.accountIdentifier.pad256().toHexString())
+        }
+    }
+
+    @Test
+    fun `ERC20 token transfer`() {
+
+        // given
+        val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seedWithEvmBalance(30000)
+        val contract = TokenERC20Contract(newAccountName, newAccountPrivateKey, newEthAccount)
+        val createContractResponse = contract.createContract(EthAsset.milliether(15000),"eos", "EOS").blockingGet()
+        assertEquals(202, createContractResponse.statusCode)
+
+        val (senderAccountName, senderPrivateKey, senderEthAccount) = setupTransactions.seedWithEvmBalance(30000)
+        val senderAccountIdentifier = AccountIdentifier.create(senderAccountName, senderEthAccount.address)
+
+        // when
+        val transferResponse = contract.transfer(
+            senderAccountIdentifier.toHexString(),
+            EthAsset.milliether(5000),
+            EvmSender(
+                3,
+                newEthAccount,
+                newAccountName,
+                newAccountPrivateKey,
+                contract.accountIdentifier.toHexString()
+            )
+        ).blockingGet()
+
+        // then
+        assertEquals(202, transferResponse.statusCode)
+
+        // and when
+        val accountState = getAccountState.getAll(contract.accountIdentifier.pad256().toHexString()).blockingGet()
+
+        // and then
+        if (accountState !is GetAccountState.Record.Multiple) Assert.fail("no state saved") else {
+            assertEquals(6, accountState.items.size)
+            // TODO: clarify this account state
+        }
+    }
+
+    @Test
+    fun `ERC20 burn tokens`() {
+
+        // given
+        val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seedWithEvmBalance(30000)
+        val contract = TokenERC20Contract(newAccountName, newAccountPrivateKey, newEthAccount)
+        val createContractResponse = faultTolerant {
+            contract.createContract(EthAsset.milliether(15000),"eos", "EOS").blockingGet()
+        }
+        assertEquals(202, createContractResponse.statusCode)
+
+        // when
+        val burnResponse = contract.burn(
+            EthAsset.milliether(12000),
+            EvmSender(
+                3,
+                newEthAccount,
+                newAccountName,
+                newAccountPrivateKey,
+                contract.accountIdentifier.toHexString()
+            )
+        ).blockingGet()
+
+        // then
+        assertEquals(202, burnResponse.statusCode)
+        burnResponse.assertConsoleString("return[0000000000000000000000000000000000000000000000000000000000000001]")
+
+        // and when
+        val accountState = getAccountState.getAll(contract.accountIdentifier.pad256().toHexString()).blockingGet()
+
+        // and then
+        if (accountState !is GetAccountState.Record.Multiple) Assert.fail("no state saved") else {
+            assertEquals(5, accountState.items.size)
+            // TODO: clarify this account state
+        }
+    }
+
+    @Test
+    fun `ERC20 approve a second account to access funds, and make transfer`() {
+
+        // given
+        val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seedWithEvmBalance(30000)
+        val contract = TokenERC20Contract(newAccountName, newAccountPrivateKey, newEthAccount)
+        val createContractResponse = faultTolerant {
+            contract.createContract(EthAsset.milliether(15000),"eos", "EOS").blockingGet()
+        }
+        assertEquals(202, createContractResponse.statusCode)
+
+        val (senderAccountName, senderPrivateKey, senderEthAccount) = setupTransactions.seedWithEvmBalance(30000)
+        val senderAccountIdentifier = AccountIdentifier.create(senderAccountName, senderEthAccount.address)
+
+        val (thirdPartyAccountName, thirdPartyPrivateKey, thirdPartyEthAccount) = setupTransactions.seedWithEvmBalance(30000)
+        val thirdPartyAccountIdentifier = AccountIdentifier.create(senderAccountName, senderEthAccount.address)
+
+        // when
+        val approveResponse = contract.approve(
+            senderAccountIdentifier.toHexString(),
+            EthAsset.milliether(5000),
+            EvmSender(
+                3,
+                newEthAccount,
+                newAccountName,
+                newAccountPrivateKey,
+                contract.accountIdentifier.toHexString()
+            )
+        ).blockingGet()
+
+        // then
+        assertEquals(202, approveResponse.statusCode)
+
+        // and when
+        val transferFromResponse = contract.transferFrom(
+            contract.accountIdentifier.toHexString(),
+            thirdPartyAccountIdentifier.toHexString(),
+            EthAsset.milliether(5000),
+            EvmSender(
+                1,
+                senderEthAccount,
+                senderAccountName,
+                senderPrivateKey,
+                senderAccountIdentifier.toHexString()
+            )
+        ).blockingGet()
+
+        // and then
+        assertEquals(202, transferFromResponse.statusCode)
+
+        // and when
+        val accountState = getAccountState.getAll(contract.accountIdentifier.pad256().toHexString()).blockingGet()
+
+        // and then
+        if (accountState !is GetAccountState.Record.Multiple) Assert.fail("no state saved") else {
+            assertEquals(7, accountState.items.size)
+            // TODO: clarify this account state
+        }
+    }
+
+    @Test
+    fun `ERC20 approve a second account to access funds, and burn tokens`() {
+
+        // given
+        val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seedWithEvmBalance(30000)
+        val contract = TokenERC20Contract(newAccountName, newAccountPrivateKey, newEthAccount)
+        val createContractResponse = faultTolerant {
+            contract.createContract(EthAsset.milliether(15000),"eos", "EOS").blockingGet()
+        }
+        assertEquals(202, createContractResponse.statusCode)
+
+        val (senderAccountName, senderPrivateKey, senderEthAccount) = setupTransactions.seedWithEvmBalance(30000)
+        val senderAccountIdentifier = AccountIdentifier.create(senderAccountName, senderEthAccount.address)
+
+        val (thirdPartyAccountName, thirdPartyPrivateKey, thirdPartyEthAccount) = setupTransactions.seedWithEvmBalance(30000)
+        val thirdPartyAccountIdentifier = AccountIdentifier.create(senderAccountName, senderEthAccount.address)
+
+        // when
+        val approveResponse = contract.approve(
+            senderAccountIdentifier.toHexString(),
+            EthAsset.milliether(5000),
+            EvmSender(
+                3,
+                newEthAccount,
+                newAccountName,
+                newAccountPrivateKey,
+                contract.accountIdentifier.toHexString()
+            )
+        ).blockingGet()
+
+        // then
+        assertEquals(202, approveResponse.statusCode)
+
+        // and when
+        val transferFromResponse = contract.burnFrom(
+            contract.accountIdentifier.toHexString(),
+            EthAsset.milliether(5000),
+            EvmSender(
+                1,
+                senderEthAccount,
+                senderAccountName,
+                senderPrivateKey,
+                senderAccountIdentifier.toHexString()
+            )
+        ).blockingGet()
+
+        // and then
+        assertEquals(202, transferFromResponse.statusCode)
+
+        // and when
+        val accountState = getAccountState.getAll(contract.accountIdentifier.pad256().toHexString()).blockingGet()
+
+        // and then
+        if (accountState !is GetAccountState.Record.Multiple) Assert.fail("no state saved") else {
+            assertEquals(6, accountState.items.size)
+            // TODO: clarify this account state
         }
     }
 }

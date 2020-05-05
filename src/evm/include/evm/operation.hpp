@@ -736,7 +736,10 @@ class Operation {
         uint8_t data[WORD_SIZE] = {};
         for (size_t i = begin; i < end; i++)
           data[i - begin] = context->data->at(i);
-        stack->push(intx::be::load<uint256_t>(data));
+        uint256_t word = intx::be::load<uint256_t>(data);
+        // Utils::print256(index, "calldataload->index");
+        // Utils::print256(word, "calldataload->word");
+        stack->push(word);
       }
       return std::make_pair(InstructionResult::OK, 0);
     }
@@ -918,8 +921,9 @@ class Operation {
     ) {
       uint256_t offset = stack->peek(0);
       uint256_t word = memory->read(Overflow::uint256Cast(offset).first);
-      Utils::print256(offset, "offset");
-      Utils::print256(word, "word");
+      // Utils::print256(offset, "offset");
+      // Utils::print256(word, "word");
+      // Utils::printBytes(memory->memory, "memory");
       stack->pop(1);
       stack->push(word);
       return std::make_pair(InstructionResult::OK, 0);
@@ -937,8 +941,9 @@ class Operation {
     ) {
       uint256_t offset = stack->peek(0);
       uint256_t word = stack->peek(1);
-      Utils::print256(offset, "offset");
-      Utils::print256(word, "word");
+      // Utils::print256(offset, "offset");
+      // Utils::print256(word, "word");
+      // Utils::printBytes(memory->memory, "memory");
       memory->write(Overflow::uint256Cast(offset).first, word);
       stack->pop(2);
       return std::make_pair(InstructionResult::OK, 0);
@@ -1058,7 +1063,7 @@ class Operation {
     ) {
       uint256_t address = stack->peek(0);
       stack->pop(1);
-      size_t codeSize = external->code(address)->size();
+      size_t codeSize = external->code(address).size();
       stack->push(uint256_t(codeSize));
       return std::make_pair(InstructionResult::OK, 0);
     }
@@ -1245,8 +1250,9 @@ class Operation {
       std::shared_ptr<Memory> memory, 
       std::shared_ptr<StackMachine> stack
     ) {
-      uint256_t address = stack->peek(0);
-      stack->push(external->balance(address));
+      uint256_t balance = external->balance(stack->peek(0));
+      Utils::print256(balance, "balance_address");
+      stack->push(balance);
       return std::make_pair(InstructionResult::OK, 0);
     }
 
@@ -1263,9 +1269,9 @@ class Operation {
       uint256_t key = stack->peek(0);
       uint256_t word = pendingState->getState(key, context->codeAddress, external);
 
-      printf("key{%s}\n", Utils::uint256_2str(key).c_str());
-      printf("word{%s}\n", Utils::uint256_2str(word).c_str());
-      printf("context->codeAddress{%s}\n", Utils::uint256_2str(context->codeAddress).c_str());
+      // printf("key{%s}\n", Utils::uint256_2str(key).c_str());
+      // printf("word{%s}\n", Utils::uint256_2str(word).c_str());
+      // printf("context->codeAddress{%s}\n", Utils::uint256_2str(context->codeAddress).c_str());
 
       stack->pop(1);
       stack->push(word);
@@ -1375,7 +1381,7 @@ class Operation {
     ) {  
       uint256_t address = stack->peek(0);
       stack->pop(1);
-      std::shared_ptr<bytes_t> codeBytes = external->code(address);
+      bytes_t codeBytes = external->code(address);
       stack->push(Hash::keccak256Word(codeBytes));
       return std::make_pair(InstructionResult::OK, 0);
     }

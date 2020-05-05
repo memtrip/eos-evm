@@ -60,8 +60,8 @@ class PendingState {
     uint256_t getState(const uint256_t& key, const uint256_t& codeAddress, std::shared_ptr<External> external) {
       std::vector<account_state_t> results;
       std::copy_if(
-        accountState.begin(), accountState.end(), std::back_inserter(results), [key](const account_state_t& stateItem) { 
-          return stateItem.key == key;
+        accountState.begin(), accountState.end(), std::back_inserter(results), [key, codeAddress](const account_state_t& stateItem) { 
+          return stateItem.key == key && stateItem.codeAddress == codeAddress;
         }
       );
 

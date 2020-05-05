@@ -1,9 +1,9 @@
 package com.memtrip.eos_evm.eos
 
-import com.memtrip.eos.chain.actions.ChainResponse
-import com.memtrip.eos.http.rpc.model.transaction.response.TransactionCommitted
 import com.memtrip.eos_evm.ethereum.EthereumTransaction
-import java.lang.IllegalStateException
+import com.memtrip.eos_evm.ethereum.asciiToHex
+import com.memtrip.eos_evm.ethereum.toHexBytes
+import com.memtrip.eos_evm.ethereum.toHexString
 import java.math.BigInteger
 import java.util.*
 import kotlin.streams.asSequence
@@ -39,3 +39,13 @@ fun stubTransaction(): EthereumTransaction {
         "0x000000000000000"
     )
 }
+
+fun unit8ArrayToHex(uint8Array: String): String {
+    val removePrecision = uint8Array.replace(".0", "")
+    val removeLeftBracket = removePrecision.replace("[", "")
+    val removeRightBracket = removeLeftBracket.replace("]", "")
+    return removeRightBracket.split(",").map {
+        (it.trim().toInt() and 0xFF).toByte()
+    }.toByteArray().toHexString()
+}
+
