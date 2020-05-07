@@ -1,0 +1,57 @@
+//
+// ${lastUpdated?string('dd.MM.yyyy')}
+// Auto generated based off the Ethereum tests found here:
+// https://github.com/ethereum/tests/blob/develop/TransactionTests/
+//
+#include "catch.hpp"
+#include <memory>
+#include <evm/transaction.hpp>
+#include <evm/utils.hpp>
+#include <evm/types.h>
+#include <evm/hex.hpp>
+#include <evm/rlp_decode.hpp>
+#include "test_utils.hpp"
+
+<#list validTests as test>
+TEST_CASE("${test.parentName}______$${test.name}", "[gen_transaction)]") {
+
+  // given
+  std::string hex = "${test.rlp}";
+
+  // when
+  std::shared_ptr<std::vector<RLPItem>> rlp = std::make_shared<std::vector<RLPItem>>();
+  RLPDecode::decode(Hex::hexToBytes(hex), rlp);
+
+  // then
+  CHECK(TransactionActionType::${test.type} == Transaction::type(rlp));
+  CHECK("${test.nonce}" ==  Utils::uint256_2str(Transaction::nonce(rlp)));
+  CHECK("${test.gasPrice}" ==  Utils::uint256_2str(Transaction::gasPrice(rlp)));
+  CHECK("${test.gasLimit}" ==  Utils::uint256_2str(Transaction::gas(rlp)));
+  CHECK("${test.value}" ==  Utils::uint256_2str(Transaction::value(rlp)));
+  CHECK("${test.data}" == Hex::bytesToHex(Transaction::data(rlp)));
+  <#if test.toAddress??>
+  CHECK("${test.toAddress}" == TestUtils::bytesToPaddedHex(Transaction::address(rlp)));
+  </#if>
+  <#if test.v??>
+  CHECK("${test.v}" == TestUtils::bytesToPaddedHex(Transaction::v(rlp)));
+  </#if>
+  <#if test.r??>
+  CHECK("${test.r}" == TestUtils::bytesToPaddedHex(Transaction::r(rlp)));
+  </#if>
+  <#if test.s??>
+  CHECK("${test.s}" == TestUtils::bytesToPaddedHex(Transaction::s(rlp)));
+  </#if>
+}
+
+</#list>
+<#list handledExceptionTests as test>
+TEST_CASE("${test.parentName}______$${test.name}", "[gen_transaction)]") {
+  // given
+  std::string hex = "${test.rlp}";
+
+  // when
+  std::shared_ptr<std::vector<RLPItem>> rlp = std::make_shared<std::vector<RLPItem>>();
+  RLPDecode::decode(Hex::hexToBytes(hex), rlp);
+}
+
+</#list>

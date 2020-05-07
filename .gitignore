@@ -7,11 +7,14 @@
 
 .DS_Store
 
-tools/js/node_modules/*
-
-out/
+build_tests/
 
 build/
 integration_tests/.gradle/
 integration_tests/.idea/
-env/mnt_nodeos/blockchain
+environment/mnt_nodeos/blockchain
+tools/node_modules
+clients/generate_tests/.gradle
+clients/generate_tests/.idea
+acceptance_tests/.gradle
+acceptance_tests/.idea

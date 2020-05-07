@@ -1,0 +1,65 @@
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath 'gradle.plugin.org.jlleitschuh.gradle:ktlint-gradle:6.1.0'
+    }
+}
+
+plugins {
+    id 'java'
+    id 'org.jetbrains.kotlin.jvm' version '1.3.61'
+    id "org.jetbrains.kotlin.kapt" version "1.2.61"
+    id "org.jlleitschuh.gradle.ktlint" version "6.1.0"
+}
+
+group 'com.memtrip.eos_evm'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    jcenter()
+    maven { url 'https://jitpack.io' }
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+
+    compile 'org.freemarker:freemarker:2.3.30'
+
+    /* moshi */
+    compile 'com.squareup.moshi:moshi-kotlin:1.6.0'
+    kapt 'com.squareup.moshi:moshi-kotlin-codegen:1.6.0'
+
+    /* eos-jvm */
+    implementation ("com.memtrip.eos-jvm:eos-abi-writer:1.0.0-beta04") {
+        exclude group: "com.lambdaworks", module: "scrypt"
+    }
+
+    /* web3j */
+    compile 'org.web3j:core:4.5.12'
+}
+
+allprojects {
+    task sourcesJar(type: Jar, dependsOn: project.classes) {
+        from sourceSets.main.allSource
+    }
+}
+
+task runGenerate(type: JavaExec) {
+    main = 'com.memtrip.evm.GenerateTests'
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}

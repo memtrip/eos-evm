@@ -1,3 +1,18 @@
+# eos-evm
+
+eos-evm is an implementation of the Ethereum Virtual Machine (EVM) written in C++17 for the EOSIO.CDT (Contract Development Toolkit). The project enables Ethereum compatible smart contracts to be executed by an eosio blockchain.
+An address scheme is used to link an eosio account to an Ethereum address, eos-evm will accept a signed Ethereum transaction, verify the validity of the signature, execute the transaction, and commit any state changes as per the EVM spec. In the case of an unsigned Ethereum transaction, eos-evm will execute the transaction using the eosio permission system.
+
+## Overview
+
+The project
+
+- Acceptance Tests
+- Clients
+- Contract
+- Environment
+- Tools
+
 ## Divergence from the EVM specification
 
 ### SSTORE
