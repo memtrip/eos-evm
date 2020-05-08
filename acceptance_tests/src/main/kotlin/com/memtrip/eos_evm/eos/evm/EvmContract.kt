@@ -7,6 +7,7 @@ import com.memtrip.eos.http.rpc.Api
 import com.memtrip.eos.http.rpc.model.transaction.response.TransactionCommitted
 import com.memtrip.eos_evm.eos.*
 import com.memtrip.eos_evm.eos.actions.raw.RawAction
+import com.memtrip.eos_evm.eos.evm.contracts.CreateResponse
 import com.memtrip.eos_evm.ethereum.EthAccount
 import com.memtrip.eos_evm.ethereum.EthereumTransaction
 import com.memtrip.eos_evm.ethereum.pad256
@@ -41,16 +42,20 @@ abstract class EvmContract(
 
     private val rawAction = RawAction(chainApi)
 
-    val accountIdentifier by lazy {
+    private val getCode = GetCode(chainApi)
+
+    val ownerAccountIdentifier by lazy {
         AccountIdentifier.create(contractAccountName, contractEthAccount.address)
     }
 
-    val contractAccountIdentifier = accountIdentifier.pad256().toHexString()
+    val ownerAccountIdentifierString32 = ownerAccountIdentifier.pad256().toHexString()
+
+    private lateinit var parentAddress: String
 
     protected fun create(
         parameters: List<Type<*>> = listOf(),
         value: BigInteger = BigInteger.valueOf(0)
-    ): Single<ChainResponse<TransactionCommitted>> {
+    ): Single<CreateResponse> {
         val abiEncodedBytes = if (parameters.isNotEmpty()) FunctionEncoder.encodeConstructor(parameters) else ""
         val transaction = EthereumTransaction(
             1,
@@ -62,9 +67,23 @@ abstract class EvmContract(
         return rawAction.pushTransaction(
             contractAccountName,
             transaction.sign(contractEthAccount).signedTransaction.toHexString(),
-            accountIdentifier.toHexString(),
+            ownerAccountIdentifier.toHexString(),
             TransactionContext(contractAccountName, contractPrivateKey, transactionDefaultExpiry())
-        )
+        ).flatMap { response ->
+            val ownerAddress = ownerAccountIdentifier.pad256().toHexString()
+            if (response.isSuccessful) {
+                getCode.getAllByOwner(ownerAddress).map {
+                    if (it is GetCode.Record.Multiple) {
+                        parentAddress = it.items.last().address
+                        CreateResponse(response, it.items, it.items.last().address)
+                    } else {
+                        CreateResponse(response, emptyList(), "")
+                    }
+                }
+            } else {
+                Single.just(CreateResponse(response, emptyList(), ""))
+            }
+        }
     }
 
     fun executeMethod(
@@ -81,7 +100,7 @@ abstract class EvmContract(
             gasLimit,
             sender.value,
             abiEncodedBytes,
-            contractAccountIdentifier
+            parentAddress
         )
 
         return rawAction.pushTransaction(

@@ -4,14 +4,12 @@ import com.memtrip.eos.http.rpc.Api
 import com.memtrip.eos_evm.eos.Config
 import com.memtrip.eos_evm.eos.SetupTransactions
 import com.memtrip.eos_evm.eos.evm.contracts.misc.BigIntArrayContract
-import com.memtrip.eos_evm.eos.faultTolerant
 import com.memtrip.eos_evm.eos.state.GetAccountState
-import com.memtrip.eos_evm.eos.state.GetCode
+import com.memtrip.eos_evm.eos.evm.GetCode
 import com.memtrip.eos_evm.ethereum.pad256
 import com.memtrip.eos_evm.ethereum.toHexString
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Assert.fail
 import org.junit.Test
@@ -49,34 +47,22 @@ class BigIntArrayContractTest {
         )
 
         // when
-        val createContractResponse = faultTolerant {
-            contract.createContract(listOf(
-                BigInteger.valueOf(0),
-                BigInteger(Hash.sha3(contract.accountIdentifier.pad256()).toHexString(), 16),
-                BigInteger("4cfe1ad630604051808273ffffffffffffffffffffffffffffffffffffffff16", 16)
-            )).blockingGet()
-        }
+        val createContract = contract.createContract(listOf(
+            BigInteger.valueOf(0),
+            BigInteger(Hash.sha3(contract.ownerAccountIdentifier.pad256()).toHexString(), 16),
+            BigInteger("4cfe1ad630604051808273ffffffffffffffffffffffffffffffffffffffff16", 16)
+        )).blockingGet()
 
         // then
-        assertEquals(202, createContractResponse.statusCode)
+        assertEquals(202, createContract.statusCode)
+        assertEquals(1, createContract.code.size)
+        assertEquals(
+            "6080604052600080fdfea265627a7a72315820a69ee7faacbc5dae47918f7b25009aace0b3bdf791cb6e44035d0311a86a8d1364736f6c63430005100032",
+            createContract.code[0].code
+        )
 
         // and when
-        val getCodeResult = getCode.getAll(
-            contract.accountIdentifier.pad256().toHexString()
-        ).blockingGet()
-
-        // and then
-        if (getCodeResult !is GetCode.Record.Multiple) Assert.fail("code record not found") else {
-            assertEquals(1, getCodeResult.items.size)
-            assertEquals(
-                "6080604052600080fdfea265627a7a72315820a69ee7faacbc5dae47918f7b25009aace0b3bdf791cb6e44035d0311a86a8d1364736f6c63430005100032",
-                getCodeResult.items[0].code
-            )
-            assertEquals(getCodeResult.items[0].address, contract.accountIdentifier.pad256().toHexString())
-        }
-
-        // and when
-        val accountState = getAccountState.getAll(contract.accountIdentifier.pad256().toHexString()).blockingGet()
+        val accountState = getAccountState.getAll(createContract.parentContractAddress32).blockingGet()
 
         // and then
         if (accountState !is GetAccountState.Record.Multiple) fail("no state saved") else {

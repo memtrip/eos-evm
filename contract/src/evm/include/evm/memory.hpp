@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <memory>
+#include <keccak/keccak.hpp>
 #include <evm/types.h>
 #include <evm/overflow.hpp>
 #include <evm/big_int.hpp>
@@ -63,7 +64,11 @@ class Memory {
       if (!isValidRange(offset, size) 
         || offset > memorySize 
         || size > memorySize
-      ) return bytes_t();
+      ) {
+        printf("should go here?");
+        return bytes_t();
+      }
+      Utils::printLong(memorySize, "memorySize");
       return bytes_t(memory.begin() + offset, memory.begin() + offset + size);
     }
  
@@ -72,7 +77,9 @@ class Memory {
         || offset > memorySize 
         || size > memorySize
       ) return Hash::keccak256Word(bytes_t());
-      return Hash::keccak256Word(bytes_t(memory.begin() + offset, memory.begin() + offset + size));
+
+      ethash::hash256 result = ethash::keccak256(memory.data() + offset, size);
+      return intx::be::load<uint256_t>(result.bytes);
     }
 
     std::string sliceAsString(uint64_t offset, uint64_t size) {

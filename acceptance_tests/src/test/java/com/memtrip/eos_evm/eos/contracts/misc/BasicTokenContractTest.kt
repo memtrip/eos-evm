@@ -9,8 +9,7 @@ import com.memtrip.eos_evm.eos.evm.EvmSender
 import com.memtrip.eos_evm.eos.evm.contracts.misc.BasicTokenContract
 import com.memtrip.eos_evm.eos.faultTolerant
 import com.memtrip.eos_evm.eos.state.GetAccountState
-import com.memtrip.eos_evm.eos.state.GetCode
-import com.memtrip.eos_evm.ethereum.pad256
+import com.memtrip.eos_evm.eos.evm.GetCode
 import com.memtrip.eos_evm.ethereum.toHexString
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -49,31 +48,19 @@ class BasicTokenContractTest {
         )
 
         // when
-        val createContractResponse = faultTolerant {
-            contract.createContract().blockingGet()
-        }
+        val createContract = contract.createContract().blockingGet()
 
         // then
-        assertEquals(202, createContractResponse.statusCode)
+        assertEquals(202, createContract.statusCode)
+        assertEquals(1, createContract.code.size)
+        assertEquals(
+            "608060405234801561001057600080fd5b50600436106100365760003560e01c806370a082311461003b578063a9059cbb14610093575b600080fd5b61007d6004803603602081101561005157600080fd5b81019080803573ffffffffffffffffffffffffffffffffffffffff1690602001909291905050506100e1565b6040518082815260200191505060405180910390f35b6100df600480360360408110156100a957600080fd5b81019080803573ffffffffffffffffffffffffffffffffffffffff16906020019092919080359060200190929190505050610129565b005b60008060008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020549050919050565b806000803373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060008282540392505081905550806000808473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060008282540192505081905550505056fea265627a7a723158206cd6bdb9d9779d30a4f5bab15baadea00a6ca7a723ad04549b29d5477684678f64736f6c63430005100032",
+            createContract.code[0].code
+        )
+        assertEquals("1.0", createContract.code[0].nonce)
 
         // and when
-        val getCodeResult = getCode.getAll(
-            contract.accountIdentifier.pad256().toHexString()
-        ).blockingGet()
-
-        // and then
-        if (getCodeResult !is GetCode.Record.Multiple) Assert.fail("code record not found") else {
-            assertEquals(1, getCodeResult.items.size)
-            assertEquals(
-                "608060405234801561001057600080fd5b50600436106100365760003560e01c806370a082311461003b578063a9059cbb14610093575b600080fd5b61007d6004803603602081101561005157600080fd5b81019080803573ffffffffffffffffffffffffffffffffffffffff1690602001909291905050506100e1565b6040518082815260200191505060405180910390f35b6100df600480360360408110156100a957600080fd5b81019080803573ffffffffffffffffffffffffffffffffffffffff16906020019092919080359060200190929190505050610129565b005b60008060008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020549050919050565b806000803373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060008282540392505081905550806000808473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060008282540192505081905550505056fea265627a7a723158206cd6bdb9d9779d30a4f5bab15baadea00a6ca7a723ad04549b29d5477684678f64736f6c63430005100032",
-                getCodeResult.items[0].code
-            )
-            assertEquals("1.0", getCodeResult.items[0].nonce)
-            assertEquals(getCodeResult.items[0].address, contract.accountIdentifier.pad256().toHexString())
-        }
-
-        // and when
-        val accountState = getAccountState.getAll(contract.accountIdentifier.pad256().toHexString()).blockingGet()
+        val accountState = getAccountState.getAll(createContract.parentContractAddress32).blockingGet()
 
         // and then
         if (accountState !is GetAccountState.Record.Multiple) Assert.fail("no state saved") else {
@@ -88,8 +75,8 @@ class BasicTokenContractTest {
         // given
         val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
         val contract = BasicTokenContract(newAccountName, newAccountPrivateKey, newEthAccount)
-        val createContractResponse = faultTolerant { contract.createContract().blockingGet() }
-        assertEquals(202, createContractResponse.statusCode)
+        val createContract = contract.createContract().blockingGet()
+        assertEquals(202, createContract.statusCode)
 
         // and given
         val (senderAccountName, senderPrivateKey, senderEthAccount) = setupTransactions.seedWithSystemBalance()
@@ -105,7 +92,7 @@ class BasicTokenContractTest {
                     newEthAccount,
                     newAccountName,
                     newAccountPrivateKey,
-                    contract.accountIdentifier.toHexString()
+                    contract.ownerAccountIdentifier.toHexString()
                 )
             ).blockingGet()
         }

@@ -75,7 +75,15 @@ class ExternalMock: public External {
       return std::make_pair(EmplaceResult::EMPLACE_SUCCESS, 0);
     };
 
-    virtual uint256_t incrementContractNonce(const uint256_t& address) { return uint256_t(0); };
+    uint256_t incrementContractNonce(const uint256_t& address) { return uint256_t(0); };
+
+    emplace_t emplaceCodeAddress(
+      const uint256_t& ownerAddressWord,
+      const uint256_t& codeAddressWord, 
+      const uint256_t& endowment, 
+    ) { 
+      return std::make_pair(EmplaceResult::EMPLACE_SUCCESS, 0); 
+    };
 
     emplace_t emplaceCode(
       const uint256_t& originWord,

@@ -8,16 +8,15 @@ import com.memtrip.eos_evm.eos.evm.EvmSender
 import com.memtrip.eos_evm.eos.evm.contracts.misc.SendEthContract
 import com.memtrip.eos_evm.eos.faultTolerant
 import com.memtrip.eos_evm.eos.state.GetAccount
-import com.memtrip.eos_evm.eos.state.GetCode
+import com.memtrip.eos_evm.eos.evm.GetCode
+import com.memtrip.eos_evm.ethereum.EthAsset
 import com.memtrip.eos_evm.ethereum.pad256
 import com.memtrip.eos_evm.ethereum.toHexString
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Assert.fail
 import org.junit.Test
-import java.math.BigInteger
 import java.util.concurrent.TimeUnit
 
 class SendEthContractTest {
@@ -33,15 +32,13 @@ class SendEthContractTest {
 
     private val setupTransactions = SetupTransactions(chainApi)
 
-    private val getCode = GetCode(chainApi)
-
     private val getAccount = GetAccount(chainApi)
 
     @Test
     fun `The SendEth contract is created`() {
 
         // given
-        val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed()
+        val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seedWithEvmBalance()
 
         val contract = SendEthContract(
             newAccountName,
@@ -50,27 +47,18 @@ class SendEthContractTest {
         )
 
         // when
-        val createContractResponse = faultTolerant {
-            contract.createContract().blockingGet()
-        }
+        val createContract = contract.createContract(EthAsset.eth(1)).blockingGet()
 
         // then
-        assertEquals(202, createContractResponse.statusCode)
+        assertEquals(202, createContract.statusCode)
 
         // and when
-        val getCodeResult = getCode.getAll(
-            contract.accountIdentifier.pad256().toHexString()
-        ).blockingGet()
-
-        if (getCodeResult !is GetCode.Record.Multiple) Assert.fail("code record not found") else {
-            assertEquals(1, getCodeResult.items.size)
-            assertEquals(
-                "608060405234801561001057600080fd5b50600436106100415760003560e01c80633e58c58c146100465780633fa26c8f1461008a5780636a0fac75146100ce575b600080fd5b6100886004803603602081101561005c57600080fd5b81019080803573ffffffffffffffffffffffffffffffffffffffff169060200190929190505050610112565b005b6100cc600480360360208110156100a057600080fd5b81019080803573ffffffffffffffffffffffffffffffffffffffff169060200190929190505050610153565b005b610110600480360360208110156100e457600080fd5b81019080803573ffffffffffffffffffffffffffffffffffffffff169060200190929190505050610194565b005b8073ffffffffffffffffffffffffffffffffffffffff166108fc670de0b6b3a76400009081150290604051600060405180830381858888f193505050505050565b8073ffffffffffffffffffffffffffffffffffffffff166108fc670de0b6b3a76400009081150290604051600060405180830381858888f193505050505050565b60008173ffffffffffffffffffffffffffffffffffffffff16670de0b6b3a764000060405180600001905060006040518083038185875af1925050503d80600081146101fc576040519150601f19603f3d011682016040523d82523d6000602084013e610201565b606091505b5050809150508061021557600061021457fe5b5b505056fea265627a7a723158206f2442af23fa33ef85370ca85bcb3052c48804d2077eddcdcf5c7a0f83e60f7864736f6c63430005100032",
-                getCodeResult.items[0].code
-            )
-            assertEquals("1.0", getCodeResult.items[0].nonce)
-            assertEquals(getCodeResult.items[0].address, contract.accountIdentifier.pad256().toHexString())
-        }
+        assertEquals(1, createContract.code.size)
+        assertEquals(
+            "608060405234801561001057600080fd5b50600436106100415760003560e01c80633e58c58c146100465780633fa26c8f1461008a5780636a0fac75146100ce575b600080fd5b6100886004803603602081101561005c57600080fd5b81019080803573ffffffffffffffffffffffffffffffffffffffff169060200190929190505050610112565b005b6100cc600480360360208110156100a057600080fd5b81019080803573ffffffffffffffffffffffffffffffffffffffff169060200190929190505050610153565b005b610110600480360360208110156100e457600080fd5b81019080803573ffffffffffffffffffffffffffffffffffffffff169060200190929190505050610194565b005b8073ffffffffffffffffffffffffffffffffffffffff166108fc670de0b6b3a76400009081150290604051600060405180830381858888f193505050505050565b8073ffffffffffffffffffffffffffffffffffffffff166108fc670de0b6b3a76400009081150290604051600060405180830381858888f193505050505050565b60008173ffffffffffffffffffffffffffffffffffffffff16670de0b6b3a764000060405180600001905060006040518083038185875af1925050503d80600081146101fc576040519150601f19603f3d011682016040523d82523d6000602084013e610201565b606091505b5050809150508061021557600061021457fe5b5b505056fea265627a7a72315820c97551ba526259c6777eb5b1bb8cf0d44c88d5711e081ef23c4ee5d0eddca59764736f6c63430005100032",
+            createContract.code[0].code
+        )
+        assertEquals("1.0", createContract.code[0].nonce)
     }
 
     @Test
@@ -84,8 +72,8 @@ class SendEthContractTest {
             newAccountPrivateKey,
             newEthAccount
         )
-        val createContractResponse = faultTolerant { contract.createContract().blockingGet() }
-        assertEquals(202, createContractResponse.statusCode)
+        val createContract = contract.createContract(EthAsset.eth(1)).blockingGet()
+        assertEquals(202, createContract.statusCode)
 
         val (senderAccountName, senderPrivateKey, senderEthAccount) = setupTransactions.seedWithEvmBalance()
         val senderAccountIdentifier = AccountIdentifier.create(senderAccountName, senderEthAccount.address)
@@ -99,7 +87,7 @@ class SendEthContractTest {
                     newEthAccount,
                     newAccountName,
                     newAccountPrivateKey,
-                    contract.accountIdentifier.toHexString()
+                    contract.ownerAccountIdentifier.toHexString()
                 )
             ).blockingGet()
         }
@@ -130,8 +118,8 @@ class SendEthContractTest {
             newAccountPrivateKey,
             newEthAccount
         )
-        val createContractResponse = faultTolerant { contract.createContract().blockingGet() }
-        assertEquals(202, createContractResponse.statusCode)
+        val createContract = contract.createContract(EthAsset.eth(1)).blockingGet()
+        assertEquals(202, createContract.statusCode)
 
         val (senderAccountName, senderPrivateKey, senderEthAccount) = setupTransactions.seedWithEvmBalance()
         val senderAccountIdentifier = AccountIdentifier.create(senderAccountName, senderEthAccount.address)
@@ -145,7 +133,7 @@ class SendEthContractTest {
                     newEthAccount,
                     newAccountName,
                     newAccountPrivateKey,
-                    contract.accountIdentifier.toHexString()
+                    contract.ownerAccountIdentifier.toHexString()
                 )
             ).blockingGet()
         }
@@ -175,8 +163,8 @@ class SendEthContractTest {
             newAccountPrivateKey,
             newEthAccount
         )
-        val createContractResponse = faultTolerant { contract.createContract().blockingGet() }
-        assertEquals(202, createContractResponse.statusCode)
+        val createContract = contract.createContract(EthAsset.eth(1)).blockingGet()
+        assertEquals(202, createContract.statusCode)
 
         val (senderAccountName, senderPrivateKey, senderEthAccount) = setupTransactions.seedWithEvmBalance()
         val senderAccountIdentifier = AccountIdentifier.create(senderAccountName, senderEthAccount.address)
@@ -190,7 +178,7 @@ class SendEthContractTest {
                     newEthAccount,
                     newAccountName,
                     newAccountPrivateKey,
-                    contract.accountIdentifier.toHexString()
+                    contract.ownerAccountIdentifier.toHexString()
                 )
             ).blockingGet()
         }

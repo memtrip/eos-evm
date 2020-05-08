@@ -56,7 +56,6 @@ exec_result_t VM::step(
   std::shared_ptr<PendingState> pendingState,
   std::shared_ptr<External> external
 ) {
-  // TODO: done check required?
 
   if (gasometer->currentGas == 0) {
     return std::make_pair(ExecResult::VM_OUT_OF_GAS, 0);
@@ -119,7 +118,6 @@ exec_result_t VM::step(
       case Opcode::RETURNDATASIZE:
         {
           uint256_t returnDataSize = uint256_t(returnData.size());
-          Utils::print256(returnDataSize, "returnDataSize");
           stack->push(returnDataSize);
           result = std::make_pair(InstructionResult::OK, 0);
           break;
@@ -254,6 +252,7 @@ instruction_result_t VM::executeCreateInstruction(
 
   AddressScheme addressScheme; 
   uint256_t salt;
+  uint256_t parentNonce = external->incrementContractNonce(context->address);
 
   switch (opcode) {
     case Opcode::CREATE:
@@ -262,7 +261,7 @@ instruction_result_t VM::executeCreateInstruction(
         endowment = stack->peek(0);
         initOff = Overflow::uint256Cast(stack->peek(1)).first;
         initSize = Overflow::uint256Cast(stack->peek(2)).first;
-        salt = external->incrementContractNonce(context->address);
+        salt = parentNonce;
         stack->pop(3);
         break;
       }
@@ -349,6 +348,7 @@ instruction_result_t VM::executeCreateInstruction(
                 callReturn.gasLeft
               );
             }
+          case EmplaceResult::EMPLACE_CODE_ALREADY_EXISTS:
           case EmplaceResult::EMPLACE_ADDRESS_NOT_FOUND:
             {
               printf("EMPLACE_ADDRESS_NOT_FOUND");

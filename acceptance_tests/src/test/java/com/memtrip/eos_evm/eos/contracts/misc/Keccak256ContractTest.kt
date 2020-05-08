@@ -7,13 +7,11 @@ import com.memtrip.eos_evm.eos.SetupTransactions
 import com.memtrip.eos_evm.eos.evm.EvmSender
 import com.memtrip.eos_evm.eos.evm.contracts.misc.Keccak256Contract
 import com.memtrip.eos_evm.eos.faultTolerant
-import com.memtrip.eos_evm.eos.state.GetAccountState
-import com.memtrip.eos_evm.eos.state.GetCode
+import com.memtrip.eos_evm.eos.evm.GetCode
 import com.memtrip.eos_evm.ethereum.pad256
 import com.memtrip.eos_evm.ethereum.toHexString
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.util.concurrent.TimeUnit
@@ -46,27 +44,16 @@ class Keccak256ContractTest {
         )
 
         // when
-        val createContractResponse = faultTolerant {
-            contract.createContract().blockingGet()
-        }
+        val createContract = contract.createContract().blockingGet()
 
         // then
-        assertEquals(202, createContractResponse.statusCode)
-
-        // and when
-        val getCodeResult = getCode.getAll(
-            contract.accountIdentifier.pad256().toHexString()
-        ).blockingGet()
-
-        if (getCodeResult !is GetCode.Record.Multiple) Assert.fail("code record not found") else {
-            assertEquals(1, getCodeResult.items.size)
-            assertEquals(
-                "608060405234801561001057600080fd5b50600436106100ea5760003560e01c80635985b6241161008c578063c8cf44bd11610066578063c8cf44bd1461021b578063d2f8cf241461023d578063e86783a71461025b578063f74d8e3214610279576100ea565b80635985b624146101c15780635fdc7f65146101df5780637781deba146101fd576100ea565b806344d9385f116100c857806344d9385f146101495780634c9e7ca5146101675780635087821a1461018557806351193102146101a3576100ea565b806304d3c094146100ef578063114be5841461010d57806311b405c71461012b575b600080fd5b6100f7610297565b6040518082815260200191505060405180910390f35b6101156102db565b6040518082815260200191505060405180910390f35b610133610329565b6040518082815260200191505060405180910390f35b6101516104de565b6040518082815260200191505060405180910390f35b61016f610516565b6040518082815260200191505060405180910390f35b61018d61076f565b6040518082815260200191505060405180910390f35b6101ab6107c6565b6040518082815260200191505060405180910390f35b6101c961082e565b6040518082815260200191505060405180910390f35b6101e761085d565b6040518082815260200191505060405180910390f35b61020561088c565b6040518082815260200191505060405180910390f35b6102236108bb565b604051808215151515815260200191505060405180910390f35b610245610979565b6040518082815260200191505060405180910390f35b6102636109a8565b6040518082815260200191505060405180910390f35b6102816109df565b6040518082815260200191505060405180910390f35b60006040518060400160405280600181526020017f610000000000000000000000000000000000000000000000000000000000000081525080519060200120905090565b60007fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff6040516020018082815260200191505060405160208183030381529060405280519060200120905090565b6000807f4254430000000000000000000000000000000000000000000000000000000000905060007f4554480000000000000000000000000000000000000000000000000000000000905060007f4c54430000000000000000000000000000000000000000000000000000000000905060007f444f474500000000000000000000000000000000000000000000000000000000905083838383604051602001808577ffffffffffffffffffffffffffffffffffffffffffffffff191677ffffffffffffffffffffffffffffffffffffffffffffffff191681526008018477ffffffffffffffffffffffffffffffffffffffffffffffff191677ffffffffffffffffffffffffffffffffffffffffffffffff191681526008018377ffffffffffffffffffffffffffffffffffffffffffffffff191677ffffffffffffffffffffffffffffffffffffffffffffffff191681526008018277ffffffffffffffffffffffffffffffffffffffffffffffff191677ffffffffffffffffffffffffffffffffffffffffffffffff191681526008019450505050506040516020818303038152906040528051906020012094505050505090565b60006001604051602001808260000b60000b60f81b815260010191505060405160208183030381529060405280519060200120905090565b60006060600460405190808252806020026020018201604052801561054a5781602001602082028038833980820191505090505b5090507f42544300000000000000000000000000000000000000000000000000000000008160008151811061057b57fe5b602002602001019077ffffffffffffffffffffffffffffffffffffffffffffffff1916908177ffffffffffffffffffffffffffffffffffffffffffffffff1916815250507f4554480000000000000000000000000000000000000000000000000000000000816001815181106105ed57fe5b602002602001019077ffffffffffffffffffffffffffffffffffffffffffffffff1916908177ffffffffffffffffffffffffffffffffffffffffffffffff1916815250507f4c544300000000000000000000000000000000000000000000000000000000008160028151811061065f57fe5b602002602001019077ffffffffffffffffffffffffffffffffffffffffffffffff1916908177ffffffffffffffffffffffffffffffffffffffffffffffff1916815250507f444f474500000000000000000000000000000000000000000000000000000000816003815181106106d157fe5b602002602001019077ffffffffffffffffffffffffffffffffffffffffffffffff1916908177ffffffffffffffffffffffffffffffffffffffffffffffff1916815250508060405160200180828051906020019060200280838360005b8381101561074957808201518184015260208101905061072e565b505050509050019150506040516020818303038152906040528051906020012091505090565b6000600160405160200180807f610000000000000000000000000000000000000000000000000000000000000081525060010182815260200191505060405160208183030381529060405280519060200120905090565b600080736779913e982688474f710b47e1c0506c5dca463490508060601b60405160200180826bffffffffffffffffffffffff19166bffffffffffffffffffffffff191681526014019150506040516020818303038152906040528051906020012091505090565b6000600a6040516020018082815260200191505060405160208183030381529060405280519060200120905090565b600060016040516020018082815260200191505060405160208183030381529060405280519060200120905090565b600060016040516020018082815260200191505060405160208183030381529060405280519060200120905090565b600060405160200180807f6100000000000000000000000000000000000000000000000000000000000000815250600101807f620000000000000000000000000000000000000000000000000000000000000081525060010190506040516020818303038152906040528051906020012060405160200180807f616200000000000000000000000000000000000000000000000000000000000081525060020190506040516020818303038152906040528051906020012014905090565b600060646040516020018082815260200191505060405160208183030381529060405280519060200120905090565b600068056bc75e2d631000006040516020018082815260200191505060405160208183030381529060405280519060200120905090565b60006001604051602001808263ffffffff1663ffffffff1660e01b81526004019150506040516020818303038152906040528051906020012090509056fea265627a7a72315820f7a792ce3b439827014f0fd72e9523c5e58cd73fe9dff7f2f0e1a09b7fd96baf64736f6c63430005100032",
-                getCodeResult.items[0].code
-            )
-            assertEquals("1.0", getCodeResult.items[0].nonce)
-            assertEquals(getCodeResult.items[0].address, contract.accountIdentifier.pad256().toHexString())
-        }
+        assertEquals(202, createContract.statusCode)
+        assertEquals(1, createContract.code.size)
+        assertEquals(
+            "608060405234801561001057600080fd5b50600436106100ea5760003560e01c80635985b6241161008c578063c8cf44bd11610066578063c8cf44bd1461021b578063d2f8cf241461023d578063e86783a71461025b578063f74d8e3214610279576100ea565b80635985b624146101c15780635fdc7f65146101df5780637781deba146101fd576100ea565b806344d9385f116100c857806344d9385f146101495780634c9e7ca5146101675780635087821a1461018557806351193102146101a3576100ea565b806304d3c094146100ef578063114be5841461010d57806311b405c71461012b575b600080fd5b6100f7610297565b6040518082815260200191505060405180910390f35b6101156102db565b6040518082815260200191505060405180910390f35b610133610329565b6040518082815260200191505060405180910390f35b6101516104de565b6040518082815260200191505060405180910390f35b61016f610516565b6040518082815260200191505060405180910390f35b61018d61076f565b6040518082815260200191505060405180910390f35b6101ab6107c6565b6040518082815260200191505060405180910390f35b6101c961082e565b6040518082815260200191505060405180910390f35b6101e761085d565b6040518082815260200191505060405180910390f35b61020561088c565b6040518082815260200191505060405180910390f35b6102236108bb565b604051808215151515815260200191505060405180910390f35b610245610979565b6040518082815260200191505060405180910390f35b6102636109a8565b6040518082815260200191505060405180910390f35b6102816109df565b6040518082815260200191505060405180910390f35b60006040518060400160405280600181526020017f610000000000000000000000000000000000000000000000000000000000000081525080519060200120905090565b60007fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff6040516020018082815260200191505060405160208183030381529060405280519060200120905090565b6000807f4254430000000000000000000000000000000000000000000000000000000000905060007f4554480000000000000000000000000000000000000000000000000000000000905060007f4c54430000000000000000000000000000000000000000000000000000000000905060007f444f474500000000000000000000000000000000000000000000000000000000905083838383604051602001808577ffffffffffffffffffffffffffffffffffffffffffffffff191677ffffffffffffffffffffffffffffffffffffffffffffffff191681526008018477ffffffffffffffffffffffffffffffffffffffffffffffff191677ffffffffffffffffffffffffffffffffffffffffffffffff191681526008018377ffffffffffffffffffffffffffffffffffffffffffffffff191677ffffffffffffffffffffffffffffffffffffffffffffffff191681526008018277ffffffffffffffffffffffffffffffffffffffffffffffff191677ffffffffffffffffffffffffffffffffffffffffffffffff191681526008019450505050506040516020818303038152906040528051906020012094505050505090565b60006001604051602001808260000b60000b60f81b815260010191505060405160208183030381529060405280519060200120905090565b60006060600460405190808252806020026020018201604052801561054a5781602001602082028038833980820191505090505b5090507f42544300000000000000000000000000000000000000000000000000000000008160008151811061057b57fe5b602002602001019077ffffffffffffffffffffffffffffffffffffffffffffffff1916908177ffffffffffffffffffffffffffffffffffffffffffffffff1916815250507f4554480000000000000000000000000000000000000000000000000000000000816001815181106105ed57fe5b602002602001019077ffffffffffffffffffffffffffffffffffffffffffffffff1916908177ffffffffffffffffffffffffffffffffffffffffffffffff1916815250507f4c544300000000000000000000000000000000000000000000000000000000008160028151811061065f57fe5b602002602001019077ffffffffffffffffffffffffffffffffffffffffffffffff1916908177ffffffffffffffffffffffffffffffffffffffffffffffff1916815250507f444f474500000000000000000000000000000000000000000000000000000000816003815181106106d157fe5b602002602001019077ffffffffffffffffffffffffffffffffffffffffffffffff1916908177ffffffffffffffffffffffffffffffffffffffffffffffff1916815250508060405160200180828051906020019060200280838360005b8381101561074957808201518184015260208101905061072e565b505050509050019150506040516020818303038152906040528051906020012091505090565b6000600160405160200180807f610000000000000000000000000000000000000000000000000000000000000081525060010182815260200191505060405160208183030381529060405280519060200120905090565b600080736779913e982688474f710b47e1c0506c5dca463490508060601b60405160200180826bffffffffffffffffffffffff19166bffffffffffffffffffffffff191681526014019150506040516020818303038152906040528051906020012091505090565b6000600a6040516020018082815260200191505060405160208183030381529060405280519060200120905090565b600060016040516020018082815260200191505060405160208183030381529060405280519060200120905090565b600060016040516020018082815260200191505060405160208183030381529060405280519060200120905090565b600060405160200180807f6100000000000000000000000000000000000000000000000000000000000000815250600101807f620000000000000000000000000000000000000000000000000000000000000081525060010190506040516020818303038152906040528051906020012060405160200180807f616200000000000000000000000000000000000000000000000000000000000081525060020190506040516020818303038152906040528051906020012014905090565b600060646040516020018082815260200191505060405160208183030381529060405280519060200120905090565b600068056bc75e2d631000006040516020018082815260200191505060405160208183030381529060405280519060200120905090565b60006001604051602001808263ffffffff1663ffffffff1660e01b81526004019150506040516020818303038152906040528051906020012090509056fea265627a7a72315820f7a792ce3b439827014f0fd72e9523c5e58cd73fe9dff7f2f0e1a09b7fd96baf64736f6c63430005100032",
+            createContract.code[0].code
+        )
+        assertEquals("1.0", createContract.code[0].nonce)
     }
 
     @Test
@@ -79,8 +66,8 @@ class Keccak256ContractTest {
             newAccountPrivateKey,
             newEthAccount
         )
-        val createContractResponse = faultTolerant { contract.createContract().blockingGet() }
-        assertEquals(202, createContractResponse.statusCode)
+        val createContract = contract.createContract().blockingGet()
+        assertEquals(202, createContract.statusCode)
 
         // when
         val response = faultTolerant {
@@ -89,7 +76,7 @@ class Keccak256ContractTest {
                 newEthAccount,
                 newAccountName,
                 newAccountPrivateKey,
-                contract.accountIdentifier.toHexString()
+                contract.ownerAccountIdentifier.toHexString()
             )).blockingGet()
         }
 
@@ -108,8 +95,8 @@ class Keccak256ContractTest {
             newAccountPrivateKey,
             newEthAccount
         )
-        val createContractResponse = faultTolerant { contract.createContract().blockingGet() }
-        assertEquals(202, createContractResponse.statusCode)
+        val createContract = contract.createContract().blockingGet()
+        assertEquals(202, createContract.statusCode)
 
         // when
         val response = faultTolerant {
@@ -118,7 +105,7 @@ class Keccak256ContractTest {
                 newEthAccount,
                 newAccountName,
                 newAccountPrivateKey,
-                contract.accountIdentifier.toHexString()
+                contract.ownerAccountIdentifier.toHexString()
             )).blockingGet()
         }
 
@@ -137,8 +124,8 @@ class Keccak256ContractTest {
             newAccountPrivateKey,
             newEthAccount
         )
-        val createContractResponse = faultTolerant { contract.createContract().blockingGet() }
-        assertEquals(202, createContractResponse.statusCode)
+        val createContract = contract.createContract().blockingGet()
+        assertEquals(202, createContract.statusCode)
 
         // when
         val response = faultTolerant {
@@ -147,7 +134,7 @@ class Keccak256ContractTest {
                 newEthAccount,
                 newAccountName,
                 newAccountPrivateKey,
-                contract.accountIdentifier.toHexString()
+                contract.ownerAccountIdentifier.toHexString()
             )).blockingGet()
         }
 
@@ -166,8 +153,8 @@ class Keccak256ContractTest {
             newAccountPrivateKey,
             newEthAccount
         )
-        val createContractResponse = faultTolerant { contract.createContract().blockingGet() }
-        assertEquals(202, createContractResponse.statusCode)
+        val createContract = contract.createContract().blockingGet()
+        assertEquals(202, createContract.statusCode)
 
         // when
         val response = faultTolerant {
@@ -176,7 +163,7 @@ class Keccak256ContractTest {
                 newEthAccount,
                 newAccountName,
                 newAccountPrivateKey,
-                contract.accountIdentifier.toHexString()
+                contract.ownerAccountIdentifier.toHexString()
             )).blockingGet()
         }
 
@@ -195,8 +182,8 @@ class Keccak256ContractTest {
             newAccountPrivateKey,
             newEthAccount
         )
-        val createContractResponse = faultTolerant { contract.createContract().blockingGet() }
-        assertEquals(202, createContractResponse.statusCode)
+        val createContract = contract.createContract().blockingGet()
+        assertEquals(202, createContract.statusCode)
 
         // when
         val response = faultTolerant {
@@ -205,7 +192,7 @@ class Keccak256ContractTest {
                 newEthAccount,
                 newAccountName,
                 newAccountPrivateKey,
-                contract.accountIdentifier.toHexString()
+                contract.ownerAccountIdentifier.toHexString()
             )).blockingGet()
         }
 
@@ -224,8 +211,8 @@ class Keccak256ContractTest {
             newAccountPrivateKey,
             newEthAccount
         )
-        val createContractResponse = faultTolerant { contract.createContract().blockingGet() }
-        assertEquals(202, createContractResponse.statusCode)
+        val createContract = contract.createContract().blockingGet()
+        assertEquals(202, createContract.statusCode)
 
         // when
         val response = faultTolerant {
@@ -234,7 +221,7 @@ class Keccak256ContractTest {
                 newEthAccount,
                 newAccountName,
                 newAccountPrivateKey,
-                contract.accountIdentifier.toHexString()
+                contract.ownerAccountIdentifier.toHexString()
             )).blockingGet()
         }
 
@@ -253,8 +240,8 @@ class Keccak256ContractTest {
             newAccountPrivateKey,
             newEthAccount
         )
-        val createContractResponse = faultTolerant { contract.createContract().blockingGet() }
-        assertEquals(202, createContractResponse.statusCode)
+        val createContract = contract.createContract().blockingGet()
+        assertEquals(202, createContract.statusCode)
 
         // when
         val response = faultTolerant {
@@ -263,7 +250,7 @@ class Keccak256ContractTest {
                 newEthAccount,
                 newAccountName,
                 newAccountPrivateKey,
-                contract.accountIdentifier.toHexString()
+                contract.ownerAccountIdentifier.toHexString()
             )).blockingGet()
         }
 
@@ -278,8 +265,8 @@ class Keccak256ContractTest {
         // given
         val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed(14000)
         val contract = Keccak256Contract(newAccountName, newAccountPrivateKey, newEthAccount)
-        val createContractResponse = faultTolerant { contract.createContract().blockingGet() }
-        assertEquals(202, createContractResponse.statusCode)
+        val createContract = contract.createContract().blockingGet()
+        assertEquals(202, createContract.statusCode)
 
         // when
         val response = faultTolerant {
@@ -288,7 +275,7 @@ class Keccak256ContractTest {
                 newEthAccount,
                 newAccountName,
                 newAccountPrivateKey,
-                contract.accountIdentifier.toHexString()
+                contract.ownerAccountIdentifier.toHexString()
             )).blockingGet()
         }
 
@@ -303,8 +290,8 @@ class Keccak256ContractTest {
         // given
         val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed(14000)
         val contract = Keccak256Contract(newAccountName, newAccountPrivateKey, newEthAccount)
-        val createContractResponse = faultTolerant { contract.createContract().blockingGet() }
-        assertEquals(202, createContractResponse.statusCode)
+        val createContract = contract.createContract().blockingGet()
+        assertEquals(202, createContract.statusCode)
 
         // when
         val response = faultTolerant {
@@ -313,7 +300,7 @@ class Keccak256ContractTest {
                 newEthAccount,
                 newAccountName,
                 newAccountPrivateKey,
-                contract.accountIdentifier.toHexString()
+                contract.ownerAccountIdentifier.toHexString()
             )).blockingGet()
         }
 
@@ -328,8 +315,8 @@ class Keccak256ContractTest {
         // given
         val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed(14000)
         val contract = Keccak256Contract(newAccountName, newAccountPrivateKey, newEthAccount)
-        val createContractResponse = faultTolerant { contract.createContract().blockingGet() }
-        assertEquals(202, createContractResponse.statusCode)
+        val createContract = contract.createContract().blockingGet()
+        assertEquals(202, createContract.statusCode)
 
         // when
         val response = faultTolerant {
@@ -338,7 +325,7 @@ class Keccak256ContractTest {
                 newEthAccount,
                 newAccountName,
                 newAccountPrivateKey,
-                contract.accountIdentifier.toHexString()
+                contract.ownerAccountIdentifier.toHexString()
             )).blockingGet()
         }
 
@@ -353,8 +340,8 @@ class Keccak256ContractTest {
         // given
         val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed(14000)
         val contract = Keccak256Contract(newAccountName, newAccountPrivateKey, newEthAccount)
-        val createContractResponse = faultTolerant { contract.createContract().blockingGet() }
-        assertEquals(202, createContractResponse.statusCode)
+        val createContract = contract.createContract().blockingGet()
+        assertEquals(202, createContract.statusCode)
 
         // when
         val response = faultTolerant {
@@ -363,7 +350,7 @@ class Keccak256ContractTest {
                 newEthAccount,
                 newAccountName,
                 newAccountPrivateKey,
-                contract.accountIdentifier.toHexString()
+                contract.ownerAccountIdentifier.toHexString()
             )).blockingGet()
         }
 
@@ -378,8 +365,8 @@ class Keccak256ContractTest {
         // given
         val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed(14000)
         val contract = Keccak256Contract(newAccountName, newAccountPrivateKey, newEthAccount)
-        val createContractResponse = faultTolerant { contract.createContract().blockingGet() }
-        assertEquals(202, createContractResponse.statusCode)
+        val createContract = contract.createContract().blockingGet()
+        assertEquals(202, createContract.statusCode)
 
         // when
         val response = faultTolerant {
@@ -388,7 +375,7 @@ class Keccak256ContractTest {
                 newEthAccount,
                 newAccountName,
                 newAccountPrivateKey,
-                contract.accountIdentifier.toHexString()
+                contract.ownerAccountIdentifier.toHexString()
             )).blockingGet()
         }
 
@@ -407,8 +394,8 @@ class Keccak256ContractTest {
             newAccountPrivateKey,
             newEthAccount
         )
-        val createContractResponse = faultTolerant { contract.createContract().blockingGet() }
-        assertEquals(202, createContractResponse.statusCode)
+        val createContract = contract.createContract().blockingGet()
+        assertEquals(202, createContract.statusCode)
 
         // when
         val response = faultTolerant {
@@ -417,7 +404,7 @@ class Keccak256ContractTest {
                 newEthAccount,
                 newAccountName,
                 newAccountPrivateKey,
-                contract.accountIdentifier.toHexString()
+                contract.ownerAccountIdentifier.toHexString()
             )).blockingGet()
         }
 
@@ -436,8 +423,8 @@ class Keccak256ContractTest {
             newAccountPrivateKey,
             newEthAccount
         )
-        val createContractResponse = faultTolerant { contract.createContract().blockingGet() }
-        assertEquals(202, createContractResponse.statusCode)
+        val createContract = contract.createContract().blockingGet()
+        assertEquals(202, createContract.statusCode)
 
         // when
         val response = faultTolerant {
@@ -446,7 +433,7 @@ class Keccak256ContractTest {
                 newEthAccount,
                 newAccountName,
                 newAccountPrivateKey,
-                contract.accountIdentifier.toHexString()
+                contract.ownerAccountIdentifier.toHexString()
             )).blockingGet()
         }
 

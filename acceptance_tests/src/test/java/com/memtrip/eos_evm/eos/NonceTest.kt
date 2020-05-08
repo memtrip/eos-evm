@@ -2,13 +2,12 @@ package com.memtrip.eos_evm.eos
 
 import com.memtrip.eos.chain.actions.transaction.TransactionContext
 import com.memtrip.eos.http.rpc.Api
-import com.memtrip.eos_evm.eos.actions.raw.RawAction
+import com.memtrip.eos_evm.eos.actions.execute.ExecuteAction
 import com.memtrip.eos_evm.eos.state.GetAccount
 import com.memtrip.eos_evm.ethereum.EthereumTransaction
 import com.memtrip.eos_evm.ethereum.toHexString
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Assert.fail
 import org.junit.Test
@@ -28,7 +27,7 @@ class NonceTest {
 
     private val setupTransactions = SetupTransactions(chainApi)
 
-    private val rawAction = RawAction(chainApi)
+    private val executeAction = ExecuteAction(chainApi)
 
     private val getAccount = GetAccount(chainApi)
 
@@ -46,14 +45,15 @@ class NonceTest {
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x00"
+                ""
             )
             val signedTransaction = transaction.sign(ethAccount).signedTransaction.toHexString()
 
-            rawAction.pushTransaction(
+            executeAction.pushTransaction(
                 accountName,
                 signedTransaction,
                 accountIdentifier,
+                "00",
                 TransactionContext(
                     accountName,
                     accountPrivateKey,
@@ -74,14 +74,15 @@ class NonceTest {
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x00"
+                ""
             )
             val signedTransaction = transaction.sign(ethAccount).signedTransaction.toHexString()
 
-            rawAction.pushTransaction(
+            executeAction.pushTransaction(
                 accountName,
                 signedTransaction,
                 accountIdentifier,
+                "00",
                 TransactionContext(
                     accountName,
                     accountPrivateKey,

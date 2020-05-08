@@ -50,14 +50,14 @@ class [[eosio::contract("eos_evm")]] eos_evm : public contract {
 
     struct [[eosio::table]] account_code {
       uint64_t pk;
-      checksum256 accountIdentifier;
+      checksum256 owner;
       checksum256 address;
       uint64_t nonce;
       bytes_t code;
       checksum256 balance;
 
       auto primary_key() const { return pk; }
-      checksum256 secondary_key() const { return accountIdentifier; }
+      checksum256 secondary_key() const { return owner; }
       checksum256 tertiary_key() const { return address; }
     };
 

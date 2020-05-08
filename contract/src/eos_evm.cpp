@@ -60,7 +60,7 @@ void eos_evm::incomingTransaction(const name& from, const bytes_t& transaction, 
   if (bytecode.size() > 0) {
     callResult = Execute::code(senderAddress, env, bytecode, rlp, external, pendingState);
   } else {
-    callResult = Execute::transaction(senderAddress, env, rlp, external, pendingState);
+    callResult = Execute::transaction(senderAddress, itr->nonce, env, rlp, external, pendingState);
   }
 
   checkCallResult(from, callResult);

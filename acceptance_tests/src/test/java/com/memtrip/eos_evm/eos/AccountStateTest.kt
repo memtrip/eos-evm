@@ -2,6 +2,7 @@ package com.memtrip.eos_evm.eos
 
 import com.memtrip.eos.chain.actions.transaction.TransactionContext
 import com.memtrip.eos.http.rpc.Api
+import com.memtrip.eos_evm.eos.actions.execute.ExecuteAction
 import com.memtrip.eos_evm.eos.actions.raw.RawAction
 import com.memtrip.eos_evm.eos.state.GetAccountState
 import com.memtrip.eos_evm.ethereum.AccountStateKey
@@ -28,7 +29,7 @@ class AccountStateTest {
 
     private val setupTransactions = SetupTransactions(chainApi)
 
-    private val rawAction = RawAction(chainApi)
+    private val executeAction = ExecuteAction(chainApi)
 
     private val getAccountState = GetAccountState(chainApi)
 
@@ -45,14 +46,15 @@ class AccountStateTest {
                 BigInteger("5af3107a4000", 16),
                 BigInteger("0186a0", 16),
                 BigInteger("0de0b6b3a7640000", 16),
-                "0x6010600055600054600501600155"
+                ""
             )
             val signedTransaction = transaction.sign(ethAccount).signedTransaction.toHexString()
 
-            rawAction.pushTransaction(
+            executeAction.pushTransaction(
                 accountName,
                 signedTransaction,
                 accountIdentifier.toHexString(),
+                "6010600055600054600501600155",
                 TransactionContext(
                     accountName,
                     accountPrivateKey,

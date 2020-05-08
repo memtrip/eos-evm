@@ -33,6 +33,7 @@ class Call {
         emplace_t result = external->transfer(context->sender, context->address, context->value);
         switch (result.first) {
           case EmplaceResult::EMPLACE_ADDRESS_NOT_FOUND:
+          case EmplaceResult::EMPLACE_CODE_ALREADY_EXISTS:
             return std::make_pair(MessageCallResult::MESSAGE_CALL_FAILED, TrapKind::TRAP_INVALID_CODE_ADDRESS);
           case EmplaceResult::EMPLACE_INSUFFICIENT_FUNDS:
             return std::make_pair(MessageCallResult::MESSAGE_CALL_FAILED, TrapKind::TRAP_INSUFFICIENT_FUNDS);

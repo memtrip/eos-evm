@@ -2,6 +2,10 @@ pragma solidity ^0.5.11;
 
 contract SendEth {
 
+  constructor() public payable {
+    assert(msg.value >= 1 ether);
+  }
+
   function send(address payable recipient) public {
     recipient.send(1 ether);
   }

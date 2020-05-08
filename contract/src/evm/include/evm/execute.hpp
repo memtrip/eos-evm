@@ -14,6 +14,7 @@ class Execute {
   public:
     static call_result_t transaction(
       const uint256_t& senderAddress,
+      const uint64_t nonce,
       const env_t& env,
       std::shared_ptr<std::vector<RLPItem>> rlp, 
       std::shared_ptr<External> external,
@@ -27,7 +28,36 @@ class Execute {
       switch (Transaction::type(rlp)) {
         case TransactionActionType::TRANSACTION_CREATE:
           {
-            std::shared_ptr<Context> context = Context::makeCreate(env, senderAddress, rlp);
+            uint256_t codeAddress = Address::makeCreateAddress(
+              AddressScheme::LEGACY,
+              senderAddress,
+              uint256_t(nonce),
+              std::shared_ptr<bytes_t>()
+            );
+
+            std::shared_ptr<Context> context = Context::makeCreate(env, senderAddress, codeAddress, rlp);
+
+            emplace_t emplaceResult = external->emplaceCodeAddress(
+              senderAddress, 
+              codeAddress,
+              context->value             
+            );
+
+            switch (emplaceResult.first) {
+              case EmplaceResult::EMPLACE_ADDRESS_NOT_FOUND:
+              case EmplaceResult::EMPLACE_CODE_ALREADY_EXISTS:
+                return std::make_pair(
+                  MessageCallResult::MESSAGE_CALL_FAILED,
+                  TrapKind::TRAP_INVALID_CODE_ADDRESS
+                );
+              case EmplaceResult::EMPLACE_INSUFFICIENT_FUNDS:
+                return std::make_pair(
+                  MessageCallResult::MESSAGE_CALL_FAILED,
+                  TrapKind::TRAP_INSUFFICIENT_FUNDS
+                );
+              case EmplaceResult::EMPLACE_SUCCESS:
+                break;
+            }
 
             callResult = Call::call(
               0,
@@ -48,14 +78,15 @@ class Execute {
               );
 
               emplace_t emplaceResult = external->emplaceCode(
-                context->sender, 
-                context->sender,
+                senderAddress, 
+                codeAddress,
                 context->value,
                 code
               );
 
               switch (emplaceResult.first) {
                 case EmplaceResult::EMPLACE_ADDRESS_NOT_FOUND:
+                case EmplaceResult::EMPLACE_CODE_ALREADY_EXISTS:
                   return std::make_pair(
                     MessageCallResult::MESSAGE_CALL_FAILED,
                     TrapKind::TRAP_INVALID_CODE_ADDRESS

@@ -2,6 +2,7 @@ package com.memtrip.eos_evm.eos
 
 import com.memtrip.eos.chain.actions.transaction.TransactionContext
 import com.memtrip.eos.http.rpc.Api
+import com.memtrip.eos_evm.eos.actions.execute.ExecuteAction
 import com.memtrip.eos_evm.eos.actions.raw.RawAction
 import com.memtrip.eos_evm.ethereum.EthAsset.Companion.WEI
 import com.memtrip.eos_evm.eos.state.GetAccountState
@@ -29,7 +30,7 @@ class BalanceTest {
 
     private val setupTransactions = SetupTransactions(chainApi)
 
-    private val rawAction = RawAction(chainApi)
+    private val executeAction = ExecuteAction(chainApi)
 
     private val getAccountState = GetAccountState(chainApi)
 
@@ -37,37 +38,29 @@ class BalanceTest {
     fun `The empty balance of the sender is stored in the account state`() {
 
         // given
-        val (accountName, accountIdentifier, response) = faultTolerantCreateAccount {
+        val (accountName, accountPrivateKey, ethAccount) = setupTransactions.seed()
 
-            val (accountName, accountPrivateKey, ethAccount) = setupTransactions.seed()
+        val transaction = EthereumTransaction(
+            1,
+            BigInteger("5af3107a4000", 16),
+            BigInteger("0186a0", 16),
+            BigInteger("0de0b6b3a7640000", 16),
+            ""
+        )
+        val signedTransaction = transaction.sign(ethAccount).signedTransaction.toHexString()
 
-            val transaction = EthereumTransaction(
-                1,
-                BigInteger("5af3107a4000", 16),
-                BigInteger("0186a0", 16),
-                BigInteger("0de0b6b3a7640000", 16),
-                "0x3331600055"
-            )
-            val signedTransaction = transaction.sign(ethAccount).signedTransaction.toHexString()
-
-            val accountIdentifier = AccountIdentifier.create(accountName, ethAccount.address)
-            val response = rawAction.pushTransaction(
+        val accountIdentifier = AccountIdentifier.create(accountName, ethAccount.address)
+        val response = executeAction.pushTransaction(
+            accountName,
+            signedTransaction,
+            accountIdentifier.toHexString(),
+            "3331600055",
+            TransactionContext(
                 accountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    accountName,
-                    accountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet()
-
-            TestTransaction(
-                accountName,
-                accountIdentifier,
-                response
+                accountPrivateKey,
+                transactionDefaultExpiry()
             )
-        }
+        ).blockingGet()
 
         // then
         assertEquals(202, response.statusCode)
@@ -87,42 +80,39 @@ class BalanceTest {
         val accountIdentifier = AccountIdentifier.create(accountName, ethAccount.address)
 
         // when
-        val transferResult = faultTolerant {
-            setupTransactions.transfer(
-                "eos.evm",
-                "0.5000 ${Config.SYMBOL}",
-                "evm funds",
-                accountName,
-                accountPrivateKey,
-                "eosio.token"
-            ).blockingGet()
-        }
+        val transferResult = setupTransactions.transfer(
+            "eos.evm",
+            "0.5000 ${Config.SYMBOL}",
+            "evm funds",
+            accountName,
+            accountPrivateKey,
+            "eosio.token"
+        ).blockingGet()
 
         // then
         assertEquals(202, transferResult.statusCode)
 
         // and when
-        val balanceResponse = faultTolerant {
-            val transaction = EthereumTransaction(
-                1,
-                BigInteger("5af3107a4000", 16),
-                BigInteger("0186a0", 16),
-                BigInteger("0de0b6b3a7640000", 16),
-                "0x3331600055"
-            )
-            val signedTransaction = transaction.sign(ethAccount).signedTransaction.toHexString()
+        val transaction = EthereumTransaction(
+            1,
+            BigInteger("5af3107a4000", 16),
+            BigInteger("0186a0", 16),
+            BigInteger("0de0b6b3a7640000", 16),
+            ""
+        )
+        val signedTransaction = transaction.sign(ethAccount).signedTransaction.toHexString()
 
-            rawAction.pushTransaction(
+        val balanceResponse = executeAction.pushTransaction(
+            accountName,
+            signedTransaction,
+            accountIdentifier.toHexString(),
+            "3331600055",
+            TransactionContext(
                 accountName,
-                signedTransaction,
-                accountIdentifier.toHexString(),
-                TransactionContext(
-                    accountName,
-                    accountPrivateKey,
-                    transactionDefaultExpiry()
-                )
-            ).blockingGet()
-        }
+                accountPrivateKey,
+                transactionDefaultExpiry()
+            )
+        ).blockingGet()
 
         // and then
         assertEquals(202, balanceResponse.statusCode)

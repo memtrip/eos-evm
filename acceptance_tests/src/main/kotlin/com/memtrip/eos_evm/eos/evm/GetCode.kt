@@ -1,4 +1,4 @@
-package com.memtrip.eos_evm.eos.state
+package com.memtrip.eos_evm.eos.evm
 
 import com.memtrip.eos.http.rpc.ChainApi
 import com.memtrip.eos.http.rpc.model.contract.request.GetTableRows
@@ -45,18 +45,18 @@ class GetCode(
                 val tableRows = response.body()!!.rows
                 if (tableRows.isEmpty()) Record.None else {
                     Record.Value(Item(
-                        unit8ArrayToHex(tableRows[0]["code"].toString()),
-                        tableRows[0]["accountIdentifier"].toString(),
-                        tableRows[0]["address"].toString(),
-                        EthAsset.create(tableRows[0]["balance"].toString()),
-                        tableRows[0]["nonce"].toString()
+                            unit8ArrayToHex(tableRows[0]["code"].toString()),
+                            tableRows[0]["owner"].toString(),
+                            tableRows[0]["address"].toString(),
+                            EthAsset.create(tableRows[0]["balance"].toString()),
+                            tableRows[0]["nonce"].toString()
                     ))
                 }
             }
         }
     }
 
-    fun getAll(ownerAddress: String): Single<Record> {
+    internal fun getAllByOwner(ownerAddress: String): Single<Record> {
         return chainApi.getTableRows(
             GetTableRows(
                 Config.CONTRACT_ACCOUNT_NAME,
@@ -77,11 +77,11 @@ class GetCode(
                 if (tableRows.isEmpty()) Record.None else {
                     Record.Multiple(tableRows.mapIndexed { index, _ ->
                         Item(
-                            unit8ArrayToHex(tableRows[index]["code"].toString()),
-                            tableRows[index]["accountIdentifier"].toString(),
-                            tableRows[index]["address"].toString(),
-                            EthAsset.create(tableRows[index]["balance"].toString()),
-                            tableRows[index]["nonce"].toString()
+                                unit8ArrayToHex(tableRows[index]["code"].toString()),
+                                tableRows[index]["owner"].toString(),
+                                tableRows[index]["address"].toString(),
+                                EthAsset.create(tableRows[index]["balance"].toString()),
+                                tableRows[index]["nonce"].toString()
                         )
                     })
                 }

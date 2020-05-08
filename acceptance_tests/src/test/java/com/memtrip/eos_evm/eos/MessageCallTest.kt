@@ -4,16 +4,13 @@ import com.memtrip.eos.chain.actions.transaction.TransactionContext
 import com.memtrip.eos.http.rpc.Api
 import com.memtrip.eos_evm.assertConsoleString
 import com.memtrip.eos_evm.eos.actions.raw.RawAction
-import com.memtrip.eos_evm.eos.state.GetAccount
-import com.memtrip.eos_evm.eos.state.GetAccountState
-import com.memtrip.eos_evm.eos.state.GetCode
+import com.memtrip.eos_evm.eos.evm.GetCode
 import com.memtrip.eos_evm.ethereum.EthereumTransaction
 import com.memtrip.eos_evm.ethereum.pad256
 import com.memtrip.eos_evm.ethereum.toHexString
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.junit.Assert.assertEquals
-import org.junit.Assert.fail
 import org.junit.Test
 import java.math.BigInteger
 import java.util.concurrent.TimeUnit
@@ -66,7 +63,7 @@ class MessageCallTest {
         assertEquals(response.statusCode, 202)
 
         // and when
-        val contractCode = getCode.getAll(
+        val contractCode = getCode.getAllByOwner(
             accountIdentifier.pad256().toHexString()
         ).blockingGet()
 
@@ -138,7 +135,7 @@ class MessageCallTest {
         assertEquals(response.statusCode, 202)
 
         // and when
-        val contractCode = getCode.getAll(
+        val contractCode = getCode.getAllByOwner(
             accountIdentifier.pad256().toHexString()
         ).blockingGet()
 

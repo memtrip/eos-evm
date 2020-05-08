@@ -71,6 +71,7 @@ class Context {
     static std::shared_ptr<Context> makeCreate(
       const env_t& env, 
       const uint256_t& senderAddress, 
+      const uint256_t& codeAddress, 
       std::shared_ptr<std::vector<RLPItem>> rlp
     ) {
 
@@ -87,10 +88,10 @@ class Context {
         env.coinbase,
         env.difficulty,
         env.blockHash,
-        senderAddress, /* codeAddress */
+        codeAddress, /* codeAddress */
         Hash::keccak256Word(code), /* codeHash */
         uint256_t(0), /* codeVersion, TODO: clarify where this comes from */
-        senderAddress, /* address */
+        codeAddress, /* address */
         senderAddress, /* sender */
         senderAddress, /* origin */
         Transaction::gas(rlp),

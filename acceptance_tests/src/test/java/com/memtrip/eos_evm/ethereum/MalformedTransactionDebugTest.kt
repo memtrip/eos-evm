@@ -67,7 +67,7 @@ class MalformedTransactionDebugTest {
             setupTransactions.createEthAccount(newAccountName, newAccountPrivateKey, newEthAccount).blockingGet()
             val contract = TupleContract(newAccountName, newAccountPrivateKey, newEthAccount)
             val createContractResponse = contract.createContract().blockingGet()
-            if (createContractResponse.errorBody?.error?.details?.first()?.message?.contains("The account identifier associated with this transaction does not exist.") == true) {
+            if (createContractResponse.response.errorBody?.error?.details?.first()?.message?.contains("The account identifier associated with this transaction does not exist.") == true) {
                 signatureFailures.add(
                     SignatureFailure(
                         newAccountName,

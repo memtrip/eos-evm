@@ -1130,6 +1130,9 @@ class Operation {
 
       if (context->isStatic) return std::make_pair(InstructionResult::INSTRUCTION_TRAP, TrapKind::TRAP_MUTATE_STATIC);
 
+      Utils::printLong(offset, "offset");
+      Utils::printLong(size, "size");
+
       pendingState->log(topics, memory->readSlice(offset, size));
       
       return std::make_pair(InstructionResult::OK, 0);
@@ -1155,6 +1158,7 @@ class Operation {
       switch (result.first) {
         case EmplaceResult::EMPLACE_ADDRESS_NOT_FOUND:
         case EmplaceResult::EMPLACE_INSUFFICIENT_FUNDS:
+        case EmplaceResult::EMPLACE_CODE_ALREADY_EXISTS:
           return std::make_pair(InstructionResult::INSTRUCTION_TRAP, TrapKind::TRAP_INVALID_CODE_ADDRESS);
         case EmplaceResult::EMPLACE_SUCCESS:
           return std::make_pair(InstructionResult::STOP_EXEC, 0);

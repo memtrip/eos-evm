@@ -4,6 +4,7 @@ import com.memtrip.eos.chain.actions.ChainResponse
 import com.memtrip.eos.core.crypto.EosPrivateKey
 import com.memtrip.eos.http.rpc.model.transaction.response.TransactionCommitted
 import com.memtrip.eos_evm.eos.evm.EvmContract
+import com.memtrip.eos_evm.eos.evm.contracts.CreateResponse
 import com.memtrip.eos_evm.ethereum.EthAccount
 import io.reactivex.Single
 import org.web3j.abi.datatypes.Address
@@ -31,7 +32,7 @@ class DaoMultiSigContract (
         initialMembers: List<String>,
         minimumAmountOfMinutes: Long,
         value: BigInteger
-    ): Single<ChainResponse<TransactionCommitted>> {
+    ): Single<CreateResponse> {
         return create(listOf(
             Address(address),
             DynamicArray<Address>(Address::class.java, initialMembers.map { Address(it) }),

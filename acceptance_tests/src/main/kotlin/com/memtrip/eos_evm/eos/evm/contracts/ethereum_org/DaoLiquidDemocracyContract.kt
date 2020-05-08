@@ -4,6 +4,7 @@ import com.memtrip.eos.chain.actions.ChainResponse
 import com.memtrip.eos.core.crypto.EosPrivateKey
 import com.memtrip.eos.http.rpc.model.transaction.response.TransactionCommitted
 import com.memtrip.eos_evm.eos.evm.EvmContract
+import com.memtrip.eos_evm.eos.evm.contracts.CreateResponse
 import com.memtrip.eos_evm.ethereum.EthAccount
 import io.reactivex.Single
 import org.web3j.abi.datatypes.Address
@@ -29,7 +30,7 @@ class DaoLiquidDemocracyContract (
         votingWeightToken: String,
         forbiddenFunctionCall: String,
         percentLossInEachRound: Long
-    ): Single<ChainResponse<TransactionCommitted>> {
+    ): Single<CreateResponse> {
         return create(listOf(
             Address(votingWeightToken),
             Utf8String(forbiddenFunctionCall),
