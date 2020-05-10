@@ -25,7 +25,6 @@ TEST_CASE("log1MemExp______11241dbcb0d33d25f1db0b51b65c38c4e3ef2f5b52c7992649794
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */

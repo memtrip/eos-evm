@@ -26,7 +26,6 @@ TEST_CASE("Add two large numbers, store the result, verify gas", "[gasometer]") 
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
@@ -73,7 +72,6 @@ TEST_CASE("Store the result of an SHA3 hash, verify gas", "[gasometer]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
@@ -120,7 +118,6 @@ TEST_CASE("Address, verify gas", "[gasometer]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
     uint256_t(0xea0e9a),
     uint256_t(0x1283fe), /* origin */
@@ -167,7 +164,6 @@ TEST_CASE("Origin, verify gas", "[gasometer]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     uint256_t(0x1283fe),
     TestUtils::fromHex("cd1722f2947def4cf144679da39c4c32bdc35681"), /* origin */
@@ -215,7 +211,6 @@ TEST_CASE("Self balance, verify gas", "[gasometer]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     address, /* address */
     uint256_t(0xea0e9e), /* sender */
     address, /* origin */
@@ -260,7 +255,6 @@ TEST_CASE("Sender, verify gas", "[gasometer]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
     TestUtils::fromHex("cd1722f2947def4cf144679da39c4c32bdc35681"), /* sender */
     uint256_t(0x1283fe), /* origin */
@@ -307,7 +301,6 @@ TEST_CASE("Chain id, verify gas", "[gasometer]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
@@ -357,7 +350,6 @@ TEST_CASE("Extcodecopy verify gas", "[gasometer]") {
     env.blockHash,
     uint256_t(0xea0e9f), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     address, /* address */
     sender, /* sender */
     uint256_t(0xea0e9e), /* origin */
@@ -407,7 +399,6 @@ TEST_CASE("Blockhash, verify gas", "[gasometer]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
     uint256_t(0xea0e9e), /* sender */
     TestUtils::fromHex("cd1722f2947def4cf144679da39c4c32bdc35681"), /* origin */
@@ -458,7 +449,6 @@ TEST_CASE("Calldataload verify gas", "[gasometer]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), 
     TestUtils::fromHex("cd1722f2947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
@@ -505,7 +495,6 @@ TEST_CASE("Multiply, store the result, verify gas", "[gasometer]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
@@ -552,7 +541,6 @@ TEST_CASE("Subtract, store the result, verify gas", "[gasometer]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
@@ -599,7 +587,6 @@ TEST_CASE("Division, store the result, verify gas", "[gasometer]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
@@ -646,7 +633,6 @@ TEST_CASE("Div zero, store the result, verify gas", "[gasometer]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
@@ -693,7 +679,6 @@ TEST_CASE("Mod, store the result, verify gas", "[gasometer]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
@@ -743,7 +728,6 @@ TEST_CASE("SMOD, store the result, verify gas", "[gasometer]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
@@ -793,7 +777,6 @@ TEST_CASE("SDIV, store the result, verify gas", "[gasometer]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
@@ -843,7 +826,6 @@ TEST_CASE("Exp, store the result, verify gas", "[gasometer]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
@@ -896,7 +878,6 @@ TEST_CASE("Comparison, store the result, verify gas", "[gasometer]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
@@ -952,7 +933,6 @@ TEST_CASE("Signed comparison, store the result, verify gas", "[gasometer]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
@@ -1011,7 +991,6 @@ TEST_CASE("Bitops, store the result, verify gas", "[gasometer]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
@@ -1073,7 +1052,6 @@ TEST_CASE("Add mod - mul mod, store the result, verify gas", "[gasometer]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
@@ -1129,7 +1107,6 @@ TEST_CASE("Byte, store the result, verify gas", "[gasometer]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
@@ -1179,7 +1156,6 @@ TEST_CASE("Signextend, store the result, verify gas", "[gasometer]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
@@ -1229,7 +1205,6 @@ TEST_CASE("Pop, store the result, verify gas", "[gasometer]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
@@ -1277,7 +1252,6 @@ TEST_CASE("Extops, store the result, verify gas", "[gasometer]") {
     env.blockHash,
     uint256_t(0xea0e9f), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* sender */
     uint256_t(0xea0e9e), /* origin */
@@ -1341,7 +1315,6 @@ TEST_CASE("Jumps, store the result, verify gas", "[gasometer]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */

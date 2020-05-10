@@ -27,7 +27,6 @@ TEST_CASE("Blockhash (stub)", "[env]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
@@ -73,7 +72,6 @@ TEST_CASE("Coinbase (stub)", "[env]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
@@ -119,7 +117,6 @@ TEST_CASE("Difficulty (stub)", "[env]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
@@ -165,7 +162,6 @@ TEST_CASE("Timestamp", "[env]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
@@ -209,7 +205,6 @@ TEST_CASE("Number", "[env]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
@@ -253,7 +248,6 @@ TEST_CASE("Gas limit", "[env]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
@@ -297,7 +291,6 @@ TEST_CASE("Chain id", "[env]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
@@ -341,7 +334,6 @@ TEST_CASE("Call value", "[env]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */

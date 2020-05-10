@@ -4,6 +4,7 @@ import com.memtrip.eos.chain.actions.transaction.TransactionContext
 import com.memtrip.eos.http.rpc.Api
 import com.memtrip.eos_evm.eos.actions.execute.ExecuteAction
 import com.memtrip.eos_evm.eos.actions.raw.RawAction
+import com.memtrip.eos_evm.eos.state.GetAccount
 import com.memtrip.eos_evm.ethereum.EthAsset.Companion.WEI
 import com.memtrip.eos_evm.eos.state.GetAccountState
 import com.memtrip.eos_evm.ethereum.AccountStateKey
@@ -33,6 +34,8 @@ class BalanceTest {
     private val executeAction = ExecuteAction(chainApi)
 
     private val getAccountState = GetAccountState(chainApi)
+
+    private val getAccount = GetAccount(chainApi)
 
     @Test
     fun `The empty balance of the sender is stored in the account state`() {
@@ -79,6 +82,11 @@ class BalanceTest {
         val (accountName, accountPrivateKey, ethAccount) = setupTransactions.seedWithSystemBalance()
         val accountIdentifier = AccountIdentifier.create(accountName, ethAccount.address)
 
+        val balanceBeforeTransfer = getAccount.getEvmAccount(accountName).blockingGet()
+        if (balanceBeforeTransfer is GetAccount.Record.Single) {
+            assertEquals("0.0000 EVM", balanceBeforeTransfer.item.balance.toString())
+        }
+
         // when
         val transferResult = setupTransactions.transfer(
             "eos.evm",
@@ -91,6 +99,11 @@ class BalanceTest {
 
         // then
         assertEquals(202, transferResult.statusCode)
+
+        val balanceAfterTransfer = getAccount.getEvmAccount(accountName).blockingGet()
+        if (balanceAfterTransfer is GetAccount.Record.Single) {
+            assertEquals("0.5000 EVM", balanceAfterTransfer.item.balance.toString())
+        }
 
         // and when
         val transaction = EthereumTransaction(

@@ -47,7 +47,7 @@ class BallotTest {
         )
 
         // when
-        val createContract = ballotContract.createBallet(listOf("option1")).blockingGet()
+        val createContract = ballotContract.createBallet(listOf("option1", "option2")).blockingGet()
 
         // then
         assertEquals(202, createContract.statusCode)
@@ -60,12 +60,13 @@ class BallotTest {
 
         val accountStateResult = getAccountState.getAll(createContract.parentContractAddress32).blockingGet()
         if (accountStateResult !is GetAccountState.Record.Multiple) fail("no state saved") else {
-            assertEquals(5, accountStateResult.items.size)
+            assertEquals(7, accountStateResult.items.size)
             assertEquals(accountStateResult.items[0].value, ballotContract.ownerAccountIdentifierString32)
             assertEquals(accountStateResult.items[1].value, "0000000000000000000000000000000000000000000000000000000000000001")
-            assertEquals(accountStateResult.items[2].value, "0000000000000000000000000000000000000000000000000000000000000001")
+            assertEquals(accountStateResult.items[2].value, "0000000000000000000000000000000000000000000000000000000000000002")
             assertEquals(accountStateResult.items[3].value, "6f7074696f6e3100000000000000000000000000000000000000000000000000") // "option1"
-            assertEquals(accountStateResult.items[4].value, "0000000000000000000000000000000000000000000000000000000000000000")
+            assertEquals(accountStateResult.items[4].value, "0000000000000000000000000000000000000000000000000000000000000000") // "option2"
+            assertEquals(accountStateResult.items[5].value, "6f7074696f6e3200000000000000000000000000000000000000000000000000")
         }
     }
 

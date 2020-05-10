@@ -10,7 +10,7 @@ public:
   virtual bytes_t code(const uint256_t& address) { return bytes_t(); };
   virtual uint256_t balance(const uint256_t& addressWord) { return 0.0; };
   virtual uint256_t storageAt(const uint256_t& key, const uint256_t& codeAddress) { return uint256_t(0); };
-  virtual emplace_t selfdestruct(const uint256_t& address) { 
+  virtual emplace_t selfdestruct(const uint256_t& contractAddressWord, const uint256_t& refundAddressWord) { 
     return std::make_pair(EmplaceResult::EMPLACE_SUCCESS, 0);
   };
   virtual emplace_t transfer(const uint256_t& senderAddress, const uint256_t& toAddressWord, const uint256_t& value) {
@@ -21,6 +21,13 @@ public:
     const uint256_t& ownerAddressWord,
     const uint256_t& codeAddressWord, 
     const uint256_t& endowment
+  ) { 
+    return std::make_pair(EmplaceResult::EMPLACE_SUCCESS, 0); 
+  };
+  virtual emplace_t emplaceParentCode(
+    const uint256_t& codeAddressWord, 
+    const uint256_t& endowment, 
+    const bytes_t& code
   ) { 
     return std::make_pair(EmplaceResult::EMPLACE_SUCCESS, 0); 
   };

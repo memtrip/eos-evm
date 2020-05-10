@@ -24,7 +24,6 @@ TEST_CASE("Create the most basic contract using COPYCODE", "[create]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
@@ -74,7 +73,6 @@ TEST_CASE("Create contract using CODECOPY", "[create]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
@@ -136,7 +134,6 @@ TEST_CASE("Create contract using CREATE (1)", "[create]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
@@ -187,7 +184,6 @@ TEST_CASE("Create main contract using COPYCODE, and a child contract with CREATE
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
@@ -249,7 +245,6 @@ TEST_CASE("Create contract using CREATE2", "[create]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
@@ -303,7 +298,6 @@ TEST_CASE("Create contract using CREATE (3)", "[create]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
@@ -357,7 +351,6 @@ TEST_CASE("Create contract using CREATE (4)", "[create]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
@@ -424,7 +417,6 @@ TEST_CASE("Create contract using CREATE (5)", "[create]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */

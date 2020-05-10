@@ -66,8 +66,8 @@ class ExternalMock: public External {
       return uint256_t(0);
     }
 
-    emplace_t selfdestruct(const uint256_t& address) {
-      selfdestructSpy.push_back(address);
+    emplace_t selfdestruct(const uint256_t& contractAddressWord, const uint256_t& refundAddressWord) {
+      selfdestructSpy.push_back(refundAddressWord);
       return std::make_pair(EmplaceResult::EMPLACE_SUCCESS, 0);
     }
 
@@ -80,9 +80,17 @@ class ExternalMock: public External {
     emplace_t emplaceCodeAddress(
       const uint256_t& ownerAddressWord,
       const uint256_t& codeAddressWord, 
-      const uint256_t& endowment, 
+      const uint256_t& endowment
     ) { 
       return std::make_pair(EmplaceResult::EMPLACE_SUCCESS, 0); 
+    };
+
+    emplace_t emplaceParentCode(
+      const uint256_t& codeAddressWord, 
+      const uint256_t& endowment, 
+      const bytes_t& code
+    ) {
+      return std::make_pair(EmplaceResult::EMPLACE_SUCCESS, 0);
     };
 
     emplace_t emplaceCode(

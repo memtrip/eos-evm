@@ -25,7 +25,6 @@ TEST_CASE("Call contract code (1)", "[call]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* codeAddress */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xea0e9e), /* sender */
     uint256_t(0x1283fe), /* origin */
@@ -75,7 +74,6 @@ TEST_CASE("Call contract code (2)", "[call]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* codeAddress */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xea0e9e), /* sender */
     uint256_t(0x1283fe), /* origin */

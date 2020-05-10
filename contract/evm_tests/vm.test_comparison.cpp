@@ -29,7 +29,6 @@ TEST_CASE("Less than comparison truthy", "[LT]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
@@ -77,7 +76,6 @@ TEST_CASE("Less than comparison not true", "[LT]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
@@ -125,7 +123,6 @@ TEST_CASE("Greater than comparison truthy", "[GT]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
@@ -173,7 +170,6 @@ TEST_CASE("Greater than comparison not true", "[GT]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
@@ -221,7 +217,6 @@ TEST_CASE("Equal comparison truthy", "[EQ]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
@@ -269,7 +264,6 @@ TEST_CASE("Equal comparison not true", "[EQ]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
@@ -316,7 +310,6 @@ TEST_CASE("Is zero comparison truthy", "[ISZERO]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
@@ -363,7 +356,6 @@ TEST_CASE("Is zero comparison not true", "[ISZERO]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
@@ -407,7 +399,6 @@ TEST_CASE("Comparison with many instructions", "[comparison]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */

@@ -1148,12 +1148,12 @@ class Operation {
       std::shared_ptr<Memory> memory, 
       std::shared_ptr<StackMachine> stack
     ) {
-      uint256_t address = stack->peek(0);
+      uint256_t refundAddress = stack->peek(0);
       stack->pop(1);
 
       if (context->isStatic) return std::make_pair(InstructionResult::INSTRUCTION_TRAP, TrapKind::TRAP_MUTATE_STATIC);
 
-      emplace_t result = external->selfdestruct(address);
+      emplace_t result = external->selfdestruct(context->codeAddress, refundAddress);
 
       switch (result.first) {
         case EmplaceResult::EMPLACE_ADDRESS_NOT_FOUND:
@@ -1255,7 +1255,7 @@ class Operation {
       std::shared_ptr<StackMachine> stack
     ) {
       uint256_t balance = external->balance(stack->peek(0));
-      Utils::print256(balance, "balance_address");
+      stack->pop(1);
       stack->push(balance);
       return std::make_pair(InstructionResult::OK, 0);
     }

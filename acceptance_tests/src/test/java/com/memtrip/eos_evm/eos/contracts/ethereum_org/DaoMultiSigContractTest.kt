@@ -48,7 +48,7 @@ class DaoMultiSigContractTest {
         val createContract = contract.createContract(
             member1AccountIdentifier.toHexString(),
             listOf(member2AccountIdentifier.toHexString(), member3AccountIdentifier.toHexString()),
-            75,
+            0,
             EthAsset.milliether(300)
         ).blockingGet()
 

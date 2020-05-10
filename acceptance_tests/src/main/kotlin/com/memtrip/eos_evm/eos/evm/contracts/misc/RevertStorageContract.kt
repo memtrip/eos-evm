@@ -1,0 +1,144 @@
+package com.memtrip.eos_evm.eos.evm.contracts.misc
+
+import com.memtrip.eos.chain.actions.ChainResponse
+import com.memtrip.eos.core.crypto.EosPrivateKey
+import com.memtrip.eos.http.rpc.model.transaction.response.TransactionCommitted
+import com.memtrip.eos_evm.eos.evm.EvmContract
+import com.memtrip.eos_evm.eos.evm.EvmSender
+import com.memtrip.eos_evm.eos.evm.contracts.CreateResponse
+import com.memtrip.eos_evm.ethereum.EthAccount
+import io.reactivex.Single
+import org.web3j.abi.datatypes.Uint
+import java.math.BigInteger
+
+/**
+pragma solidity ^0.5.11;
+
+contract RevertChild {
+    uint value;
+
+    function setVars(uint valueArg) public {
+        value = valueArg;
+    }
+
+    function setVarsRevert(uint valueArg) public {
+        value = valueArg;
+        revert("do not save this change");
+    }
+
+    function setVarsAssert(uint valueArg) public {
+        value = valueArg;
+        assert(false);
+    }
+
+    function setVarsRequire(uint valueArg) public {
+        value = valueArg;
+        assert(false);
+    }
+
+    function steal() public {
+        selfdestruct(msg.sender);
+    }
+}
+
+contract RevertStorage {
+    uint value;
+
+    RevertChild child;
+
+    constructor() public {
+        child = new RevertChild();
+    }
+
+    function setVars(uint value) public payable {
+        (bool success, bytes memory data) = address(child).delegatecall(
+        abi.encodeWithSignature("setVars(uint256)", value)
+        );
+    }
+
+    function setVarsRevert(uint value) public payable {
+        (bool success, bytes memory data) = address(child).delegatecall(
+        abi.encodeWithSignature("setVarsRevert(uint256)", value)
+        );
+    }
+
+    function setVarsAssert(uint value) public payable {
+        (bool success, bytes memory data) = address(child).delegatecall(
+        abi.encodeWithSignature("setVarsAssert(uint256)", value)
+        );
+    }
+
+    function setVarsRequire(uint value) public payable {
+        (bool success, bytes memory data) = address(child).delegatecall(
+        abi.encodeWithSignature("setVarsRequire(uint256)", value)
+        );
+    }
+
+    function dangerous() public {
+        (bool success, bytes memory data) = address(child).delegatecall(
+        abi.encodeWithSignature("steal()")
+        );
+    }
+}
+*/
+class RevertStorageContract(
+    contractAccountName: String,
+    contractPrivateKey: EosPrivateKey,
+    contractEthAccount: EthAccount
+) : EvmContract(
+    contractAccountName,
+    contractPrivateKey,
+    contractEthAccount,
+    "0x608060405234801561001057600080fd5b5060405161001d9061007f565b604051809103906000f080158015610039573d6000803e3d6000fd5b50600160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555061008c565b61022f8061090383390190565b6108688061009b6000396000f3fe60806040526004361061004a5760003560e01c80631366e6ca1461004f578063280622be1461007d578063553bcd7a146100945780636466414b146100c2578063bb1b8c2f146100f0575b600080fd5b61007b6004803603602081101561006557600080fd5b810190808035906020019092919050505061011e565b005b34801561008957600080fd5b5061009261028b565b005b6100c0600480360360208110156100aa57600080fd5b81019080803590602001909291905050506103ec565b005b6100ee600480360360208110156100d857600080fd5b8101908080359060200190929190505050610559565b005b61011c6004803603602081101561010657600080fd5b81019080803590602001909291905050506106c6565b005b60006060600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1683604051602401808281526020019150506040516020818303038152906040527f1366e6ca000000000000000000000000000000000000000000000000000000007bffffffffffffffffffffffffffffffffffffffffffffffffffffffff19166020820180517bffffffffffffffffffffffffffffffffffffffffffffffffffffffff83818316178352505050506040518082805190602001908083835b6020831061021c57805182526020820191506020810190506020830392506101f9565b6001836020036101000a038019825116818451168082178552505050505050905001915050600060405180830381855af49150503d806000811461027c576040519150601f19603f3d011682016040523d82523d6000602084013e610281565b606091505b5091509150505050565b60006060600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff166040516024016040516020818303038152906040527fcf7a8965000000000000000000000000000000000000000000000000000000007bffffffffffffffffffffffffffffffffffffffffffffffffffffffff19166020820180517bffffffffffffffffffffffffffffffffffffffffffffffffffffffff83818316178352505050506040518082805190602001908083835b6020831061037e578051825260208201915060208101905060208303925061035b565b6001836020036101000a038019825116818451168082178552505050505050905001915050600060405180830381855af49150503d80600081146103de576040519150601f19603f3d011682016040523d82523d6000602084013e6103e3565b606091505b50915091505050565b60006060600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1683604051602401808281526020019150506040516020818303038152906040527f553bcd7a000000000000000000000000000000000000000000000000000000007bffffffffffffffffffffffffffffffffffffffffffffffffffffffff19166020820180517bffffffffffffffffffffffffffffffffffffffffffffffffffffffff83818316178352505050506040518082805190602001908083835b602083106104ea57805182526020820191506020810190506020830392506104c7565b6001836020036101000a038019825116818451168082178552505050505050905001915050600060405180830381855af49150503d806000811461054a576040519150601f19603f3d011682016040523d82523d6000602084013e61054f565b606091505b5091509150505050565b60006060600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1683604051602401808281526020019150506040516020818303038152906040527f6466414b000000000000000000000000000000000000000000000000000000007bffffffffffffffffffffffffffffffffffffffffffffffffffffffff19166020820180517bffffffffffffffffffffffffffffffffffffffffffffffffffffffff83818316178352505050506040518082805190602001908083835b602083106106575780518252602082019150602081019050602083039250610634565b6001836020036101000a038019825116818451168082178552505050505050905001915050600060405180830381855af49150503d80600081146106b7576040519150601f19603f3d011682016040523d82523d6000602084013e6106bc565b606091505b5091509150505050565b60006060600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1683604051602401808281526020019150506040516020818303038152906040527fbb1b8c2f000000000000000000000000000000000000000000000000000000007bffffffffffffffffffffffffffffffffffffffffffffffffffffffff19166020820180517bffffffffffffffffffffffffffffffffffffffffffffffffffffffff83818316178352505050506040518082805190602001908083835b602083106107c457805182526020820191506020810190506020830392506107a1565b6001836020036101000a038019825116818451168082178552505050505050905001915050600060405180830381855af49150503d8060008114610824576040519150601f19603f3d011682016040523d82523d6000602084013e610829565b606091505b509150915050505056fea265627a7a7231582060c115a78b93bfa378522673f4b21ced48e04118428109d004315da16590388764736f6c63430005100032608060405234801561001057600080fd5b5061020f806100206000396000f3fe608060405234801561001057600080fd5b50600436106100575760003560e01c80631366e6ca1461005c578063553bcd7a1461008a5780636466414b146100b8578063bb1b8c2f146100e6578063cf7a896514610114575b600080fd5b6100886004803603602081101561007257600080fd5b810190808035906020019092919050505061011e565b005b6100b6600480360360208110156100a057600080fd5b8101908080359060200190929190505050610130565b005b6100e4600480360360208110156100ce57600080fd5b81019080803590602001909291905050506101a5565b005b610112600480360360208110156100fc57600080fd5b81019080803590602001909291905050506101af565b005b61011c6101c1565b005b80600081905550600061012d57fe5b50565b806000819055506040517f08c379a00000000000000000000000000000000000000000000000000000000081526004018080602001828103825260178152602001807f646f206e6f7420736176652074686973206368616e676500000000000000000081525060200191505060405180910390fd5b8060008190555050565b8060008190555060006101be57fe5b50565b3373ffffffffffffffffffffffffffffffffffffffff16fffea265627a7a723158203e7bd67971b64b89aee964ba2e301027a958c4569f6cabb76c64595afbc7420e64736f6c63430005100032"
+) {
+
+    fun createContract(): Single<CreateResponse> {
+        return create(listOf())
+    }
+
+    fun setVars(value: BigInteger, sender: EvmSender): Single<ChainResponse<TransactionCommitted>> {
+        return executeMethod(
+            "setVars",
+            listOf(Uint(value)),
+            listOf(),
+            sender
+        )
+    }
+
+
+    fun setVarsRevert(value: BigInteger, sender: EvmSender): Single<ChainResponse<TransactionCommitted>> {
+        return executeMethod(
+            "setVarsRevert",
+            listOf(Uint(value)),
+            listOf(),
+            sender
+        )
+    }
+
+    fun setVarsAssert(value: BigInteger, sender: EvmSender): Single<ChainResponse<TransactionCommitted>> {
+        return executeMethod(
+            "setVarsAssert",
+            listOf(Uint(value)),
+            listOf(),
+            sender
+        )
+    }
+
+    fun setVarsRequire(value: BigInteger, sender: EvmSender): Single<ChainResponse<TransactionCommitted>> {
+        return executeMethod(
+            "setVarsRequire",
+            listOf(Uint(value)),
+            listOf(),
+            sender
+        )
+    }
+
+    fun dangerous(sender: EvmSender): Single<ChainResponse<TransactionCommitted>> {
+        return executeMethod(
+            "dangerous",
+            listOf(),
+            listOf(),
+            sender
+        )
+    }
+}

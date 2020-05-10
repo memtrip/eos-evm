@@ -26,7 +26,6 @@ TEST_CASE("extcodesize and extcodecopy", "[code]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xea0e9e), /* sender */
     uint256_t(0x1283fe), /* origin */
@@ -80,7 +79,6 @@ TEST_CASE("codesize", "[code]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */
@@ -126,7 +124,6 @@ TEST_CASE("calldataload", "[code]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"),
     uint256_t(0x1283fe), /* origin */

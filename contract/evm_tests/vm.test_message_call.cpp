@@ -28,7 +28,6 @@ TEST_CASE("Call the code of another contract using CALL", "[message_call]") {
     env.blockHash,
     codeAddress, /* codeAddress */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     address, /* address */
     uint256_t(0xea0e9e), /* sender */
     uint256_t(0x1283fe), /* origin */
@@ -94,7 +93,6 @@ TEST_CASE("Call the code of another contract using STATICCALL", "[create]") {
     env.blockHash,
     codeAddress, /* senderAddress */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     codeAddress,
     uint256_t(0x1283fe), /* origin */
@@ -162,7 +160,6 @@ TEST_CASE("Call the code of another contract using DELEGATECALL", "[message_call
     env.blockHash,
     codeAddress, /* codeAddress */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     address, /* address */
     uint256_t(0xea0e9e), /* sender */
     uint256_t(0x1283fe), /* origin */
@@ -218,7 +215,6 @@ TEST_CASE("Call the code of the same contract using CALL", "[message_call]") {
     env.blockHash,
     codeAddress, /* codeAddress */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     codeAddress, /* address */
     uint256_t(0xea0e9e), /* sender */
     uint256_t(0x1283fe), /* origin */

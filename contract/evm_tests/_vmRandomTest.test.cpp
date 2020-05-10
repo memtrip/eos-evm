@@ -30,7 +30,6 @@ TEST_CASE("201503110206PYTHON______ad34ff6291ab537633ab5e7163537b24617cc4edb2f45
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
@@ -72,7 +71,6 @@ TEST_CASE("201503111844PYTHON______a8049871a173837bf8fbfab3352baf9bb9e33d0ffa2bd
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
@@ -114,7 +112,6 @@ TEST_CASE("201503112218PYTHON______6fc205d30fd7493b6e120e18c91e1e41f6fe334b94aba
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
@@ -156,7 +153,6 @@ TEST_CASE("201503110219PYTHON______93dd23cbf213b07ac96a1fdfc826f41475452fea6da2e
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
@@ -198,7 +194,6 @@ TEST_CASE("201503102320PYTHON______38aa9ba7f7836987852734619b0192d42434bd7106da1
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
@@ -240,7 +235,6 @@ TEST_CASE("201503110346PYTHON_PUSH24______953cb389f468c0d45697c57895679d7675ab43
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */

@@ -29,7 +29,6 @@ TEST_CASE("keccak256 hash int8", "[vm_keccak256]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     codeAddress,
     uint256_t(0x1283fe), /* origin */

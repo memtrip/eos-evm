@@ -77,8 +77,7 @@ class Execute {
                 messageCallReturn.size
               );
 
-              emplace_t emplaceResult = external->emplaceCode(
-                senderAddress, 
+              emplace_t emplaceResult = external->emplaceParentCode(
                 codeAddress,
                 context->value,
                 code
@@ -106,7 +105,9 @@ class Execute {
           {
             uint256_t toAddress = BigInt::fromBigEndianBytes(Transaction::address(rlp));
 
-            std::shared_ptr<Context> context = Context::makeCall(env, senderAddress, toAddress, rlp, external);
+            std::shared_ptr<bytes_t< code = std::make_shared<bytes_t>(external->code(toAddress));
+
+            std::shared_ptr<Context> context = Context::makeCall(env, senderAddress, toAddress, rlp, code);
 
             callResult = Call::call(
               0,
@@ -145,7 +146,7 @@ class Execute {
       std::shared_ptr<Memory> memory = std::make_shared<Memory>();
 
       uint256_t toAddress = BigInt::fromBigEndianBytes(Transaction::address(rlp));
-      std::shared_ptr<Context> context = Context::makeCodeCall(env, senderAddress, code, rlp, external);
+      std::shared_ptr<Context> context = Context::makeCodeCall(env, senderAddress, code, rlp);
 
       return Call::call(
         0,

@@ -29,6 +29,7 @@ typedef std::pair<ExecResult, exec_result_info_t> exec_result_t;
 
 enum InstructionResult {
   OK,
+  OUT_OF_GAS,
   UNUSED_GAS,
   JUMP_POSITION,
   STOP_EXEC_RETURN,

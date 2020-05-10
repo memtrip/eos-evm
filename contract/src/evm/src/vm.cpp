@@ -192,6 +192,8 @@ exec_result_t VM::step(
     switch (result.first) {
       case InstructionResult::OK:
         break;
+      case InstructionResult::OUT_OF_GAS:
+        return std::make_pair(ExecResult::VM_OUT_OF_GAS, 0);
       case InstructionResult::UNUSED_GAS:
         {
           gas_t gasLeft = std::get<gas_t>(result.second);
@@ -328,8 +330,12 @@ instruction_result_t VM::executeCreateInstruction(
       {
         printf("MESSAGE_CALL_RETURN\n");
         MessageCallReturn callReturn = std::get<MessageCallReturn>(callResult.second);
-    
         bytes_t returnDataBytes = createMemory->readSlice(callReturn.offset, callReturn.size);
+
+        uint256_t returnDataCost = uint256_t(returnDataBytes.size()) * uint256_t(CREATE_DATA_GAS);
+        if (returnDataCost > callReturn.gasLeft || returnDataBytes.size() > MAX_CONTRACT_SIZE) {
+          return std::make_pair(InstructionResult::OUT_OF_GAS, 0);
+        }
 
         emplace_t emplaceResult = external->emplaceCode(
           context->address, 
@@ -344,8 +350,8 @@ instruction_result_t VM::executeCreateInstruction(
               printf("EMPLACE_SUCCESS");
               stack->push(codeAddress);
               return std::make_pair(
-                InstructionResult::UNUSED_GAS,
-                callReturn.gasLeft
+                InstructionResult::UNUSED_GAS, 
+                callReturn.gasLeft - Overflow::uint256Cast(returnDataCost).first
               );
             }
           case EmplaceResult::EMPLACE_CODE_ALREADY_EXISTS:
@@ -441,6 +447,7 @@ instruction_result_t VM::executeCallInstruction(
 
   uint256_t senderAddress;
   uint256_t receiveAddress;
+  uint256_t codeExecutionAddress;
   bool hasBalance;
   CallType callType;
 
@@ -450,6 +457,7 @@ instruction_result_t VM::executeCallInstruction(
         if (isStatic && value > 0) return std::make_pair(InstructionResult::INSTRUCTION_TRAP, TrapKind::TRAP_MUTATE_STATIC);
         senderAddress = context->address;
         receiveAddress = codeAddress;
+        codeExecutionAddress = codeAddress;
         Utils::print256(value, "call->value");
         hasBalance = external->balance(context->address) >= value;
         callType = CallType::ACTION_CALL;
@@ -459,6 +467,7 @@ instruction_result_t VM::executeCallInstruction(
       {
         senderAddress = context->address;
         receiveAddress = context->address;
+        codeExecutionAddress = context->address;
         hasBalance = external->balance(context->address) >= value;
         callType = CallType::ACTION_CALL;
         break;
@@ -467,6 +476,7 @@ instruction_result_t VM::executeCallInstruction(
       {
         senderAddress = context->sender;
         receiveAddress = context->address;
+        codeExecutionAddress = context->codeAddress;
         hasBalance = true;
         callType = CallType::ACTION_CALL;
         break;
@@ -475,6 +485,7 @@ instruction_result_t VM::executeCallInstruction(
       {
         senderAddress = context->address;
         receiveAddress = codeAddress;
+        codeExecutionAddress = codeAddress;
         hasBalance = true;
         callType = CallType::ACTION_STATIC_CALL;
         break;
@@ -498,8 +509,11 @@ instruction_result_t VM::executeCallInstruction(
 
   Utils::print256(codeAddress, "context->codeAddress");
 
+  std::shared_ptr<bytes_t> code = std::make_shared<bytes_t>(external->code(codeAddress));
+
   std::shared_ptr<Context> callContext = Context::makeInnerCall(
     context,
+    codeExecutionAddress,
     codeAddress, 
     receiveAddress, 
     senderAddress, 
@@ -507,8 +521,8 @@ instruction_result_t VM::executeCallInstruction(
     context->gasPrice, 
     value, 
     isStatic,
-    callData,
-    external
+    code,
+    callData
   ); 
 
   std::shared_ptr<Memory> callMemory = std::make_shared<Memory>();
@@ -541,10 +555,7 @@ instruction_result_t VM::executeCallInstruction(
         Utils::printBytes(callMemory->memory, "callMemory->memory");
         Utils::printBytes(returnData, "returnData");
         stack->push(UINT256_ONE);
-        return std::make_pair(
-          InstructionResult::UNUSED_GAS,
-          callReturn.gasLeft
-        );
+        return std::make_pair(InstructionResult::UNUSED_GAS, callReturn.gasLeft);
       }
     case MESSAGE_CALL_REVERTED:
       {
@@ -553,10 +564,7 @@ instruction_result_t VM::executeCallInstruction(
         stack->push(UINT256_ZERO);
         returnData = callMemory->readSlice(callReturn.offset, callReturn.size);
         memory->writeSlice(outOffset, outSize, returnData);
-        return std::make_pair(
-          InstructionResult::UNUSED_GAS,
-          callReturn.gasLeft
-        );
+        return std::make_pair(InstructionResult::UNUSED_GAS, callReturn.gasLeft);
       }
     case MESSAGE_CALL_OUT_OF_GAS:
     {

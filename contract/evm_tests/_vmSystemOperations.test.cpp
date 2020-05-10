@@ -30,7 +30,6 @@ TEST_CASE("return0______1cd2b9480f1f5bdd82e8026b6342008ef84d318c3f9f173eae7d09e5
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* address */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* sender */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* origin */
@@ -75,7 +74,6 @@ TEST_CASE("return1______5cd716a8e8d460b10e0dc1b3d5b6394f0c388e0e36246bf124478b0c
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* address */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* sender */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* origin */
@@ -120,7 +118,6 @@ TEST_CASE("suicideSendEtherToMe______0cf005812e9c99dc87bdd8463a9849a0164a9e02b3d
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
@@ -162,7 +159,6 @@ TEST_CASE("TestNameRegistrator______7e0e4bcbcbe8bcaf9a8535e65d4c6665db752910953b
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
@@ -213,7 +209,6 @@ TEST_CASE("suicideNotExistingAccount______ba450a40efb62a9fb6e16e3bced0afde8d0b08
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
@@ -255,7 +250,6 @@ TEST_CASE("return2______4181cbf262c1dc2cdc186e007ec6c13466bd031b190b07874b1177a0
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* address */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* sender */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* origin */
@@ -300,7 +294,6 @@ TEST_CASE("suicide0______56c8766e8a1687dfe807b1e8f2d0454267f432c7e3035ff5fa9c27a
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
     TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */

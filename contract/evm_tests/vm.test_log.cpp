@@ -25,7 +25,6 @@ TEST_CASE("Log empty (LOG0)", "[log]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xea0e9e), /* sender */
     uint256_t(0x1283fe), /* origin */
@@ -73,7 +72,6 @@ TEST_CASE("Log sender (LOG1)", "[log]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xea0e9e), /* sender */
     uint256_t(0x1283fe), /* origin */
@@ -126,7 +124,6 @@ TEST_CASE("Log origin and sender (LOG2)", "[log]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xea0e9e), /* sender */
     uint256_t(0x1283fe), /* origin */
@@ -182,7 +179,6 @@ TEST_CASE("Log caller, origin, sender (LOG3)", "[log]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xea0e9e), /* sender */
     uint256_t(0x1283fe), /* origin */
@@ -241,7 +237,6 @@ TEST_CASE("Log number, caller, origin and sender (LOG4)", "[log]") {
     env.blockHash,
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     uint256_t(0xea0e9a), /* address */
     uint256_t(0xea0e9e), /* sender */
     uint256_t(0x1283fe), /* origin */
