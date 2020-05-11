@@ -15,14 +15,14 @@ class Call {
       CallType callType,
       std::shared_ptr<Memory> memory,
       std::shared_ptr<Context> context,
+      std::shared_ptr<Operation> operation,
+      std::shared_ptr<GasCalculation> gasCalculation,
       std::shared_ptr<External> external,
       std::shared_ptr<PendingState> pendingState
     ) {
 
       uint16_t nextStackDepth = stackDepth + 1;
       pendingState->currentStackDepth = nextStackDepth;
-
-      Operation operation = Operation();
 
       std::shared_ptr<StackMachine> stack =  std::make_shared<StackMachine>();
       std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
@@ -45,9 +45,10 @@ class Call {
       printf("nextStackDepth{%d}[", nextStackDepth);
       exec_result_t vm_result = vm.execute(
         nextStackDepth,
-        operation,
         context,
         memory, 
+        operation,
+        gasCalculation,
         pendingState, 
         external
       );

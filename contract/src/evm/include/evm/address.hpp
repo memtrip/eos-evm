@@ -17,20 +17,17 @@ class Address {
 
       RLPItem accountNameItem {
         RLPType::STRING,
-        accountNameBytes,
-        std::vector<RLPItem> {}
+        accountNameBytes
       };
 
       RLPItem addressItem {
         RLPType::STRING,
-        address,
-        std::vector<RLPItem> {}
+        address
       };
 
       RLPItem accountNameAddressList {
         RLPType::LIST,
-        bytes_t {},
-        std::vector<RLPItem> { accountNameItem, addressItem }
+        rlp_list_t { accountNameItem, addressItem }
       };
 
       bytes_t result = RLPEncode::encode(accountNameAddressList);
@@ -58,20 +55,17 @@ class Address {
 
       RLPItem addressItem {
         RLPType::STRING,
-        BigInt::toBytes(address),
-        std::vector<RLPItem> {}
+        BigInt::toBytes(address)
       };
 
       RLPItem nonceItem {
         RLPType::STRING,
-        BigInt::toBytes(nonce),
-        std::vector<RLPItem> {}
+        BigInt::toBytes(nonce)
       };
 
       RLPItem addressNonceList {
         RLPType::LIST,
-        bytes_t {},
-        std::vector<RLPItem> { addressItem, nonceItem }
+        rlp_list_t { addressItem, nonceItem }
       };
 
       bytes_t result = RLPEncode::encode(addressNonceList);
@@ -93,32 +87,27 @@ class Address {
 
       RLPItem singleByte {
         RLPType::STRING,
-        bytes_t { 0xFF },
-        std::vector<RLPItem> {}
+        bytes_t { 0xFF }
       };
 
       RLPItem addressItem {
         RLPType::STRING,
-        BigInt::toBytes(address),
-        std::vector<RLPItem> {}
+        BigInt::toBytes(address)
       };
 
       RLPItem saltItem {
         RLPType::STRING,
-        BigInt::toBytes(salt),
-        std::vector<RLPItem> {}
+        BigInt::toBytes(salt)
       };
 
       RLPItem codeHashItem {
         RLPType::STRING,
-        codeHash,
-        std::vector<RLPItem> {}
+        codeHash
       };
 
       RLPItem addressList {
         RLPType::LIST,
-        bytes_t {},
-        std::vector<RLPItem> { singleByte, addressItem, saltItem, codeHashItem }
+        rlp_list_t { singleByte, addressItem, saltItem, codeHashItem }
       };
 
       bytes_t result = RLPEncode::encode(addressList);

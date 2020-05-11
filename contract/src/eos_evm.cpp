@@ -1,4 +1,5 @@
 #include <string>
+#include <memory>
 #include <eosio/crypto.hpp>
 
 #include <eos_evm.hpp>
@@ -15,6 +16,7 @@
 #include <evm/hash.hpp>
 #include <evm/hex.hpp>
 #include <evm/overflow.hpp>
+#include <evm/utils.hpp>
 
 void eos_evm::raw(name from, bytes_t code, string sender) {
   incomingTransaction(from, code, sender, bytes_t());
@@ -32,17 +34,30 @@ void eos_evm::incomingTransaction(const name& from, const bytes_t& transaction, 
 
   env_t env = eos_system::env();
 
-  std::shared_ptr<std::vector<RLPItem>> rlp = std::make_shared<std::vector<RLPItem>>();
+  rlp_list_t* rlp = new rlp_list_t();
   RLPDecode::decode(transaction, rlp);
 
-  std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
-
   uint64_t transactionNonce = Overflow::uint256Cast(Transaction::nonce(rlp)).first;
-
   bool hasSignature = Transaction::hasSignature(rlp);
+  bytes_t digest = Transaction::digest(rlp, 0x01);
+  bytes_t signature = Transaction::signature(rlp, env.chainId);
+
+  TransactionActionType actionType = Transaction::type(rlp);
+  gas_t gasLimit = Transaction::gas(rlp);
+  uint256_t gasPrice = Transaction::gasPrice(rlp);
+  uint256_t value = Transaction::value(rlp);
+  uint256_t toAddress = BigInt::fromBigEndianBytes(Transaction::address(rlp));
+  std::shared_ptr<bytes_t> data = std::make_shared<bytes_t>(Transaction::data(rlp));
+
   bytes_t accountIdentifierBytes = hasSignature ? eos_ecrecover::recover(from.to_string(), rlp, env) : Hex::hexToBytes(sender);
   checksum256 accountIdentifier = Hex::hexToChecksum256(accountIdentifierBytes);
   uint256_t senderAddress = BigInt::fromBigEndianBytes(accountIdentifierBytes);
+
+  delete rlp;
+
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
+  std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
 
   account_table _account(get_self(), get_self().value);
   auto idx = _account.get_index<name("accountid")>();
@@ -58,9 +73,37 @@ void eos_evm::incomingTransaction(const name& from, const bytes_t& transaction, 
 
   call_result_t callResult;
   if (bytecode.size() > 0) {
-    callResult = Execute::code(senderAddress, env, bytecode, rlp, external, pendingState);
+    callResult = Execute::code(
+      senderAddress, 
+      env, 
+      std::make_shared<bytes_t>(bytecode), 
+      actionType, 
+      gasLimit,
+      gasPrice,
+      value,
+      data,
+      toAddress,
+      operation,
+      gasCalculation,
+      external, 
+      pendingState
+    );
   } else {
-    callResult = Execute::transaction(senderAddress, itr->nonce, env, rlp, external, pendingState);
+    callResult = Execute::transaction(
+      senderAddress, 
+      itr->nonce, 
+      env, 
+      actionType,
+      gasLimit,
+      gasPrice,
+      value,
+      data,
+      toAddress,
+      operation,
+      gasCalculation,
+      external, 
+      pendingState
+    );
   }
 
   checkCallResult(from, callResult);

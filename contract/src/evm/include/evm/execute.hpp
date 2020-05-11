@@ -16,7 +16,14 @@ class Execute {
       const uint256_t& senderAddress,
       const uint64_t nonce,
       const env_t& env,
-      std::shared_ptr<std::vector<RLPItem>> rlp, 
+      TransactionActionType actionType,
+      gas_t gasLimit,
+      const uint256_t& gasPrice,
+      const uint256_t& value,
+      std::shared_ptr<bytes_t> data,
+      const uint256_t& toAddress,
+      std::shared_ptr<Operation> operation,
+      std::shared_ptr<GasCalculation> gasCalculation,
       std::shared_ptr<External> external,
       std::shared_ptr<PendingState> pendingState
     ) {
@@ -25,7 +32,7 @@ class Execute {
 
       call_result_t callResult;
 
-      switch (Transaction::type(rlp)) {
+      switch (actionType) {
         case TransactionActionType::TRANSACTION_CREATE:
           {
             uint256_t codeAddress = Address::makeCreateAddress(
@@ -35,7 +42,15 @@ class Execute {
               std::shared_ptr<bytes_t>()
             );
 
-            std::shared_ptr<Context> context = Context::makeCreate(env, senderAddress, codeAddress, rlp);
+            std::shared_ptr<Context> context = Context::makeCreate(
+              env, 
+              senderAddress, 
+              codeAddress,
+              gasLimit,
+              gasPrice,
+              value, 
+              data
+            );
 
             emplace_t emplaceResult = external->emplaceCodeAddress(
               senderAddress, 
@@ -64,6 +79,8 @@ class Execute {
               CallType::ACTION_CREATE,
               memory,
               context,
+              operation,
+              gasCalculation,
               external,
               pendingState
             );
@@ -103,17 +120,26 @@ class Execute {
           }
         case TransactionActionType::TRANSACTION_CALL:
           {
-            uint256_t toAddress = BigInt::fromBigEndianBytes(Transaction::address(rlp));
+            std::shared_ptr<bytes_t> code = std::make_shared<bytes_t>(external->code(toAddress));
 
-            std::shared_ptr<bytes_t< code = std::make_shared<bytes_t>(external->code(toAddress));
-
-            std::shared_ptr<Context> context = Context::makeCall(env, senderAddress, toAddress, rlp, code);
+            std::shared_ptr<Context> context = Context::makeCall(
+              env, 
+              senderAddress, 
+              toAddress, 
+              gasLimit,
+              gasPrice,
+              value,
+              code, 
+              data
+            );
 
             callResult = Call::call(
               0,
               CallType::ACTION_CALL,
               memory,
               context,
+              operation,
+              gasCalculation,
               external,
               pendingState
             );
@@ -137,22 +163,38 @@ class Execute {
     static call_result_t code(
       const uint256_t& senderAddress,
       const env_t& env,
-      const bytes_t& code, 
-      std::shared_ptr<std::vector<RLPItem>> rlp, 
+      std::shared_ptr<bytes_t> code, 
+      TransactionActionType actionType, 
+      gas_t gasLimit,
+      const uint256_t& gasPrice,
+      const uint256_t& value,
+      std::shared_ptr<bytes_t> data,
+      const uint256_t& toAddress,
+      std::shared_ptr<Operation> operation,
+      std::shared_ptr<GasCalculation> gasCalculation,
       std::shared_ptr<External> external,
       std::shared_ptr<PendingState> pendingState
     ) {
 
       std::shared_ptr<Memory> memory = std::make_shared<Memory>();
 
-      uint256_t toAddress = BigInt::fromBigEndianBytes(Transaction::address(rlp));
-      std::shared_ptr<Context> context = Context::makeCodeCall(env, senderAddress, code, rlp);
+      std::shared_ptr<Context> context = Context::makeCodeCall(
+        env,
+        senderAddress, 
+        gasLimit,
+        gasPrice,
+        value,
+        code, 
+        data
+      );
 
       return Call::call(
         0,
         CallType::ACTION_STATIC_CALL,
         memory,
         context,
+        operation,
+        gasCalculation,
         external,
         pendingState
       );

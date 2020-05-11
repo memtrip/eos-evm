@@ -15,9 +15,10 @@
 
 exec_result_t VM::execute(
   uint16_t stackDepth,
-  Operation& operation,
   std::shared_ptr<Context> context,
   std::shared_ptr<Memory> memory,
+  std::shared_ptr<Operation> operation,
+  std::shared_ptr<GasCalculation> gasCalculation,
   std::shared_ptr<PendingState> pendingState,
   std::shared_ptr<External> external
 ) {
@@ -26,17 +27,16 @@ exec_result_t VM::execute(
 
   jump_set_t jumps = Jumps::findDestinations(context->code);
   std::shared_ptr<ByteReader> reader = std::make_shared<ByteReader>(0);
-  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   do {
     result = VM::step(
       stackDepth,
-      operation,
       jumps, 
       context,
-      gasCalculation,
       memory, 
       reader, 
+      operation,
+      gasCalculation,
       pendingState, 
       external
     );
@@ -47,12 +47,12 @@ exec_result_t VM::execute(
 
 exec_result_t VM::step(
   uint16_t stackDepth,
-  Operation& operation,
   jump_set_t& jumps, 
   std::shared_ptr<Context> context,
-  std::shared_ptr<GasCalculation> gasCalculation,
   std::shared_ptr<Memory> memory,
   std::shared_ptr<ByteReader> reader, 
+  std::shared_ptr<Operation> operation,
+  std::shared_ptr<GasCalculation> gasCalculation,
   std::shared_ptr<PendingState> pendingState,
   std::shared_ptr<External> external
 ) {
@@ -95,7 +95,6 @@ exec_result_t VM::step(
     switch (calculateRequirements.first) {
       case GasometerResult::GASOMETER_RESULT_OK:
         requirements = std::get<GasRequirements>(calculateRequirements.second);
-        //Utils::printInstructionRequirements(requirements);
         break;
       case GasometerResult::GASOMETER_RESULT_OUT_OF_GAS:
         return std::make_pair(ExecResult::VM_OUT_OF_GAS, 0);
@@ -147,11 +146,12 @@ exec_result_t VM::step(
         {
           result = executeCreateInstruction(
             stackDepth,
-            operation,
             opcode,
             requirements.provideGas,
             context,
             memory,
+            operation,
+            gasCalculation,
             pendingState,
             external
           );
@@ -164,11 +164,12 @@ exec_result_t VM::step(
         {
           result = executeCallInstruction(
             stackDepth,
-            operation,
             opcode,
             requirements.provideGas,
             context,
             memory,
+            operation,
+            gasCalculation,
             pendingState,
             external
           );
@@ -176,7 +177,7 @@ exec_result_t VM::step(
         }
       default:
         result = std::invoke(
-          operation.values[opcode], 
+          operation->values[opcode], 
           operation, 
           currentGas,
           instruction, 
@@ -198,7 +199,6 @@ exec_result_t VM::step(
         {
           gas_t gasLeft = std::get<gas_t>(result.second);
           gasometer->currentGas = gasometer->currentGas + gasLeft;
-          // printf("\n>> currentGas{%llu}\n", gasometer->currentGas);
           break;
         }
       case InstructionResult::JUMP_POSITION:
@@ -240,11 +240,12 @@ exec_result_t VM::step(
 
 instruction_result_t VM::executeCreateInstruction(
   uint16_t stackDepth,
-  Operation& operation,
   uint8_t opcode,
   gas_t providedGas,
   std::shared_ptr<Context> context,
   std::shared_ptr<Memory> memory,
+  std::shared_ptr<Operation> operation,
+  std::shared_ptr<GasCalculation> gasCalculation,
   std::shared_ptr<PendingState> pendingState,
   std::shared_ptr<External> external
 ) {
@@ -314,6 +315,8 @@ instruction_result_t VM::executeCreateInstruction(
     CallType::ACTION_CREATE,
     createMemory,
     createContext,
+    operation,
+    gasCalculation,
     external,
     pendingState
   );
@@ -321,14 +324,12 @@ instruction_result_t VM::executeCreateInstruction(
   switch (callResult.first) {
     case MESSAGE_CALL_SUCCESS:
       {
-        printf("MESSAGE_CALL_SUCCESS");
         stack->push(UINT256_ONE);
         gas_t gasLeft = std::get<gas_t>(callResult.second);
         return std::make_pair(InstructionResult::UNUSED_GAS, gasLeft);
       }
     case MESSAGE_CALL_RETURN:
       {
-        printf("MESSAGE_CALL_RETURN\n");
         MessageCallReturn callReturn = std::get<MessageCallReturn>(callResult.second);
         bytes_t returnDataBytes = createMemory->readSlice(callReturn.offset, callReturn.size);
 
@@ -347,7 +348,6 @@ instruction_result_t VM::executeCreateInstruction(
         switch (emplaceResult.first) {
           case EmplaceResult::EMPLACE_SUCCESS:
             {
-              printf("EMPLACE_SUCCESS");
               stack->push(codeAddress);
               return std::make_pair(
                 InstructionResult::UNUSED_GAS, 
@@ -356,15 +356,11 @@ instruction_result_t VM::executeCreateInstruction(
             }
           case EmplaceResult::EMPLACE_CODE_ALREADY_EXISTS:
           case EmplaceResult::EMPLACE_ADDRESS_NOT_FOUND:
-            {
-              printf("EMPLACE_ADDRESS_NOT_FOUND");
-              return std::make_pair(InstructionResult::INSTRUCTION_TRAP, TrapKind::TRAP_INVALID_CODE_ADDRESS);
-            }
+            return std::make_pair(InstructionResult::INSTRUCTION_TRAP, TrapKind::TRAP_INVALID_CODE_ADDRESS);
           case EmplaceResult::EMPLACE_INSUFFICIENT_FUNDS:
             {
-              printf("EMPLACE_INSUFFICIENT_FUNDS");
               stack->push(UINT256_ZERO);
-              return std::make_pair(InstructionResult::UNUSED_GAS, createGas);
+              return std::make_pair(InstructionResult::UNUSED_GAS, callReturn.gasLeft);
             }
         }
       }
@@ -380,13 +376,11 @@ instruction_result_t VM::executeCreateInstruction(
       }
     case MESSAGE_CALL_OUT_OF_GAS:
     {
-        printf("MESSAGE_CALL_OUT_OF_GAS");
         stack->push(UINT256_ZERO);
         return std::make_pair(InstructionResult::OK, 0);      
     }
     case MESSAGE_CALL_FAILED:
       {
-        printf("MESSAGE_CALL_FAILED");
         stack->push(UINT256_ZERO);
         return std::make_pair(InstructionResult::OK, 0);
       }
@@ -397,16 +391,17 @@ instruction_result_t VM::executeCreateInstruction(
 
 instruction_result_t VM::executeCallInstruction(
   uint16_t stackDepth,
-  Operation& operation,
   uint8_t opcode,
   gas_t providedGas,
   std::shared_ptr<Context> context,
   std::shared_ptr<Memory> memory,
+  std::shared_ptr<Operation> operation,
+  std::shared_ptr<GasCalculation> gasCalculation,
   std::shared_ptr<PendingState> pendingState,
   std::shared_ptr<External> external
 ) {
   uint256_t codeAddress = stack->peek(1);
-  uint256_t value = 0; /* TODO: clarify, should context->value be used in the absense of a stack value? */
+  uint256_t value = 0; 
   bool isStatic = context->isStatic;
   uint64_t inOffset;
   uint64_t inSize;
@@ -458,7 +453,6 @@ instruction_result_t VM::executeCallInstruction(
         senderAddress = context->address;
         receiveAddress = codeAddress;
         codeExecutionAddress = codeAddress;
-        Utils::print256(value, "call->value");
         hasBalance = external->balance(context->address) >= value;
         callType = CallType::ACTION_CALL;
         break;
@@ -499,16 +493,11 @@ instruction_result_t VM::executeCallInstruction(
   callGas = Overflow::add(callGas, stipend).first;
 
   if (!hasBalance || stackDepth > STACK_LIMIT) {
-    printf("no balance");
     stack->push(UINT256_ZERO);
     return std::make_pair(InstructionResult::UNUSED_GAS, callGas);
   }
 
   std::shared_ptr<bytes_t> callData = std::make_shared<bytes_t>(memory->readSlice(inOffset, inSize));
-  // printf("callData{%s}\n", Hex::bytesToHex(callData).c_str());
-
-  Utils::print256(codeAddress, "context->codeAddress");
-
   std::shared_ptr<bytes_t> code = std::make_shared<bytes_t>(external->code(codeAddress));
 
   std::shared_ptr<Context> callContext = Context::makeInnerCall(
@@ -532,6 +521,8 @@ instruction_result_t VM::executeCallInstruction(
     callType,
     callMemory,
     callContext,
+    operation,
+    gasCalculation,
     external,
     pendingState
   );
@@ -539,27 +530,20 @@ instruction_result_t VM::executeCallInstruction(
   switch (callResult.first) {
     case MESSAGE_CALL_SUCCESS:
       {
-        printf("MESSAGE_CALL_SUCCESS\n");
         stack->push(UINT256_ONE);
         gas_t gasLeft = std::get<gas_t>(callResult.second);
         return std::make_pair(InstructionResult::UNUSED_GAS, gasLeft);
       }
     case MESSAGE_CALL_RETURN:
       {
-        printf("MESSAGE_CALL_RETURN\n");
         MessageCallReturn callReturn = std::get<MessageCallReturn>(callResult.second);
         returnData = callMemory->readSlice(callReturn.offset, callReturn.size);
         memory->writeSlice(outOffset, outSize, returnData);
-        Utils::printLong(callReturn.offset, "offset");
-        Utils::printLong(callReturn.size, "size");
-        Utils::printBytes(callMemory->memory, "callMemory->memory");
-        Utils::printBytes(returnData, "returnData");
         stack->push(UINT256_ONE);
         return std::make_pair(InstructionResult::UNUSED_GAS, callReturn.gasLeft);
       }
     case MESSAGE_CALL_REVERTED:
       {
-        printf("MESSAGE_CALL_REVERTED\n");
         MessageCallReturn callReturn = std::get<MessageCallReturn>(callResult.second);
         stack->push(UINT256_ZERO);
         returnData = callMemory->readSlice(callReturn.offset, callReturn.size);
@@ -568,13 +552,11 @@ instruction_result_t VM::executeCallInstruction(
       }
     case MESSAGE_CALL_OUT_OF_GAS:
     {
-        printf("MESSAGE_CALL_OUT_OF_GAS");
         stack->push(UINT256_ZERO);
         return std::make_pair(InstructionResult::OK, 0);      
     }
     case MESSAGE_CALL_FAILED:
       {
-        printf("MESSAGE_CALL_FAILED\n");
         stack->push(UINT256_ZERO);
         return std::make_pair(InstructionResult::OK, 0);
       }

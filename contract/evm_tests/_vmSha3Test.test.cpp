@@ -49,10 +49,11 @@ TEST_CASE("sha3_0______55a13dc9cd0457c545a8ff9a046a83facd094f8bc1b0aa57a04d58a47
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
 
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  vm.execute(0, operation, context, mem, pendingState, external);
+  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK("c5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470" ==
@@ -93,10 +94,11 @@ TEST_CASE("sha3_memSizeNoQuadraticCost31______f3e15daec7cb9cd515321d21f091a8863a
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
 
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  vm.execute(0, operation, context, mem, pendingState, external);
+  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK("bc36789e7a1e281436464229828f817d6612f7b477d66591ff96a9e064bcc98a" ==
@@ -137,10 +139,11 @@ TEST_CASE("sha3_memSizeQuadraticCost63______c707d289675e51f41e5ddb0cfa077b7108e8
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
 
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  vm.execute(0, operation, context, mem, pendingState, external);
+  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK("bc36789e7a1e281436464229828f817d6612f7b477d66591ff96a9e064bcc98a" ==
@@ -181,10 +184,11 @@ TEST_CASE("sha3_1______25997633273316ca1cf2258035f3cf723789e01c837f12095561c96a9
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
 
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  vm.execute(0, operation, context, mem, pendingState, external);
+  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK("c41589e7559804ea4a2080dad19d876a024ccb05117835447d72ce08c1d020ec" ==
@@ -225,10 +229,11 @@ TEST_CASE("sha3_memSizeQuadraticCost65______2af3a55f4752f20404afb7c3a1c889d4c21d
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
 
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  vm.execute(0, operation, context, mem, pendingState, external);
+  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK("bc36789e7a1e281436464229828f817d6612f7b477d66591ff96a9e064bcc98a" ==
@@ -269,10 +274,11 @@ TEST_CASE("sha3_memSizeQuadraticCost32______ce67ec8d13841600bc8076b4136260645e72
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
 
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  vm.execute(0, operation, context, mem, pendingState, external);
+  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK("bc36789e7a1e281436464229828f817d6612f7b477d66591ff96a9e064bcc98a" ==
@@ -313,10 +319,11 @@ TEST_CASE("sha3_bigOffset______9df88aa7ae0baf4b6db458e8101233391101b3343a26dd91f
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
 
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  vm.execute(0, operation, context, mem, pendingState, external);
+  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
 }
@@ -354,10 +361,11 @@ TEST_CASE("sha3_6______db7522537756de38606a515817f7f953d63869199afbdb2ef97441a65
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
 
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  vm.execute(0, operation, context, mem, pendingState, external);
+  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
 }
@@ -395,10 +403,11 @@ TEST_CASE("sha3_memSizeQuadraticCost33______66fefc4166dd60603843813c9413995b2a06
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
 
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  vm.execute(0, operation, context, mem, pendingState, external);
+  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK("bc36789e7a1e281436464229828f817d6612f7b477d66591ff96a9e064bcc98a" ==
@@ -439,10 +448,11 @@ TEST_CASE("sha3_memSizeQuadraticCost64______b38d9ca851b3236eb73cb13cad9fea6e605e
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
 
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  vm.execute(0, operation, context, mem, pendingState, external);
+  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK("bc36789e7a1e281436464229828f817d6612f7b477d66591ff96a9e064bcc98a" ==
@@ -483,10 +493,11 @@ TEST_CASE("sha3_memSizeQuadraticCost64_2______d185939aec4f4aae503167ad5a5f8b40aa
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
 
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  vm.execute(0, operation, context, mem, pendingState, external);
+  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK("290decd9548b62a8d60345a988386fc84ba6bc95484008f6362f93160ef3e563" ==
@@ -527,10 +538,11 @@ TEST_CASE("sha3_4______f05a375db651dc62f2409f548bdd0db74a50cdc163feb25d1f65be155
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
 
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  vm.execute(0, operation, context, mem, pendingState, external);
+  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
 }
@@ -568,10 +580,11 @@ TEST_CASE("sha3_5______58a094eff7761aa13888ad9b24ead0f78207f29b7b27ec19e07f9ab7c
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
 
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  vm.execute(0, operation, context, mem, pendingState, external);
+  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
 }
@@ -609,10 +622,11 @@ TEST_CASE("sha3_bigSize______794cb1a0b26deee9fb2c7a1bec1e0c6b499a91b9b6e2024f31e
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
 
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  vm.execute(0, operation, context, mem, pendingState, external);
+  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
 }
@@ -650,10 +664,11 @@ TEST_CASE("sha3_2______296af237a14112e306707e5f8e6ef1c64c19f67c4bd35fbfabbfe5a94
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
 
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  vm.execute(0, operation, context, mem, pendingState, external);
+  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK("6bd2dd6bd408cbee33429358bf24fdc64612fbf8b1b4db604518f40ffd34b607" ==
@@ -694,10 +709,11 @@ TEST_CASE("sha3_memSizeQuadraticCost32_zeroSize______2da0644da1e2765b44f104b0987
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
 
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  vm.execute(0, operation, context, mem, pendingState, external);
+  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK("c5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470" ==
@@ -738,10 +754,11 @@ TEST_CASE("sha3_3______de2716629e8c598d97f20e648cce8062238e5a4c5b02d88386f72fd0d
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
 
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  vm.execute(0, operation, context, mem, pendingState, external);
+  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
 }
@@ -779,10 +796,11 @@ TEST_CASE("sha3_bigOffset2______6d4d1bdba5c2a7921d8c4c6145cf926eb73e320125347296
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
 
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  vm.execute(0, operation, context, mem, pendingState, external);
+  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK("54a8c0ab653c15bfb48b47fd011ba2b9617af01cb45cab344acd57c924d56798" ==

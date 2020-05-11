@@ -44,10 +44,11 @@ TEST_CASE("Add two large numbers, store the result, verify gas", "[gasometer]") 
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  exec_result_t result = vm.execute(0, operation, context, mem, pendingState, external);
+  exec_result_t result = vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK(79988 == Utils::gasLeft(result));
@@ -90,10 +91,11 @@ TEST_CASE("Store the result of an SHA3 hash, verify gas", "[gasometer]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  exec_result_t result = vm.execute(0, operation, context, mem, pendingState, external);
+  exec_result_t result = vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK(79961 == Utils::gasLeft(result));
@@ -136,10 +138,11 @@ TEST_CASE("Address, verify gas", "[gasometer]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  exec_result_t result = vm.execute(0, operation, context, mem, pendingState, external);
+  exec_result_t result = vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK(79995 == Utils::gasLeft(result));
@@ -182,10 +185,11 @@ TEST_CASE("Origin, verify gas", "[gasometer]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  exec_result_t result = vm.execute(0, operation, context, mem, pendingState, external);
+  exec_result_t result = vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK(79995 == Utils::gasLeft(result));
@@ -231,10 +235,11 @@ TEST_CASE("Self balance, verify gas", "[gasometer]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  exec_result_t result = vm.execute(0, operation, context, mem, pendingState, external);
+  exec_result_t result = vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK(79992 == Utils::gasLeft(result));
@@ -273,10 +278,11 @@ TEST_CASE("Sender, verify gas", "[gasometer]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  exec_result_t result = vm.execute(0, operation, context, mem, pendingState, external);
+  exec_result_t result = vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK(79995 == Utils::gasLeft(result));
@@ -319,10 +325,11 @@ TEST_CASE("Chain id, verify gas", "[gasometer]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  exec_result_t result = vm.execute(0, operation, context, mem, pendingState, external);
+  exec_result_t result = vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK(79995 == Utils::gasLeft(result));
@@ -370,10 +377,11 @@ TEST_CASE("Extcodecopy verify gas", "[gasometer]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  exec_result_t result = vm.execute(0, operation, context, mem, pendingState, external);
+  exec_result_t result = vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK(79935 == Utils::gasLeft(result));
@@ -417,10 +425,11 @@ TEST_CASE("Blockhash, verify gas", "[gasometer]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  exec_result_t result = vm.execute(0, operation, context, mem, pendingState, external);
+  exec_result_t result = vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK(79974 == Utils::gasLeft(result));
@@ -467,10 +476,11 @@ TEST_CASE("Calldataload verify gas", "[gasometer]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  exec_result_t result = vm.execute(0, operation, context, mem, pendingState, external);
+  exec_result_t result = vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK(79991 == Utils::gasLeft(result));
@@ -513,10 +523,11 @@ TEST_CASE("Multiply, store the result, verify gas", "[gasometer]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  exec_result_t result = vm.execute(0, operation, context, mem, pendingState, external);
+  exec_result_t result = vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK(79983 == Utils::gasLeft(result));
@@ -559,10 +570,11 @@ TEST_CASE("Subtract, store the result, verify gas", "[gasometer]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  exec_result_t result = vm.execute(0, operation, context, mem, pendingState, external);
+  exec_result_t result = vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK(79985 == Utils::gasLeft(result));
@@ -605,10 +617,11 @@ TEST_CASE("Division, store the result, verify gas", "[gasometer]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  exec_result_t result = vm.execute(0, operation, context, mem, pendingState, external);
+  exec_result_t result = vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK(79983 == Utils::gasLeft(result));
@@ -651,10 +664,11 @@ TEST_CASE("Div zero, store the result, verify gas", "[gasometer]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  exec_result_t result = vm.execute(0, operation, context, mem, pendingState, external);
+  exec_result_t result = vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK(94983 == Utils::gasLeft(result));
@@ -697,10 +711,11 @@ TEST_CASE("Mod, store the result, verify gas", "[gasometer]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  exec_result_t result = vm.execute(0, operation, context, mem, pendingState, external);
+  exec_result_t result = vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK(74966 == Utils::gasLeft(result));
@@ -746,10 +761,11 @@ TEST_CASE("SMOD, store the result, verify gas", "[gasometer]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  exec_result_t result = vm.execute(0, operation, context, mem, pendingState, external);
+  exec_result_t result = vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK(74966 == Utils::gasLeft(result));
@@ -795,10 +811,11 @@ TEST_CASE("SDIV, store the result, verify gas", "[gasometer]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  exec_result_t result = vm.execute(0, operation, context, mem, pendingState, external);
+  exec_result_t result = vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK(74966 == Utils::gasLeft(result));
@@ -844,10 +861,11 @@ TEST_CASE("Exp, store the result, verify gas", "[gasometer]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  exec_result_t result = vm.execute(0, operation, context, mem, pendingState, external);
+  exec_result_t result = vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK(39923 == Utils::gasLeft(result));
@@ -896,10 +914,11 @@ TEST_CASE("Comparison, store the result, verify gas", "[gasometer]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  exec_result_t result = vm.execute(0, operation, context, mem, pendingState, external);
+  exec_result_t result = vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK(49952 == Utils::gasLeft(result));
@@ -951,10 +970,11 @@ TEST_CASE("Signed comparison, store the result, verify gas", "[gasometer]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  exec_result_t result = vm.execute(0, operation, context, mem, pendingState, external);
+  exec_result_t result = vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK(49940 == Utils::gasLeft(result));
@@ -1009,10 +1029,11 @@ TEST_CASE("Bitops, store the result, verify gas", "[gasometer]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  exec_result_t result = vm.execute(0, operation, context, mem, pendingState, external);
+  exec_result_t result = vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK(44937 == Utils::gasLeft(result));
@@ -1070,10 +1091,11 @@ TEST_CASE("Add mod - mul mod, store the result, verify gas", "[gasometer]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  exec_result_t result = vm.execute(0, operation, context, mem, pendingState, external);
+  exec_result_t result = vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK(19914 == Utils::gasLeft(result));
@@ -1125,10 +1147,11 @@ TEST_CASE("Byte, store the result, verify gas", "[gasometer]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  exec_result_t result = vm.execute(0, operation, context, mem, pendingState, external);
+  exec_result_t result = vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK(74976 == Utils::gasLeft(result));
@@ -1174,10 +1197,11 @@ TEST_CASE("Signextend, store the result, verify gas", "[gasometer]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  exec_result_t result = vm.execute(0, operation, context, mem, pendingState, external);
+  exec_result_t result = vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK(59972 == Utils::gasLeft(result));
@@ -1223,10 +1247,11 @@ TEST_CASE("Pop, store the result, verify gas", "[gasometer]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  exec_result_t result = vm.execute(0, operation, context, mem, pendingState, external);
+  exec_result_t result = vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK(79989 == Utils::gasLeft(result));
@@ -1270,10 +1295,11 @@ TEST_CASE("Extops, store the result, verify gas", "[gasometer]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  exec_result_t result = vm.execute(0, operation, context, mem, pendingState, external);
+  exec_result_t result = vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK(29898 == Utils::gasLeft(result));
@@ -1333,10 +1359,11 @@ TEST_CASE("Jumps, store the result, verify gas", "[gasometer]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  exec_result_t result = vm.execute(0, operation, context, mem, pendingState, external);
+  exec_result_t result = vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK(54117 == Utils::gasLeft(result));

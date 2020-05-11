@@ -38,6 +38,6 @@ class TransactionTestGenerator(
                 }
             )
         )
-        writeFile.writeFile("$generatePath+transactionTests.kt", file)
+        writeFile.writeFile("${generatePath}TransactionTests.kt", file)
     }
 }

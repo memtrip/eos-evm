@@ -46,10 +46,11 @@ TEST_CASE("Push1", "[push]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  vm.execute(0, operation, context, mem, pendingState, external);
+  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000009" == 
@@ -93,10 +94,11 @@ TEST_CASE("Push2", "[push]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  vm.execute(0, operation, context, mem, pendingState, external);
+  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000015700" == 
@@ -140,10 +142,11 @@ TEST_CASE("Push3", "[push]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  vm.execute(0, operation, context, mem, pendingState, external);
+  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK("00000000000000000000000000000000000000000000000000000000015701de" == 
@@ -187,10 +190,11 @@ TEST_CASE("Push4", "[push]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  vm.execute(0, operation, context, mem, pendingState, external);
+  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK("000000000000000000000000000000000000000000000000000000002468a978" == 
@@ -234,10 +238,11 @@ TEST_CASE("Push5", "[push]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  vm.execute(0, operation, context, mem, pendingState, external);
+  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000002468a97824" == 
@@ -281,10 +286,11 @@ TEST_CASE("Push6", "[push]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  vm.execute(0, operation, context, mem, pendingState, external);
+  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK("00000000000000000000000000000000000000000000000000002468a9782468" == 
@@ -328,10 +334,11 @@ TEST_CASE("Push7", "[push]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  vm.execute(0, operation, context, mem, pendingState, external);
+  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000020000000000024" == 
@@ -375,10 +382,11 @@ TEST_CASE("Push8", "[push]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  vm.execute(0, operation, context, mem, pendingState, external);
+  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000002000000000000024" == 

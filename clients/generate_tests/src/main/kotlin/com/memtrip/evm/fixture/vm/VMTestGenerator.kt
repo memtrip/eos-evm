@@ -35,6 +35,6 @@ class VMTestGenerator(
                 unit.fixtureParent
             })
         )
-        writeFile.writeFile(generatePath + "+" + tests.first().groupName + ".kt", file)
+        writeFile.writeFile(generatePath + tests.first().groupName + ".kt", file)
     }
 }

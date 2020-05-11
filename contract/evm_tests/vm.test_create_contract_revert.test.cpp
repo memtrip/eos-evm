@@ -42,9 +42,10 @@ TEST_CASE("Malformed CREATE statement will not create a contract", "[create_reve
   VM vm(stack, gasometer);
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
-  exec_result_t vm_result = vm.execute(0, operation, context, mem, pendingState, external);
+  exec_result_t vm_result = vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   REQUIRE(ExecResult::DONE_VOID == vm_result.first);
@@ -80,10 +81,11 @@ TEST_CASE("Impossible contract will not be created", "[create_revert]") {
   VM vm(stack, gasometer);
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  exec_result_t vm_result = vm.execute(0, operation, context, mem, pendingState, external);
+  exec_result_t vm_result = vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   REQUIRE(ExecResult::DONE_RETURN == vm_result.first);

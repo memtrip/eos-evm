@@ -35,6 +35,11 @@ constexpr uint256_t UINT256_32 = uint256_t(32);
 constexpr uint256_t UINT256_FF = uint256_t(0xff);
 constexpr uint256_t UINT256_ONE = uint256_t(1);
 
+const uint8_t OFFSET_SHORT_STRING = 0x80;
+const uint8_t OFFSET_LONG_STRING = 0xb7;
+const uint8_t OFFSET_SHORT_LIST = 0xc0;
+const uint8_t OFFSET_LONG_LIST = 0xf7;
+
 struct EnvInfo {
   uint256_t chainId;
   uint256_t blockNumber;
@@ -79,15 +84,14 @@ enum RLPType {
 
 struct RLPItem {
   RLPType type;
-  bytes_t bytes;
-  std::vector<RLPItem> values;
-
-  static const uint8_t OFFSET_SHORT_STRING = 0x80;
-  static const uint8_t OFFSET_LONG_STRING = 0xb7;
-  static const uint8_t OFFSET_SHORT_LIST = 0xc0;
-  static const uint8_t OFFSET_LONG_LIST = 0xf7;
+  std::variant<
+    bytes_t,
+    std::vector<RLPItem>
+  > value;
 };
-typedef std::vector<RLPItem> rlp_t;
+
+typedef std::vector<RLPItem> rlp_list_t;
+
 
 enum TrapKind {
   TRAP_STACK_UNDERFLOW,

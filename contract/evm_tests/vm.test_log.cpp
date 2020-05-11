@@ -43,10 +43,11 @@ TEST_CASE("Log empty (LOG0)", "[log]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  exec_result_t result = vm.execute(0, operation, context, mem, pendingState, external);
+  exec_result_t result = vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK(99619 == Utils::gasLeft(result));
@@ -90,10 +91,11 @@ TEST_CASE("Log sender (LOG1)", "[log]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  exec_result_t result = vm.execute(0, operation, context, mem, pendingState, external);
+  exec_result_t result = vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK(98974 == Utils::gasLeft(result));
@@ -142,10 +144,11 @@ TEST_CASE("Log origin and sender (LOG2)", "[log]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  exec_result_t result = vm.execute(0, operation, context, mem, pendingState, external);
+  exec_result_t result = vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK(98597 == Utils::gasLeft(result));
@@ -197,10 +200,11 @@ TEST_CASE("Log caller, origin, sender (LOG3)", "[log]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  exec_result_t result = vm.execute(0, operation, context, mem, pendingState, external);
+  exec_result_t result = vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK(98220 == Utils::gasLeft(result));
@@ -255,10 +259,11 @@ TEST_CASE("Log number, caller, origin and sender (LOG4)", "[log]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  exec_result_t result = vm.execute(0, operation, context, mem, pendingState, external);
+  exec_result_t result = vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK(97843 == Utils::gasLeft(result));

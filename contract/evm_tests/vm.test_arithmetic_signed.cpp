@@ -43,10 +43,11 @@ TEST_CASE("signed division", "[signed]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  vm.execute(0, operation, context, mem, pendingState, external);
+  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK("000000000000000000000000000000000000000000000000000000000002e0ac" == 
@@ -90,10 +91,11 @@ TEST_CASE("signed mod", "[signed]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  vm.execute(0, operation, context, mem, pendingState, external);
+  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000076b4b" == 
@@ -137,10 +139,11 @@ TEST_CASE("add mod, mul mod", "[signed]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  vm.execute(0, operation, context, mem, pendingState, external);
+  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
@@ -192,10 +195,11 @@ TEST_CASE("exponent", "[signed]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  vm.execute(0, operation, context, mem, pendingState, external);
+  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK("90fd23767b60204c3d6fc8aec9e70a42a3f127140879c133a20129a597ed0c59" == 
@@ -243,10 +247,11 @@ TEST_CASE("signextend", "[signed]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  vm.execute(0, operation, context, mem, pendingState, external);
+  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000fff" == 
@@ -290,10 +295,11 @@ TEST_CASE("signed comparison", "[signed]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  vm.execute(0, operation, context, mem, pendingState, external);
+  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 

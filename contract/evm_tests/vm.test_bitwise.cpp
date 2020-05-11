@@ -47,10 +47,11 @@ TEST_CASE("Bitwise AND", "[bitwise]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  vm.execute(0, operation, context, mem, pendingState, external);
+  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
@@ -93,10 +94,11 @@ TEST_CASE("Bitwise OR", "[bitwise]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  vm.execute(0, operation, context, mem, pendingState, external);
+  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000006" == 
@@ -139,10 +141,11 @@ TEST_CASE("Bitwise XOR", "[bitwise]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  vm.execute(0, operation, context, mem, pendingState, external);
+  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000005" == 
@@ -182,10 +185,11 @@ TEST_CASE("Bitops", "[bitwise]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  vm.execute(0, operation, context, mem, pendingState, external);
+  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   CHECK("00000000000000000000000000000000000000000000000000000000000000f0" == Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, external)));

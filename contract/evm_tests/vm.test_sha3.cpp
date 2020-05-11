@@ -46,10 +46,11 @@ TEST_CASE("Hash zero", "[sha3]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  vm.execute(0, operation, context, mem, pendingState, external);
+  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   REQUIRE("c5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470" == 

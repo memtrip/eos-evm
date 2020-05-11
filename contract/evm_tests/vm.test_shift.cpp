@@ -43,10 +43,11 @@ TEST_CASE("shift left ", "[shift]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  vm.execute(0, operation, context, mem, pendingState, external);
+  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   REQUIRE("8000000000000000000000000000000000000000000000000000000000000000" == 
@@ -86,10 +87,11 @@ TEST_CASE("shift left (2)", "[shift]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  vm.execute(0, operation, context, mem, pendingState, external);
+  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   REQUIRE("fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe" 
@@ -129,10 +131,11 @@ TEST_CASE("shift left (3)", "[shift]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  vm.execute(0, operation, context, mem, pendingState, external);
+  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   REQUIRE("000000000000000000000000000000000000000000000000000000000000000a" ==
@@ -172,10 +175,11 @@ TEST_CASE("shift right ", "[shift]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  exec_result_t result = vm.execute(0, operation, context, mem, pendingState, external);
+  exec_result_t result = vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   REQUIRE("4000000000000000000000000000000000000000000000000000000000000000" == 
@@ -215,10 +219,11 @@ TEST_CASE("shift right (1)", "[shift]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  exec_result_t result = vm.execute(0, operation, context, mem, pendingState, external);
+  exec_result_t result = vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   REQUIRE("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" == 
@@ -258,10 +263,11 @@ TEST_CASE("shift right (2)", "[shift]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  exec_result_t result = vm.execute(0, operation, context, mem, pendingState, external);
+  exec_result_t result = vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   REQUIRE("0000000000000000000000000000000000000000000000000000000000000002" == 
@@ -301,10 +307,11 @@ TEST_CASE("sar", "[shift]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  exec_result_t result = vm.execute(0, operation, context, mem, pendingState, external);
+  exec_result_t result = vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   REQUIRE("c000000000000000000000000000000000000000000000000000000000000000" 
@@ -344,10 +351,11 @@ TEST_CASE("sar (1)", "[shift]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  exec_result_t result = vm.execute(0, operation, context, mem, pendingState, external);
+  exec_result_t result = vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   REQUIRE("0000000000000000000000000000000000000000000000000000000000000001" == 
@@ -387,10 +395,11 @@ TEST_CASE("sar (2)", "[shift]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  exec_result_t result = vm.execute(0, operation, context, mem, pendingState, external);
+  exec_result_t result = vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   REQUIRE("000000000000000000000000000000000000000000000000000000000000007f" == 
@@ -430,10 +439,11 @@ TEST_CASE("sar (3)", "[shift]") {
 
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  exec_result_t result = vm.execute(0, operation, context, mem, pendingState, external);
+  exec_result_t result = vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   REQUIRE("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" == 

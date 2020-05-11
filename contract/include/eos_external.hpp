@@ -21,8 +21,6 @@ class eos_external: public External {
       const uint256_t& toAddressWord, 
       const uint256_t& value
     ) {
-      printf("[outgoingTransfer]");
-
       if (_senderAccountBalance < value) return std::make_pair(EmplaceResult::EMPLACE_INSUFFICIENT_FUNDS, 0);
       _senderAccountBalance -= value;
 
@@ -58,8 +56,6 @@ class eos_external: public External {
       const uint256_t& toAddressWord, 
       const uint256_t& value
     ) {
-      printf("[contractTransfer]");
-
       address_t senderAddress = BigInt::toFixed32(senderAddressWord);
       address_t toAddress = BigInt::toFixed32(toAddressWord);
 
@@ -92,7 +88,6 @@ class eos_external: public External {
       const uint256_t& toAddressWord, 
       const uint256_t& value
     ) {
-      printf("[incomingTransfer]");
       eos_evm::account_code_table _account_code(_contract->get_self(), _contract->get_self().value);
       auto senderAccountCodeIdx = _account_code.get_index<name("codeaddress")>();
       auto senderAccountCodeItr = senderAccountCodeIdx.find(BigInt::toFixed32(toAddressWord));
@@ -114,7 +109,6 @@ class eos_external: public External {
       const checksum256& ownerAddress,
       const uint256_t& endowment
     ) {
-      printf("[emplace_code_child]");
       eos_evm::account_code_table _account_code(_contract->get_self(), _contract->get_self().value);
       auto accountCodeIdx = _account_code.get_index<name("codeaddress")>();
       auto accountCodeItr = accountCodeIdx.find(ownerAddress);
@@ -281,7 +275,6 @@ class eos_external: public External {
       const uint256_t& endowment, 
       const bytes_t& code
     ) {
-      printf("[emplace_code_parent]");
       eos_evm::account_code_table _account_code(_contract->get_self(), _contract->get_self().value);
       auto accountCodeIdx = _account_code.get_index<name("codeaddress")>();
       auto accountCodeItr = accountCodeIdx.find(BigInt::toFixed32(codeAddressWord));

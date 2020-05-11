@@ -5,13 +5,15 @@ An address scheme is used to link an eosio account to an Ethereum address, eos-e
 
 ## Overview
 
-The project
+eos-evm is divided into five subprojects:
 
-- Acceptance Tests
-- Clients
-- Contract
-- Environment
-- Tools
+| Name             | Purpose                                                                               |
+| ---------------- | ------------------------------------------------------------------------------------- |
+| Environment      | Single node Docker environment with eos-evm and the default system contracts deployed |
+| Acceptance Tests | Verifying EVM state and behaviour via Chain API `push_transaction`                    |
+| Clients          | Example contracts, Kotlin SDK for eos-evm contracts, and an Ethereum test generator   |
+| Contract         | C++17 EVM implementation, the eosio smart contract, and EVM unit tests                |
+| Tools            | Useful javascript tools for debugging various aspects of the EVM                      |
 
 ## Divergence from the EVM specification
 
@@ -30,10 +32,6 @@ When deploying the EVM smart contract, the --add-code permisison is required to 
 ```
 cleos set account permission eos.evm active --add-code
 ```
-
-### Nonce
-
-The Ethereum transaction nonce rules are enforced, but it's debatable as to whether this is really required, since eosio already provides it's own douple spending prevention mechanism. This extra
 
 ### TODO
 

@@ -35,7 +35,6 @@ TEST_CASE("${test.name}______${test.fixture._info.sourceHash}", "[vm]") {
     TestUtils::fromHex("${(test.fixture.env.previousHash[2..])!""}"), /* blockHash */
     TestUtils::fromHex("${test.fixture.exec.address[2..]}"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
-    uint256_t(0x193821), /* codeVersion */
     TestUtils::fromHex("${test.fixture.exec.address[2..]}"), /* address */
     TestUtils::fromHex("${test.fixture.exec.caller[2..]}"), /* sender */
     TestUtils::fromHex("${test.fixture.exec.origin[2..]}"), /* origin */
@@ -63,10 +62,10 @@ TEST_CASE("${test.name}______${test.fixture._info.sourceHash}", "[vm]") {
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
 
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
 
   // when
-  vm.execute(0, operation, context, mem, pendingState, external);
+  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   <#if test.fixture.post??><#if test.fixture.post.accountState??>

@@ -1,6 +1,6 @@
 #pragma once
-#include <memory>
 #include <vector>
+#include <variant>
 #include <evm/types.h>
 #include <evm/rlp_encode.hpp>
 #include <evm/hash.hpp>
@@ -9,135 +9,137 @@
 
 class Transaction {
   public:
+    static const size_t RLP_NONCE = 0;
+    static const size_t RLP_GAS_PRICE = 1;
+    static const size_t RLP_GAS_LIMIT = 2;
     static const size_t RLP_ADDRESS = 3;
+    static const size_t RLP_VALUE = 4;
     static const size_t RLP_DATA = 5;
     static const size_t RLP_V = 6;
     static const size_t RLP_R = 7;
     static const size_t RLP_S = 8;
 
-    static bool hasSignature(std::shared_ptr<std::vector<RLPItem>> rlp) {
-      return rlp->at(0).values[RLP_R].bytes.size() > 0 && rlp->at(0).values[RLP_S].bytes.size() > 0;
+    static bool hasSignature(rlp_list_t* rlp) {
+      return std::get<bytes_t>(std::get<rlp_list_t>(rlp->at(0).value)[RLP_R].value).size() > 0 
+        && std::get<bytes_t>(std::get<rlp_list_t>(rlp->at(0).value)[RLP_S].value).size() > 0;
     }
 
-    static std::shared_ptr<bytes_t> data(std::shared_ptr<std::vector<RLPItem>> rlp) {
-      return std::make_shared<bytes_t>(rlp->at(0).values[RLP_DATA].bytes.begin(), rlp->at(0).values[RLP_DATA].bytes.end());
+    static bytes_t data(rlp_list_t* rlp) {
+      return std::get<bytes_t>(std::get<rlp_list_t>(rlp->at(0).value)[RLP_DATA].value);
     }
 
-    static TransactionActionType type(std::shared_ptr<std::vector<RLPItem>> rlp) {
-      return rlp->at(0).values[RLP_ADDRESS].bytes.size() == 0 ? 
+    static TransactionActionType type(rlp_list_t* rlp) {
+      return std::get<bytes_t>(std::get<rlp_list_t>(rlp->at(0).value)[RLP_ADDRESS].value).size() == 0 ? 
         TransactionActionType::TRANSACTION_CREATE :
         TransactionActionType::TRANSACTION_CALL;
     }
 
-    static uint256_t nonce(std::shared_ptr<std::vector<RLPItem>> rlp) {
-      return BigInt::fromBigEndianBytes(rlp->at(0).values[0].bytes);
+    static uint256_t nonce(rlp_list_t* rlp) {
+      return BigInt::fromBigEndianBytes(std::get<bytes_t>(std::get<rlp_list_t>(rlp->at(0).value)[RLP_NONCE].value));
     }
 
-    static uint256_t gasPrice(std::shared_ptr<std::vector<RLPItem>> rlp) {
-      return BigInt::fromBigEndianBytes(rlp->at(0).values[1].bytes);
+    static uint256_t gasPrice(rlp_list_t* rlp) {
+      return BigInt::fromBigEndianBytes(std::get<bytes_t>(std::get<rlp_list_t>(rlp->at(0).value)[RLP_GAS_PRICE].value));
     }
 
-    static uint64_t gas(std::shared_ptr<std::vector<RLPItem>> rlp) {
-      return Overflow::uint256Cast(BigInt::fromBigEndianBytes(rlp->at(0).values[2].bytes)).first;
+    static gas_t gas(rlp_list_t* rlp) {
+      return Overflow::uint256Cast(
+        BigInt::fromBigEndianBytes(std::get<bytes_t>(std::get<rlp_list_t>(rlp->at(0).value)[RLP_GAS_LIMIT].value))
+      ).first;
     }
 
-    static uint256_t value(std::shared_ptr<std::vector<RLPItem>> rlp) {
-      return BigInt::fromBigEndianBytes(rlp->at(0).values[4].bytes);
+    static bytes_t address(rlp_list_t* rlp) {
+      return std::get<bytes_t>(std::get<rlp_list_t>(rlp->at(0).value)[RLP_ADDRESS].value);
     }
 
-    static bytes_t v(std::shared_ptr<std::vector<RLPItem>> rlp) {
-      return rlp->at(0).values[RLP_V].bytes;
+    static uint256_t value(rlp_list_t* rlp) {
+      return BigInt::fromBigEndianBytes(std::get<bytes_t>(std::get<rlp_list_t>(rlp->at(0).value)[RLP_VALUE].value));
     }
 
-    static bytes_t r(std::shared_ptr<std::vector<RLPItem>> rlp) {
-      return rlp->at(0).values[RLP_R].bytes;
+    static bytes_t v(rlp_list_t* rlp) {
+      return std::get<bytes_t>(std::get<rlp_list_t>(rlp->at(0).value)[RLP_V].value);
     }
 
-    static bytes_t s(std::shared_ptr<std::vector<RLPItem>> rlp) {
-      return rlp->at(0).values[RLP_S].bytes;
+    static bytes_t r(rlp_list_t* rlp) {
+      bytes_t r = std::get<bytes_t>(std::get<rlp_list_t>(rlp->at(0).value)[RLP_R].value);
+      if (r.size() > 0) Hex::padWordSize(r);
+      return r;
     }
 
-    static bytes_t address(std::shared_ptr<std::vector<RLPItem>> rlp) {
-      return rlp->at(0).values[RLP_ADDRESS].bytes;
+    static bytes_t s(rlp_list_t* rlp) {
+      bytes_t s = std::get<bytes_t>(std::get<rlp_list_t>(rlp->at(0).value)[RLP_S].value);
+      if (s.size() > 0) Hex::padWordSize(s);
+      return s;
     }
 
-    static bytes_t signature(std::shared_ptr<std::vector<RLPItem>> rlp, uint256_t chainId) {
+    static bytes_t signature(rlp_list_t* rlp, uint256_t chainId) {
       bytes_t signatureBytes;
-      if (rlp->at(0).values[RLP_R].bytes.size() != 0 && rlp->at(0).values[RLP_S].bytes.size() != 0) {
-        signatureBytes.reserve(1 + rlp->at(0).values[RLP_R].bytes.size() + rlp->at(0).values[RLP_S].bytes.size());
+      bytes_t rBytes = r(rlp);
+      bytes_t sBytes = s(rlp);
+      bytes_t vBytes = v(rlp);
 
-        uint8_t v = eip155Compat(rlp->at(0).values[RLP_V].bytes);
+      if (rBytes.size() != 0 && sBytes.size() != 0) {
+        signatureBytes.reserve(1 + rBytes.size() + sBytes.size()); 
+
+        uint8_t v = eip155Compat(vBytes);
         v += 27;
 
-        Hex::padWordSize(rlp->at(0).values[RLP_R].bytes);
-        Hex::padWordSize(rlp->at(0).values[RLP_S].bytes);
-
         signatureBytes.push_back(v);
-        signatureBytes.insert(signatureBytes.end(), rlp->at(0).values[RLP_R].bytes.begin(), rlp->at(0).values[RLP_R].bytes.end());
-        signatureBytes.insert(signatureBytes.end(), rlp->at(0).values[RLP_S].bytes.begin(), rlp->at(0).values[RLP_S].bytes.end());
+        signatureBytes.insert(signatureBytes.end(), rBytes.begin(), rBytes.end());
+        signatureBytes.insert(signatureBytes.end(), sBytes.begin(), sBytes.end());
       }
       return signatureBytes;
     }
 
-    static bytes_t digest(std::shared_ptr<std::vector<RLPItem>> rlp, uint8_t chainId) {
+    static bytes_t digest(rlp_list_t* rlp, uint8_t chainId) {
       RLPItem nonce {
         RLPType::STRING,
-        rlp->at(0).values[0].bytes,
-        std::vector<RLPItem> {}
+        std::get<bytes_t>(std::get<rlp_list_t>(rlp->at(0).value)[RLP_NONCE].value)
       };
 
       RLPItem gasPrice {
         RLPType::STRING,
-        rlp->at(0).values[1].bytes,
-        std::vector<RLPItem> {}
+        std::get<bytes_t>(std::get<rlp_list_t>(rlp->at(0).value)[RLP_GAS_PRICE].value)
       };
 
       RLPItem gasLimit {
         RLPType::STRING,
-        rlp->at(0).values[2].bytes,
-        std::vector<RLPItem> {}
+        std::get<bytes_t>(std::get<rlp_list_t>(rlp->at(0).value)[RLP_GAS_LIMIT].value)
       };
 
       RLPItem address {
         RLPType::STRING,
-        rlp->at(0).values[3].bytes,
-        std::vector<RLPItem> {}
+        std::get<bytes_t>(std::get<rlp_list_t>(rlp->at(0).value)[RLP_ADDRESS].value)
       };
 
       RLPItem value {
         RLPType::STRING,
-        rlp->at(0).values[4].bytes,
-        std::vector<RLPItem> {}
+        std::get<bytes_t>(std::get<rlp_list_t>(rlp->at(0).value)[RLP_VALUE].value)
       };
 
       RLPItem data {
         RLPType::STRING,
-        rlp->at(0).values[5].bytes,
-        std::vector<RLPItem> {}
+        std::get<bytes_t>(std::get<rlp_list_t>(rlp->at(0).value)[RLP_DATA].value)
       };
 
       RLPItem v {
         RLPType::STRING,
-        bytes_t { chainId },
-        std::vector<RLPItem> {}
+        bytes_t { chainId }
       };
 
       RLPItem r {
         RLPType::STRING,
-        bytes_t { },
-        std::vector<RLPItem> {}
+        bytes_t()
       };
 
       RLPItem s {
         RLPType::STRING,
-        bytes_t { },
-        std::vector<RLPItem> {}
+        bytes_t()
       };
 
       RLPItem itemList {
         RLPType::LIST,
-        bytes_t {},
-        std::vector<RLPItem> { 
+        rlp_list_t { 
           nonce, gasPrice, gasLimit, 
           address, value, data,
           v, r, s  

@@ -64,11 +64,7 @@ class Memory {
       if (!isValidRange(offset, size) 
         || offset > memorySize 
         || size > memorySize
-      ) {
-        printf("should go here?");
-        return bytes_t();
-      }
-      Utils::printLong(memorySize, "memorySize");
+      ) return bytes_t();
       return bytes_t(memory.begin() + offset, memory.begin() + offset + size);
     }
  

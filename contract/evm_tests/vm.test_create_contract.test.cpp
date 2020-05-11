@@ -41,9 +41,10 @@ TEST_CASE("Create the most basic contract using COPYCODE", "[create]") {
   VM vm(stack, gasometer);
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
-  exec_result_t vm_result = vm.execute(0, operation, context, mem, pendingState, external);
+  exec_result_t vm_result = vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   REQUIRE(ExecResult::DONE_RETURN == vm_result.first);
@@ -90,10 +91,11 @@ TEST_CASE("Create contract using CODECOPY", "[create]") {
   VM vm(stack, gasometer);
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  exec_result_t vm_result = vm.execute(0, operation, context, mem, pendingState, external);
+  exec_result_t vm_result = vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   REQUIRE(ExecResult::DONE_RETURN == vm_result.first);
@@ -151,9 +153,10 @@ TEST_CASE("Create contract using CREATE (1)", "[create]") {
   VM vm(stack, gasometer);
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
-  exec_result_t vm_result = vm.execute(0, operation, context, mem, pendingState, external);
+  exec_result_t vm_result = vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   REQUIRE(ExecResult::DONE_VOID == vm_result.first);
@@ -201,10 +204,11 @@ TEST_CASE("Create main contract using COPYCODE, and a child contract with CREATE
   VM vm(stack, gasometer);
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  exec_result_t vm_result = vm.execute(0, operation, context, mem, pendingState, external);
+  exec_result_t vm_result = vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   REQUIRE(ExecResult::DONE_RETURN == vm_result.first);
@@ -262,10 +266,11 @@ TEST_CASE("Create contract using CREATE2", "[create]") {
   VM vm(stack, gasometer);
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  exec_result_t vm_result = vm.execute(0, operation, context, mem, pendingState, external);
+  exec_result_t vm_result = vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   REQUIRE(ExecResult::DONE_RETURN == vm_result.first);
@@ -315,10 +320,11 @@ TEST_CASE("Create contract using CREATE (3)", "[create]") {
   VM vm(stack, gasometer);
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  exec_result_t vm_result = vm.execute(0, operation, context, mem, pendingState, external);
+  exec_result_t vm_result = vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   REQUIRE(ExecResult::DONE_RETURN == vm_result.first);
@@ -368,10 +374,11 @@ TEST_CASE("Create contract using CREATE (4)", "[create]") {
   VM vm(stack, gasometer);
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  exec_result_t vm_result = vm.execute(0, operation, context, mem, pendingState, external);
+  exec_result_t vm_result = vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   REQUIRE(ExecResult::DONE_RETURN == vm_result.first);
@@ -434,10 +441,11 @@ TEST_CASE("Create contract using CREATE (5)", "[create]") {
   VM vm(stack, gasometer);
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  exec_result_t vm_result = vm.execute(0, operation, context, mem, pendingState, external);
+  exec_result_t vm_result = vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   REQUIRE(ExecResult::DONE_RETURN == vm_result.first);

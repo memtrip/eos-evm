@@ -13,14 +13,14 @@ TEST_CASE("Empty byte array", "[rlp_decode]") {
   bytes_t bytes = bytes_t();
 
   // when
-  std::shared_ptr<std::vector<RLPItem>> items = std::make_shared<std::vector<RLPItem>>();
+  rlp_list_t* items = new rlp_list_t();
   RLPDecode::decode(bytes, items);
 
   // then
   REQUIRE(0 == items->size()); 
-}
 
-//std::string str(v.begin(), v.end());
+  delete items;
+}
 
 TEST_CASE("Small string", "[rlp_decode]") {
 
@@ -28,14 +28,18 @@ TEST_CASE("Small string", "[rlp_decode]") {
   bytes_t bytes = { 0x83, 'd', 'o', 'g' };
 
   // when
-  std::shared_ptr<std::vector<RLPItem>> items = std::make_shared<std::vector<RLPItem>>();
+  rlp_list_t* items = new rlp_list_t();
   RLPDecode::decode(bytes, items);
 
-  std::string result(items->at(0).bytes.begin(), items->at(0).bytes.end());
+  bytes_t decodedBytes = std::get<bytes_t>(items->at(0).value);
+
+  std::string result(decodedBytes.begin(), decodedBytes.end());
 
   // then
   REQUIRE(RLPType::STRING == items->at(0).type); 
   REQUIRE("dog" == result); 
+
+  delete items;
 }
 
 TEST_CASE("Two small strings", "[rlp_decode]") {
@@ -47,16 +51,21 @@ TEST_CASE("Two small strings", "[rlp_decode]") {
   };
 
   // when
-  std::shared_ptr<std::vector<RLPItem>> items = std::make_shared<std::vector<RLPItem>>();
+  rlp_list_t* items = new rlp_list_t();
   RLPDecode::decode(bytes, items);
 
-  std::string result1(items->at(0).values[0].bytes.begin(), items->at(0).values[0].bytes.end());
-  std::string result2(items->at(0).values[1].bytes.begin(), items->at(0).values[1].bytes.end());
+  bytes_t bytes1 = std::get<bytes_t>(std::get<rlp_list_t>(items->at(0).value)[0].value);
+  bytes_t bytes2 = std::get<bytes_t>(std::get<rlp_list_t>(items->at(0).value)[1].value);
+
+  std::string result1(bytes1.begin(), bytes1.end());
+  std::string result2(bytes2.begin(), bytes2.end());
 
   // then
   REQUIRE(RLPType::LIST == items->at(0).type); 
   REQUIRE("cat" == result1); 
   REQUIRE("dog" == result2); 
+
+  delete items;
 }
 
 TEST_CASE("Null string", "[rlp_decode]") {
@@ -65,14 +74,18 @@ TEST_CASE("Null string", "[rlp_decode]") {
   bytes_t bytes = { 0x80 };
 
   // when
-  std::shared_ptr<std::vector<RLPItem>> items = std::make_shared<std::vector<RLPItem>>();
+  rlp_list_t* items = new rlp_list_t();
   RLPDecode::decode(bytes, items);
 
-  std::string result(items->at(0).bytes.begin(), items->at(0).bytes.end());
+  bytes_t decodedBytes = std::get<bytes_t>(items->at(0).value);
+
+  std::string result(decodedBytes.begin(), decodedBytes.end());
 
   // then
   REQUIRE(RLPType::STRING == items->at(0).type);
   REQUIRE("" == result);
+
+  delete items;
 }
 
 TEST_CASE("Empty list", "[rlp_decode]") {
@@ -81,14 +94,16 @@ TEST_CASE("Empty list", "[rlp_decode]") {
   bytes_t bytes = { 0xc0 };
 
   // when
-  std::shared_ptr<std::vector<RLPItem>> items = std::make_shared<std::vector<RLPItem>>();
+  rlp_list_t* items = new rlp_list_t();
   RLPDecode::decode(bytes, items);
 
-  std::string result(items->at(0).bytes.begin(), items->at(0).bytes.end());
+  rlp_list_t list = std::get<rlp_list_t>(items->at(0).value);
 
   // then
   REQUIRE(RLPType::LIST == items->at(0).type);
-  REQUIRE(0 == items->at(0).values.size());
+  REQUIRE(0 == list.size());
+
+  delete items;
 }
 
 TEST_CASE("Encoded integer (0x00)", "[rlp_decode]") {
@@ -97,12 +112,16 @@ TEST_CASE("Encoded integer (0x00)", "[rlp_decode]") {
   bytes_t bytes = { 0x00 };
 
   // when
-  std::shared_ptr<std::vector<RLPItem>> items = std::make_shared<std::vector<RLPItem>>();
+  rlp_list_t* items = new rlp_list_t();
   RLPDecode::decode(bytes, items);
+
+  bytes_t decodedBytes = std::get<bytes_t>(items->at(0).value);
 
   // then
   REQUIRE(RLPType::STRING == items->at(0).type);
-  REQUIRE(uint256_t(0) == BigInt::fromBigEndianBytes(items->at(0).bytes));
+  REQUIRE(uint256_t(0) == BigInt::fromBigEndianBytes(decodedBytes));
+
+  delete items;
 }
 
 TEST_CASE("Encoded integer (0x0f)", "[rlp_decode]") {
@@ -111,12 +130,16 @@ TEST_CASE("Encoded integer (0x0f)", "[rlp_decode]") {
   bytes_t bytes = { 0x0f };
 
   // when
-  std::shared_ptr<std::vector<RLPItem>> items = std::make_shared<std::vector<RLPItem>>();
+  rlp_list_t* items = new rlp_list_t();
   RLPDecode::decode(bytes, items);
+
+  bytes_t decodedBytes = std::get<bytes_t>(items->at(0).value);
 
   // then
   REQUIRE(RLPType::STRING == items->at(0).type);
-  REQUIRE(uint256_t(15) == BigInt::fromBigEndianBytes(items->at(0).bytes));
+  REQUIRE(uint256_t(15) == BigInt::fromBigEndianBytes(decodedBytes));
+  
+  delete items;
 }
 
 TEST_CASE("Encoded integer (0x82, 0x04, 0x00)", "[rlp_decode]") {
@@ -125,14 +148,18 @@ TEST_CASE("Encoded integer (0x82, 0x04, 0x00)", "[rlp_decode]") {
   bytes_t bytes = { 0x82, 0x04, 0x00 };
 
   // when
-  std::shared_ptr<std::vector<RLPItem>> items = std::make_shared<std::vector<RLPItem>>();
+  rlp_list_t* items = new rlp_list_t();
   RLPDecode::decode(bytes, items);
 
-  std::string result(items->at(0).bytes.begin(), items->at(0).bytes.end());
+  bytes_t decodedBytes = std::get<bytes_t>(items->at(0).value);
+
+  std::string result(decodedBytes.begin(), decodedBytes.end());
 
   // then
   REQUIRE(RLPType::STRING == items->at(0).type);
-  REQUIRE(uint256_t(1024) == BigInt::fromBigEndianBytes(items->at(0).bytes));
+  REQUIRE(uint256_t(1024) == BigInt::fromBigEndianBytes(decodedBytes));
+
+  delete items;
 }
 
 TEST_CASE("Set", "[rlp_decode]") {
@@ -144,17 +171,23 @@ TEST_CASE("Set", "[rlp_decode]") {
   };
 
   // when
-  std::shared_ptr<std::vector<RLPItem>> items = std::make_shared<std::vector<RLPItem>>();
+  rlp_list_t* items = new rlp_list_t();
   RLPDecode::decode(bytes, items);
 
   // then
+  rlp_list_t parentList = std::get<rlp_list_t>(items->at(0).value);
+
+  rlp_list_t childList = std::get<rlp_list_t>(parentList[2].value);
+
   REQUIRE(1 == items->size());
-  REQUIRE(3 == items->at(0).values.size());
-  REQUIRE(0 == items->at(0).values[0].values.size());
-  REQUIRE(1 == items->at(0).values[1].values.size());
-  REQUIRE(2 == items->at(0).values[2].values.size());
-  REQUIRE(0 == items->at(0).values[2].values[0].values.size());
-  REQUIRE(1 == items->at(0).values[2].values[1].values.size());
+  REQUIRE(3 == parentList.size());
+  REQUIRE(0 == std::get<rlp_list_t>(parentList[0].value).size());
+  REQUIRE(1 == std::get<rlp_list_t>(parentList[1].value).size());
+  REQUIRE(2 == childList.size());
+  REQUIRE(0 == std::get<rlp_list_t>(childList[0].value).size());
+  REQUIRE(1 == std::get<rlp_list_t>(childList[1].value).size());
+
+  delete items;
 }
 
 TEST_CASE("Long string", "[rlp_decode]") {
@@ -179,15 +212,19 @@ TEST_CASE("Long string", "[rlp_decode]") {
   };
 
   // when
-  std::shared_ptr<std::vector<RLPItem>> items = std::make_shared<std::vector<RLPItem>>();
+  rlp_list_t* items = new rlp_list_t();
   RLPDecode::decode(bytes, items);
 
+  bytes_t decodedBytes = std::get<bytes_t>(items->at(0).value);
+
   // then
-  std::string result(items->at(0).bytes.begin(), items->at(0).bytes.end());
+  std::string result(decodedBytes.begin(), decodedBytes.end());
 
   // then
   REQUIRE(RLPType::STRING == items->at(0).type);
   REQUIRE("Lorem ipsum dolor sit amet, consectetur adipisicing elit" == result);
+
+  delete items;
 }
 
 TEST_CASE("Long string in bytes", "[rlp_decode]") {
@@ -199,18 +236,31 @@ TEST_CASE("Long string in bytes", "[rlp_decode]") {
   };
 
   // when
-  std::shared_ptr<std::vector<RLPItem>> items = std::make_shared<std::vector<RLPItem>>();
+  rlp_list_t* items = new rlp_list_t();
   RLPDecode::decode(bytes, items);
 
-  // then
-  std::string result2(items->at(0).values[0].bytes.begin(), items->at(0).values[0].bytes.end());
+  rlp_list_t parentList = std::get<rlp_list_t>(items->at(0).value);
 
   // then
+  bytes_t decodedBytes = std::get<bytes_t>(parentList[0].value);
+  std::string result2(decodedBytes.begin(), decodedBytes.end());
+
+  rlp_list_t childList1 = std::get<rlp_list_t>(parentList[1].value);
+  bytes_t decodedBytes1 = std::get<bytes_t>(childList1[0].value);
+  bytes_t decodedBytes2 = std::get<bytes_t>(parentList[2].value);
+
+  // // then
   REQUIRE(RLPType::LIST == items->at(0).type);
-  REQUIRE(3 == items->at(0).values.size());
+  REQUIRE(3 == parentList.size());
+  REQUIRE(RLPType::STRING == parentList[0].type);
+  REQUIRE(RLPType::LIST == parentList[1].type);
+  REQUIRE(RLPType::STRING == childList1[0].type);
+  REQUIRE(RLPType::STRING == parentList[2].type);
   REQUIRE("zw" == result2);
-  REQUIRE(uint256_t(4) == BigInt::fromBigEndianBytes(items->at(0).values[1].values[0].bytes));
-  REQUIRE(uint256_t(1) == BigInt::fromBigEndianBytes(items->at(0).values[2].bytes));
+  REQUIRE(uint256_t(4) == BigInt::fromBigEndianBytes(decodedBytes1));
+  REQUIRE(uint256_t(1) == BigInt::fromBigEndianBytes(decodedBytes2));
+
+  delete items;
 }
 
 TEST_CASE("Payload", "[rlp_decode]") {
@@ -221,13 +271,18 @@ TEST_CASE("Payload", "[rlp_decode]") {
   bytes_t bytes = Hex::hexToBytes(hex);
 
   // when
-  std::shared_ptr<std::vector<RLPItem>> items = std::make_shared<std::vector<RLPItem>>();
+  rlp_list_t* items = new rlp_list_t();
   RLPDecode::decode(bytes, items);
+
+  rlp_list_t list = std::get<rlp_list_t>(items->at(0).value);
+  rlp_list_t childList = std::get<rlp_list_t>(list[1].value);
 
   // then
   REQUIRE(RLPType::LIST == items->at(0).type);
-  REQUIRE(2 == items->at(0).values.size());
-  REQUIRE(9 == items->at(0).values[1].values.size());
+  REQUIRE(2 == list.size());
+  REQUIRE(9 == childList.size());
+
+  delete items;
 }
 
 TEST_CASE("Payload (1)", "[rlp_decode]") {
@@ -238,55 +293,59 @@ TEST_CASE("Payload (1)", "[rlp_decode]") {
   bytes_t bytes = Hex::hexToBytes(hex);
 
   // when
-  std::shared_ptr<std::vector<RLPItem>> items = std::make_shared<std::vector<RLPItem>>();
+  rlp_list_t* items = new rlp_list_t();
   RLPDecode::decode(bytes, items);
+
+  rlp_list_t parentList = std::get<rlp_list_t>(items->at(0).value);
 
   // then
   REQUIRE(RLPType::LIST == items->at(0).type);
-  REQUIRE(9 == items->at(0).values.size());
+  REQUIRE(9 == parentList.size());
 
   // nonce
   CHECK(uint256_t(0) == 
-    BigInt::fromBigEndianBytes(items->at(0).values[0].bytes)
+    BigInt::fromBigEndianBytes(std::get<bytes_t>(parentList[0].value))
   );
 
   // gas price
   CHECK(uint256_t(0x01) == 
-    BigInt::fromBigEndianBytes(items->at(0).values[1].bytes)
+    BigInt::fromBigEndianBytes(std::get<bytes_t>(parentList[1].value))
   );
 
   // gas limit
   CHECK(uint256_t(0x5208) == 
-    BigInt::fromBigEndianBytes(items->at(0).values[2].bytes)
+    BigInt::fromBigEndianBytes(std::get<bytes_t>(parentList[2].value))
   );
 
   // to
   CHECK("095e7baea6a6c7c4c2dfeb977efac326af552d87" == 
-    TestUtils::bytesToHex(items->at(0).values[3].bytes)
+    TestUtils::bytesToHex(std::get<bytes_t>(parentList[3].value))
   );
 
   // value
   CHECK(uint256_t(0x0a) == 
-    BigInt::fromBigEndianBytes(items->at(0).values[4].bytes)
+    BigInt::fromBigEndianBytes(std::get<bytes_t>(parentList[4].value))
   );
 
   // data
   CHECK("" == 
-    TestUtils::bytesToHex(items->at(0).values[5].bytes)
+    TestUtils::bytesToHex(std::get<bytes_t>(parentList[5].value))
   );
 
   // v
   CHECK(uint256_t(27) == 
-    BigInt::fromBigEndianBytes(items->at(0).values[6].bytes)
+    BigInt::fromBigEndianBytes(std::get<bytes_t>(parentList[6].value))
   );
   
   // r
   CHECK("48b55bfa915ac795c431978d8a6a992b628d557da5ff759b307d495a36649353" == 
-    TestUtils::bytesToHex(items->at(0).values[7].bytes)
+    TestUtils::bytesToHex(std::get<bytes_t>(parentList[7].value))
   );
 
   // s
   CHECK("efffd310ac743f371de3b9f7f9cb56c0b28ad43601b4ab949f53faa07bd2c804" == 
-    TestUtils::bytesToHex(items->at(0).values[8].bytes)
+    TestUtils::bytesToHex(std::get<bytes_t>(parentList[8].value))
   );
+
+  delete items;
 }

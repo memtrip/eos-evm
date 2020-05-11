@@ -49,10 +49,11 @@ TEST_CASE("suicide______4622c577440f9db4b3954a1de60bf2fac55886dcb0ec4ecaf906c25b
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
 
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
-  vm.execute(0, operation, context, mem, pendingState, external);
+  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
 }

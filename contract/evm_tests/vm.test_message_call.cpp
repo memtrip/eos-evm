@@ -45,7 +45,8 @@ TEST_CASE("Call the code of another contract using CALL", "[message_call]") {
   VM vm(stack, gasometer);
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   uint256_t childContractAddress = uint256_t(0x1283ae);
   pendingState->putState(uint256_t(0), childContractAddress, codeAddress);
@@ -53,7 +54,7 @@ TEST_CASE("Call the code of another contract using CALL", "[message_call]") {
   external->balanceResponder.push_back(std::make_pair(address, uint256_t(100)));
 
   // when
-  exec_result_t vm_result = vm.execute(0, operation, context, mem, pendingState, external);
+  exec_result_t vm_result = vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   REQUIRE(ExecResult::DONE_VOID == vm_result.first);
@@ -110,7 +111,8 @@ TEST_CASE("Call the code of another contract using STATICCALL", "[create]") {
   VM vm(stack, gasometer);
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   uint256_t childContractAddress = uint256_t(0x1283ae);
 
@@ -126,7 +128,7 @@ TEST_CASE("Call the code of another contract using STATICCALL", "[create]") {
   external->codeResponder.push_back(std::make_pair(childContractAddress, childCodeBytes));
 
   // when
-  exec_result_t vm_result = vm.execute(0, operation, context, mem, pendingState, external);
+  exec_result_t vm_result = vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   REQUIRE(ExecResult::DONE_RETURN == vm_result.first);
@@ -177,7 +179,8 @@ TEST_CASE("Call the code of another contract using DELEGATECALL", "[message_call
   VM vm(stack, gasometer);
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   uint256_t childContractAddress = uint256_t(0x1283ae);
   pendingState->putState(uint256_t(0), childContractAddress, codeAddress);
@@ -186,7 +189,7 @@ TEST_CASE("Call the code of another contract using DELEGATECALL", "[message_call
   external->balanceResponder.push_back(std::make_pair(codeAddress, uint256_t(100)));
 
   // when
-  exec_result_t vm_result = vm.execute(0, operation, context, mem, pendingState, external);
+  exec_result_t vm_result = vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   REQUIRE(ExecResult::DONE_VOID == vm_result.first);
@@ -232,14 +235,15 @@ TEST_CASE("Call the code of the same contract using CALL", "[message_call]") {
   VM vm(stack, gasometer);
   std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  Operation operation = Operation();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   external->codeResponder.push_back(std::make_pair(codeAddress, codeBytes));
 
   external->balanceResponder.push_back(std::make_pair(codeAddress, uint256_t(100)));
 
   // when
-  exec_result_t vm_result = vm.execute(0, operation, context, mem, pendingState, external);
+  exec_result_t vm_result = vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
   REQUIRE(ExecResult::DONE_RETURN == vm_result.first);

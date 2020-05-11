@@ -1,22 +1,21 @@
 import com.memtrip.eos.chain.actions.transaction.TransactionContext
 import com.memtrip.eos.core.crypto.EosPrivateKey
 import com.memtrip.eos.http.rpc.Api
-import com.memtrip.eos_evm.eos.*
-import com.memtrip.eos_evm.eos.state.GetAccountState
-import com.memtrip.eos_evm.eos.actions.execute.ExecuteAction
-import com.memtrip.eos_evm.ethereum.EthereumTransaction
-import com.memtrip.evm.toHexString
-import com.memtrip.evm.toHexBytes
-import com.memtrip.evm.pad256
-import com.memtrip.eos_evm.ethereum.AccountStateKey
+import com.memtrip.evm.eos.state.GetAccountState
+import com.memtrip.evm.eos.actions.execute.ExecuteAction
+import com.memtrip.evm.ethereum.toHexString
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.util.concurrent.TimeUnit
-import com.memtrip.eos_evm.eos.TestTransaction
-import com.memtrip.eos_evm.eos.faultTolerantCreateAccount
-import com.memtrip.eos_evm.assertConsoleError
+import com.memtrip.evm.assertConsoleError
+import com.memtrip.evm.eos.AccountIdentifier
+import com.memtrip.evm.eos.Config
+import com.memtrip.evm.eos.generateUniqueAccountName
+import com.memtrip.evm.eos.SetupTransactions
+import com.memtrip.evm.eos.faultTolerant
+import com.memtrip.evm.eos.transactionDefaultExpiry
 
 //
 // ${lastUpdated?string('dd.MM.yyyy')}
@@ -63,21 +62,21 @@ class TransactionTests {
         // when
         val response = faultTolerant {
             executeAction.pushTransaction(
-               newAccountName,
-               "${test.rlp}",
-               accountIdentifier.toHexString(),
-               "",
-               TransactionContext(
-                   newAccountName,
-                   newAccountPrivateKey,
-                   transactionDefaultExpiry()
-               )
-           ).blockingGet()
-       }
+                newAccountName,
+                "${test.rlp}",
+                accountIdentifier.toHexString(),
+                "",
+                TransactionContext(
+                    newAccountName,
+                    newAccountPrivateKey,
+                    transactionDefaultExpiry()
+                )
+            ).blockingGet()
+        }
 
-       // then
-       assertEquals(500, response.statusCode)
-       response.assertConsoleError("assertion failure with message")
+        // then
+        assertEquals(500, response.statusCode)
+        response.assertConsoleError("assertion failure with message")
     }
     </#if>
     </#list>

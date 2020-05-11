@@ -69,14 +69,11 @@ class Context {
       const env_t& env, 
       const uint256_t& senderAddress, 
       const uint256_t& codeAddress, 
-      std::shared_ptr<std::vector<RLPItem>> rlp
+      const gas_t gasLimit,
+      const uint256_t& gasPrice,
+      const uint256_t& value,
+      std::shared_ptr<bytes_t> code
     ) {
-
-      std::shared_ptr<bytes_t> code = std::make_shared<bytes_t>(
-        rlp->at(0).values[Transaction::RLP_DATA].bytes.begin(), 
-        rlp->at(0).values[Transaction::RLP_DATA].bytes.end()
-      );
-
       return std::make_shared<Context>(
         env.chainId,
         env.blockNumber,
@@ -90,9 +87,9 @@ class Context {
         codeAddress, /* address */
         senderAddress, /* sender */
         senderAddress, /* origin */
-        Transaction::gas(rlp),
-        Transaction::gasPrice(rlp),
-        Transaction::value(rlp),
+        gasLimit,
+        gasPrice,
+        value,
         false,
         code,
         std::make_shared<bytes_t>()
@@ -103,8 +100,11 @@ class Context {
       const env_t& env, 
       const uint256_t& senderAddress, 
       const uint256_t& toAddress,
-      std::shared_ptr<std::vector<RLPItem>> rlp, 
-      std::shared_ptr<bytes_t> code
+      const gas_t gasLimit,
+      const uint256_t& gasPrice,
+      const uint256_t& value,
+      std::shared_ptr<bytes_t> code,
+      std::shared_ptr<bytes_t> data
     ) {
       return std::make_shared<Context>(
         env.chainId,
@@ -119,15 +119,12 @@ class Context {
         toAddress, /* address */
         senderAddress, /* sender */
         senderAddress, /* origin */
-        Transaction::gas(rlp),
-        Transaction::gasPrice(rlp),
-        Transaction::value(rlp),
+        gasLimit,
+        gasPrice,
+        value,
         false,
         code,
-        std::make_shared<bytes_t>(
-          rlp->at(0).values[Transaction::RLP_DATA].bytes.begin(), 
-          rlp->at(0).values[Transaction::RLP_DATA].bytes.end()
-        )
+        data
       );
     }
 
@@ -198,8 +195,11 @@ class Context {
     static std::shared_ptr<Context> makeCodeCall(
       const env_t& env, 
       const uint256_t& senderAddress, 
-      const bytes_t& code,
-      std::shared_ptr<std::vector<RLPItem>> rlp
+      const gas_t gasLimit,
+      const uint256_t& gasPrice,
+      const uint256_t& value,  
+      std::shared_ptr<bytes_t> code,
+      std::shared_ptr<bytes_t> data
     ) {
       return std::make_shared<Context>(
         env.chainId,
@@ -214,15 +214,12 @@ class Context {
         senderAddress, /* address */
         senderAddress, /* sender */
         senderAddress, /* origin */
-        Transaction::gas(rlp),
-        Transaction::gasPrice(rlp),
-        Transaction::value(rlp),
+        gasLimit,
+        gasPrice,
+        value,
         false,
-        std::make_shared<bytes_t>(code),
-        std::make_shared<bytes_t>(
-          rlp->at(0).values[Transaction::RLP_DATA].bytes.begin(), 
-          rlp->at(0).values[Transaction::RLP_DATA].bytes.end()
-        )
+        code,
+        data
       );
     }
 };

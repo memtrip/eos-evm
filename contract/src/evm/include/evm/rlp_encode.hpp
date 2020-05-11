@@ -5,35 +5,34 @@ class RLPEncode {
   public:
     static bytes_t encode(const RLPItem& item) {
       if (item.type == RLPType::STRING) {
-        return encodeString(item);
+        return encodeString(std::get<bytes_t>(item.value));
       } else {
-        return encodeList(item);
+        return encodeList(std::get<rlp_list_t>(item.value));
       }
     }
 
-    static bytes_t encodeString(const RLPItem& item) {
-      return encode(item.bytes, RLPItem::OFFSET_SHORT_STRING);
+    static bytes_t encodeString(const bytes_t& bytes) {
+      return encode(bytes, OFFSET_SHORT_STRING);
     }
 
-    static bytes_t encodeList(const RLPItem& item) {
-      std::vector<RLPItem> values = item.values;
+    static bytes_t encodeList(const rlp_list_t& values) {
       if (values.size() == 0) {
         bytes_t emptyBytes = bytes_t();
-        return encode(emptyBytes, RLPItem::OFFSET_SHORT_LIST);
+        return encode(emptyBytes, OFFSET_SHORT_LIST);
       } else {
         bytes_t result;
         for (int i = 0; i < values.size(); i++) {
           bytes_t encodedBytes = encode(values[i]);
           result = concat(result, encodedBytes);
         }
-        return encode(result, RLPItem::OFFSET_SHORT_LIST);
+        return encode(result, OFFSET_SHORT_LIST);
       }
     }
 
   private:
     static bytes_t encode(const bytes_t& bytesValue, uint16_t offset) {
       if (bytesValue.size() == 1
-        && offset == RLPItem::OFFSET_SHORT_STRING
+        && offset == OFFSET_SHORT_STRING
         && bytesValue[0] <= 0x7f
       ) {
         return bytesValue;

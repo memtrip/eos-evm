@@ -1130,9 +1130,6 @@ class Operation {
 
       if (context->isStatic) return std::make_pair(InstructionResult::INSTRUCTION_TRAP, TrapKind::TRAP_MUTATE_STATIC);
 
-      Utils::printLong(offset, "offset");
-      Utils::printLong(size, "size");
-
       pendingState->log(topics, memory->readSlice(offset, size));
       
       return std::make_pair(InstructionResult::OK, 0);

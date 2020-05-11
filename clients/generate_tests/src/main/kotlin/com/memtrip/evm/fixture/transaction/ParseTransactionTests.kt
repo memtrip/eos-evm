@@ -24,12 +24,9 @@ class ParseTransactionTests(
     fun parse(files: List<FileContext>): List<TransactionTest> {
         return files.map { file ->
             val rlpItem = jsonAdapter.fromJson(file.body)
-            if (rlpItem?.skip == true) null else {
+            if (rlpItem?.skip == true || file.parentName.contains("ttWrongRLP")) null else {
                 if (rlpItem != null) RLPItemWithFileName(
-                    file.parentName.replace(
-                        "\$",
-                        ""
-                    ), rlpItem
+                    file.parentName, rlpItem
                 )
                     else null
             }

@@ -12,7 +12,7 @@
 
 class eos_ecrecover {
   public:
-    static bytes_t recover(std::string accountName, std::shared_ptr<std::vector<RLPItem>> rlp, const env_t& env) {
+    static bytes_t recover(std::string accountName, rlp_list_t* rlp, const env_t& env) {
 
       bytes_t digest = Transaction::digest(rlp, 0x01);
       std::array<uint8_t, 32> digestData;

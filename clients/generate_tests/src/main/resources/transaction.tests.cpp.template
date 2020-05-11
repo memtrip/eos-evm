@@ -19,7 +19,7 @@ TEST_CASE("${test.parentName}______$${test.name}", "[gen_transaction)]") {
   std::string hex = "${test.rlp}";
 
   // when
-  std::shared_ptr<std::vector<RLPItem>> rlp = std::make_shared<std::vector<RLPItem>>();
+  rlp_list_t* rlp = new rlp_list_t();
   RLPDecode::decode(Hex::hexToBytes(hex), rlp);
 
   // then
@@ -41,6 +41,8 @@ TEST_CASE("${test.parentName}______$${test.name}", "[gen_transaction)]") {
   <#if test.s??>
   CHECK("${test.s}" == TestUtils::bytesToPaddedHex(Transaction::s(rlp)));
   </#if>
+
+  delete rlp;
 }
 
 </#list>
@@ -50,8 +52,9 @@ TEST_CASE("${test.parentName}______$${test.name}", "[gen_transaction)]") {
   std::string hex = "${test.rlp}";
 
   // when
-  std::shared_ptr<std::vector<RLPItem>> rlp = std::make_shared<std::vector<RLPItem>>();
+  rlp_list_t* rlp = new rlp_list_t();
   RLPDecode::decode(Hex::hexToBytes(hex), rlp);
+  delete rlp;
 }
 
 </#list>

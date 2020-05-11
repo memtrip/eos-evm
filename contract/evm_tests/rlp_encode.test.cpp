@@ -11,12 +11,10 @@ TEST_CASE("empty string", "[rlp_encode]") {
 
   // given
   bytes_t bytes = {};
-  std::vector<RLPItem> values;
 
   RLPItem item {
     RLPType::STRING,
-    bytes,
-    values
+    bytes
   };
 
   // when
@@ -31,12 +29,10 @@ TEST_CASE("Short string", "[rlp_encode]") {
 
   // given
   bytes_t bytes = { 'd', 'o', 'g' };
-  std::vector<RLPItem> values;
 
   RLPItem item {
     RLPType::STRING,
-    bytes,
-    values
+    bytes
   };
 
   // when
@@ -52,8 +48,7 @@ TEST_CASE("empty list", "[rlp_encode]") {
   // given
   RLPItem item {
     RLPType::LIST,
-    bytes_t {},
-    std::vector<RLPItem> {}
+    rlp_list_t {}
   };
 
   // when
@@ -72,20 +67,17 @@ TEST_CASE("Short string list", "[rlp_encode]") {
   
   RLPItem item1 {
     RLPType::STRING,
-    bytes1,
-    std::vector<RLPItem> {}
+    bytes1
   };
 
   RLPItem item2 {
     RLPType::STRING,
-    bytes2,
-    std::vector<RLPItem> {}
+    bytes2
   };
 
   RLPItem itemList {
     RLPType::LIST,
-    bytes_t {},
-    std::vector<RLPItem> { item1, item2 }
+    rlp_list_t { item1, item2 }
   };
 
   // when
@@ -105,33 +97,28 @@ TEST_CASE("Mixed nested list", "[rlp_encode]") {
   
   RLPItem string1 {
     RLPType::STRING,
-    bytes1,
-    std::vector<RLPItem> {}
+    bytes1
   };
 
   RLPItem string2 {
     RLPType::STRING,
-    bytes2,
-    std::vector<RLPItem> {}
+    bytes2
   };
 
   RLPItem string3 {
     RLPType::STRING,
-    bytes3,
-    std::vector<RLPItem> {}
+    bytes3
   };
 
   RLPItem list1 {
     RLPType::LIST,
-    bytes_t {},
-    std::vector<RLPItem> { string2 }
+    rlp_list_t { string2 }
   };
 
 
   RLPItem itemList {
     RLPType::LIST,
-    bytes_t {},
-    std::vector<RLPItem> { string1, list1, string3 }
+    rlp_list_t { string1, list1, string3 }
   };
 
   // when
@@ -151,50 +138,42 @@ TEST_CASE("Multiple nested lists", "[rlp_encode]") {
   
   RLPItem item8 {
     RLPType::LIST,
-    bytes_t {},
-    std::vector<RLPItem> {}
+    rlp_list_t {}
   };
 
   RLPItem item7 {
     RLPType::LIST,
-    bytes_t {},
-    std::vector<RLPItem> { item8 }
+    rlp_list_t { item8 }
   };
 
   RLPItem item6 {
     RLPType::LIST,
-    bytes_t {},
-    std::vector<RLPItem> { }
+    rlp_list_t { }
   };
 
   RLPItem item5 {
     RLPType::LIST,
-    bytes_t {},
-    std::vector<RLPItem> { item6, item7 }
+    rlp_list_t { item6, item7 }
   };
 
   RLPItem item4 {
     RLPType::LIST,
-    bytes_t {},
-    std::vector<RLPItem> { }
+    rlp_list_t { }
   };
 
   RLPItem item3 {
     RLPType::LIST,
-    bytes_t {},
-    std::vector<RLPItem> { item4 }
+    rlp_list_t { item4 }
   };
 
   RLPItem item2 {
     RLPType::LIST,
-    bytes_t {},
-    std::vector<RLPItem> { }
+    rlp_list_t { }
   };
 
   RLPItem item1 {
     RLPType::LIST,
-    bytes_t {},
-    std::vector<RLPItem> { item2, item3, item5 }
+    rlp_list_t { item2, item3, item5 }
   };
 
   // when
@@ -209,12 +188,11 @@ TEST_CASE("Single int", "[rlp_encode]") {
 
   // given
   bytes_t bytes = { 0x0f };
-  std::vector<RLPItem> values;
+  rlp_list_t values;
 
   RLPItem item {
     RLPType::STRING,
-    bytes,
-    values
+    bytes
   };
 
   // when
@@ -229,12 +207,10 @@ TEST_CASE("Int", "[rlp_encode]") {
 
   // given
   bytes_t bytes = { 0x04, 0x00 };
-  std::vector<RLPItem> values;
 
   RLPItem item {
     RLPType::STRING,
-    bytes,
-    values
+    bytes
   };
 
   // when
@@ -264,12 +240,11 @@ TEST_CASE("Long string encode", "[rlp_encode]") {
     'i', 'n', 'g', ' ',
     'e', 'l', 'i', 't'
   };
-  std::vector<RLPItem> values;
+  rlp_list_t values;
 
   RLPItem item {
     RLPType::STRING,
-    bytes,
-    values
+    bytes
   };
 
   // when
