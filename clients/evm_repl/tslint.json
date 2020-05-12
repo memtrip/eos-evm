@@ -1,0 +1,13 @@
+{
+  "extends": ["tslint", "tslint-react"],
+  "rules": {
+    "jsx-wrap-multiline": false,
+    "jsx-no-multiline-js": false,
+    "jsx-no-lambda": false,
+    "no-namespace": false,
+    "no-console": false
+  },
+  "linterOptions": {
+    "exclude": ["src/generated"]
+  }
+}
