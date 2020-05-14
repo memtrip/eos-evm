@@ -111,7 +111,7 @@ void eos_evm::incomingTransaction(const name& from, const bytes_t& transaction, 
 
   idx.modify(itr, from, [&](auto& account) {
     account.nonce = itr->nonce + 1;
-    account.balance = BigInt::toFixed32(external->senderAccountBalance());
+    account.balance = BigInt::toFixed32(external->senderAccountBalance(pendingState));
   });
 }
 
@@ -181,6 +181,38 @@ void eos_evm::resolveAccountState(const name& from, std::shared_ptr<PendingState
           account_state.key = compositeKey;
           account_state.value = BigInt::toFixed32(pendingState->accountState.at(i).value);
         });
+      }
+    }
+  }
+
+  if (pendingState->revertedContractCreation.size() > 0) {
+    eos_evm::account_code_table _account_code(get_self(), get_self().value);
+    for (int i = 0; i < pendingState->revertedContractCreation.size(); i++) {
+      auto accountCodeIdx = _account_code.get_index<name("codeaddress")>();
+      auto accountCodeItr = accountCodeIdx.find(BigInt::toFixed32(pendingState->revertedContractCreation[i].address));
+      if (accountCodeItr != accountCodeIdx.end()) {
+        accountCodeIdx.erase(accountCodeItr);
+      }
+    }
+  }
+
+  std::vector<resolved_balance_t> resolvedBalances = pendingState->resolveBalanceChanges();
+  if (resolvedBalances.size() > 0) {
+    for (resolved_balance_t resolvedBalance : resolvedBalances) {
+      if (resolvedBalance.addressType == BalanceAddressType::BALANCE_ADDRESS_ACCOUNT) {
+        eos_evm::account_table _account(get_self(), get_self().value);
+        auto accountIdx = _account.get_index<name("accountid")>();
+        auto accountItr = accountIdx.find(BigInt::toFixed32(resolvedBalance.address));
+        accountIdx.modify(accountItr, from, [&](auto& account) {
+          account.balance = BigInt::toFixed32(resolvedBalance.value);
+        });
+      } else {
+        eos_evm::account_code_table _account_code(get_self(), get_self().value);
+        auto accountCodeIdx = _account_code.get_index<name("codeaddress")>();
+        auto accountCodeItr = accountCodeIdx.find(BigInt::toFixed32(resolvedBalance.address));
+        accountCodeIdx.modify(accountCodeItr, from, [&](auto& account_code) {
+          account_code.balance = BigInt::toFixed32(resolvedBalance.value);
+        }); 
       }
     }
   }

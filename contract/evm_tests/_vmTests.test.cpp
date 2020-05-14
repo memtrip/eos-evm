@@ -1,5 +1,5 @@
 //
-// 01.05.2020
+// 14.05.2020
 // Auto generated based off the Ethereum tests found here:
 // https://github.com/ethereum/tests/blob/develop/VMTests/
 //
@@ -16,26 +16,26 @@
 #include "external_mock.hpp"
 #include <evm/operation.hpp>
 
-TEST_CASE("suicide______4622c577440f9db4b3954a1de60bf2fac55886dcb0ec4ecaf906c25bc77372e7", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("33ff");
+TEST_CASE("suicide______f640b3fc832dcd14496e5d6a7efea0b993ff1f62dc6d6baa40eb27a53def3304", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("33ff00");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)

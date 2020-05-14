@@ -54,11 +54,10 @@ TEST_CASE("extcodesize and extcodecopy", "[code]") {
   // then
   CHECK("6005600055000000000000000000000000000000000000000000000000000000" == 
     Utils::uint256_2str(pendingState->getState( 
-      uint256_t(0x00),
-      context->codeAddress,
-      external
-    ))
-  );
+      uint256_t(0x00), context->codeAddress, [external, context] () {
+      return external->storageAt(uint256_t(0x00), context->codeAddress);
+    }
+  )));
 
   CHECK("0000000000000000000000000000000000000000000000000000000000ea0e9e" ==
     Utils::uint256_2str(external->codeSpy[0])
@@ -153,9 +152,8 @@ TEST_CASE("calldataload", "[code]") {
   // then
   CHECK("23ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff23" == 
     Utils::uint256_2str(pendingState->getState( 
-      uint256_t(0x00),
-      context->codeAddress,
-      external
-    ))
-  );
+      uint256_t(0x00), context->codeAddress, [external, context] () {
+      return external->storageAt(uint256_t(0x00), context->codeAddress);
+    }
+  )));
 }

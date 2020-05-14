@@ -54,7 +54,8 @@ class Execute {
             emplace_t emplaceResult = external->emplaceCodeAddress(
               senderAddress, 
               codeAddress,
-              context->value             
+              context->value,
+              pendingState             
             );
 
             switch (emplaceResult.first) {
@@ -119,7 +120,7 @@ class Execute {
           }
         case TransactionActionType::TRANSACTION_CALL:
           {
-            std::shared_ptr<bytes_t> code = std::make_shared<bytes_t>(external->code(toAddress));
+            std::shared_ptr<bytes_t> code = std::make_shared<bytes_t>(external->code(toAddress, pendingState));
 
             std::shared_ptr<Context> context = Context::makeCall(
               env, 

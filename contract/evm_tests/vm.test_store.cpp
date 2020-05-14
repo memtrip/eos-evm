@@ -55,6 +55,8 @@ TEST_CASE("Store two values", "[store]") {
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000002" == 
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x01), context->codeAddress, external))
-  );
+    Utils::uint256_2str(pendingState->getState(uint256_t(0x01), context->codeAddress, [external, context] () {
+      return external->storageAt(uint256_t(0x01), context->codeAddress);
+    })
+  ));
 }

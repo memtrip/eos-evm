@@ -1052,7 +1052,7 @@ class Operation {
     ) {
       uint256_t address = stack->peek(0);
       stack->pop(1);
-      size_t codeSize = external->code(address).size();
+      size_t codeSize = external->code(address, pendingState).size();
       stack->push(uint256_t(codeSize));
       return std::make_pair(InstructionResult::OK, 0);
     }
@@ -1076,7 +1076,7 @@ class Operation {
         Overflow::uint256Cast(destOffset).first, 
         Overflow::uint256Cast(sourceOffset).first, 
         Overflow::uint256Cast(sizeItem).first, 
-        external->code(address)
+        external->code(address, pendingState)
       );
       stack->pop(4);
       return std::make_pair(InstructionResult::OK, 0);
@@ -1092,7 +1092,7 @@ class Operation {
       std::shared_ptr<Memory> memory, 
       std::shared_ptr<StackMachine> stack
     ) {
-      stack->push(external->balance(context->address));
+      stack->push(external->balance(context->address, pendingState));
       return std::make_pair(InstructionResult::OK, 0);
     }
 
@@ -1139,7 +1139,7 @@ class Operation {
 
       if (context->isStatic) return std::make_pair(InstructionResult::INSTRUCTION_TRAP, TrapKind::TRAP_MUTATE_STATIC);
 
-      emplace_t result = external->selfdestruct(context->codeAddress, refundAddress);
+      emplace_t result = external->selfdestruct(context->codeAddress, refundAddress, pendingState);
 
       switch (result.first) {
         case EmplaceResult::EMPLACE_ADDRESS_NOT_FOUND:
@@ -1240,7 +1240,7 @@ class Operation {
       std::shared_ptr<Memory> memory, 
       std::shared_ptr<StackMachine> stack
     ) {
-      uint256_t balance = external->balance(stack->peek(0));
+      uint256_t balance = external->balance(stack->peek(0), pendingState);
       stack->pop(1);
       stack->push(balance);
       return std::make_pair(InstructionResult::OK, 0);
@@ -1257,8 +1257,9 @@ class Operation {
       std::shared_ptr<StackMachine> stack
     ) {
       uint256_t key = stack->peek(0);
-      uint256_t word = pendingState->getState(key, context->codeAddress, external);
-
+      uint256_t word =  pendingState->getState(key, context->codeAddress, [external, key, context] () {
+        return external->storageAt(key, context->codeAddress);
+      });
       stack->pop(1);
       stack->push(word);
       return std::make_pair(InstructionResult::OK, 0);
@@ -1364,7 +1365,7 @@ class Operation {
     ) {  
       uint256_t address = stack->peek(0);
       stack->pop(1);
-      bytes_t codeBytes = external->code(address);
+      bytes_t codeBytes = external->code(address, pendingState);
       stack->push(Hash::keccak256Word(codeBytes));
       return std::make_pair(InstructionResult::OK, 0);
     }

@@ -63,6 +63,7 @@ TEST_CASE("${test.name}______${test.fixture._info.sourceHash}", "[vm]") {
 
   std::shared_ptr<Memory> mem = std::make_shared<Memory>();
   std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
 
   // when
   vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
@@ -72,13 +73,21 @@ TEST_CASE("${test.name}______${test.fixture._info.sourceHash}", "[vm]") {
   <#list test.fixture.post.accountState.storage?keys as key>
   CHECK("${test.fixture.post.accountState.storage[key]}" ==
     <#if key?length <= 8>
-    Utils::uint256_2str(pendingState->getState(uint256_t(${key}), context->codeAddress, external))
+    Utils::uint256_2str(
+      pendingState->getState(
+        uint256_t(${key}),
+        context->codeAddress, [external, context] () {
+          return external->storageAt(uint256_t(${key}), context->codeAddress);
+        }
+      )
+    )
     <#else>
     Utils::uint256_2str(
       pendingState->getState(
         TestUtils::fromHex("${key[2..]}"),
-        context->codeAddress,
-        external
+        context->codeAddress, [external, context] () {
+          return external->storageAt(TestUtils::fromHex("${key[2..]}"), context->codeAddress);
+        }
       )
     )
     </#if>

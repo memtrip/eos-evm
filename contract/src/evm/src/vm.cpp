@@ -11,6 +11,7 @@
 #include <evm/gas_calculation.hpp>
 #include <evm/gas_types.h>
 #include <evm/call.hpp>
+#include <evm/utils.hpp>
 
 exec_result_t VM::execute(
   uint16_t stackDepth,
@@ -136,6 +137,7 @@ exec_result_t VM::step(
             );
             result = std::make_pair(InstructionResult::OK, 0);
           }
+          stack->pop(3);
           break;
         }
       case Opcode::CREATE:
@@ -339,7 +341,8 @@ instruction_result_t VM::executeCreateInstruction(
           context->address, 
           codeAddress,
           endowment, 
-          returnDataBytes
+          returnDataBytes,
+          pendingState
         );
 
         switch (emplaceResult.first) {
@@ -450,7 +453,7 @@ instruction_result_t VM::executeCallInstruction(
         senderAddress = context->address;
         receiveAddress = codeAddress;
         codeExecutionAddress = codeAddress;
-        hasBalance = external->balance(context->address) >= value;
+        hasBalance = external->balance(context->address, pendingState) >= value;
         callType = CallType::ACTION_CALL;
         break;
       }
@@ -459,7 +462,7 @@ instruction_result_t VM::executeCallInstruction(
         senderAddress = context->address;
         receiveAddress = context->address;
         codeExecutionAddress = context->address;
-        hasBalance = external->balance(context->address) >= value;
+        hasBalance = external->balance(context->address, pendingState) >= value;
         callType = CallType::ACTION_CALL;
         break;
       }
@@ -495,7 +498,7 @@ instruction_result_t VM::executeCallInstruction(
   }
 
   std::shared_ptr<bytes_t> callData = std::make_shared<bytes_t>(memory->readSlice(inOffset, inSize));
-  std::shared_ptr<bytes_t> code = std::make_shared<bytes_t>(external->code(codeAddress));
+  std::shared_ptr<bytes_t> code = std::make_shared<bytes_t>(external->code(codeAddress, pendingState));
 
   std::shared_ptr<Context> callContext = Context::makeInnerCall(
     context,

@@ -433,34 +433,34 @@ TEST_CASE("Comparison with many instructions", "[comparison]") {
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
-    Utils::uint256_2str(pendingState->getState( 
-      uint256_t(0x00), 
-      context->codeAddress,
-      external
+    Utils::uint256_2str(pendingState->getState(
+      uint256_t(0x00), context->codeAddress, [external, context] () {
+        return external->storageAt(uint256_t(0x01), context->codeAddress);
+      }
     ))
   );
 
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
     Utils::uint256_2str(pendingState->getState( 
-      uint256_t(0x01),
-      context->codeAddress,
-      external
+      uint256_t(0x01), context->codeAddress, [external, context] () {
+        return external->storageAt(uint256_t(0x01), context->codeAddress);
+      }
     ))
   );
 
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
     Utils::uint256_2str(pendingState->getState( 
-      uint256_t(0x02),
-      context->codeAddress,
-      external
+      uint256_t(0x02), context->codeAddress, [external, context] () {
+        return external->storageAt(uint256_t(0x02), context->codeAddress);
+      }
     ))
   );
 
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
     Utils::uint256_2str(pendingState->getState( 
-      uint256_t(0x03),
-      context->codeAddress,
-      external
+      uint256_t(0x03), context->codeAddress, [external, context] () {
+        return external->storageAt(uint256_t(0x03), context->codeAddress);
+      }
     ))
   );
 }

@@ -192,10 +192,28 @@ TEST_CASE("Bitops", "[bitwise]") {
   vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
 
   // then
-  CHECK("00000000000000000000000000000000000000000000000000000000000000f0" == Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, external)));
-  CHECK("0000000000000000000000000000000000000000000000000000000000000fff" == Utils::uint256_2str(pendingState->getState(uint256_t(0x01), context->codeAddress, external)));
-  CHECK("0000000000000000000000000000000000000000000000000000000000000f0f" == Utils::uint256_2str(pendingState->getState(uint256_t(0x02), context->codeAddress, external)));
-  CHECK("0000000000000000000000000000000000000000000000000000000000000001" == Utils::uint256_2str(pendingState->getState(uint256_t(0x03), context->codeAddress, external)));
-  CHECK("0000000000000000000000000000000000000000000000000000000000000000" == Utils::uint256_2str(pendingState->getState(uint256_t(0x04), context->codeAddress, external)));
-  CHECK("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" == Utils::uint256_2str(pendingState->getState(uint256_t(0x05), context->codeAddress, external)));
+  CHECK("00000000000000000000000000000000000000000000000000000000000000f0" == Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, [external, context] () {
+      return external->storageAt(uint256_t(0x00), context->codeAddress);
+    }))
+  );
+  CHECK("0000000000000000000000000000000000000000000000000000000000000fff" == Utils::uint256_2str(pendingState->getState(uint256_t(0x01), context->codeAddress, [external, context] () {
+      return external->storageAt(uint256_t(0x01), context->codeAddress);
+    }))
+  );
+  CHECK("0000000000000000000000000000000000000000000000000000000000000f0f" == Utils::uint256_2str(pendingState->getState(uint256_t(0x02), context->codeAddress, [external, context] () {
+      return external->storageAt(uint256_t(0x02), context->codeAddress);
+    }))
+  );
+  CHECK("0000000000000000000000000000000000000000000000000000000000000001" == Utils::uint256_2str(pendingState->getState(uint256_t(0x03), context->codeAddress, [external, context] () {
+      return external->storageAt(uint256_t(0x03), context->codeAddress);
+    }))
+  );
+  CHECK("0000000000000000000000000000000000000000000000000000000000000000" == Utils::uint256_2str(pendingState->getState(uint256_t(0x04), context->codeAddress, [external, context] () {
+      return external->storageAt(uint256_t(0x04), context->codeAddress);
+    }))
+  );
+  CHECK("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" == Utils::uint256_2str(pendingState->getState(uint256_t(0x05), context->codeAddress, [external, context] () {
+      return external->storageAt(uint256_t(0x05), context->codeAddress);
+    }))
+  );
 }

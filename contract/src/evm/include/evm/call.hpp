@@ -30,7 +30,7 @@ class Call {
       VM vm(stack, gasometer);
 
       if (Overflow::uint256Cast(context->value).first > 0 && callType == CallType::ACTION_CALL) {
-        emplace_t result = external->transfer(context->sender, context->address, context->value);
+        emplace_t result = external->transfer(context->sender, context->address, context->value, pendingState);
         switch (result.first) {
           case EmplaceResult::EMPLACE_ADDRESS_NOT_FOUND:
           case EmplaceResult::EMPLACE_CODE_ALREADY_EXISTS:

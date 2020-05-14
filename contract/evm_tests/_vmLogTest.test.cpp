@@ -1,5 +1,5 @@
 //
-// 01.05.2020
+// 14.05.2020
 // Auto generated based off the Ethereum tests found here:
 // https://github.com/ethereum/tests/blob/develop/VMTests/
 //
@@ -16,26 +16,26 @@
 #include "external_mock.hpp"
 #include <evm/operation.hpp>
 
-TEST_CASE("log2_logMemsizeTooHigh______9fb39d1608049d1d5455c7409514acc175724f2b1e43102d17b631862c3bc1a4", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd600052600060007fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff6001a2");
+TEST_CASE("log2_logMemsizeTooHigh______c15f851f69a9ec210b01976bca64f7972bffce13daaa98d154d3f64df2f3ed5d", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd600052600060007fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff6001a200");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -58,26 +58,26 @@ TEST_CASE("log2_logMemsizeTooHigh______9fb39d1608049d1d5455c7409514acc175724f2b1
   // then
 }
 
-TEST_CASE("log1_nonEmptyMem______f3e28ff95bf5e800cd43ab50df02e0c38e9fa2b8205732a9ef4a9c7c4a881da6", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff600052600060206000a1");
+TEST_CASE("log1_nonEmptyMem______c5dfd1c14f86ad9ec283cf490d2541b5fc2606d228091ddf89ae1637de0ea5ea", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff600052600060206000a100");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -100,26 +100,26 @@ TEST_CASE("log1_nonEmptyMem______f3e28ff95bf5e800cd43ab50df02e0c38e9fa2b8205732a
   // then
 }
 
-TEST_CASE("log4_logMemsizeZero______c7e7169c36cc57a6425d03859449560d8d7f48c189f2af5d90710d24de096912", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd600052600060006000600060006001a4");
+TEST_CASE("log4_logMemsizeZero______f1050561050660b2a28b3f0e472bcbcc57b9954695f5c308e21e6de28beb88ea", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd600052600060006000600060006001a400");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -142,26 +142,26 @@ TEST_CASE("log4_logMemsizeZero______c7e7169c36cc57a6425d03859449560d8d7f48c189f2
   // then
 }
 
-TEST_CASE("log1_emptyMem______3284dac984331ac8d612e2bb4994f34e19f76861ed5294388fe95c283bd500fc", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("600060006000a1");
+TEST_CASE("log1_emptyMem______cb45f3f12dcf866d3fea5146281d28a31e42abc663ca72dfeb99e0df3ccc92e7", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("600060006000a100");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -184,26 +184,26 @@ TEST_CASE("log1_emptyMem______3284dac984331ac8d612e2bb4994f34e19f76861ed5294388f
   // then
 }
 
-TEST_CASE("log0_logMemsizeZero______e5b6bb2501704a5d2b73c86a3e02be967fdfc90fb58f2b4f5e6e3750406792ef", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd60005260006001a0");
+TEST_CASE("log0_logMemsizeZero______52eb47e08ce56a1034d6ddaa6e7dfd065b358b76dcd3684ef24354f6c3f307e8", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd60005260006001a000");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -226,26 +226,26 @@ TEST_CASE("log0_logMemsizeZero______e5b6bb2501704a5d2b73c86a3e02be967fdfc90fb58f
   // then
 }
 
-TEST_CASE("log2_emptyMem______6cc6686c11bbd223248c591c4c90a38f469fdb2571b7b6279a116ee07147b4be", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("6000600060006000a2");
+TEST_CASE("log2_emptyMem______d5a9d0f1fe58af445e8de2d33c532a3867f623942fb4379a55da9d86de0e680b", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("6000600060006000a200");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -268,26 +268,26 @@ TEST_CASE("log2_emptyMem______6cc6686c11bbd223248c591c4c90a38f469fdb2571b7b6279a
   // then
 }
 
-TEST_CASE("log4_nonEmptyMem_logMemSize1_logMemStart31______4f7869f982d0f61e794df14e64040914832b8e4f7d643c94bb9d2694ce228450", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd60005260006000600060006001601fa4");
+TEST_CASE("log4_nonEmptyMem_logMemSize1_logMemStart31______7403e34c24c7ced4e53285fb25858b4a93434b77aab75d1a7c58e054079a2a06", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd60005260006000600060006001601fa400");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -310,26 +310,26 @@ TEST_CASE("log4_nonEmptyMem_logMemSize1_logMemStart31______4f7869f982d0f61e794df
   // then
 }
 
-TEST_CASE("log1_logMemsizeZero______583cfb6cec3eb602dc034886dfc2e2171da94941d0bbb8c36156bcf50d2b6827", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd600052600060006001a1");
+TEST_CASE("log1_logMemsizeZero______d2f7e23587578e940a641dfdd677eb6a36266fc232b15baf3005a69e6fce407d", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd600052600060006001a100");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -352,26 +352,26 @@ TEST_CASE("log1_logMemsizeZero______583cfb6cec3eb602dc034886dfc2e2171da94941d0bb
   // then
 }
 
-TEST_CASE("log2_Caller______bf2bb94ebe5938744184e8a6f7b2a5eaa274b40d3a92b6802153133a1f8d64ef", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("60ff60005333600060206000a2");
+TEST_CASE("log2_Caller______278fce0660fbdc58abc43da69206146d754a93c6a168d0600bbbb11643283202", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("60ff60005333600060206000a200");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -394,26 +394,26 @@ TEST_CASE("log2_Caller______bf2bb94ebe5938744184e8a6f7b2a5eaa274b40d3a92b6802153
   // then
 }
 
-TEST_CASE("log1_logMemsizeTooHigh______17e5a63a7a389f823678de07caa666ff5148749e4697b54e304dd9407312c672", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd60005260007fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff6001a1");
+TEST_CASE("log1_logMemsizeTooHigh______d19a89acfe1f8ba46e7f748b7b8b255e6c9a8c8dc6ff96e0fce88d6790f8e41a", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd60005260007fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff6001a100");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -436,26 +436,26 @@ TEST_CASE("log1_logMemsizeTooHigh______17e5a63a7a389f823678de07caa666ff5148749e4
   // then
 }
 
-TEST_CASE("log2_logMemsizeZero______686ccc981e9622bcfeb6161ad1d9f71a70d91b3d828ee46bffb105be3394dbab", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd6000526000600060006001a2");
+TEST_CASE("log2_logMemsizeZero______19a20d8fee378a3b161eb6564d3496d096dc75198ca0d7888dbc017d25817842", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd6000526000600060006001a200");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -478,26 +478,26 @@ TEST_CASE("log2_logMemsizeZero______686ccc981e9622bcfeb6161ad1d9f71a70d91b3d828e
   // then
 }
 
-TEST_CASE("log2_logMemStartTooHigh______d45766f7e33ecc09cc11f00e216474469c49933a5777d8599ad60fd51e1ab3e1", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd6000526000600060017fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffa2");
+TEST_CASE("log2_logMemStartTooHigh______f8bcf2d2fe1877558a05c120a5d5e42b4e802dfb67df153b50a82d86d07fee6c", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd6000526000600060017fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffa200");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -520,26 +520,26 @@ TEST_CASE("log2_logMemStartTooHigh______d45766f7e33ecc09cc11f00e216474469c49933a
   // then
 }
 
-TEST_CASE("log3_logMemsizeZero______69bd3e5dcb7e699abcb3faa58aa9a80a6ff20e8287c8f4981f4973cbba96e192", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd60005260006000600060006001a3");
+TEST_CASE("log3_logMemsizeZero______d7c4acfe824b6ed9c85fde144fc0e412e7efb2fbf6373e86e6f88830898e3bfe", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd60005260006000600060006001a300");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -562,26 +562,26 @@ TEST_CASE("log3_logMemsizeZero______69bd3e5dcb7e699abcb3faa58aa9a80a6ff20e8287c8
   // then
 }
 
-TEST_CASE("log2_MaxTopic______d3c300433ba07e9e91cab5d9ad174a159012c1975b3b69c3ceedb895132265c6", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd6000527fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff60206000a2");
+TEST_CASE("log2_MaxTopic______c03f4ad00e5829058f2f9c7a45d0194a0b997d37157c8b70e76a576c28c18d93", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd6000527fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff60206000a200");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -604,26 +604,26 @@ TEST_CASE("log2_MaxTopic______d3c300433ba07e9e91cab5d9ad174a159012c1975b3b69c3ce
   // then
 }
 
-TEST_CASE("log1_logMemStartTooHigh______b6a326587a3dbbd977d24a247338ade2c2feed85e53de7b8067809c00034cd6d", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd600052600060017fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffa1");
+TEST_CASE("log1_logMemStartTooHigh______aa2fd3ef175d7fa1c64505d7c40c462692aa6a7cb89ecec90be36e289e4293ce", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd600052600060017fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffa100");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -646,26 +646,26 @@ TEST_CASE("log1_logMemStartTooHigh______b6a326587a3dbbd977d24a247338ade2c2feed85
   // then
 }
 
-TEST_CASE("log0_nonEmptyMem______0cfc646681837311fb39e1273123794960fbb9ea4e424578f87a551a36df6fae", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff60005260206000a0");
+TEST_CASE("log0_nonEmptyMem______7a8343131774de16b70dfae8cfa95f9dd677799b058452104b1a9de12e954fbf", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff60005260206000a000");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -688,26 +688,26 @@ TEST_CASE("log0_nonEmptyMem______0cfc646681837311fb39e1273123794960fbb9ea4e42457
   // then
 }
 
-TEST_CASE("log0_logMemsizeTooHigh______04fe0fcd01a67dcc0bbc0ea972f7af4c8695a6b63170a53ac5d11ce437bc7904", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd6000527fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff6001a0");
+TEST_CASE("log0_logMemsizeTooHigh______98f168bbd9db9773020a01ad2df5346cb03a456aad27ddee61df6b94e7021974", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd6000527fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff6001a000");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -730,26 +730,26 @@ TEST_CASE("log0_logMemsizeTooHigh______04fe0fcd01a67dcc0bbc0ea972f7af4c8695a6b63
   // then
 }
 
-TEST_CASE("log_2logs______59ad5528d89751649749405f4a5cd70d8a03875afb90fa0d4d6824d3d96a390f", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff60005260206000a060106002a0");
+TEST_CASE("log_2logs______e77c29f677e27b332b5f411695c2c0ed599c4617c4fbe3461700be862f73a195", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff60005260206000a060106002a000");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -772,26 +772,26 @@ TEST_CASE("log_2logs______59ad5528d89751649749405f4a5cd70d8a03875afb90fa0d4d6824
   // then
 }
 
-TEST_CASE("log1_Caller______33df8d2b8c92e29404110e09be9bd88bc1f685e12067c07e534f683ccebc5ac7", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("60ff6000533360206000a1");
+TEST_CASE("log1_Caller______11a741ae08deb8f51cdfcf2f7642ee85477f9e0dd23ecca9917bb9d3b0234c47", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("60ff6000533360206000a100");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -814,26 +814,26 @@ TEST_CASE("log1_Caller______33df8d2b8c92e29404110e09be9bd88bc1f685e12067c07e534f
   // then
 }
 
-TEST_CASE("log3_nonEmptyMem_logMemSize1______baeb20e8806b5cf814426f11178bd4d5ac34165b77a660713d5202e166784e72", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd60005260006000600060016000a3");
+TEST_CASE("log3_nonEmptyMem_logMemSize1______e1cb9ae5d4ae4b21ff690698f15f92aeccfbf46c6c9c80e2dc4e006822519af1", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd60005260006000600060016000a300");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -856,26 +856,26 @@ TEST_CASE("log3_nonEmptyMem_logMemSize1______baeb20e8806b5cf814426f11178bd4d5ac3
   // then
 }
 
-TEST_CASE("log0_nonEmptyMem_logMemSize1______a20cb10f863eb27a33608f41f9d3de3d25a37da55aadb03a2a794cc5dedcaa05", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd60005260016000a0");
+TEST_CASE("log0_nonEmptyMem_logMemSize1______acf8b35b5a89a7406eefa2ffe1c2908175d62349241ff40e266d53336373a4e7", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd60005260016000a000");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -898,26 +898,26 @@ TEST_CASE("log0_nonEmptyMem_logMemSize1______a20cb10f863eb27a33608f41f9d3de3d25a
   // then
 }
 
-TEST_CASE("log4_Caller______8ea00f94cec5a457cac5de1731aa75c588c13d2eab55297aa7a3b62c268add1f", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("60ff6000533360006000600060206000a4");
+TEST_CASE("log4_Caller______36f4b47d5ee5ef17d69bd1a8e477bda5301dd5658e4de225e5e9262b8cebb24f", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("60ff6000533360006000600060206000a400");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -940,26 +940,26 @@ TEST_CASE("log4_Caller______8ea00f94cec5a457cac5de1731aa75c588c13d2eab55297aa7a3
   // then
 }
 
-TEST_CASE("log4_logMemsizeTooHigh______13b51aeb36d62dac84da56023d6406a59c83490d2640d4d6abdf89c2d55c9fed", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd60005260006000600060007fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff6001a4");
+TEST_CASE("log4_logMemsizeTooHigh______9c3f68462bcf3b618eca0c008fd2fc7193ac53808825fb63cd3fa15019510b5e", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd60005260006000600060007fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff6001a400");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -982,26 +982,26 @@ TEST_CASE("log4_logMemsizeTooHigh______13b51aeb36d62dac84da56023d6406a59c83490d2
   // then
 }
 
-TEST_CASE("log4_nonEmptyMem______a3c64c86ba9a76871b7c3c281a0454708cdb5e91ca611b55df194bab9a1fafaf", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff600052600060006000600060206000a4");
+TEST_CASE("log4_nonEmptyMem______ea8cc861b4fbae99cdff27c3ccad6670aa64db4c167c6b7d8fb48971a926830d", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff600052600060006000600060206000a400");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -1024,26 +1024,26 @@ TEST_CASE("log4_nonEmptyMem______a3c64c86ba9a76871b7c3c281a0454708cdb5e91ca611b5
   // then
 }
 
-TEST_CASE("log1_MaxTopic______0a4c414906a74571451b62d5cbccfd73c420f46831681365491d35d780a1c98a", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd6000527fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff60206000a1");
+TEST_CASE("log1_MaxTopic______36486dae9ad818460b9639b39d19ac38be7837782e821721ab2183b2fdc4d09b", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd6000527fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff60206000a100");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -1066,26 +1066,26 @@ TEST_CASE("log1_MaxTopic______0a4c414906a74571451b62d5cbccfd73c420f4683168136549
   // then
 }
 
-TEST_CASE("log3_logMemsizeTooHigh______f2c5e55c6680ac4b66054f399561cbe97badde7f2f3292132ab9d36b2b160464", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd6000526000600060007fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff6001a3");
+TEST_CASE("log3_logMemsizeTooHigh______ded88943d0a834487d459105c747a70c634abecefd18b26dfce95e404a563843", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd6000526000600060007fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff6001a300");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -1108,26 +1108,26 @@ TEST_CASE("log3_logMemsizeTooHigh______f2c5e55c6680ac4b66054f399561cbe97badde7f2
   // then
 }
 
-TEST_CASE("log3_PC______8d7beb47cc14822075ce2fbac294728f8faba640e26a7ed370eafa8e590df2d0", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("60ff60005358585860206000a3");
+TEST_CASE("log3_PC______8de4bf578ab42d8ead2f17eb84baecaebae0f8e8ed8940bd6426211fd307345c", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("60ff60005358585860206000a300");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -1150,26 +1150,26 @@ TEST_CASE("log3_PC______8d7beb47cc14822075ce2fbac294728f8faba640e26a7ed370eafa8e
   // then
 }
 
-TEST_CASE("log3_nonEmptyMem_logMemSize1_logMemStart31______bda2d24ce0f250b08877fc4e9da8c2952804af9662c3af30db45995f0cd80ce4", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd6000526000600060006001601fa3");
+TEST_CASE("log3_nonEmptyMem_logMemSize1_logMemStart31______d6e9c256c18bc919385db7a9057a075ae5a13720df293067a6f4d59ea2b5a355", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd6000526000600060006001601fa300");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -1192,26 +1192,26 @@ TEST_CASE("log3_nonEmptyMem_logMemSize1_logMemStart31______bda2d24ce0f250b08877f
   // then
 }
 
-TEST_CASE("log3_logMemStartTooHigh______9810608d983312d9f5ab12cd9358825f20f92ca174905c314a551082406dea1a", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd60005260006000600060017fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffa3");
+TEST_CASE("log3_logMemStartTooHigh______fa365bab7ef9991853f4cd75ce14acf1d6e443de6db2b005ad09f95363225cbf", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd60005260006000600060017fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffa300");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -1234,26 +1234,26 @@ TEST_CASE("log3_logMemStartTooHigh______9810608d983312d9f5ab12cd9358825f20f92ca1
   // then
 }
 
-TEST_CASE("log1_nonEmptyMem_logMemSize1______49ec0b89dab4beb39bb4dbc58191f465ef09c133df05d7444cc5dfc95274360f", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd600052600060016000a1");
+TEST_CASE("log1_nonEmptyMem_logMemSize1______c542775d98d7dd40f18362f1a170ef0a1ce8462f5b8213b973a766a22b525a92", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd600052600060016000a100");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -1276,26 +1276,26 @@ TEST_CASE("log1_nonEmptyMem_logMemSize1______49ec0b89dab4beb39bb4dbc58191f465ef0
   // then
 }
 
-TEST_CASE("log4_MaxTopic______1928e2558239ffc6fbb18068e3f1428cd7e60eb06e8dd308bce1938f5ee7144a", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd6000527fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff60206000a4");
+TEST_CASE("log4_MaxTopic______00e6574e01b070ff976ba01169778358d6d612a25dcc108ab26feae6b16ba925", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd6000527fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff60206000a400");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -1318,26 +1318,26 @@ TEST_CASE("log4_MaxTopic______1928e2558239ffc6fbb18068e3f1428cd7e60eb06e8dd308bc
   // then
 }
 
-TEST_CASE("log3_Caller______fae584b1f6d4f92ed0b072ce8f7842b2ca367ab838949e51830c9ca8f70713c5", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("60ff600053336000600060206000a3");
+TEST_CASE("log3_Caller______85db43566fe1363203e193e988cb1412679412c1c3c36fae2a9ff227acd4ba70", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("60ff600053336000600060206000a300");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -1360,26 +1360,26 @@ TEST_CASE("log3_Caller______fae584b1f6d4f92ed0b072ce8f7842b2ca367ab838949e51830c
   // then
 }
 
-TEST_CASE("log3_nonEmptyMem______1d2ad4f6f79e0161150ea4ae333a9df11e1099df23fff0eb0844c70f77dabe60", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff60005260006000600060206000a3");
+TEST_CASE("log3_nonEmptyMem______664a6c604ffc289d6e643202fb6f1d0771ae2daf6839267bcb08561f62b1ee8f", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff60005260006000600060206000a300");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -1402,26 +1402,26 @@ TEST_CASE("log3_nonEmptyMem______1d2ad4f6f79e0161150ea4ae333a9df11e1099df23fff0e
   // then
 }
 
-TEST_CASE("log3_MaxTopic______b7120956567b5710f9dd49ac0db7e43d839a6a026598143cff9b58d02e61193a", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd6000527fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff60206000a3");
+TEST_CASE("log3_MaxTopic______5c6ce379435ed5bc536187047997e2709c5797bcf6b0af4d86190537d332af13", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd6000527fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff60206000a300");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -1444,26 +1444,26 @@ TEST_CASE("log3_MaxTopic______b7120956567b5710f9dd49ac0db7e43d839a6a026598143cff
   // then
 }
 
-TEST_CASE("log1_nonEmptyMem_logMemSize1_logMemStart31______dfba77e757549bc564c542df0e94e48a135e817f9f53455000827eaafeffb307", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd60005260006001601fa1");
+TEST_CASE("log1_nonEmptyMem_logMemSize1_logMemStart31______96699f92a9eeb0cda8a5f294aa02f4b229c0b43d6847022bb0ab8a28d3b943dd", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd60005260006001601fa100");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -1486,26 +1486,26 @@ TEST_CASE("log1_nonEmptyMem_logMemSize1_logMemStart31______dfba77e757549bc564c54
   // then
 }
 
-TEST_CASE("log2_nonEmptyMem_logMemSize1______0db120840474461ba7c4de523260af515ca7424bc998312fd5cbd21a955e627e", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd6000526000600060016000a2");
+TEST_CASE("log2_nonEmptyMem_logMemSize1______dc1d4c4e42812550b3f51478c316ae5922e167649a43d7e7dfe6c60c104ac905", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd6000526000600060016000a200");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -1528,26 +1528,26 @@ TEST_CASE("log2_nonEmptyMem_logMemSize1______0db120840474461ba7c4de523260af515ca
   // then
 }
 
-TEST_CASE("log2_nonEmptyMem_logMemSize1_logMemStart31______fad1ccc7b33b11ea24c70737aa879fd8172c7ba8b413bca9002e360f15cb0377", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd600052600060006001601fa2");
+TEST_CASE("log2_nonEmptyMem_logMemSize1_logMemStart31______3e6c65ee231d2cf413dd90768d10563d4897b7c67e57448c21a1fdac42ef0aa6", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd600052600060006001601fa200");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -1570,26 +1570,26 @@ TEST_CASE("log2_nonEmptyMem_logMemSize1_logMemStart31______fad1ccc7b33b11ea24c70
   // then
 }
 
-TEST_CASE("log3_emptyMem______f39ac12e960ba98b1d6d52dbe564caded52a338cb16b7924869a1b8c2a77188c", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("60006000600060006000a3");
+TEST_CASE("log3_emptyMem______433cb7d8a2766ad9964a17ccff7001ed7ee22e59fb544784218f890762231ba4", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("60006000600060006000a300");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -1612,26 +1612,26 @@ TEST_CASE("log3_emptyMem______f39ac12e960ba98b1d6d52dbe564caded52a338cb16b792486
   // then
 }
 
-TEST_CASE("log4_logMemStartTooHigh______b231ee785a24fab97ccfb8dde384ecbb03ea86bd9c5b7a8e7c602b7f1b347ab7", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd600052600060006000600060017fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffa4");
+TEST_CASE("log4_logMemStartTooHigh______b068a4e68702129e5ac6bc8c151ab563e8715f75a441af1d6dce48447caf81a3", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd600052600060006000600060017fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffa400");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -1654,26 +1654,26 @@ TEST_CASE("log4_logMemStartTooHigh______b231ee785a24fab97ccfb8dde384ecbb03ea86bd
   // then
 }
 
-TEST_CASE("log4_nonEmptyMem_logMemSize1______2e590a92288accca39422740f9b8c7d946723b636dcaf988e583438247ef8e75", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd600052600060006000600060016000a4");
+TEST_CASE("log4_nonEmptyMem_logMemSize1______368bcd4494a77049154e435884e513aad030fa0727c7f50a81a4496376c66c37", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd600052600060006000600060016000a400");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -1696,26 +1696,26 @@ TEST_CASE("log4_nonEmptyMem_logMemSize1______2e590a92288accca39422740f9b8c7d9467
   // then
 }
 
-TEST_CASE("log2_nonEmptyMem______a1c8ae74a72e0723f39e564ff0843ed03b579c9e7ae7b0c13d755c78a4589705", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff6000526000600060206000a2");
+TEST_CASE("log2_nonEmptyMem______34ce371bf389d71c908207212751a200822caf413fe8b529fb388926350316de", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff6000526000600060206000a200");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -1738,26 +1738,26 @@ TEST_CASE("log2_nonEmptyMem______a1c8ae74a72e0723f39e564ff0843ed03b579c9e7ae7b0c
   // then
 }
 
-TEST_CASE("log4_PC______1c6a8d77e5986d32795ac6f8757849527822e91848f34f531cc5c81cfbcdebcd", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("60ff6000535858585860206000a4");
+TEST_CASE("log4_PC______5b673a36865e4f089cf6b97f17a41271297be125f314afeab2ec9f99d6b5bba5", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("60ff6000535858585860206000a400");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -1780,26 +1780,26 @@ TEST_CASE("log4_PC______1c6a8d77e5986d32795ac6f8757849527822e91848f34f531cc5c81c
   // then
 }
 
-TEST_CASE("log4_emptyMem______1d899abc32e13324725840e9b79042f03f389f1ab1a3fb013b9a2d49261d795b", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("600060006000600060006000a4");
+TEST_CASE("log4_emptyMem______4bb9593ee7b20f95de99dad6e047e52946bd44ebbbc34df0280fae1f06ece59f", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("600060006000600060006000a400");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -1822,26 +1822,26 @@ TEST_CASE("log4_emptyMem______1d899abc32e13324725840e9b79042f03f389f1ab1a3fb013b
   // then
 }
 
-TEST_CASE("log0_nonEmptyMem_logMemSize1_logMemStart31______777ce021b26b0e4f62b98b595d6ee69ce21d83027c2975ef24f51af29416b9fa", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd6000526001601fa0");
+TEST_CASE("log0_nonEmptyMem_logMemSize1_logMemStart31______9054ce73cd8cb95662232503f78343a48e20eb4540c5dff81b597d7b5affce21", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd6000526001601fa000");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -1864,26 +1864,26 @@ TEST_CASE("log0_nonEmptyMem_logMemSize1_logMemStart31______777ce021b26b0e4f62b98
   // then
 }
 
-TEST_CASE("log0_logMemStartTooHigh______7cc27fdfcb258a0528c94496e60e3b10907a4d241b9d9e685e72597c472aa1b1", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd60005260017fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffa0");
+TEST_CASE("log0_logMemStartTooHigh______8b1468f75620dfd878eee65dc147a08ab70ffe9bade0d5bb8b3ffd775203fb58", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("7faabbffffffffffffffffffffffffffffffffffffffffffffffffffffffffccdd60005260017fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffa000");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -1906,26 +1906,26 @@ TEST_CASE("log0_logMemStartTooHigh______7cc27fdfcb258a0528c94496e60e3b10907a4d24
   // then
 }
 
-TEST_CASE("log0_emptyMem______dddfbdc5d0776cd04613d3515648fa20eb5dc10a86b4e393b1ef818a28c82095", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("60006000a0");
+TEST_CASE("log0_emptyMem______3d9600b4cafc8481a7329cfb5ae7d2783dd534adca30bb07ad9c4a282e6c2112", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("60006000a000");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)

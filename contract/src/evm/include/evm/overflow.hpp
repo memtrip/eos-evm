@@ -20,6 +20,11 @@ class Overflow {
       return std::make_pair(value - value2, false);
     }
 
+    static std::pair<uint256_t, bool> sub(uint256_t value, uint256_t value2) {
+      if (value2 > value) return std::make_pair(0, true);
+      return std::make_pair(value - value2, false);
+    }
+
     static overflow_t uint256Cast(const uint256_t& value) {
       if (value > std::numeric_limits<uint64_t>::max()) return std::make_pair(0, true);
       return std::make_pair(static_cast<uint64_t>(value), false);

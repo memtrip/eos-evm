@@ -202,8 +202,10 @@ TEST_CASE("Multiply and store", "[arithmetic]") {
 
   // then
   CHECK("000000000000000000000000000000000000000000000000734349397b853383" == 
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, external))
-  );
+    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, [external, context] () {
+      return external->storageAt(uint256_t(0x00), context->codeAddress);
+    })
+  ));
 }
 
 TEST_CASE("Subtract two numbers", "[arithmetic]") {
@@ -301,8 +303,10 @@ TEST_CASE("Subtract and store", "[arithmetic]") {
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000012364ad0302" == 
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, external))
-  );
+    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, [external, context] () {
+      return external->storageAt(uint256_t(0x00), context->codeAddress);
+    })
+  ));
 }
 
 TEST_CASE("Divide two numbers", "[arithmetic]") {
@@ -448,8 +452,10 @@ TEST_CASE("Divide and store", "[arithmetic]") {
 
   // then
   CHECK("000000000000000000000000000000000000000000000000000000000002e0ac" == 
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, external))
-  );
+    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, [external, context] () {
+      return external->storageAt(uint256_t(0x00), context->codeAddress);
+    })
+  ));
 }
 
 TEST_CASE("Divide by zero and store", "[arithmetic]") {
@@ -499,8 +505,10 @@ TEST_CASE("Divide by zero and store", "[arithmetic]") {
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, external))
-  );
+    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, [external, context] () {
+      return external->storageAt(uint256_t(0x00), context->codeAddress);
+    })
+  ));
 }
 
 TEST_CASE("Mod and store", "[arithmetic]") {
@@ -543,12 +551,16 @@ TEST_CASE("Mod and store", "[arithmetic]") {
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000076b4b" == 
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, external))
-  );
+    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, [external, context] () {
+      return external->storageAt(uint256_t(0x00), context->codeAddress);
+    })
+  ));
 
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x01), context->codeAddress, external))
-  );
+    Utils::uint256_2str(pendingState->getState(uint256_t(0x01), context->codeAddress, [external, context] () {
+      return external->storageAt(uint256_t(0x01), context->codeAddress);
+    })
+  ));
 }
 
 
@@ -736,10 +748,14 @@ TEST_CASE("Byte", "[arithmetic]") {
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, external))
-  );
+    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, [external, context] () {
+      return external->storageAt(uint256_t(0x00), context->codeAddress);
+    })
+  ));
 
   CHECK("00000000000000000000000000000000000000000000000000000000000000ff" == 
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x01), context->codeAddress, external))
-  );
+    Utils::uint256_2str(pendingState->getState(uint256_t(0x01), context->codeAddress, [external, context] () {
+      return external->storageAt(uint256_t(0x01), context->codeAddress);
+    })
+  ));
 }

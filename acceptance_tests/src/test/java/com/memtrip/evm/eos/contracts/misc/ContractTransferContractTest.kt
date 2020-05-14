@@ -1,6 +1,7 @@
 package com.memtrip.evm.eos.contracts.misc
 
 import com.memtrip.eos.http.rpc.Api
+import com.memtrip.evm.assertConsoleString
 import com.memtrip.evm.eos.Config
 import com.memtrip.evm.eos.SetupTransactions
 import com.memtrip.evm.eos.evm.EvmSender
@@ -109,5 +110,6 @@ class ContractTransferContractTest {
 
         // then
         assertEquals(202, child2BalanceResponse.statusCode)
+        child2BalanceResponse.assertConsoleString("return[0000000000000000000000000000000000000000000000000429d069189e0000]")
     }
 }

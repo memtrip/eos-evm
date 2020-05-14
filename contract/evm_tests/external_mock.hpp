@@ -4,6 +4,7 @@
 #include <evm/address.hpp>
 #include <evm/big_int.hpp>
 #include <evm/hex.hpp>
+#include <evm/pending_state.hpp>
 
 typedef std::vector<std::pair<std::vector<uint256_t>, bytes_t>> log_spy_t;
 typedef std::vector<std::pair<uint256_t, std::string>> string_spy_t;
@@ -33,7 +34,7 @@ class ExternalMock: public External {
       storageResponder = word_responder_t();
     }
 
-    uint256_t senderAccountBalance() {
+    uint256_t senderAccountBalance(std::shared_ptr<PendingState> pendingState) {
       return uint256_t(0);
     }
 
@@ -41,7 +42,7 @@ class ExternalMock: public External {
       logSpy.push_back(std::make_pair(topics, data));
     }
 
-    bytes_t code(const uint256_t& address) {
+    bytes_t code(const uint256_t& address, std::shared_ptr<PendingState> pendingState) {
       codeSpy.push_back(address);
       for (int i = 0; i < codeResponder.size(); i++) {
         if (codeResponder[i].first == address)
@@ -50,7 +51,7 @@ class ExternalMock: public External {
       return bytes_t();
     }
 
-    uint256_t balance(const uint256_t& addressWord) {
+    uint256_t balance(const uint256_t& addressWord, std::shared_ptr<PendingState> pendingState) {
       for (int i = 0; i < balanceResponder.size(); i++) {
         if (balanceResponder[i].first == addressWord)
           return balanceResponder[i].second;
@@ -66,12 +67,21 @@ class ExternalMock: public External {
       return uint256_t(0);
     }
 
-    emplace_t selfdestruct(const uint256_t& contractAddressWord, const uint256_t& refundAddressWord) {
+    emplace_t selfdestruct(
+      const uint256_t& contractAddressWord, 
+      const uint256_t& refundAddressWord,
+      std::shared_ptr<PendingState> pendingState
+    ) {
       selfdestructSpy.push_back(refundAddressWord);
       return std::make_pair(EmplaceResult::EMPLACE_SUCCESS, 0);
     }
 
-    emplace_t transfer(const uint256_t& senderAddress, const uint256_t& toAddressWord, const uint256_t& value) { 
+    emplace_t transfer(
+      const uint256_t& senderAddress, 
+      const uint256_t& toAddressWord, 
+      const uint256_t& value,
+      std::shared_ptr<PendingState> pendingState
+    ) { 
       return std::make_pair(EmplaceResult::EMPLACE_SUCCESS, 0);
     };
 
@@ -80,7 +90,8 @@ class ExternalMock: public External {
     emplace_t emplaceCodeAddress(
       const uint256_t& ownerAddressWord,
       const uint256_t& codeAddressWord, 
-      const uint256_t& endowment
+      const uint256_t& endowment,
+      std::shared_ptr<PendingState> pendingState
     ) { 
       return std::make_pair(EmplaceResult::EMPLACE_SUCCESS, 0); 
     };
@@ -97,7 +108,8 @@ class ExternalMock: public External {
       const uint256_t& originWord,
       const uint256_t& codeAddressWord, 
       const uint256_t& endowment, 
-      const bytes_t& code
+      const bytes_t& code,
+      std::shared_ptr<PendingState> pendingState
     ) {
       emplaceSpy.push_back(std::make_pair(codeAddressWord, Hex::bytesToHex(code)));
       return std::make_pair(EmplaceResult::EMPLACE_SUCCESS, 0);

@@ -53,7 +53,7 @@ class StackDepthContractTest {
     }
 
     @Test
-    fun `Call the depthCharge method that will attempt 6 call frames`() {
+    fun `Call the depthCharge method that will attempt 6 nested call frames`() {
         // given
         val (newAccountName, newAccountPrivateKey, newEthAccount) = setupTransactions.seed(17000)
         val contract = StackDepthContract(newAccountName, newAccountPrivateKey, newEthAccount)

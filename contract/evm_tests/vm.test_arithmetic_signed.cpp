@@ -51,12 +51,16 @@ TEST_CASE("signed division", "[signed]") {
 
   // then
   CHECK("000000000000000000000000000000000000000000000000000000000002e0ac" == 
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, external))
-  );
+    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, [external, context] () {
+      return external->storageAt(uint256_t(0x00), context->codeAddress);
+    })
+  ));
 
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x01), context->codeAddress, external))
-  );
+    Utils::uint256_2str(pendingState->getState(uint256_t(0x01), context->codeAddress, [external, context] () {
+      return external->storageAt(uint256_t(0x01), context->codeAddress);
+    })
+  ));
 }
 
 TEST_CASE("signed mod", "[signed]") {
@@ -99,12 +103,16 @@ TEST_CASE("signed mod", "[signed]") {
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000076b4b" == 
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, external))
-  );
+    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, [external, context] () {
+      return external->storageAt(uint256_t(0x00), context->codeAddress);
+    })
+  ));
 
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x01), context->codeAddress, external))
-  );
+    Utils::uint256_2str(pendingState->getState(uint256_t(0x01), context->codeAddress, [external, context] () {
+      return external->storageAt(uint256_t(0x01), context->codeAddress);
+    })
+  ));
 }
 
 TEST_CASE("add mod, mul mod", "[signed]") {
@@ -147,20 +155,28 @@ TEST_CASE("add mod, mul mod", "[signed]") {
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, external))
-  );
+    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, [external, context] () {
+      return external->storageAt(uint256_t(0x00), context->codeAddress);
+    })
+  ));
 
   CHECK("000000000000000000000000000000000000000000000000000000000000000f" == 
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x01), context->codeAddress, external))
-  );
+    Utils::uint256_2str(pendingState->getState(uint256_t(0x01), context->codeAddress, [external, context] () {
+      return external->storageAt(uint256_t(0x01), context->codeAddress);
+    })
+  ));
 
   CHECK("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" == 
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x02), context->codeAddress, external))
-  );
+    Utils::uint256_2str(pendingState->getState(uint256_t(0x02), context->codeAddress, [external, context] () {
+      return external->storageAt(uint256_t(0x02), context->codeAddress);
+    })
+  ));
 
   CHECK("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" == 
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x03), context->codeAddress, external))
-  );
+    Utils::uint256_2str(pendingState->getState(uint256_t(0x03), context->codeAddress, [external, context] () {
+      return external->storageAt(uint256_t(0x03), context->codeAddress);
+    })
+  ));
 }
 
 TEST_CASE("exponent", "[signed]") {
@@ -203,16 +219,22 @@ TEST_CASE("exponent", "[signed]") {
 
   // then
   CHECK("90fd23767b60204c3d6fc8aec9e70a42a3f127140879c133a20129a597ed0c59" == 
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, external))
-  );
+    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, [external, context] () {
+      return external->storageAt(uint256_t(0x00), context->codeAddress);
+    })
+  ));
 
   CHECK("0000000000000000000000000000000000000000000000000000012365124623" == 
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x01), context->codeAddress, external))
-  );
+    Utils::uint256_2str(pendingState->getState(uint256_t(0x01), context->codeAddress, [external, context] () {
+      return external->storageAt(uint256_t(0x01), context->codeAddress);
+    })
+  ));
 
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x02), context->codeAddress, external))
-  );
+    Utils::uint256_2str(pendingState->getState(uint256_t(0x02), context->codeAddress, [external, context] () {
+      return external->storageAt(uint256_t(0x02), context->codeAddress);
+    })
+  ));
 }
 
 TEST_CASE("signextend", "[signed]") {
@@ -255,12 +277,16 @@ TEST_CASE("signextend", "[signed]") {
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000fff" == 
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, external))
-  );
+    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, [external, context] () {
+      return external->storageAt(uint256_t(0x00), context->codeAddress);
+    })
+  ));
 
   CHECK("00000000000000000000000000000000000000000000000000000000000000ff" == 
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x01), context->codeAddress, external))
-  );
+    Utils::uint256_2str(pendingState->getState(uint256_t(0x01), context->codeAddress, [external, context] () {
+      return external->storageAt(uint256_t(0x01), context->codeAddress);
+    })
+  ));
 }
 
 TEST_CASE("signed comparison", "[signed]") {
@@ -303,18 +329,26 @@ TEST_CASE("signed comparison", "[signed]") {
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, external))
-  );
+    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, [external, context] () {
+      return external->storageAt(uint256_t(0x00), context->codeAddress);
+    })
+  ));
 
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x01), context->codeAddress, external))
-  );
+    Utils::uint256_2str(pendingState->getState(uint256_t(0x01), context->codeAddress, [external, context] () {
+      return external->storageAt(uint256_t(0x01), context->codeAddress);
+    })
+  ));
 
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" == 
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x02), context->codeAddress, external))
-  );
+    Utils::uint256_2str(pendingState->getState(uint256_t(0x02), context->codeAddress, [external, context] () {
+      return external->storageAt(uint256_t(0x02), context->codeAddress);
+    })
+  ));
 
   CHECK("0000000000000000000000000000000000000000000000000000000000000000" == 
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x03), context->codeAddress, external))
-  );
+    Utils::uint256_2str(pendingState->getState(uint256_t(0x03), context->codeAddress, [external, context] () {
+      return external->storageAt(uint256_t(0x03), context->codeAddress);
+    })
+  ));
 }

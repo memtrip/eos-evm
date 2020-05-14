@@ -1,5 +1,5 @@
 //
-// 01.05.2020
+// 14.05.2020
 // Auto generated based off the Ethereum tests found here:
 // https://github.com/ethereum/tests/blob/develop/VMTests/
 //
@@ -16,26 +16,26 @@
 #include "external_mock.hpp"
 #include <evm/operation.hpp>
 
-TEST_CASE("slt1______ed3559af4c3e3d1f16995417fd3ce8b2d5d289b2debd9d34e7d103af59a64f4a", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("6002600003600012600055");
+TEST_CASE("slt1______1d6cfd4be348f47f26815c96a9805d11e21f2e3c9cbce069941b1ebd1ca7cd8d", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("600260000360001260005500");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -58,26 +58,26 @@ TEST_CASE("slt1______ed3559af4c3e3d1f16995417fd3ce8b2d5d289b2debd9d34e7d103af59a
   // then
 }
 
-TEST_CASE("or2______2c00a57a80d580130b60d9deda2890eccef876d65ea95b4c43bbb1a4dd0cecd5", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("6001600317600055");
+TEST_CASE("or2______8de97b69135dab0235ffad5d98bdbecb9e87d3621a1eaec632ae170419950544", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("600160031760005500");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -99,30 +99,37 @@ TEST_CASE("or2______2c00a57a80d580130b60d9deda2890eccef876d65ea95b4c43bbb1a4dd0c
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000003" ==
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, external))
+    Utils::uint256_2str(
+      pendingState->getState(
+        uint256_t(0x00),
+        context->codeAddress, [external, context] () {
+          return external->storageAt(uint256_t(0x00), context->codeAddress);
+        }
+      )
+    )
   );
 }
 
-TEST_CASE("sgt3______46e9db07c8df7ae98ca90780aeaf1b5a64a02cda8b54068c021dd897d8c56ab5", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff600013600055");
+TEST_CASE("sgt3______9d66ea591c184ba2295ed3f5dd0e9e0e171b312b9bf254dbf8965b540842aaf4", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff60001360005500");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -144,30 +151,37 @@ TEST_CASE("sgt3______46e9db07c8df7ae98ca90780aeaf1b5a64a02cda8b54068c021dd897d8c
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, external))
+    Utils::uint256_2str(
+      pendingState->getState(
+        uint256_t(0x00),
+        context->codeAddress, [external, context] () {
+          return external->storageAt(uint256_t(0x00), context->codeAddress);
+        }
+      )
+    )
   );
 }
 
-TEST_CASE("xor2______cbff7fbed032981ae1743bb8965aaf666a481933ad201acde2a755b4e24ee7d7", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("6001600318600055");
+TEST_CASE("xor2______a7e6da72f6240cfa040d4a40143e7c984a114174dfae0635a5671b035080ee17", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("600160031860005500");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -189,30 +203,37 @@ TEST_CASE("xor2______cbff7fbed032981ae1743bb8965aaf666a481933ad201acde2a755b4e24
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000002" ==
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, external))
+    Utils::uint256_2str(
+      pendingState->getState(
+        uint256_t(0x00),
+        context->codeAddress, [external, context] () {
+          return external->storageAt(uint256_t(0x00), context->codeAddress);
+        }
+      )
+    )
   );
 }
 
-TEST_CASE("byte4______2ada67be185a5b95ca62844c81c52e64b00614d02b64cbf9253baf2a7566e2ae", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("6780402010080402016004601f031a600055");
+TEST_CASE("byte4______8948584057cf91d218252142512f207da22edbf1d782a4c1c2cbc58a5470a228", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("6780402010080402016004601f031a60005500");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -234,30 +255,37 @@ TEST_CASE("byte4______2ada67be185a5b95ca62844c81c52e64b00614d02b64cbf9253baf2a75
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000010" ==
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, external))
+    Utils::uint256_2str(
+      pendingState->getState(
+        uint256_t(0x00),
+        context->codeAddress, [external, context] () {
+          return external->storageAt(uint256_t(0x00), context->codeAddress);
+        }
+      )
+    )
   );
 }
 
-TEST_CASE("not5______0748608e64f72417803be26086c812c31a590a1a95f26e9af0bedc573bddf7e7", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("600060000319600055");
+TEST_CASE("not5______53348b9719a8627a969e72f9ed933258544249355a0a3f97331dcb9d9db969f0", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("60006000031960005500");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -279,30 +307,37 @@ TEST_CASE("not5______0748608e64f72417803be26086c812c31a590a1a95f26e9af0bedc573bd
 
   // then
   CHECK("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" ==
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, external))
+    Utils::uint256_2str(
+      pendingState->getState(
+        uint256_t(0x00),
+        context->codeAddress, [external, context] () {
+          return external->storageAt(uint256_t(0x00), context->codeAddress);
+        }
+      )
+    )
   );
 }
 
-TEST_CASE("eq2______ae4e87a6dad61b0aa93103ef5906eaeeb3733413e00cb1d2524ee7119383b375", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff14600055");
+TEST_CASE("eq2______b2d716396d12dc97180b8152b4c0aaff27210722d37d08e7c06143efbfd2e513", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff1460005500");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -324,30 +359,37 @@ TEST_CASE("eq2______ae4e87a6dad61b0aa93103ef5906eaeeb3733413e00cb1d2524ee7119383
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, external))
+    Utils::uint256_2str(
+      pendingState->getState(
+        uint256_t(0x00),
+        context->codeAddress, [external, context] () {
+          return external->storageAt(uint256_t(0x00), context->codeAddress);
+        }
+      )
+    )
   );
 }
 
-TEST_CASE("byte8______d8241a95a99ed5c0c39a8d26a9c809b0f62d56817af1fba2368cd2400f2e17a1", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("678040201008040201601f601f031a600055");
+TEST_CASE("byte8______033b3fdc6a35ea782e565b9d1c74ff224fe6028523c5898e4a945c4ba7e12240", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("678040201008040201601f601f031a60005500");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -370,26 +412,26 @@ TEST_CASE("byte8______d8241a95a99ed5c0c39a8d26a9c809b0f62d56817af1fba2368cd2400f
   // then
 }
 
-TEST_CASE("and0______53831e569b6ec2b12b840d539617bd382a07e3700db75ba43d88b45c488abeea", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("6002600216600055");
+TEST_CASE("and0______c40353c65b979562862dd7d04b62d69fc7c38c645428e93f461f1cac359e3f5e", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("600260021660005500");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -411,30 +453,37 @@ TEST_CASE("and0______53831e569b6ec2b12b840d539617bd382a07e3700db75ba43d88b45c488
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000002" ==
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, external))
+    Utils::uint256_2str(
+      pendingState->getState(
+        uint256_t(0x00),
+        context->codeAddress, [external, context] () {
+          return external->storageAt(uint256_t(0x00), context->codeAddress);
+        }
+      )
+    )
   );
 }
 
-TEST_CASE("and1______d92d694f1df1088e777abdb7e6a441d9c71e4e634886410c4c65bff718a6f675", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("6001600216600055");
+TEST_CASE("and1______92e40f17e0a9077630bf0cef49de526ce0f270ff4a2da281d82c94eae0456946", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("600160021660005500");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -457,26 +506,26 @@ TEST_CASE("and1______d92d694f1df1088e777abdb7e6a441d9c71e4e634886410c4c65bff718a
   // then
 }
 
-TEST_CASE("byte9______29129062d256e9717217835274e382615224df82e97c8567aa472d206a2e4111", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("6780402010080402016020601f051a600055");
+TEST_CASE("byte9______101bcc95959a1c5793a35408c8da6a591e1fa1c83d257ecd74ad3ac67697baf8", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("6780402010080402016020601f051a60005500");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -499,26 +548,26 @@ TEST_CASE("byte9______29129062d256e9717217835274e382615224df82e97c8567aa472d206a
   // then
 }
 
-TEST_CASE("not4______aee8ec9908daccb907c7076b988b58caffaa8ba68141534a0767d041fbfcb729", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff60000319600055");
+TEST_CASE("not4______b7deb3aa18fcfa197c84e6cf00f10d0ad755f1e21664eb59c75d978a6ea51f04", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff6000031960005500");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -540,30 +589,37 @@ TEST_CASE("not4______aee8ec9908daccb907c7076b988b58caffaa8ba68141534a0767d041fbf
 
   // then
   CHECK("fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe" ==
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, external))
+    Utils::uint256_2str(
+      pendingState->getState(
+        uint256_t(0x00),
+        context->codeAddress, [external, context] () {
+          return external->storageAt(uint256_t(0x00), context->codeAddress);
+        }
+      )
+    )
   );
 }
 
-TEST_CASE("byte5______c2f04b6c8ad9f10c1c6302aaa1b1faa4bb90e700d062d6cf2ad06f7f8009d115", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("6780402010080402016005601f031a600055");
+TEST_CASE("byte5______f42859aee6a2fcaaab7b2aebd6a0ad6478ec246f3008fa8132709ea9812c20cb", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("6780402010080402016005601f031a60005500");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -585,30 +641,37 @@ TEST_CASE("byte5______c2f04b6c8ad9f10c1c6302aaa1b1faa4bb90e700d062d6cf2ad06f7f80
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000020" ==
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, external))
+    Utils::uint256_2str(
+      pendingState->getState(
+        uint256_t(0x00),
+        context->codeAddress, [external, context] () {
+          return external->storageAt(uint256_t(0x00), context->codeAddress);
+        }
+      )
+    )
   );
 }
 
-TEST_CASE("xor3______2e67a0c6dbf54b8eaa761a710775d8f516fb5d4afff97ec05f2bf2b0ca89e9a7", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("7f0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff18600055");
+TEST_CASE("xor3______f1215b33b0028138337bf498d00b043f603594d6286c8ad80259043d6c67e927", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("7f0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff1860005500");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -630,30 +693,37 @@ TEST_CASE("xor3______2e67a0c6dbf54b8eaa761a710775d8f516fb5d4afff97ec05f2bf2b0ca8
 
   // then
   CHECK("fedcba9876543210fedcba9876543210fedcba9876543210fedcba9876543210" ==
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, external))
+    Utils::uint256_2str(
+      pendingState->getState(
+        uint256_t(0x00),
+        context->codeAddress, [external, context] () {
+          return external->storageAt(uint256_t(0x00), context->codeAddress);
+        }
+      )
+    )
   );
 }
 
-TEST_CASE("sgt2______b9b0e8560b1da602351ee89d9385bd7bd33d19a5e4bc4ae1dbddc76ebf87a0ad", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("60007fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff13600055");
+TEST_CASE("sgt2______47bbf89217496d523294ed357657c4f83f9496b451b7d06df0ad5716a024d9b8", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("60007fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff1360005500");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -676,248 +746,26 @@ TEST_CASE("sgt2______b9b0e8560b1da602351ee89d9385bd7bd33d19a5e4bc4ae1dbddc76ebf8
   // then
 }
 
-TEST_CASE("or3______e86a2ab7088faca5e880fab11b2cf61601e941f621330eceec13296405f02e2b", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("7f0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff17600055");
+TEST_CASE("or3______92d0f6fe174fa59b8d0dcc4ff4bde628c1a662f4b6450bf1b12e23c17cf0823f", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("7f0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff1760005500");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
-    false,
-    std::make_shared<bytes_t>(code_bytes),
-    std::make_shared<bytes_t>(data_bytes)
-  );
-
-  std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
-
-  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>();
-  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
-  VM vm(stack, gasometer);
-  std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
-
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
-  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
-
-  // when
-  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
-
-  // then
-  CHECK("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" ==
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, external))
-  );
-}
-
-TEST_CASE("slt0______2fa0aa23a17f6f906146df0f152b09727ed44e560ba9ca9b357285f2ec0b38c3", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("6000600260000312600055");
-  bytes_t data_bytes = bytes_t();
-
-  std::shared_ptr<Context> context = std::make_shared<Context>(
-    uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
-    TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
-    TestUtils::fromHex(""), /* blockHash */
-    TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
-    uint256_t(0xf9313a), /* codeHash */
-    TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
-    gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
-    false,
-    std::make_shared<bytes_t>(code_bytes),
-    std::make_shared<bytes_t>(data_bytes)
-  );
-
-  std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
-
-  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>();
-  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
-  VM vm(stack, gasometer);
-  std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
-
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
-  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
-
-  // when
-  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
-
-  // then
-  CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, external))
-  );
-}
-
-TEST_CASE("not3______98f29555aca23bee7693ee4962daafe489d8c024dfc8db3da4252ee438d15d64", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("600260000319600055");
-  bytes_t data_bytes = bytes_t();
-
-  std::shared_ptr<Context> context = std::make_shared<Context>(
-    uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
-    TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
-    TestUtils::fromHex(""), /* blockHash */
-    TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
-    uint256_t(0xf9313a), /* codeHash */
-    TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
-    gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
-    false,
-    std::make_shared<bytes_t>(code_bytes),
-    std::make_shared<bytes_t>(data_bytes)
-  );
-
-  std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
-
-  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>();
-  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
-  VM vm(stack, gasometer);
-  std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
-
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
-  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
-
-  // when
-  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
-
-  // then
-  CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, external))
-  );
-}
-
-TEST_CASE("lt0______3f82794b3ab7a1381f800f045fe2a52a2c742a5bf5a0c262cfb6be574d305879", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("6000600260000310600055");
-  bytes_t data_bytes = bytes_t();
-
-  std::shared_ptr<Context> context = std::make_shared<Context>(
-    uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
-    TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
-    TestUtils::fromHex(""), /* blockHash */
-    TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
-    uint256_t(0xf9313a), /* codeHash */
-    TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
-    gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("8ac7230489e80000"), /* value */
-    false,
-    std::make_shared<bytes_t>(code_bytes),
-    std::make_shared<bytes_t>(data_bytes)
-  );
-
-  std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
-
-  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>();
-  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
-  VM vm(stack, gasometer);
-  std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
-
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
-  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
-
-  // when
-  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
-
-  // then
-}
-
-TEST_CASE("gt2______4b0191dbc7944ec9b47ede8560ad03500238397635dc897707fd45937b0d762b", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("60007fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff11600055");
-  bytes_t data_bytes = bytes_t();
-
-  std::shared_ptr<Context> context = std::make_shared<Context>(
-    uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
-    TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
-    TestUtils::fromHex(""), /* blockHash */
-    TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
-    uint256_t(0xf9313a), /* codeHash */
-    TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
-    gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
-    false,
-    std::make_shared<bytes_t>(code_bytes),
-    std::make_shared<bytes_t>(data_bytes)
-  );
-
-  std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
-
-  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>();
-  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
-  VM vm(stack, gasometer);
-  std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
-
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
-  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
-
-  // when
-  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
-
-  // then
-  CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, external))
-  );
-}
-
-TEST_CASE("or4______0529771970ae1453127c9560e68b8274a9662ddf5684bdc7c6a5bd925fedbd27", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7feeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee17600055");
-  bytes_t data_bytes = bytes_t();
-
-  std::shared_ptr<Context> context = std::make_shared<Context>(
-    uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
-    TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
-    TestUtils::fromHex(""), /* blockHash */
-    TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
-    uint256_t(0xf9313a), /* codeHash */
-    TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
-    gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -939,30 +787,287 @@ TEST_CASE("or4______0529771970ae1453127c9560e68b8274a9662ddf5684bdc7c6a5bd925fed
 
   // then
   CHECK("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" ==
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, external))
+    Utils::uint256_2str(
+      pendingState->getState(
+        uint256_t(0x00),
+        context->codeAddress, [external, context] () {
+          return external->storageAt(uint256_t(0x00), context->codeAddress);
+        }
+      )
+    )
   );
 }
 
-TEST_CASE("xor4______c3087ab19e23a572ebb996067c96ae4e3a83fbfe7a3253e347130c9767afb7be", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7feeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee18600055");
+TEST_CASE("slt0______3ae833c8da69980fb07ef8ed5841ce0f435ea2367ef01e33119901c1e0859507", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("600060026000031260005500");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
+    false,
+    std::make_shared<bytes_t>(code_bytes),
+    std::make_shared<bytes_t>(data_bytes)
+  );
+
+  std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
+
+  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>();
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(stack, gasometer);
+  std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
+
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
+
+  // when
+  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
+
+  // then
+  CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
+    Utils::uint256_2str(
+      pendingState->getState(
+        uint256_t(0x00),
+        context->codeAddress, [external, context] () {
+          return external->storageAt(uint256_t(0x00), context->codeAddress);
+        }
+      )
+    )
+  );
+}
+
+TEST_CASE("not3______9d15a0f5f891e35d991e57396be8d96d359ac379dd770bce0a52586a51c036e6", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("60026000031960005500");
+  bytes_t data_bytes = bytes_t();
+
+  std::shared_ptr<Context> context = std::make_shared<Context>(
+    uint256_t(1), /* chainId */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
+    TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
+    TestUtils::fromHex("020000"), /* difficulty */
+    TestUtils::fromHex(""), /* blockHash */
+    TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
+    uint256_t(0xf9313a), /* codeHash */
+    TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
+    gas_t(0x0186a0), /* gas */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
+    false,
+    std::make_shared<bytes_t>(code_bytes),
+    std::make_shared<bytes_t>(data_bytes)
+  );
+
+  std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
+
+  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>();
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(stack, gasometer);
+  std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
+
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
+
+  // when
+  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
+
+  // then
+  CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
+    Utils::uint256_2str(
+      pendingState->getState(
+        uint256_t(0x00),
+        context->codeAddress, [external, context] () {
+          return external->storageAt(uint256_t(0x00), context->codeAddress);
+        }
+      )
+    )
+  );
+}
+
+TEST_CASE("lt0______7215a9bba3f52209ee4d88c501e1d5be9dadf227c40db1c93d422cd55916921e", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("600060026000031060005500");
+  bytes_t data_bytes = bytes_t();
+
+  std::shared_ptr<Context> context = std::make_shared<Context>(
+    uint256_t(1), /* chainId */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
+    TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
+    TestUtils::fromHex("020000"), /* difficulty */
+    TestUtils::fromHex(""), /* blockHash */
+    TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
+    uint256_t(0xf9313a), /* codeHash */
+    TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
+    gas_t(0x0186a0), /* gas */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
+    false,
+    std::make_shared<bytes_t>(code_bytes),
+    std::make_shared<bytes_t>(data_bytes)
+  );
+
+  std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
+
+  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>();
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(stack, gasometer);
+  std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
+
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
+
+  // when
+  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
+
+  // then
+}
+
+TEST_CASE("gt2______dd0aaffde364cf9a80df42f854be651e9da858052e279559a22e7a429165eded", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("60007fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff1160005500");
+  bytes_t data_bytes = bytes_t();
+
+  std::shared_ptr<Context> context = std::make_shared<Context>(
+    uint256_t(1), /* chainId */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
+    TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
+    TestUtils::fromHex("020000"), /* difficulty */
+    TestUtils::fromHex(""), /* blockHash */
+    TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
+    uint256_t(0xf9313a), /* codeHash */
+    TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
+    gas_t(0x0186a0), /* gas */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
+    false,
+    std::make_shared<bytes_t>(code_bytes),
+    std::make_shared<bytes_t>(data_bytes)
+  );
+
+  std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
+
+  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>();
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(stack, gasometer);
+  std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
+
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
+
+  // when
+  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
+
+  // then
+  CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
+    Utils::uint256_2str(
+      pendingState->getState(
+        uint256_t(0x00),
+        context->codeAddress, [external, context] () {
+          return external->storageAt(uint256_t(0x00), context->codeAddress);
+        }
+      )
+    )
+  );
+}
+
+TEST_CASE("or4______2d1d9d971e4387390bd025e68ccc6cf5a417999ba23fc43bc1938b8aaa88643d", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7feeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee1760005500");
+  bytes_t data_bytes = bytes_t();
+
+  std::shared_ptr<Context> context = std::make_shared<Context>(
+    uint256_t(1), /* chainId */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
+    TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
+    TestUtils::fromHex("020000"), /* difficulty */
+    TestUtils::fromHex(""), /* blockHash */
+    TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
+    uint256_t(0xf9313a), /* codeHash */
+    TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
+    gas_t(0x0186a0), /* gas */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
+    false,
+    std::make_shared<bytes_t>(code_bytes),
+    std::make_shared<bytes_t>(data_bytes)
+  );
+
+  std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
+
+  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>();
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(stack, gasometer);
+  std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
+
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
+
+  // when
+  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
+
+  // then
+  CHECK("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" ==
+    Utils::uint256_2str(
+      pendingState->getState(
+        uint256_t(0x00),
+        context->codeAddress, [external, context] () {
+          return external->storageAt(uint256_t(0x00), context->codeAddress);
+        }
+      )
+    )
+  );
+}
+
+TEST_CASE("xor4______21b5fc2a9794b3dee29f63945511c0709a86759cb04ea70be1e06dafcec18688", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7feeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee1860005500");
+  bytes_t data_bytes = bytes_t();
+
+  std::shared_ptr<Context> context = std::make_shared<Context>(
+    uint256_t(1), /* chainId */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
+    TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
+    TestUtils::fromHex("020000"), /* difficulty */
+    TestUtils::fromHex(""), /* blockHash */
+    TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
+    uint256_t(0xf9313a), /* codeHash */
+    TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
+    gas_t(0x0186a0), /* gas */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -984,30 +1089,37 @@ TEST_CASE("xor4______c3087ab19e23a572ebb996067c96ae4e3a83fbfe7a3253e347130c9767a
 
   // then
   CHECK("1111111111111111111111111111111111111111111111111111111111111111" ==
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, external))
+    Utils::uint256_2str(
+      pendingState->getState(
+        uint256_t(0x00),
+        context->codeAddress, [external, context] () {
+          return external->storageAt(uint256_t(0x00), context->codeAddress);
+        }
+      )
+    )
   );
 }
 
-TEST_CASE("byte2______88e635fca6798de38b2831eaf5aa1d7ccc10a703006fc531c431a07a6f0ad9b7", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("6780402010080402016002601f031a600055");
+TEST_CASE("byte2______4dcb8fb06db558c6f87712d03c87a27770c760c4d366c12e2a189f5dfef5e48e", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("6780402010080402016002601f031a60005500");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -1029,30 +1141,37 @@ TEST_CASE("byte2______88e635fca6798de38b2831eaf5aa1d7ccc10a703006fc531c431a07a6f
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000004" ==
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, external))
+    Utils::uint256_2str(
+      pendingState->getState(
+        uint256_t(0x00),
+        context->codeAddress, [external, context] () {
+          return external->storageAt(uint256_t(0x00), context->codeAddress);
+        }
+      )
+    )
   );
 }
 
-TEST_CASE("byte3______f182ba9431c0afa8951345caab69362ef0d08befe7af3ba46c0150f194528281", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("6780402010080402016003601f031a600055");
+TEST_CASE("byte3______972a37042584365726f573826465dc1fc589376ab30b4c30e5a3470f093d8497", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("6780402010080402016003601f031a60005500");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -1074,30 +1193,37 @@ TEST_CASE("byte3______f182ba9431c0afa8951345caab69362ef0d08befe7af3ba46c0150f194
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000008" ==
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, external))
+    Utils::uint256_2str(
+      pendingState->getState(
+        uint256_t(0x00),
+        context->codeAddress, [external, context] () {
+          return external->storageAt(uint256_t(0x00), context->codeAddress);
+        }
+      )
+    )
   );
 }
 
-TEST_CASE("xor5______208791127a38c44787ac9739f8e2d42eafcc94924b718326bb2f41c0641fe68e", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7feeeeeeeeeeeeeeeeeeeeeeeeeeeeefeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee18600055");
+TEST_CASE("xor5______b13cfb27b0dc5d75f153db558108c111150b4ab9c734d2bc3b817eba8b1877f7", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7feeeeeeeeeeeeeeeeeeeeeeeeeeeeefeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee1860005500");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -1119,30 +1245,37 @@ TEST_CASE("xor5______208791127a38c44787ac9739f8e2d42eafcc94924b718326bb2f41c0641
 
   // then
   CHECK("1111111111111111111111111111101111111111111111111111111111111111" ==
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, external))
+    Utils::uint256_2str(
+      pendingState->getState(
+        uint256_t(0x00),
+        context->codeAddress, [external, context] () {
+          return external->storageAt(uint256_t(0x00), context->codeAddress);
+        }
+      )
+    )
   );
 }
 
-TEST_CASE("sgt4______952942a91ed7040913a6bb27488e09877b1c0eff4b14fcc9e515f8ffde6a2016", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("6003600003600560000313600055");
+TEST_CASE("sgt4______b735292ef446cbdb965a0a49421380e1ad4195604f1ad2f7c6e750eead25d669", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("600360000360056000031360005500");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -1165,26 +1298,26 @@ TEST_CASE("sgt4______952942a91ed7040913a6bb27488e09877b1c0eff4b14fcc9e515f8ffde6
   // then
 }
 
-TEST_CASE("or5______4c9eb19946147a54071f850e4812bd9b75e200b344b9bd27cb1d8af2c4674933", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7feeeeeeeeeeeeeeeeeeeeeeeeeeeeefeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee17600055");
+TEST_CASE("or5______8f4e889a3136fdb23e65823f863a2147b0783839d6211850cded6bec1df40751", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7feeeeeeeeeeeeeeeeeeeeeeeeeeeeefeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee1760005500");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -1206,30 +1339,37 @@ TEST_CASE("or5______4c9eb19946147a54071f850e4812bd9b75e200b344b9bd27cb1d8af2c467
 
   // then
   CHECK("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" ==
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, external))
+    Utils::uint256_2str(
+      pendingState->getState(
+        uint256_t(0x00),
+        context->codeAddress, [external, context] () {
+          return external->storageAt(uint256_t(0x00), context->codeAddress);
+        }
+      )
+    )
   );
 }
 
-TEST_CASE("gt3______2c4b8f3a0bd648007898638b2bf6ab5f170741704abc751161d5f90f0494d666", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff600011600055");
+TEST_CASE("gt3______6c76635dc0b46eb74b3832016952f70d948da050cd1e4f469cfa39011bf3c4e2", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff60001160005500");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -1252,26 +1392,26 @@ TEST_CASE("gt3______2c4b8f3a0bd648007898638b2bf6ab5f170741704abc751161d5f90f0494
   // then
 }
 
-TEST_CASE("lt1______63a727c86d3f482ccf6a02dbded8c26b306938192e9a6008f4ad74c7a5efd8fd", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("6002600003600010600055");
+TEST_CASE("lt1______08c5a13db7eb864c1318d8c79b78b4ba2c494bd4d49085b5a96c1454283fff7a", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("600260000360001060005500");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("8ac7230489e80000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -1293,30 +1433,37 @@ TEST_CASE("lt1______63a727c86d3f482ccf6a02dbded8c26b306938192e9a6008f4ad74c7a5ef
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, external))
+    Utils::uint256_2str(
+      pendingState->getState(
+        uint256_t(0x00),
+        context->codeAddress, [external, context] () {
+          return external->storageAt(uint256_t(0x00), context->codeAddress);
+        }
+      )
+    )
   );
 }
 
-TEST_CASE("not2______324eba656aca54db2f9828012cc52c412e67ea3976e1e806698486b3f755b5eb", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff19600055");
+TEST_CASE("not2______7ab3647221dd6c8b42dc5b515020c5be134a45efd012bc74a28a5eda456ad0a1", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff1960005500");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -1339,26 +1486,26 @@ TEST_CASE("not2______324eba656aca54db2f9828012cc52c412e67ea3976e1e806698486b3f75
   // then
 }
 
-TEST_CASE("and4______e21e8e11b9513679c36fd3f2877d5ef73d302169e669d42569e9b28e07ee85f5", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7feeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee16600055");
+TEST_CASE("and4______2f95852d29395f28f29f09c3968858179b97b062caa4e388f2ffdc2c62add796", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7feeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee1660005500");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -1380,30 +1527,37 @@ TEST_CASE("and4______e21e8e11b9513679c36fd3f2877d5ef73d302169e669d42569e9b28e07e
 
   // then
   CHECK("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee" ==
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, external))
+    Utils::uint256_2str(
+      pendingState->getState(
+        uint256_t(0x00),
+        context->codeAddress, [external, context] () {
+          return external->storageAt(uint256_t(0x00), context->codeAddress);
+        }
+      )
+    )
   );
 }
 
-TEST_CASE("gt0______c17427d3c9acd0c27322e9bb49e967e2240aa803764c4ccf202d94ef4cb9939c", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("6000600260000311600055");
+TEST_CASE("gt0______19eaff4bc4babcc2c71930986a3ac95aa7dfd15408a096da93faab8e8d8acd1c", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("600060026000031160005500");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -1425,30 +1579,37 @@ TEST_CASE("gt0______c17427d3c9acd0c27322e9bb49e967e2240aa803764c4ccf202d94ef4cb9
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, external))
+    Utils::uint256_2str(
+      pendingState->getState(
+        uint256_t(0x00),
+        context->codeAddress, [external, context] () {
+          return external->storageAt(uint256_t(0x00), context->codeAddress);
+        }
+      )
+    )
   );
 }
 
-TEST_CASE("iszero0______c7730a4eae5d80429b5e6a822a0c8c4dc6bece946d3d6902a5fddb2fc120fa04", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff15600055");
+TEST_CASE("iszero0______cb2362cbec805fbe2158b543915ea93b9f3e7eecbdea7f39d3afdc71b3c575fe", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff1560005500");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -1471,26 +1632,26 @@ TEST_CASE("iszero0______c7730a4eae5d80429b5e6a822a0c8c4dc6bece946d3d6902a5fddb2f
   // then
 }
 
-TEST_CASE("lt2______2e2c7923db8f0fc63497824b409ae8c0eba04c0e352fe50ae0a5cc00469d9498", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("60007fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff10600055");
+TEST_CASE("lt2______a539298bf110f5763a46ebcd8955a53dfbfee4bec0e903a0bc2c4d0124296f35", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("60007fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff1060005500");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("8ac7230489e80000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -1513,26 +1674,26 @@ TEST_CASE("lt2______2e2c7923db8f0fc63497824b409ae8c0eba04c0e352fe50ae0a5cc00469d
   // then
 }
 
-TEST_CASE("not1______986682dadca33278653a19f30a97e9db367c671a612d67a4535d20510e2d625e", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("600219600055");
+TEST_CASE("not1______30d49c47d08666377d743e9c50ccd2a33a3a0b06b0c1f16a49f36f71f6f54fad", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("60021960005500");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -1554,30 +1715,37 @@ TEST_CASE("not1______986682dadca33278653a19f30a97e9db367c671a612d67a4535d20510e2
 
   // then
   CHECK("fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffd" ==
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, external))
+    Utils::uint256_2str(
+      pendingState->getState(
+        uint256_t(0x00),
+        context->codeAddress, [external, context] () {
+          return external->storageAt(uint256_t(0x00), context->codeAddress);
+        }
+      )
+    )
   );
 }
 
-TEST_CASE("byte0______ca8eddefff06f7e6cb91dd60e11a7dd107ced29e7c88ef06da7952e8cfd38d45", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("6780402010080402016000601f031a600055");
+TEST_CASE("byte0______6e4a3dbcba9210a7e37ba449a4d5f203b6bfae7876221bc9be4293dcd540242c", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("6780402010080402016000601f031a60005500");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -1599,30 +1767,37 @@ TEST_CASE("byte0______ca8eddefff06f7e6cb91dd60e11a7dd107ced29e7c88ef06da7952e8cf
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, external))
+    Utils::uint256_2str(
+      pendingState->getState(
+        uint256_t(0x00),
+        context->codeAddress, [external, context] () {
+          return external->storageAt(uint256_t(0x00), context->codeAddress);
+        }
+      )
+    )
   );
 }
 
-TEST_CASE("slt4______ed936fea46872027bbe365872786c5ab0e1356dfae7bc9c81150fdaa86cb443f", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("6003600003600560000312600055");
+TEST_CASE("slt4______1c6ad637c774fc865fc4b308c6637dfc06b3231c5cd82ac7f146b20623f47352", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("600360000360056000031260005500");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -1644,30 +1819,37 @@ TEST_CASE("slt4______ed936fea46872027bbe365872786c5ab0e1356dfae7bc9c81150fdaa86c
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, external))
+    Utils::uint256_2str(
+      pendingState->getState(
+        uint256_t(0x00),
+        context->codeAddress, [external, context] () {
+          return external->storageAt(uint256_t(0x00), context->codeAddress);
+        }
+      )
+    )
   );
 }
 
-TEST_CASE("byte1______bb1c4e33835be3cbddbd232873e7ee350b4f971f725bf3b1c56c7e4f456d690a", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("6780402010080402016001601f031a600055");
+TEST_CASE("byte1______421ed8cfbf542717eb2af3a11847a4942f8b07dd9ae7a1161bfd0c2fd440dfe6", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("6780402010080402016001601f031a60005500");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -1689,30 +1871,37 @@ TEST_CASE("byte1______bb1c4e33835be3cbddbd232873e7ee350b4f971f725bf3b1c56c7e4f45
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000002" ==
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, external))
+    Utils::uint256_2str(
+      pendingState->getState(
+        uint256_t(0x00),
+        context->codeAddress, [external, context] () {
+          return external->storageAt(uint256_t(0x00), context->codeAddress);
+        }
+      )
+    )
   );
 }
 
-TEST_CASE("not0______3235e2a1af7340deea07b964fc3532b19092832b2c9592d3c777a659e97a01ba", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("600019600055");
+TEST_CASE("not0______dd7ac25c42a66a8adb490cc8301bf791f93bbb99f7e6af8adcc5d21263079470", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("60001960005500");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -1734,30 +1923,37 @@ TEST_CASE("not0______3235e2a1af7340deea07b964fc3532b19092832b2c9592d3c777a659e97
 
   // then
   CHECK("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" ==
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, external))
+    Utils::uint256_2str(
+      pendingState->getState(
+        uint256_t(0x00),
+        context->codeAddress, [external, context] () {
+          return external->storageAt(uint256_t(0x00), context->codeAddress);
+        }
+      )
+    )
   );
 }
 
-TEST_CASE("lt3______ba2bc4205d1ca31e29315edfc5708f300f44cb02936b9da05a9097b26f97d71a", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff600010600055");
+TEST_CASE("lt3______bee2688e5cacde141c463f294d987f3a1ab75cb3b6bbd5137ddeb8bf6d9c9b33", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff60001060005500");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -1779,30 +1975,37 @@ TEST_CASE("lt3______ba2bc4205d1ca31e29315edfc5708f300f44cb02936b9da05a9097b26f97
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, external))
+    Utils::uint256_2str(
+      pendingState->getState(
+        uint256_t(0x00),
+        context->codeAddress, [external, context] () {
+          return external->storageAt(uint256_t(0x00), context->codeAddress);
+        }
+      )
+    )
   );
 }
 
-TEST_CASE("iszero1______1fc0ad71c14401598db2286ee499a76e21de97cbb63ee987afd5f603d34ef903", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("600015600055");
+TEST_CASE("iszero1______c4e0f9e2cd35e935633730400eab95c14a7d180f208ad4bd71f6a9a1695965e3", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("60001560005500");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -1824,30 +2027,37 @@ TEST_CASE("iszero1______1fc0ad71c14401598db2286ee499a76e21de97cbb63ee987afd5f603
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, external))
+    Utils::uint256_2str(
+      pendingState->getState(
+        uint256_t(0x00),
+        context->codeAddress, [external, context] () {
+          return external->storageAt(uint256_t(0x00), context->codeAddress);
+        }
+      )
+    )
   );
 }
 
-TEST_CASE("gt1______98d2099f8676c20a4806282a1fbe0968231046a99e137070724adbc117447290", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("6002600003600011600055");
+TEST_CASE("gt1______4b02207ff24a59f8691d2dce3a1b155f4b392565f0964b7a3d37f4ea3207aec6", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("600260000360001160005500");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -1870,26 +2080,26 @@ TEST_CASE("gt1______98d2099f8676c20a4806282a1fbe0968231046a99e137070724adbc11744
   // then
 }
 
-TEST_CASE("byteBN______43da3e8490c4e2724415c26642284184fbbcb7e128d59d7693386f3da3c2d08e", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("641234523456601f1a8001600155");
+TEST_CASE("byteBN______bcd1d24d868f03ceb7f413c6e7edb6f4f9b4ff22819405de2aee318e3931442b", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("641234523456601f1a800160015500");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -1911,30 +2121,37 @@ TEST_CASE("byteBN______43da3e8490c4e2724415c26642284184fbbcb7e128d59d7693386f3da
 
   // then
   CHECK("00000000000000000000000000000000000000000000000000000000000000ac" ==
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x01), context->codeAddress, external))
+    Utils::uint256_2str(
+      pendingState->getState(
+        uint256_t(0x01),
+        context->codeAddress, [external, context] () {
+          return external->storageAt(uint256_t(0x01), context->codeAddress);
+        }
+      )
+    )
   );
 }
 
-TEST_CASE("and5______1bbd8a8b90a8f84cb52e9514c9a02cd594e6e731065b54087cfa7afc9ccd2fc2", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7feeeeeeeeeeeeeeeeeeeeeeeeeeeeefeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee16600055");
+TEST_CASE("and5______4cb06bd9dace9c6556db7d8831b587aecebf5fc56342a0e02fe58b4b301e7f5c", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7feeeeeeeeeeeeeeeeeeeeeeeeeeeeefeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee1660005500");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -1956,30 +2173,37 @@ TEST_CASE("and5______1bbd8a8b90a8f84cb52e9514c9a02cd594e6e731065b54087cfa7afc9cc
 
   // then
   CHECK("eeeeeeeeeeeeeeeeeeeeeeeeeeeeefeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee" ==
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, external))
+    Utils::uint256_2str(
+      pendingState->getState(
+        uint256_t(0x00),
+        context->codeAddress, [external, context] () {
+          return external->storageAt(uint256_t(0x00), context->codeAddress);
+        }
+      )
+    )
   );
 }
 
-TEST_CASE("byte6______2f99689c10d739d33cec8c8062c608a1b01c61686ca12f01d2e9fe2b73d1ee0f", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("6780402010080402016006601f031a600055");
+TEST_CASE("byte6______7cb8fb35460672dd82118bba6feab41877437d20b6f838de9a80c6387c919dbb", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("6780402010080402016006601f031a60005500");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -2001,30 +2225,37 @@ TEST_CASE("byte6______2f99689c10d739d33cec8c8062c608a1b01c61686ca12f01d2e9fe2b73
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000040" ==
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, external))
+    Utils::uint256_2str(
+      pendingState->getState(
+        uint256_t(0x00),
+        context->codeAddress, [external, context] () {
+          return external->storageAt(uint256_t(0x00), context->codeAddress);
+        }
+      )
+    )
   );
 }
 
-TEST_CASE("xor0______e08c105ef68171d063c469dd9b2a23da11aac894df3ee20271da79681250fc9b", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("6002600218600055");
+TEST_CASE("xor0______787214bbdcaa5700693cba6ac538c4ee61d47ac2be4dbe8bd3f1a92db6b14812", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("600260021860005500");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -2047,26 +2278,26 @@ TEST_CASE("xor0______e08c105ef68171d063c469dd9b2a23da11aac894df3ee20271da7968125
   // then
 }
 
-TEST_CASE("sgt1______671a4ef36d8c59426ca6b9eeb8cc46cfb41716888e2f2df3852eb03e9c14dbb1", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("6002600003600013600055");
+TEST_CASE("sgt1______815df3b7b40f38bd552eb8d276a42ab8d95bdb4aeff80ee46f36bb41416f218e", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("600260000360001360005500");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -2088,30 +2319,37 @@ TEST_CASE("sgt1______671a4ef36d8c59426ca6b9eeb8cc46cfb41716888e2f2df3852eb03e9c1
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, external))
+    Utils::uint256_2str(
+      pendingState->getState(
+        uint256_t(0x00),
+        context->codeAddress, [external, context] () {
+          return external->storageAt(uint256_t(0x00), context->codeAddress);
+        }
+      )
+    )
   );
 }
 
-TEST_CASE("or0______dcc4012a46120cba05d501bbffe31a249fd5445b29b3f7e8e2133e9098e735e4", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("6002600217600055");
+TEST_CASE("or0______a86c21e32601782988ab644fc718ad330defe02bcba039d08be2f1c57311c996", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("600260021760005500");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -2133,30 +2371,37 @@ TEST_CASE("or0______dcc4012a46120cba05d501bbffe31a249fd5445b29b3f7e8e2133e9098e7
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000002" ==
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, external))
+    Utils::uint256_2str(
+      pendingState->getState(
+        uint256_t(0x00),
+        context->codeAddress, [external, context] () {
+          return external->storageAt(uint256_t(0x00), context->codeAddress);
+        }
+      )
+    )
   );
 }
 
-TEST_CASE("slt3______32f573a07264be5090d1b383aac1d8803ab95f9420e0d8a849de627095f954ee", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff600012600055");
+TEST_CASE("slt3______e53415c8ebbaf76706e5f74fede5948ea03b6c87aa5cc79ad9bb195f919d14bc", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff60001260005500");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -2179,197 +2424,26 @@ TEST_CASE("slt3______32f573a07264be5090d1b383aac1d8803ab95f9420e0d8a849de627095f
   // then
 }
 
-TEST_CASE("and2______b8c8c36bba987b4b5e5172ea00931076b8169ff8a8ff0d48244637c3dbe1eba1", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("6001600316600055");
+TEST_CASE("and2______d2ed664b2c711297008dca673e71d3505b287410f65fbfeec95dd3351964eaec", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("600160031660005500");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
-    false,
-    std::make_shared<bytes_t>(code_bytes),
-    std::make_shared<bytes_t>(data_bytes)
-  );
-
-  std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
-
-  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>();
-  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
-  VM vm(stack, gasometer);
-  std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
-
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
-  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
-
-  // when
-  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
-
-  // then
-  CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, external))
-  );
-}
-
-TEST_CASE("byte11______57be2a02bebea1ac84a6d1bbb3f15f0ab9d9339fa706131cd052c9275a0ec871", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("67804020100804020160001a600055");
-  bytes_t data_bytes = bytes_t();
-
-  std::shared_ptr<Context> context = std::make_shared<Context>(
-    uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
-    TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
-    TestUtils::fromHex(""), /* blockHash */
-    TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
-    uint256_t(0xf9313a), /* codeHash */
-    TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
-    gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
-    false,
-    std::make_shared<bytes_t>(code_bytes),
-    std::make_shared<bytes_t>(data_bytes)
-  );
-
-  std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
-
-  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>();
-  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
-  VM vm(stack, gasometer);
-  std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
-
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
-  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
-
-  // when
-  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
-
-  // then
-}
-
-TEST_CASE("iszeo2______4e5ea4236cff2cb1176ad44dba65cb26dec72438acaa1e35600292b1bee87a71", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("600260000315600055");
-  bytes_t data_bytes = bytes_t();
-
-  std::shared_ptr<Context> context = std::make_shared<Context>(
-    uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
-    TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
-    TestUtils::fromHex(""), /* blockHash */
-    TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
-    uint256_t(0xf9313a), /* codeHash */
-    TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
-    gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
-    false,
-    std::make_shared<bytes_t>(code_bytes),
-    std::make_shared<bytes_t>(data_bytes)
-  );
-
-  std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
-
-  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>();
-  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
-  VM vm(stack, gasometer);
-  std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
-
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
-  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
-
-  // when
-  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
-
-  // then
-}
-
-TEST_CASE("eq0______e9cd05b4ad632b287637f3682cb5bd3d39957b0a859fcaf2740c3a84bff603f2", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("6003600003600560000314600055");
-  bytes_t data_bytes = bytes_t();
-
-  std::shared_ptr<Context> context = std::make_shared<Context>(
-    uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
-    TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
-    TestUtils::fromHex(""), /* blockHash */
-    TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
-    uint256_t(0xf9313a), /* codeHash */
-    TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
-    gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
-    false,
-    std::make_shared<bytes_t>(code_bytes),
-    std::make_shared<bytes_t>(data_bytes)
-  );
-
-  std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
-
-  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>();
-  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
-  VM vm(stack, gasometer);
-  std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
-
-  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
-  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
-  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
-
-  // when
-  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
-
-  // then
-}
-
-TEST_CASE("eq1______71d72425d2c1777c6991d09b38aed473c3dc3b9b370b8397c0d48e68a29b3aac", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("6000600014600055");
-  bytes_t data_bytes = bytes_t();
-
-  std::shared_ptr<Context> context = std::make_shared<Context>(
-    uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
-    TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
-    TestUtils::fromHex(""), /* blockHash */
-    TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
-    uint256_t(0xf9313a), /* codeHash */
-    TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
-    gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -2391,30 +2465,37 @@ TEST_CASE("eq1______71d72425d2c1777c6991d09b38aed473c3dc3b9b370b8397c0d48e68a29b
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, external))
+    Utils::uint256_2str(
+      pendingState->getState(
+        uint256_t(0x00),
+        context->codeAddress, [external, context] () {
+          return external->storageAt(uint256_t(0x00), context->codeAddress);
+        }
+      )
+    )
   );
 }
 
-TEST_CASE("byte10______866a8493a1363ce7e4595429147e8892ee6abb300fe15732d93c8d6b5c3c84f7", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("6780402010080402017fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff1a600055");
+TEST_CASE("byte11______4d8ccc3641222e01d4ce431ad66dd5dcd4976df2db62e2e5df732f7e9198bc1d", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("67804020100804020160001a60005500");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -2437,26 +2518,204 @@ TEST_CASE("byte10______866a8493a1363ce7e4595429147e8892ee6abb300fe15732d93c8d6b5
   // then
 }
 
-TEST_CASE("and3______d37be2fe655f6f4348e3ab48e7b0f832505ab4800835a50e516c726bc6f59cf1", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("7f0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff16600055");
+TEST_CASE("iszeo2______30cd9235c67be31f04b119305b0985b34787110d3483b38c3b507702bc6a5ebc", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("60026000031560005500");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
+    false,
+    std::make_shared<bytes_t>(code_bytes),
+    std::make_shared<bytes_t>(data_bytes)
+  );
+
+  std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
+
+  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>();
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(stack, gasometer);
+  std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
+
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
+
+  // when
+  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
+
+  // then
+}
+
+TEST_CASE("eq0______778aa850729f70c994647bdb1487432b38b2d1ade6138036bed1509c99ba5118", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("600360000360056000031460005500");
+  bytes_t data_bytes = bytes_t();
+
+  std::shared_ptr<Context> context = std::make_shared<Context>(
+    uint256_t(1), /* chainId */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
+    TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
+    TestUtils::fromHex("020000"), /* difficulty */
+    TestUtils::fromHex(""), /* blockHash */
+    TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
+    uint256_t(0xf9313a), /* codeHash */
+    TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
+    gas_t(0x0186a0), /* gas */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
+    false,
+    std::make_shared<bytes_t>(code_bytes),
+    std::make_shared<bytes_t>(data_bytes)
+  );
+
+  std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
+
+  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>();
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(stack, gasometer);
+  std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
+
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
+
+  // when
+  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
+
+  // then
+}
+
+TEST_CASE("eq1______0ee1cb1ebb52b04e7317d73122b0572f6baba0fa7976130af684ab07adaa19ad", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("600060001460005500");
+  bytes_t data_bytes = bytes_t();
+
+  std::shared_ptr<Context> context = std::make_shared<Context>(
+    uint256_t(1), /* chainId */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
+    TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
+    TestUtils::fromHex("020000"), /* difficulty */
+    TestUtils::fromHex(""), /* blockHash */
+    TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
+    uint256_t(0xf9313a), /* codeHash */
+    TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
+    gas_t(0x0186a0), /* gas */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
+    false,
+    std::make_shared<bytes_t>(code_bytes),
+    std::make_shared<bytes_t>(data_bytes)
+  );
+
+  std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
+
+  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>();
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(stack, gasometer);
+  std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
+
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
+
+  // when
+  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
+
+  // then
+  CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
+    Utils::uint256_2str(
+      pendingState->getState(
+        uint256_t(0x00),
+        context->codeAddress, [external, context] () {
+          return external->storageAt(uint256_t(0x00), context->codeAddress);
+        }
+      )
+    )
+  );
+}
+
+TEST_CASE("byte10______f32ca6574789bd3749a1dea65ea6c64bf10eb7b642e60f0532ee858f9e3593b1", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("6780402010080402017fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff1a60005500");
+  bytes_t data_bytes = bytes_t();
+
+  std::shared_ptr<Context> context = std::make_shared<Context>(
+    uint256_t(1), /* chainId */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
+    TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
+    TestUtils::fromHex("020000"), /* difficulty */
+    TestUtils::fromHex(""), /* blockHash */
+    TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
+    uint256_t(0xf9313a), /* codeHash */
+    TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
+    gas_t(0x0186a0), /* gas */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
+    false,
+    std::make_shared<bytes_t>(code_bytes),
+    std::make_shared<bytes_t>(data_bytes)
+  );
+
+  std::shared_ptr<ExternalMock> external = std::make_shared<ExternalMock>();
+
+  std::shared_ptr<StackMachine> stack = std::make_shared<StackMachine>();
+  std::shared_ptr<Gasometer> gasometer = std::make_shared<Gasometer>(context->gas);
+  VM vm(stack, gasometer);
+  std::shared_ptr<PendingState> pendingState = std::make_shared<PendingState>();
+
+  std::shared_ptr<Memory> mem = std::make_shared<Memory>();
+  std::shared_ptr<Operation> operation = std::make_shared<Operation>();
+  std::shared_ptr<GasCalculation> gasCalculation = std::make_shared<GasCalculation>();
+
+  // when
+  vm.execute(0, context, mem, operation, gasCalculation, pendingState, external);
+
+  // then
+}
+
+TEST_CASE("and3______eb1141f933d73bc23b99d298d8d051b85a3184777aa17ab0e5c469bbf6028365", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("7f0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff1660005500");
+  bytes_t data_bytes = bytes_t();
+
+  std::shared_ptr<Context> context = std::make_shared<Context>(
+    uint256_t(1), /* chainId */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
+    TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
+    TestUtils::fromHex("020000"), /* difficulty */
+    TestUtils::fromHex(""), /* blockHash */
+    TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
+    uint256_t(0xf9313a), /* codeHash */
+    TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
+    gas_t(0x0186a0), /* gas */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -2478,30 +2737,37 @@ TEST_CASE("and3______d37be2fe655f6f4348e3ab48e7b0f832505ab4800835a50e516c726bc6f
 
   // then
   CHECK("0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef" ==
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, external))
+    Utils::uint256_2str(
+      pendingState->getState(
+        uint256_t(0x00),
+        context->codeAddress, [external, context] () {
+          return external->storageAt(uint256_t(0x00), context->codeAddress);
+        }
+      )
+    )
   );
 }
 
-TEST_CASE("slt2______92e953b3e18b0939fd97afb7875129e10860293931b9cb840b50f1559489ac16", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("60007fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff12600055");
+TEST_CASE("slt2______1ba9695a1388e9a583ea16aa528c0f792f67998f6f948eaa69e5e73b63c9a1cb", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("60007fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff1260005500");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -2523,30 +2789,37 @@ TEST_CASE("slt2______92e953b3e18b0939fd97afb7875129e10860293931b9cb840b50f155948
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000001" ==
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, external))
+    Utils::uint256_2str(
+      pendingState->getState(
+        uint256_t(0x00),
+        context->codeAddress, [external, context] () {
+          return external->storageAt(uint256_t(0x00), context->codeAddress);
+        }
+      )
+    )
   );
 }
 
-TEST_CASE("or1______791c257002ce8dd940a5391775fd4eac1836f7eb55304f658a32485f79d4993f", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("6001600217600055");
+TEST_CASE("or1______6540302402b45c7e3680fdc1d63dd4b664c0ee07797e8018b17967bd783c9e8d", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("600160021760005500");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -2568,30 +2841,37 @@ TEST_CASE("or1______791c257002ce8dd940a5391775fd4eac1836f7eb55304f658a32485f79d4
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000003" ==
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, external))
+    Utils::uint256_2str(
+      pendingState->getState(
+        uint256_t(0x00),
+        context->codeAddress, [external, context] () {
+          return external->storageAt(uint256_t(0x00), context->codeAddress);
+        }
+      )
+    )
   );
 }
 
-TEST_CASE("sgt0______c5194500b062e2d1bf6dd6607185c661b6500d51c7146603f7f4ed31795b5d23", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("6000600260000313600055");
+TEST_CASE("sgt0______1142a1998c184cb7cd1cd0cba8ade456c3920e8ab41c0edfcc5031d191d39e54", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("600060026000031360005500");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -2614,26 +2894,26 @@ TEST_CASE("sgt0______c5194500b062e2d1bf6dd6607185c661b6500d51c7146603f7f4ed31795
   // then
 }
 
-TEST_CASE("xor1______417302c7876ef9a5209b50fcbd9ea4a70ca3d74748ed4f92f0c3164c0584c313", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("6001600218600055");
+TEST_CASE("xor1______788046c24f986a6794abc4424c79b69f3e4388a4a5abad78db207a718eb1d988", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("600160021860005500");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -2655,30 +2935,37 @@ TEST_CASE("xor1______417302c7876ef9a5209b50fcbd9ea4a70ca3d74748ed4f92f0c3164c058
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000003" ==
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, external))
+    Utils::uint256_2str(
+      pendingState->getState(
+        uint256_t(0x00),
+        context->codeAddress, [external, context] () {
+          return external->storageAt(uint256_t(0x00), context->codeAddress);
+        }
+      )
+    )
   );
 }
 
-TEST_CASE("byte7______c4d404f87e398a368fb2b0cb2165358ecdd92a97a2bbffcd0f8e833fc942976b", "[vm]") {
-  bytes_t code_bytes = Hex::hexToBytes("6780402010080402016007601f031a600055");
+TEST_CASE("byte7______357ab8dcab670e5791bca70f9ec7415e130602edeaa571645ae01fb43bf17ffb", "[vm]") {
+  bytes_t code_bytes = Hex::hexToBytes("6780402010080402016007601f031a60005500");
   bytes_t data_bytes = bytes_t();
 
   std::shared_ptr<Context> context = std::make_shared<Context>(
     uint256_t(1), /* chainId */
-    TestUtils::fromHex("00"), /* blockNumber */
-    TestUtils::fromHex("01"), /* timestamp */
-    TestUtils::fromHex("0f4240"), /* gasLimit */
+    TestUtils::fromHex("01"), /* blockNumber */
+    TestUtils::fromHex("03e8"), /* timestamp */
+    TestUtils::fromHex("7fffffffffffffff"), /* gasLimit */
     TestUtils::fromHex("2adc25665018aa1fe0e6bc666dac8fc2697ff9ba"), /* coinbase */
-    TestUtils::fromHex("0100"), /* difficulty */
+    TestUtils::fromHex("020000"), /* difficulty */
     TestUtils::fromHex(""), /* blockHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* codeAddress*/
     uint256_t(0xf9313a), /* codeHash */
     TestUtils::fromHex("0f572e5295c57f15886f9b263e2f6d2d6c7b5ec6"), /* address */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* sender */
-    TestUtils::fromHex("cd1722f3947def4cf144679da39c4c32bdc35681"), /* origin */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* sender */
+    TestUtils::fromHex("a94f5374fce5edbc8e2a8697c15331677e6ebf0b"), /* origin */
     gas_t(0x0186a0), /* gas */
-    TestUtils::fromHex("5af3107a4000"), /* gasPrice */
-    TestUtils::fromHex("0de0b6b3a7640000"), /* value */
+    TestUtils::fromHex("0c"), /* gasPrice */
+    TestUtils::fromHex("0b"), /* value */
     false,
     std::make_shared<bytes_t>(code_bytes),
     std::make_shared<bytes_t>(data_bytes)
@@ -2700,7 +2987,14 @@ TEST_CASE("byte7______c4d404f87e398a368fb2b0cb2165358ecdd92a97a2bbffcd0f8e833fc9
 
   // then
   CHECK("0000000000000000000000000000000000000000000000000000000000000080" ==
-    Utils::uint256_2str(pendingState->getState(uint256_t(0x00), context->codeAddress, external))
+    Utils::uint256_2str(
+      pendingState->getState(
+        uint256_t(0x00),
+        context->codeAddress, [external, context] () {
+          return external->storageAt(uint256_t(0x00), context->codeAddress);
+        }
+      )
+    )
   );
 }
 
