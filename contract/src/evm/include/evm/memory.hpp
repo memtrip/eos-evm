@@ -7,7 +7,6 @@
 #include <evm/big_int.hpp>
 #include <evm/hex.hpp>
 #include <evm/hash.hpp>
-#include <evm/utils.hpp>
 
 class Memory {
   private: 

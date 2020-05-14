@@ -14,7 +14,7 @@ import {
   defaultCommandMapping,
 } from "javascript-terminal";
 import { AnyAction } from "redux";
-import { commandMap, wrapOutput } from "../../../commands/CommandMap";
+import { commandMap } from "../../../commands/CommandMap";
 
 export interface AppRootState {
   emulatorState: any;
@@ -85,6 +85,13 @@ const appRootReducer = (
     case asSuccess(AppRootActionType.COMMAND_EOS_PRIVATE_KEY):
       return stopLoading(state);
 
+    case asStarted(AppRootActionType.COMMAND_ENV):
+      return startLoading(state);
+    case asError(AppRootActionType.COMMAND_ENV):
+      return logError(stopLoading(state), action);
+    case asSuccess(AppRootActionType.COMMAND_ENV):
+      return envSuccess(stopLoading(state), action);
+
     case asStarted(AppRootActionType.COMMAND_CREATE):
       return startLoading(state);
     case asError(AppRootActionType.COMMAND_CREATE):
@@ -92,11 +99,18 @@ const appRootReducer = (
     case asSuccess(AppRootActionType.COMMAND_CREATE):
       return transactionSuccess(stopLoading(state), action);
 
-    case asStarted(AppRootActionType.COMMAND_RAW):
+    case asStarted(AppRootActionType.COMMAND_RAW_UNSIGNED):
       return startLoading(state);
-    case asError(AppRootActionType.COMMAND_RAW):
+    case asError(AppRootActionType.COMMAND_RAW_UNSIGNED):
       return logError(stopLoading(state), action);
-    case asSuccess(AppRootActionType.COMMAND_RAW):
+    case asSuccess(AppRootActionType.COMMAND_RAW_UNSIGNED):
+      return transactionSuccess(stopLoading(state), action);
+
+    case asStarted(AppRootActionType.COMMAND_RAW_SIGNED):
+      return startLoading(state);
+    case asError(AppRootActionType.COMMAND_RAW_SIGNED):
+      return logError(stopLoading(state), action);
+    case asSuccess(AppRootActionType.COMMAND_RAW_SIGNED):
       return transactionSuccess(stopLoading(state), action);
 
     case asStarted(AppRootActionType.COMMAND_ACCOUNT):
@@ -104,21 +118,21 @@ const appRootReducer = (
     case asError(AppRootActionType.COMMAND_ACCOUNT):
       return logError(stopLoading(state), action);
     case asSuccess(AppRootActionType.COMMAND_ACCOUNT):
-      return transactionSuccess(stopLoading(state), action);
+      return jsonSuccess(stopLoading(state), action);
 
     case asStarted(AppRootActionType.COMMAND_CODE):
       return startLoading(state);
     case asError(AppRootActionType.COMMAND_CODE):
       return logError(stopLoading(state), action);
     case asSuccess(AppRootActionType.COMMAND_CODE):
-      return transactionSuccess(stopLoading(state), action);
+      return jsonSuccess(stopLoading(state), action);
 
     case asStarted(AppRootActionType.COMMAND_STATE):
       return startLoading(state);
     case asError(AppRootActionType.COMMAND_STATE):
       return logError(stopLoading(state), action);
     case asSuccess(AppRootActionType.COMMAND_STATE):
-      return transactionSuccess(stopLoading(state), action);
+      return jsonSuccess(stopLoading(state), action);
 
     default:
       return state;
@@ -137,8 +151,37 @@ const logError = (state: AppRootState, action: AnyAction) => {
     defaultOutputs,
     OutputFactory.makeErrorOutput({
       source: "eos-evm",
-      type: wrapOutput(action.result.error.body),
+      type: action.result.error.body,
     })
+  );
+  const emulatorState = defaultState.setOutputs(newOutputs);
+  return { ...state, emulatorState: emulatorState };
+};
+
+const envSuccess = (state: AppRootState, action: AnyAction) => {
+  const defaultState = EmulatorState.create({
+    commandMapping: CommandMapping.create({
+      ...defaultCommandMapping,
+      ...commandMap,
+    }),
+  });
+  const defaultOutputs = state.emulatorState.getOutputs();
+  const newOutputs = Outputs.addRecord(
+    defaultOutputs,
+    OutputFactory.makeTextOutput(
+      `EOS_API=` +
+        action.result.entity.api +
+        `
+EOS_ACCOUNT_NAME=` +
+        action.result.entity.eosAccountName +
+        `
+EOS_PRIVATE_KEY=` +
+        action.result.entity.eosPrivateKey +
+        `
+EVM_CONTRACT_NAME=` +
+        action.result.entity.evmContractName +
+        ``
+    )
   );
   const emulatorState = defaultState.setOutputs(newOutputs);
   return { ...state, emulatorState: emulatorState };
@@ -154,11 +197,43 @@ const transactionSuccess = (state: AppRootState, action: AnyAction) => {
   const defaultOutputs = state.emulatorState.getOutputs();
   const newOutputs = Outputs.addRecord(
     defaultOutputs,
-    OutputFactory.makeTextOutput("Transaction committed")
+    OutputFactory.makeTextOutput("(Transaction committed)")
   );
   const emulatorState = defaultState.setOutputs(newOutputs);
   return { ...state, emulatorState: emulatorState };
 };
+
+const jsonSuccess = (state: AppRootState, action: AnyAction) => {
+  const rows = action.result.entity.rows.map((row: any) => {
+    if ("code" in row) {
+      console.dir(row.code);
+      row.code = toHexString(Uint8Array.from(row.code));
+    }
+    return row;
+  });
+
+  const defaultState = EmulatorState.create({
+    commandMapping: CommandMapping.create({
+      ...defaultCommandMapping,
+      ...commandMap,
+    }),
+  });
+  const defaultOutputs = state.emulatorState.getOutputs();
+  const newOutputs = Outputs.addRecord(
+    defaultOutputs,
+    OutputFactory.makeTextOutput(JSON.stringify(rows, undefined, 2))
+  );
+  const emulatorState = defaultState.setOutputs(newOutputs);
+  return { ...state, emulatorState: emulatorState };
+};
+
+const emitCode = (state: AppRootState, action: AnyAction) => {};
+
+const toHexString = (bytes: any) =>
+  bytes.reduce(
+    (str: string, byte: any) => str + byte.toString(16).padStart(2, "0"),
+    ""
+  );
 
 const inputChanged = (state: AppRootState, action: AnyAction) => {
   return { ...state, input: action.input };

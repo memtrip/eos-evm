@@ -42,7 +42,6 @@ class Call {
         }
       }
 
-      printf("nextStackDepth{%d}[", nextStackDepth);
       exec_result_t vm_result = vm.execute(
         nextStackDepth,
         context,
@@ -52,7 +51,6 @@ class Call {
         pendingState, 
         external
       );
-      printf("]");
 
       switch (vm_result.first) {
         case ExecResult::DONE_VOID:

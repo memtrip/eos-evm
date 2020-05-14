@@ -1,7 +1,6 @@
 #include <evm/types.h>
 #include <evm/big_int.hpp>
 #include <evm/hex.hpp>
-#include <evm/utils.hpp>
 
 class DecompressKey {
   public:

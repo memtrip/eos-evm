@@ -10,7 +10,6 @@
 #include <evm/context.hpp>
 #include <evm/pending_state.hpp>
 #include <evm/external.h>
-#include <evm/utils.hpp>
 
 class Operation { 
   typedef instruction_result_t (Operation::*operation_t)(
@@ -653,8 +652,6 @@ class Operation {
     ) {
       uint64_t offset = Overflow::uint256Cast(stack->peek(0)).first;
       uint64_t size = Overflow::uint256Cast(stack->peek(1)).first;
-      // Utils::printLong(offset, "offset");
-      // Utils::printLong(size, "size");
       stack->pop(2);
       stack->push(memory->hashSlice(offset, size));
       return std::make_pair(InstructionResult::OK, 0);
@@ -737,8 +734,6 @@ class Operation {
         for (size_t i = begin; i < end; i++)
           data[i - begin] = context->data->at(i);
         uint256_t word = intx::be::load<uint256_t>(data);
-        // Utils::print256(index, "calldataload->index");
-        // Utils::print256(word, "calldataload->word");
         stack->push(word);
       }
       return std::make_pair(InstructionResult::OK, 0);
@@ -921,9 +916,6 @@ class Operation {
     ) {
       uint256_t offset = stack->peek(0);
       uint256_t word = memory->read(Overflow::uint256Cast(offset).first);
-      // Utils::print256(offset, "offset");
-      // Utils::print256(word, "word");
-      // Utils::printBytes(memory->memory, "memory");
       stack->pop(1);
       stack->push(word);
       return std::make_pair(InstructionResult::OK, 0);
@@ -941,9 +933,6 @@ class Operation {
     ) {
       uint256_t offset = stack->peek(0);
       uint256_t word = stack->peek(1);
-      // Utils::print256(offset, "offset");
-      // Utils::print256(word, "word");
-      // Utils::printBytes(memory->memory, "memory");
       memory->write(Overflow::uint256Cast(offset).first, word);
       stack->pop(2);
       return std::make_pair(InstructionResult::OK, 0);
@@ -1270,10 +1259,6 @@ class Operation {
       uint256_t key = stack->peek(0);
       uint256_t word = pendingState->getState(key, context->codeAddress, external);
 
-      // printf("key{%s}\n", Utils::uint256_2str(key).c_str());
-      // printf("word{%s}\n", Utils::uint256_2str(word).c_str());
-      // printf("context->codeAddress{%s}\n", Utils::uint256_2str(context->codeAddress).c_str());
-
       stack->pop(1);
       stack->push(word);
       return std::make_pair(InstructionResult::OK, 0);
@@ -1291,9 +1276,6 @@ class Operation {
     ) {
       uint256_t key = stack->peek(0);
       uint256_t value = stack->peek(1);  
-      // printf("key{%s}\n", Utils::uint256_2str(key).c_str());
-      // printf("word{%s}\n", Utils::uint256_2str(value).c_str());
-      // printf("codeAddress{%s}\n", Utils::uint256_2str(context->codeAddress).c_str());
       stack->pop(2);
 
       if (context->isStatic) return std::make_pair(InstructionResult::INSTRUCTION_TRAP, TrapKind::TRAP_MUTATE_STATIC);

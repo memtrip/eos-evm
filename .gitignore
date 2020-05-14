@@ -19,3 +19,4 @@ clients/generate_tests/.idea
 acceptance_tests/.gradle
 acceptance_tests/.idea
 clients/evm_repl/node_modules
+tools/js/node_modules

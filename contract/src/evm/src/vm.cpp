@@ -8,7 +8,6 @@
 #include <evm/hash.hpp>
 #include <evm/overflow.hpp>
 #include <evm/hex.hpp>
-#include <evm/utils.hpp>
 #include <evm/gas_calculation.hpp>
 #include <evm/gas_types.h>
 #include <evm/call.hpp>
@@ -65,8 +64,6 @@ exec_result_t VM::step(
     uint8_t opcode = reader->currentOp(context->code);
     instruct_t instruction = Instruction::values[opcode];
     reader->next();
-
-    // Utils::printInstruction(instruction);
 
     instruction_verify_t verifyResult = Instruction::verify(instruction, stack->size());
     switch (verifyResult) {

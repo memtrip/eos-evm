@@ -2,7 +2,7 @@ import DomainError from "./DomainError";
 
 export enum DomainResponseType {
   success,
-  error
+  error,
 }
 
 export interface DomainResponseValue<T> {
@@ -15,7 +15,7 @@ export default class DomainResponse<T> {
     readonly type: DomainResponseType,
     readonly entity: T | undefined,
     readonly error: DomainError | undefined
-  ) { }
+  ) {}
 
   static createSuccess<T>(entity: T): DomainResponse<T> {
     return new DomainResponse(DomainResponseType.success, entity, undefined);

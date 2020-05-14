@@ -1,7 +1,6 @@
 #pragma once
 #include <memory>
 #include <evm/types.h>
-#include <evm/utils.hpp>
 
 class RLPDecode {
   public:

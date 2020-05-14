@@ -17,11 +17,13 @@ export interface AppRootComponentProps extends AppRootState {
   commandEvmContractName: (value: string) => void;
   commandEosAccountName: (value: string) => void;
   commandEosPrivateKey: (value: string) => void;
-  commandCreate: (value: String) => void;
-  commandRaw: (value: String) => void;
-  commandAccount: (value: String) => void;
-  commandCode: (value: String) => void;
-  commandState: (value: String) => void;
+  commandEnv: (value: string) => void;
+  commandCreate: (value: string) => void;
+  commandRawUnsigned: (sender: string, rawTransaction: string) => void;
+  commandRawSigned: (value: string) => void;
+  commandAccount: (value: string) => void;
+  commandCode: (value: string) => void;
+  commandState: (value: string) => void;
 }
 
 const AppRootComponent = (props: AppRootComponentProps) => {
@@ -39,7 +41,6 @@ const AppRootComponent = (props: AppRootComponentProps) => {
             const [stateRecord] = emulatorState.getOutputs().slice(-1);
             if (isOutputCommand(typeRecord)) {
               if (recordStartsWith("EOS_API", stateRecord)) {
-                console.dir(stateRecord);
                 props.commandEosioApi(extractSummary("EOS_API", stateRecord));
               } else if (recordStartsWith("EVM_CONTRACT_NAME", stateRecord)) {
                 props.commandEvmContractName(
@@ -53,10 +54,22 @@ const AppRootComponent = (props: AppRootComponentProps) => {
                 props.commandEosPrivateKey(
                   extractSummary("EOS_PRIVATE_KEY", stateRecord)
                 );
+              } else if (recordStartsWith("env", stateRecord)) {
+                props.commandEnv(extractSummary("env", stateRecord));
               } else if (recordStartsWith("create", stateRecord)) {
                 props.commandCreate(extractSummary("create", stateRecord));
+              } else if (recordStartsWith("raw-unsigned", stateRecord)) {
+                const summary = extractSummary("raw-unsigned", stateRecord);
+                const summaryParts = summary.split(" ");
+                const accountIdentifier =
+                  summaryParts[0].length === 64
+                    ? summaryParts[0].substring(24)
+                    : summaryParts[0];
+                props.commandRawUnsigned(accountIdentifier, summaryParts[1]);
               } else if (recordStartsWith("raw-signed", stateRecord)) {
-                props.commandRaw(extractSummary("raw-signed", stateRecord));
+                props.commandRawSigned(
+                  extractSummary("raw-signed", stateRecord)
+                );
               } else if (recordStartsWith("account", stateRecord)) {
                 props.commandAccount(extractSummary("account", stateRecord));
               } else if (recordStartsWith("code", stateRecord)) {
@@ -78,8 +91,8 @@ const AppRootComponent = (props: AppRootComponentProps) => {
             fontSize: "1.1rem",
             spacing: "1%",
             fontFamily: "monospace",
-            height: "80vh",
-            width: "850px",
+            height: "90vh",
+            width: "920px",
           }}
         />
       </FadeDiv>

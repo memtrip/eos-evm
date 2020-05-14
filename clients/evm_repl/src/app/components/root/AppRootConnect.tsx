@@ -50,16 +50,28 @@ const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
         value: value,
       });
     },
+    commandEnv: (value: string) => {
+      dispatch({
+        type: AppRootActionType.COMMAND_ENV,
+        value: value,
+      });
+    },
     commandCreate: (value: string) => {
-      console.log("COMMAND_CREATE");
       dispatch({
         type: AppRootActionType.COMMAND_CREATE,
         value: value,
       });
     },
-    commandRaw: (value: string) => {
+    commandRawUnsigned: (sender: string, rawTransaction: string) => {
       dispatch({
-        type: AppRootActionType.COMMAND_RAW,
+        type: AppRootActionType.COMMAND_RAW_UNSIGNED,
+        sender: sender,
+        rawTransaction: rawTransaction,
+      });
+    },
+    commandRawSigned: (value: string) => {
+      dispatch({
+        type: AppRootActionType.COMMAND_RAW_SIGNED,
         value: value,
       });
     },

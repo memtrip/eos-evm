@@ -16,7 +16,6 @@
 #include <evm/hash.hpp>
 #include <evm/hex.hpp>
 #include <evm/overflow.hpp>
-#include <evm/utils.hpp>
 
 void eos_evm::raw(name from, bytes_t code, string sender) {
   incomingTransaction(from, code, sender, bytes_t());

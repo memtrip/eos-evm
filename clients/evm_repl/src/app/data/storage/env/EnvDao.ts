@@ -23,7 +23,6 @@ const updateEnv = (
   return storage.getItem().pipe(
     mergeMap((envEntity) => {
       if (envEntity != null) {
-        console.dir(envEntity);
         return storage.removeItem().pipe(
           mergeMap(() => {
             return storage.insertItem({

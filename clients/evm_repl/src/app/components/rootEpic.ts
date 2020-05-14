@@ -4,8 +4,12 @@ import {
   evmContractNameEpic,
   eosAccountNameEpic,
   eosPrivateKeyEpic,
+  getEvmEpic,
+  getEvmAccountEpic,
   createEvmAccountEpic,
-  rawEvmTransactionEpic,
+  rawEvmUnsignedTransactionEpic,
+  getEvmCodeEpic,
+  getEvmStateEpic,
 } from "./root/model/AppRootEpic";
 
 const rootEpic = combineEpics(
@@ -13,8 +17,12 @@ const rootEpic = combineEpics(
   evmContractNameEpic,
   eosAccountNameEpic,
   eosPrivateKeyEpic,
+  getEvmEpic,
   createEvmAccountEpic,
-  rawEvmTransactionEpic
+  rawEvmUnsignedTransactionEpic,
+  getEvmAccountEpic,
+  getEvmCodeEpic,
+  getEvmStateEpic
 );
 
 export { rootEpic };

@@ -24,7 +24,7 @@ const pushTransaction = (
     textDecoder: new TextDecoder(),
     textEncoder: new TextEncoder(),
   });
-  return send(
+  return request(
     api.transact(
       {
         actions: [
@@ -49,7 +49,37 @@ const pushTransaction = (
   );
 };
 
-const send = (fetch: Promise<any>): Observable<any> => {
+const getTableRows = (
+  chainApiUrl: string,
+  evmContractName: string,
+  scope: string,
+  table: string,
+  upperBound: string = "",
+  lowerBound: string = "",
+  tableKey: string = "",
+  keyType: string = "",
+  indexPosition: string = ""
+): Observable<any> => {
+  const rpc = new JsonRpc(chainApiUrl);
+  return request(
+    rpc.get_table_rows({
+      json: true,
+      code: evmContractName,
+      scope: scope,
+      table: table,
+      table_key: tableKey,
+      key_type: keyType,
+      index_position: indexPosition,
+      limit: 1000,
+      reverse: false,
+      show_payer: false,
+      upper_bound: upperBound,
+      lower_bound: lowerBound,
+    })
+  );
+};
+
+const request = (fetch: Promise<any>): Observable<any> => {
   return Observable.create((observer: ApiObserver) => {
     fetch
       .then((response) => {
@@ -66,4 +96,4 @@ const send = (fetch: Promise<any>): Observable<any> => {
   });
 };
 
-export { pushTransaction };
+export { pushTransaction, getTableRows };

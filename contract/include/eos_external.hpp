@@ -5,7 +5,6 @@
 #include <evm/types.h>
 #include <evm/external.h>
 #include <evm/hash.hpp>
-#include <evm/utils.hpp>
 #include <evm/hex.hpp>
 #include <evm/overflow.hpp>
 
@@ -141,7 +140,8 @@ class eos_external: public External {
     void log(const std::vector<uint256_t>& topics, const bytes_t& data) {
       std::string output = "LOG(topics=[";
       for (int i = 0; i < topics.size(); i++) {
-        output += Utils::uint256_2str(topics[i]) + ",";
+        bytes_t bytes = BigInt::toBytes(topics[i]);
+        output += Hex::bytesToHex(bytes) + ",";
       }
       if (topics.size() > 0) output.pop_back();
       output += "], data=" + Hex::bytesToHex(data) + ")";

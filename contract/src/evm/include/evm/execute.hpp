@@ -7,7 +7,6 @@
 #include <evm/context.hpp>
 #include <evm/overflow.hpp>
 #include <evm/hex.hpp>
-#include <evm/utils.hpp>
 #include <evm/external.h>
 
 class Execute {

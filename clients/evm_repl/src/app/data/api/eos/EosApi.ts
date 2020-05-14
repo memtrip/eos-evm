@@ -1,5 +1,5 @@
 import { Observable } from "rxjs";
-import { pushTransaction } from "../RxEos";
+import { pushTransaction, getTableRows } from "../RxEos";
 import { fromHexString } from "../Utils";
 
 const createEvmAccount = (
@@ -22,13 +22,13 @@ const createEvmAccount = (
   );
 };
 
-const rawEvmTransaction = (
+const rawEvmUnsignedTransaction = (
   chainApiUrl: string,
   evmContractName: string,
   accountName: string,
   privateKey: string,
   ethereumTransaction: string,
-  sender?: string
+  sender: string
 ): Observable<any> => {
   return pushTransaction(
     chainApiUrl,
@@ -39,9 +39,66 @@ const rawEvmTransaction = (
     {
       from: accountName,
       code: fromHexString(ethereumTransaction),
-      sender: sender || "",
+      sender: sender,
     }
   );
 };
 
-export { createEvmAccount, rawEvmTransaction };
+const getEvmAccountIdentifier = (
+  chainApiUrl: string,
+  evmContractName: string,
+  accountName: string
+): Observable<any> => {
+  return getTableRows(
+    chainApiUrl,
+    evmContractName,
+    evmContractName,
+    "account",
+    accountName,
+    accountName
+  );
+};
+
+const getEvmCode = (
+  chainApiUrl: string,
+  evmContractName: string,
+  accountIdentifier: string
+): Observable<any> => {
+  return getTableRows(
+    chainApiUrl,
+    evmContractName,
+    evmContractName,
+    "accountcode",
+    accountIdentifier,
+    accountIdentifier,
+    "owneraddress",
+    "sha256",
+    "2"
+  );
+};
+
+const getEvmState = (
+  chainApiUrl: string,
+  evmContractName: string,
+  accountIdentifier: string
+): Observable<any> => {
+  return getTableRows(
+    chainApiUrl,
+    evmContractName,
+    evmContractName,
+    "accountstate",
+    accountIdentifier,
+    accountIdentifier,
+    "stateid",
+    "sha256",
+    "3"
+  );
+};
+
+export {
+  createEvmAccount,
+  rawEvmUnsignedTransaction,
+  getEvmAccountIdentifier,
+  getEvmCode,
+  getEvmState,
+};

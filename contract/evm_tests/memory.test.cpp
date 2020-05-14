@@ -61,7 +61,6 @@ TEST_CASE("Write word at index 32, write word at index 0, read word at index 32"
   
   // when
   memory->expand(64);
-  Utils::printBytes(memory->memory, "empty_memory");
 
   uint256_t writeWord = uint256_t(0x06);
   memory->write(0x20, writeWord);
