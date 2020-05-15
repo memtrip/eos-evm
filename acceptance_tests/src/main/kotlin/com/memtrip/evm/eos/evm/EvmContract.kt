@@ -66,7 +66,7 @@ abstract class EvmContract(
             value,
             data + abiEncodedBytes
         )
-        val transactionHex = transaction.sign(contractEthAccount).unsignedTransaction.toHexString()
+        val transactionHex = transaction.sign(contractEthAccount).signedTransaction.toHexString()
         return rawAction.pushTransaction(
             contractAccountName,
             transactionHex,

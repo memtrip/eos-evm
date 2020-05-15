@@ -145,6 +145,10 @@ class SimpleAuctionTest {
 
         // and then
         assertEquals(addressXBidResponse.statusCode, 202)
+        val getCodeAfterFirstBid = getCode.getByAddress(createContract.code.first().address).blockingGet()
+        if (getCodeAfterFirstBid is GetCode.Record.Value) {
+            assertEquals("0.1000 EVM", getCodeAfterFirstBid.item.balance.toString())
+        } else fail("could not find code for contract")
 
         // and when
         val addressXBalanceAfterBid = getAccount.getEvmAccount(addressXAccountName).blockingGet()
@@ -168,6 +172,10 @@ class SimpleAuctionTest {
 
         // and then
         assertEquals(addressYBidResponse.statusCode, 202)
+        val getCodeAfterSecondBid = getCode.getByAddress(createContract.code.first().address).blockingGet()
+        if (getCodeAfterSecondBid is GetCode.Record.Value) {
+            assertEquals("0.3000 EVM", getCodeAfterSecondBid.item.balance.toString())
+        } else fail("could not find code for contract")
 
         // and when
         val addressYBalanceAfterBid = getAccount.getEvmAccount(addressYAccountName).blockingGet()
@@ -203,6 +211,7 @@ class SimpleAuctionTest {
 
         // and then
         assertEquals(addressXWithdrawResponse.statusCode, 202)
+        addressXWithdrawResponse.assertConsoleString("return[0000000000000000000000000000000000000000000000000000000000000001]")
 
         // and when
         val addressXBalanceAfterWithdraw = getAccount.getEvmAccount(addressXAccountName).blockingGet()
@@ -212,13 +221,15 @@ class SimpleAuctionTest {
             assertEquals("1.0000 EVM", addressXBalanceAfterWithdraw.item.balance.toString())
         }
 
-        val getCodeBeforeEnd = getCode.getAllByOwner(createContract.parentContractAddress32).blockingGet()
-        if (getCodeBeforeEnd is GetCode.Record.Multiple) {
-            assertEquals("1.2000 EVM", getCodeBeforeEnd.items.first().balance)
-        }
+        val getCodeBeforeEnd = getCode.getByAddress(createContract.code.first().address).blockingGet()
+        if (getCodeBeforeEnd is GetCode.Record.Value) {
+            assertEquals("0.2000 EVM", getCodeBeforeEnd.item.balance.toString())
+        } else fail("could not find code for contract")
 
         // and when
         Thread.sleep(3000) // wait at least 5 seconds for the auction to end
+
+        val beneficiaryAccountIdentifierString = beneficiaryAccountIdentifier.toHexString()
 
         val auctionEndResponse = faultTolerant {
             simpleAuctionContract.auctionEnd(EvmSender(

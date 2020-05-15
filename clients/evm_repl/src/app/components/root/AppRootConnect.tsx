@@ -75,6 +75,24 @@ const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
         value: value,
       });
     },
+    commandSeed: (value: string) => {
+      dispatch({
+        type: AppRootActionType.COMMAND_SEED,
+        value: value,
+      });
+    },
+    commandWithdraw: (value: string) => {
+      dispatch({
+        type: AppRootActionType.COMMAND_WITHDRAW,
+        value: value,
+      });
+    },
+    commandBalance: (value: string) => {
+      dispatch({
+        type: AppRootActionType.COMMAND_BALANCE,
+        value: value,
+      });
+    },
     commandAccount: (value: string) => {
       dispatch({
         type: AppRootActionType.COMMAND_ACCOUNT,

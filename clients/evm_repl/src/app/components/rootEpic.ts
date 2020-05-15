@@ -7,7 +7,11 @@ import {
   getEvmEpic,
   getEvmAccountEpic,
   createEvmAccountEpic,
+  rawEvmSignedTransactionEpic,
   rawEvmUnsignedTransactionEpic,
+  seedEvmTransactionEpic,
+  withdrawBalanceEpic,
+  getBalanceEpic,
   getEvmCodeEpic,
   getEvmStateEpic,
 } from "./root/model/AppRootEpic";
@@ -19,7 +23,11 @@ const rootEpic = combineEpics(
   eosPrivateKeyEpic,
   getEvmEpic,
   createEvmAccountEpic,
+  rawEvmSignedTransactionEpic,
   rawEvmUnsignedTransactionEpic,
+  seedEvmTransactionEpic,
+  withdrawBalanceEpic,
+  getBalanceEpic,
   getEvmAccountEpic,
   getEvmCodeEpic,
   getEvmStateEpic

@@ -16,10 +16,14 @@ import {
 } from "../../../data/domain/env/EnvRepository";
 import {
   createAccount,
+  rawSignedTransaction,
   rawUnsignedTransaction,
   getAccountIdentifier,
+  getBalance,
   getCode,
   getState,
+  seedEvmAccount,
+  withdrawEvmBalance,
 } from "../../../data/domain/eos/EosRepository";
 
 const eosioApiEpic = (action$: ActionsObservable<AnyAction>) => {
@@ -100,6 +104,19 @@ const createEvmAccountEpic = (action$: ActionsObservable<AnyAction>) => {
   );
 };
 
+const rawEvmSignedTransactionEpic = (action$: ActionsObservable<AnyAction>) => {
+  return action$.pipe(
+    ofType(AppRootActionType.COMMAND_RAW_SIGNED),
+    mergeMap((action) =>
+      rawSignedTransaction(action.rawTransaction).pipe(
+        map((response) => responseAction(action.type, response)),
+        catchError(() => genericErrorAction(action.type)),
+        startWith(startedAction(action.type))
+      )
+    )
+  );
+};
+
 const rawEvmUnsignedTransactionEpic = (
   action$: ActionsObservable<AnyAction>
 ) => {
@@ -107,6 +124,45 @@ const rawEvmUnsignedTransactionEpic = (
     ofType(AppRootActionType.COMMAND_RAW_UNSIGNED),
     mergeMap((action) =>
       rawUnsignedTransaction(action.sender, action.rawTransaction).pipe(
+        map((response) => responseAction(action.type, response)),
+        catchError(() => genericErrorAction(action.type)),
+        startWith(startedAction(action.type))
+      )
+    )
+  );
+};
+
+const seedEvmTransactionEpic = (action$: ActionsObservable<AnyAction>) => {
+  return action$.pipe(
+    ofType(AppRootActionType.COMMAND_SEED),
+    mergeMap((action) =>
+      seedEvmAccount(action.value).pipe(
+        map((response) => responseAction(action.type, response)),
+        catchError(() => genericErrorAction(action.type)),
+        startWith(startedAction(action.type))
+      )
+    )
+  );
+};
+
+const withdrawBalanceEpic = (action$: ActionsObservable<AnyAction>) => {
+  return action$.pipe(
+    ofType(AppRootActionType.COMMAND_WITHDRAW),
+    mergeMap((action) =>
+      withdrawEvmBalance(action.value).pipe(
+        map((response) => responseAction(action.type, response)),
+        catchError(() => genericErrorAction(action.type)),
+        startWith(startedAction(action.type))
+      )
+    )
+  );
+};
+
+const getBalanceEpic = (action$: ActionsObservable<AnyAction>) => {
+  return action$.pipe(
+    ofType(AppRootActionType.COMMAND_BALANCE),
+    mergeMap((action) =>
+      getBalance(action.value).pipe(
         map((response) => responseAction(action.type, response)),
         catchError(() => genericErrorAction(action.type)),
         startWith(startedAction(action.type))
@@ -161,7 +217,11 @@ export {
   eosPrivateKeyEpic,
   getEvmEpic,
   createEvmAccountEpic,
+  rawEvmSignedTransactionEpic,
   rawEvmUnsignedTransactionEpic,
+  seedEvmTransactionEpic,
+  withdrawBalanceEpic,
+  getBalanceEpic,
   getEvmAccountEpic,
   getEvmCodeEpic,
   getEvmStateEpic,

@@ -21,13 +21,12 @@ class Execute {
       const uint256_t& value,
       std::shared_ptr<bytes_t> data,
       const uint256_t& toAddress,
+      std::shared_ptr<Memory> memory,
       std::shared_ptr<Operation> operation,
       std::shared_ptr<GasCalculation> gasCalculation,
       std::shared_ptr<External> external,
       std::shared_ptr<PendingState> pendingState
     ) {
-
-      std::shared_ptr<Memory> memory = std::make_shared<Memory>();
 
       call_result_t callResult;
 
@@ -148,10 +147,6 @@ class Execute {
               MessageCallReturn messageCallReturn = std::get<MessageCallReturn>(callResult.second);
               if (messageCallReturn.size > 0) 
                 eosio::print("return" + Hex::bytesToWordOutput(memory->memory, messageCallReturn.offset, messageCallReturn.size));
-            } else if (callResult.first == MessageCallResult::MESSAGE_CALL_REVERTED) {
-              MessageCallReturn messageCallReturn = std::get<MessageCallReturn>(callResult.second);
-              if (messageCallReturn.size > 0)
-                eosio::print("revert" + Hex::bytesToWordOutput(memory->memory, messageCallReturn.offset, messageCallReturn.size));
             }
 
             break;

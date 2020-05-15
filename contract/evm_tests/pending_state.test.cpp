@@ -379,22 +379,10 @@ TEST_CASE("Balance changes are resolved for each address", "[pending_state]") {
   pendingState.putBalanceChange(BalanceChangeType::BALANCE_CHANGE_ADD, BalanceAddressType::BALANCE_ADDRESS_CONTRACT, uint256_t(0xA), uint256_t(0x72));
 
   // when
-  std::vector<resolved_balance_t> resolvedBalances = pendingState.resolveBalanceChanges();
+  std::set<resolved_balance_t> addresses = pendingState.resolvedBalanceAddresses();
 
   // then
-  CHECK(3 == resolvedBalances.size());
-  CHECK(Utils::uint256_2str(resolvedBalances[0].value) == 
-    "0000000000000000000000000000000000000000000000000000000000000022"
-  );
-  CHECK(resolvedBalances[0].addressType == BalanceAddressType::BALANCE_ADDRESS_CONTRACT);
-  CHECK(Utils::uint256_2str(resolvedBalances[1].value) == 
-    "0000000000000000000000000000000000000000000000000000000000000030"
-  );
-  CHECK(resolvedBalances[1].addressType == BalanceAddressType::BALANCE_ADDRESS_ACCOUNT);
-  CHECK(Utils::uint256_2str(resolvedBalances[2].value) == 
-    "0000000000000000000000000000000000000000000000000000000000000000"
-  );
-  CHECK(resolvedBalances[2].addressType == BalanceAddressType::BALANCE_ADDRESS_ACCOUNT);
+  CHECK(3 == addresses.size());
 }
 
 TEST_CASE("Ensure that balances can't overflow", "[pending_state]") {

@@ -87,7 +87,7 @@ class [[eosio::contract("eos_evm")]] eos_evm : public contract {
 
   private:
     void incomingTransaction(const name& from, const bytes_t& transaction, const string& sender, const bytes_t& bytecode);
-    void checkCallResult(const name& from, call_result_t callResult);
+    void checkCallResult(const name& from, call_result_t callResult, std::shared_ptr<Memory> memory);
     void resolveAccountState(const name& from, std::shared_ptr<PendingState> pendingState);
     void resolveLogs(std::shared_ptr<PendingState> pendingState, std::shared_ptr<External> external);
 };

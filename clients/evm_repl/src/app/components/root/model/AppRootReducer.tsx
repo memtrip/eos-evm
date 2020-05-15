@@ -14,7 +14,7 @@ import {
   defaultCommandMapping,
 } from "javascript-terminal";
 import { AnyAction } from "redux";
-import { commandMap } from "../../../commands/CommandMap";
+import { commandMap, wrapOutput } from "../../../commands/CommandMap";
 
 export interface AppRootState {
   emulatorState: any;
@@ -113,6 +113,27 @@ const appRootReducer = (
     case asSuccess(AppRootActionType.COMMAND_RAW_SIGNED):
       return transactionSuccess(stopLoading(state), action);
 
+    case asStarted(AppRootActionType.COMMAND_SEED):
+      return startLoading(state);
+    case asError(AppRootActionType.COMMAND_SEED):
+      return logError(stopLoading(state), action);
+    case asSuccess(AppRootActionType.COMMAND_SEED):
+      return transactionSuccess(stopLoading(state), action);
+
+    case asStarted(AppRootActionType.COMMAND_WITHDRAW):
+      return startLoading(state);
+    case asError(AppRootActionType.COMMAND_WITHDRAW):
+      return logError(stopLoading(state), action);
+    case asSuccess(AppRootActionType.COMMAND_WITHDRAW):
+      return transactionSuccess(stopLoading(state), action);
+
+    case asStarted(AppRootActionType.COMMAND_BALANCE):
+      return startLoading(state);
+    case asError(AppRootActionType.COMMAND_BALANCE):
+      return logError(stopLoading(state), action);
+    case asSuccess(AppRootActionType.COMMAND_BALANCE):
+      return arraySuccess(stopLoading(state), action);
+
     case asStarted(AppRootActionType.COMMAND_ACCOUNT):
       return startLoading(state);
     case asError(AppRootActionType.COMMAND_ACCOUNT):
@@ -151,7 +172,7 @@ const logError = (state: AppRootState, action: AnyAction) => {
     defaultOutputs,
     OutputFactory.makeErrorOutput({
       source: "eos-evm",
-      type: action.result.error.body,
+      type: wrapOutput(action.result.error.body),
     })
   );
   const emulatorState = defaultState.setOutputs(newOutputs);
@@ -212,6 +233,17 @@ const jsonSuccess = (state: AppRootState, action: AnyAction) => {
     return row;
   });
 
+  return outputString(state, JSON.stringify(rows, undefined, 2));
+};
+
+const arraySuccess = (state: AppRootState, action: AnyAction) => {
+  return outputString(
+    state,
+    JSON.stringify(action.result.entity, undefined, 2)
+  );
+};
+
+const outputString = (state: AppRootState, json: string) => {
   const defaultState = EmulatorState.create({
     commandMapping: CommandMapping.create({
       ...defaultCommandMapping,
@@ -221,13 +253,11 @@ const jsonSuccess = (state: AppRootState, action: AnyAction) => {
   const defaultOutputs = state.emulatorState.getOutputs();
   const newOutputs = Outputs.addRecord(
     defaultOutputs,
-    OutputFactory.makeTextOutput(JSON.stringify(rows, undefined, 2))
+    OutputFactory.makeTextOutput(json)
   );
   const emulatorState = defaultState.setOutputs(newOutputs);
   return { ...state, emulatorState: emulatorState };
 };
-
-const emitCode = (state: AppRootState, action: AnyAction) => {};
 
 const toHexString = (bytes: any) =>
   bytes.reduce(

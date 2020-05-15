@@ -4,7 +4,11 @@ import { getEnv } from "../../storage/env/EnvDao";
 import { catchError, mergeMap, map } from "rxjs/operators";
 import {
   createEvmAccount,
+  rawEvmSignedTransaction,
   rawEvmUnsignedTransaction,
+  seedEvmAccountTransaction,
+  withdrawEvmBalanceTransaction,
+  getEosBalance,
   getEvmAccountIdentifier,
   getEvmCode,
   getEvmState,
@@ -35,6 +39,33 @@ const createAccount = (blob: string): Observable<DomainResponse<void>> => {
   );
 };
 
+const rawSignedTransaction = (
+  rawTransaction: string
+): Observable<DomainResponse<void>> => {
+  return getEnv().pipe(
+    mergeMap((envEntity) => {
+      if (envEntity != null) {
+        return rawEvmSignedTransaction(
+          envEntity.api || "",
+          envEntity.evmContractName || "",
+          envEntity.eosAccountName || "",
+          envEntity.eosPrivateKey || "",
+          rawTransaction
+        ).pipe(map(() => DomainResponse.createSuccessEmpty<void>()));
+      } else {
+        return of(
+          DomainResponse.createError<any>(
+            Error(
+              'Environment not setup, type "help" to view the prerequisite commands'
+            )
+          )
+        );
+      }
+    }),
+    catchError((error) => of(DomainResponse.createError<void>(error)))
+  );
+};
+
 const rawUnsignedTransaction = (
   sender: string,
   rawTransaction: string
@@ -50,6 +81,81 @@ const rawUnsignedTransaction = (
           rawTransaction,
           sender
         ).pipe(map(() => DomainResponse.createSuccessEmpty<void>()));
+      } else {
+        return of(
+          DomainResponse.createError<any>(
+            Error(
+              'Environment not setup, type "help" to view the prerequisite commands'
+            )
+          )
+        );
+      }
+    }),
+    catchError((error) => of(DomainResponse.createError<void>(error)))
+  );
+};
+
+const seedEvmAccount = (amount: string): Observable<DomainResponse<void>> => {
+  return getEnv().pipe(
+    mergeMap((envEntity) => {
+      if (envEntity != null) {
+        return seedEvmAccountTransaction(
+          envEntity.api || "",
+          envEntity.evmContractName || "",
+          envEntity.eosAccountName || "",
+          envEntity.eosPrivateKey || "",
+          amount
+        ).pipe(map(() => DomainResponse.createSuccessEmpty<void>()));
+      } else {
+        return of(
+          DomainResponse.createError<any>(
+            Error(
+              'Environment not setup, type "help" to view the prerequisite commands'
+            )
+          )
+        );
+      }
+    }),
+    catchError((error) => of(DomainResponse.createError<void>(error)))
+  );
+};
+
+const withdrawEvmBalance = (
+  amount: string
+): Observable<DomainResponse<void>> => {
+  return getEnv().pipe(
+    mergeMap((envEntity) => {
+      if (envEntity != null) {
+        return withdrawEvmBalanceTransaction(
+          envEntity.api || "",
+          envEntity.evmContractName || "",
+          envEntity.eosAccountName || "",
+          envEntity.eosPrivateKey || "",
+          amount
+        ).pipe(map(() => DomainResponse.createSuccessEmpty<void>()));
+      } else {
+        return of(
+          DomainResponse.createError<any>(
+            Error(
+              'Environment not setup, type "help" to view the prerequisite commands'
+            )
+          )
+        );
+      }
+    }),
+    catchError((error) => of(DomainResponse.createError<void>(error)))
+  );
+};
+
+const getBalance = (symbol: string): Observable<DomainResponse<void>> => {
+  return getEnv().pipe(
+    mergeMap((envEntity) => {
+      if (envEntity != null) {
+        return getEosBalance(
+          envEntity.api || "",
+          envEntity.eosAccountName || "",
+          symbol
+        ).pipe(map((entity) => DomainResponse.createSuccess<any>(entity)));
       } else {
         return of(
           DomainResponse.createError<any>(
@@ -141,7 +247,11 @@ const getState = (
 
 export {
   createAccount,
+  rawSignedTransaction,
   rawUnsignedTransaction,
+  seedEvmAccount,
+  withdrawEvmBalance,
+  getBalance,
   getAccountIdentifier,
   getCode,
   getState,

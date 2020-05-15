@@ -11,10 +11,11 @@ eos-evm is divided into five subprojects:
 | ---------------- | ------------------------------------------------------------------------------------- |
 | Environment      | Single node Docker environment with eos-evm and the default system contracts deployed |
 | Acceptance Tests | Verifying EVM state and behaviour via Chain API `push_transaction`                    |
-| Clients          | Example contracts, Kotlin SDK for eos-evm contracts, and an Ethereum test generator   |
+| Clients          | REPL, and an Ethereum test generator                                                  |
 | Contract         | C++17 EVM implementation, the eosio smart contract, and EVM unit tests                |
 | Tools            | Useful javascript tools for debugging various aspects of the EVM                      |
 
 ## Development environment
-The solution is development on Mac OSX 10.14.*, and the smart contract is compiled using EOSIO.CDT 1.7.0. Changes may 
+
+The solution is development on Mac OSX 10.14.\*, and the smart contract is compiled using EOSIO.CDT 1.7.0. Changes may
 be required to build the contract or run the unit tests in a different environment.

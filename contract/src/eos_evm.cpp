@@ -16,6 +16,7 @@
 #include <evm/hash.hpp>
 #include <evm/hex.hpp>
 #include <evm/overflow.hpp>
+#include <evm/utils.hpp>
 
 void eos_evm::raw(name from, bytes_t code, string sender) {
   incomingTransaction(from, code, sender, bytes_t());
@@ -70,6 +71,8 @@ void eos_evm::incomingTransaction(const name& from, const bytes_t& transaction, 
   std::shared_ptr<External> external = std::make_shared<eos_external>(
     this, senderAddress, itr->user, BigInt::fromFixed32(itr->balance.extract_as_byte_array()));
 
+  std::shared_ptr<Memory> memory = std::make_shared<Memory>();
+
   call_result_t callResult;
   if (bytecode.size() > 0) {
     callResult = Execute::code(
@@ -98,6 +101,7 @@ void eos_evm::incomingTransaction(const name& from, const bytes_t& transaction, 
       value,
       data,
       toAddress,
+      memory,
       operation,
       gasCalculation,
       external, 
@@ -105,7 +109,7 @@ void eos_evm::incomingTransaction(const name& from, const bytes_t& transaction, 
     );
   }
 
-  checkCallResult(from, callResult);
+  checkCallResult(from, callResult, memory);
   resolveAccountState(from, pendingState);
   resolveLogs(pendingState, external);
 
@@ -115,14 +119,17 @@ void eos_evm::incomingTransaction(const name& from, const bytes_t& transaction, 
   });
 }
 
-void eos_evm::checkCallResult(const name& from, call_result_t callResult) {
+void eos_evm::checkCallResult(const name& from, call_result_t callResult, std::shared_ptr<Memory> memory) {
   switch (callResult.first) {
     case MESSAGE_CALL_SUCCESS:
     case MESSAGE_CALL_RETURN:
       break;
     case MESSAGE_CALL_REVERTED:
-      check(false, "MESSAGE_CALL_REVERTED");
-      break;
+      {
+        MessageCallReturn messageCallReturn = std::get<MessageCallReturn>(callResult.second);
+        check(false, "MESSAGE_CALL_REVERTED" + Hex::bytesToWordOutput(memory->memory, messageCallReturn.offset, messageCallReturn.size));
+        break;
+      }
     case MESSAGE_CALL_OUT_OF_GAS:
       check(false, "MESSAGE_CALL_OUT_OF_GAS");
       break;
@@ -196,23 +203,46 @@ void eos_evm::resolveAccountState(const name& from, std::shared_ptr<PendingState
     }
   }
 
-  std::vector<resolved_balance_t> resolvedBalances = pendingState->resolveBalanceChanges();
-  if (resolvedBalances.size() > 0) {
-    for (resolved_balance_t resolvedBalance : resolvedBalances) {
-      if (resolvedBalance.addressType == BalanceAddressType::BALANCE_ADDRESS_ACCOUNT) {
+  std::set<resolved_balance_t> resolvedBalanceAddresses = pendingState->resolvedBalanceAddresses();
+  if (resolvedBalanceAddresses.size() > 0) {
+    for (resolved_balance_t balanceAddress : resolvedBalanceAddresses) {
+      if (balanceAddress.addressType == BalanceAddressType::BALANCE_ADDRESS_ACCOUNT) {
         eos_evm::account_table _account(get_self(), get_self().value);
         auto accountIdx = _account.get_index<name("accountid")>();
-        auto accountItr = accountIdx.find(BigInt::toFixed32(resolvedBalance.address));
+        auto accountItr = accountIdx.find(BigInt::toFixed32(balanceAddress.address));
         accountIdx.modify(accountItr, from, [&](auto& account) {
-          account.balance = BigInt::toFixed32(resolvedBalance.value);
+          account.balance = BigInt::toFixed32(pendingState->resolveAddressBalanceChanges(
+            balanceAddress.address,  
+            BigInt::fromFixed32(accountItr->balance.extract_as_byte_array())
+          ).second);
         });
       } else {
         eos_evm::account_code_table _account_code(get_self(), get_self().value);
         auto accountCodeIdx = _account_code.get_index<name("codeaddress")>();
-        auto accountCodeItr = accountCodeIdx.find(BigInt::toFixed32(resolvedBalance.address));
+        auto accountCodeItr = accountCodeIdx.find(BigInt::toFixed32(balanceAddress.address));
         accountCodeIdx.modify(accountCodeItr, from, [&](auto& account_code) {
-          account_code.balance = BigInt::toFixed32(resolvedBalance.value);
+          account_code.balance = BigInt::toFixed32(pendingState->resolveAddressBalanceChanges(
+            balanceAddress.address,  
+            BigInt::fromFixed32(accountCodeItr->balance.extract_as_byte_array())
+          ).second);
         }); 
+      }
+    }
+  }
+
+  if (pendingState->selfDestruct.size() > 0) {
+    for (self_destruct_t selfDestruct : pendingState->selfDestruct) {
+      address_t address = BigInt::toFixed32(selfDestruct.address);
+      eos_evm::account_code_table _account_code(get_self(), get_self().value);
+      auto accountCodeIdx = _account_code.get_index<name("codeaddress")>();
+      auto accountCodeItr = accountCodeIdx.find(address);
+      accountCodeIdx.erase(accountCodeItr);
+
+      eos_evm::account_state_table _account_state(get_self(), get_self().value);
+      auto accountStateIdx = _account_state.get_index<name("stateid")>();
+      auto accountStateItr = accountStateIdx.find(address);
+      while(accountStateItr != accountStateIdx.end()) {
+        accountStateItr = accountStateIdx.erase(accountStateItr);
       }
     }
   }
@@ -261,7 +291,7 @@ void eos_evm::withdraw(name to, asset quantity) {
   check(currentBalance >= quantityValue, "Insufficient funds.");
 
   _account.modify(iterator, same_payer, [&](auto& account) {
-    account.balance = BigInt::toFixed32(currentBalance - quantityValue); 
+    account.balance = BigInt::toFixed32(Overflow::sub(currentBalance, quantityValue).first); 
   });
 
   action{

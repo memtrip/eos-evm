@@ -3,6 +3,8 @@
 #include <numeric>
 #include <evm/types.h>
 #include <evm/overflow.hpp>
+#include <evm/hex.hpp>
+#include <evm/big_int.hpp>
 
 struct Log {
   uint64_t stackDepth;
@@ -50,9 +52,11 @@ typedef BalanceChange balance_change_t;
 struct ResolvedBalance {
   BalanceAddressType addressType;
   uint256_t address;
-  uint256_t value;
 };
 typedef ResolvedBalance resolved_balance_t;
+inline bool operator<(const resolved_balance_t& lhs, const resolved_balance_t& rhs) {
+  return lhs.address < rhs.address;
+}
 
 struct AddressChange {
   uint64_t stackDepth;
@@ -193,20 +197,13 @@ class PendingState {
       );
     }
 
-    std::vector<resolved_balance_t> resolveBalanceChanges() {
-      if (balanceChange.size() == 0) return std::vector<resolved_balance_t>();
-      std::set<uint256_t> changedAddress;
+    std::set<resolved_balance_t> resolvedBalanceAddresses() {
+      if (balanceChange.size() == 0) return std::set<resolved_balance_t>();
+      std::set<resolved_balance_t> changedAddress;
       for (int i = 0; i < balanceChange.size(); i++) {
-        changedAddress.insert(balanceChange[i].address);
+        changedAddress.insert({balanceChange[i].addressType, balanceChange[i].address});
       }
-
-      std::vector<resolved_balance_t> resolvedBalances;
-      for (uint256_t address : changedAddress) {
-        std::pair<BalanceAddressType, uint256_t> result = resolveAddressBalanceChanges(address, 0);
-        resolvedBalances.push_back({result.first, address, result.second});
-      }
-
-      return resolvedBalances;
+      return changedAddress;
     }
 
     void putSelfDestruct(const uint256_t& address) {

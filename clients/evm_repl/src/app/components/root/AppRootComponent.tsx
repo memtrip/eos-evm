@@ -21,6 +21,9 @@ export interface AppRootComponentProps extends AppRootState {
   commandCreate: (value: string) => void;
   commandRawUnsigned: (sender: string, rawTransaction: string) => void;
   commandRawSigned: (value: string) => void;
+  commandSeed: (value: string) => void;
+  commandWithdraw: (value: string) => void;
+  commandBalance: (value: string) => void;
   commandAccount: (value: string) => void;
   commandCode: (value: string) => void;
   commandState: (value: string) => void;
@@ -70,6 +73,12 @@ const AppRootComponent = (props: AppRootComponentProps) => {
                 props.commandRawSigned(
                   extractSummary("raw-signed", stateRecord)
                 );
+              } else if (recordStartsWith("seed", stateRecord)) {
+                props.commandSeed(extractSummary("seed", stateRecord));
+              } else if (recordStartsWith("withdraw", stateRecord)) {
+                props.commandWithdraw(extractSummary("withdraw", stateRecord));
+              } else if (recordStartsWith("balance", stateRecord)) {
+                props.commandBalance(extractSummary("balance", stateRecord));
               } else if (recordStartsWith("account", stateRecord)) {
                 props.commandAccount(extractSummary("account", stateRecord));
               } else if (recordStartsWith("code", stateRecord)) {

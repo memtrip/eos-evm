@@ -8,6 +8,7 @@
 #include <evm/hex.hpp>
 #include <evm/overflow.hpp>
 #include <evm/pending_state.hpp>
+#include <evm/utils.hpp>
 
 class eos_external: public External {
   private:
@@ -217,22 +218,23 @@ class eos_external: public External {
       if (addressWord == _senderAddress) 
         return pendingState->balanceWithPendingChanges(_senderAddress, _senderAccountBalance);
 
+      address_t address = BigInt::toFixed32(addressWord);
+
       eos_evm::account_code_table _account_code(_contract->get_self(), _contract->get_self().value);
       auto accountCodeIdx = _account_code.get_index<name("codeaddress")>();
-      auto accountCodeItr = accountCodeIdx.find(BigInt::toFixed32(addressWord));
+      auto accountCodeItr = accountCodeIdx.find(address);
       if (accountCodeItr != accountCodeIdx.end()) {
+        uint256_t balance = BigInt::fromFixed32(accountCodeItr->balance.extract_as_byte_array());
         return pendingState->balanceWithPendingChanges(
           addressWord,
           BigInt::fromFixed32(accountCodeItr->balance.extract_as_byte_array())
         );
       }
 
-      address_t address = BigInt::toFixed32(addressWord);
       eos_evm::account_table _account(_contract->get_self(), _contract->get_self().value);
       auto accountIdx = _account.get_index<name("accountid")>();
       auto accountItr = accountIdx.find(address);
       if (accountItr != accountIdx.end()) {
-        printf("account");
         return pendingState->balanceWithPendingChanges(
           addressWord,
           BigInt::fromFixed32(accountItr->balance.extract_as_byte_array())
@@ -262,21 +264,11 @@ class eos_external: public External {
 
       address_t contractAddress = BigInt::toFixed32(contractAddressWord);
 
-      // TODO: this will be moved to eos_evm contract
       eos_evm::account_code_table _account_code(_contract->get_self(), _contract->get_self().value);
       auto accountCodeIdx = _account_code.get_index<name("codeaddress")>();
       auto accountCodeItr = accountCodeIdx.find(contractAddress);
       if (accountCodeItr == accountCodeIdx.end()) return std::make_pair(EmplaceResult::EMPLACE_ADDRESS_NOT_FOUND, 0);
       uint256_t refundBalance = BigInt::fromFixed32(accountCodeItr->balance.extract_as_byte_array());
-      accountCodeIdx.erase(accountCodeItr);
-
-      eos_evm::account_state_table _account_state(_contract->get_self(), _contract->get_self().value);
-      auto accountStateIdx = _account_state.get_index<name("stateid")>();
-      auto accountStateItr = accountStateIdx.find(contractAddress);
-      while(accountStateItr != accountStateIdx.end()) {
-        accountStateItr = accountStateIdx.erase(accountStateItr);
-      }
-      // TODO: this will be moved to resolvePendingChanges contract
 
       if (_senderAddress == refundAddressWord) {
         pendingState->putBalanceChange(
@@ -285,24 +277,18 @@ class eos_external: public External {
           _senderAddress,
           refundBalance
         );
-
         return std::make_pair(EmplaceResult::EMPLACE_SUCCESS, 0);
       } else {
         eos_evm::account_table _account(_contract->get_self(), _contract->get_self().value);
         auto accountIdx = _account.get_index<name("accountid")>();
         auto accountItr = accountIdx.find(BigInt::toFixed32(refundAddressWord));
         if (accountItr != accountIdx.end()) {
-          // pendingState->putBalanceChange(
-          //   BalanceChangeType::BALANCE_CHANGE_ADD,
-          //   refundAddressWord,
-          //   refundBalance
-          // );
-          // TODO: this will be moved to resolvePendingChanges
-          accountIdx.modify(accountItr, _sender, [&](auto& account) {
-            uint256_t newBalance = BigInt::fromFixed32(account.balance.extract_as_byte_array()) + refundBalance;
-            account.balance = BigInt::toFixed32(newBalance);
-          });
-          // TODO: this will be moved to resolvePendingChanges
+          pendingState->putBalanceChange(
+            BalanceChangeType::BALANCE_CHANGE_ADD,
+            BalanceAddressType::BALANCE_ADDRESS_ACCOUNT, 
+            refundAddressWord,
+            refundBalance
+          );
           return std::make_pair(EmplaceResult::EMPLACE_SUCCESS, 0);
         }
 
@@ -310,17 +296,12 @@ class eos_external: public External {
         auto accountCodeIdx = _account_code.get_index<name("codeaddress")>();
         auto accountCodeItr = accountCodeIdx.find(BigInt::toFixed32(refundAddressWord));
         if (accountCodeItr != accountCodeIdx.end()) {
-          // pendingState->putBalanceChange(
-          //   BalanceChangeType::BALANCE_CHANGE_ADD,
-          //   refundAddressWord,
-          //   refundBalance
-          // );
-          // TODO: this will be moved to resolvePendingChanges
-          accountCodeIdx.modify(accountCodeItr, _sender, [&](auto& account_code) {
-            uint256_t newBalance = BigInt::fromFixed32(account_code.balance.extract_as_byte_array()) + refundBalance;
-            account_code.balance = BigInt::toFixed32(newBalance);
-          }); 
-          // TODO: this will be moved to resolvePendingChanges
+          pendingState->putBalanceChange(
+            BalanceChangeType::BALANCE_CHANGE_ADD,
+            BalanceAddressType::BALANCE_ADDRESS_CONTRACT, 
+            refundAddressWord,
+            refundBalance
+          );
           return std::make_pair(EmplaceResult::EMPLACE_SUCCESS, 0);
         }
       }

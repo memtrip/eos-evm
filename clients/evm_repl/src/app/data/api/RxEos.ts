@@ -79,6 +79,15 @@ const getTableRows = (
   );
 };
 
+const getBalances = (
+  chainApiUrl: string,
+  accountName: string,
+  symbol: string
+): Observable<any> => {
+  const rpc = new JsonRpc(chainApiUrl);
+  return request(rpc.get_currency_balance("eosio.token", accountName, symbol));
+};
+
 const request = (fetch: Promise<any>): Observable<any> => {
   return Observable.create((observer: ApiObserver) => {
     fetch
@@ -96,4 +105,4 @@ const request = (fetch: Promise<any>): Observable<any> => {
   });
 };
 
-export { pushTransaction, getTableRows };
+export { pushTransaction, getTableRows, getBalances };

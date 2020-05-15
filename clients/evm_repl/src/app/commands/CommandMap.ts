@@ -89,6 +89,37 @@ const commandMap = {
     },
     optDef: {},
   },
+  seed: {
+    function: (state: any, opts: any) => {
+      const input = opts.join(" ");
+      if (input === "")
+        return errorOutput(
+          "arg1 must be the eosio token amount to transfer to the EVM smart contract. e.g; 1.0000 EOS"
+        );
+      return textOutput("seed", input);
+    },
+    optDef: {},
+  },
+  withdraw: {
+    function: (state: any, opts: any) => {
+      const input = opts.join(" ");
+      if (input === "")
+        return errorOutput(
+          "arg1 must be the eosio token amount to withdraw from the EVM smart contract. e.g; 1.0000 EOS"
+        );
+      return textOutput("withdraw", input);
+    },
+    optDef: {},
+  },
+  balance: {
+    function: (state: any, opts: any) => {
+      const input = opts.join("");
+      if (input === "")
+        return errorOutput("arg1 must be the system token symbol e.g; EOS");
+      return textOutput("balance", input);
+    },
+    optDef: {},
+  },
   account: {
     function: (state: any, opts: any) => {
       const input = opts.join("");
@@ -126,18 +157,21 @@ const commandMap = {
 Environment commands:
   EOS_API             Set the nodeos HTTP Api endpoint
   EVM_CONTRACT_NAME   Set the account name containing the eos-evm contract
-  EOS_ACCOUNT_NAME    Set the eos account name that will authorize transactions
-  EOS_PRIVATE_KEY     Set the private key of the authorizing eos account
+  EOS_ACCOUNT_NAME    Set the eosio account name that will authorize transactions
+  EOS_PRIVATE_KEY     Set the private key of the authorizing eosio account
   
 Commands
   env                 Prints the configured environment variables
   create              Creates a new EVM account, (optional: link to an existing Ethereum address)
   raw-signed          Push a signed Ethereum transaction, the signature address must be linked to the
-                      account identifier associated with the sender
+                      account identifier associated with the action from eos account
   raw-unsigned        Push an unsigned Ethereum transaction, 
                         arg1; accountIdentifier
                         arg2; rlp encoded transaction hex string
-  account             Gets the EVM account details associated with the eos account name
+  seed                Send eosio balance to the EVM smart contract, to seed it with a balance
+  withdraw            Withdraw the EVM balance into the eosio account balance
+  balance             Gets the balance of the current eosio account 
+  account             Gets the EVM account details associated with the eosio account name
   code                Gets the Ethereum contracts associated with the account identifier
   state               Gets the Ethereum state associated with the acccount identifier
           `

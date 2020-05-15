@@ -1,4 +1,5 @@
 # Tools
+
 Useful javascript tools that were used to debug various aspects of the EVM.
 
 ## Setup
@@ -25,7 +26,17 @@ node sign.js <message>
 ```
 
 ## Decompress Key
-The following command will decompress a compressed EDCSA public key into a 65 bytes uncompressed public key, it is useful for verifying that decompress_key.hpp produces the correct results. 
+
+The following command will decompress a compressed EDCSA public key into a 65 bytes uncompressed public key, it is useful for verifying that decompress_key.hpp produces the correct results.
+
 ```
 node ecc_decompress.js <compressed_key>
+```
+
+## Tx
+
+The following command will create an RLP encoded unsigned transaction from the given args
+
+```
+node tx '[1, "0x0000000000000000000000000000000000000000", "0x", "0x"]'  // nonce, address, data, value
 ```
